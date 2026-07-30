@@ -2,7 +2,7 @@ import { motion } from 'framer-motion';
 import { Navigation } from '@/components/navigation';
 import { FallOrderForm } from '@/components/forms/fall-order-form';
 
-const heroPath = '/images/hero-doorway.jpg';
+const heroPath = '/images/hero-fall.png';
 
 export default function Fall() {
   return (

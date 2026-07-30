@@ -7,20 +7,32 @@ import Fall from '@/pages/fall';
 import Winter from '@/pages/winter';
 import Summer from '@/pages/summer';
 import Portfolio from '@/pages/portfolio';
-import { Route, Switch, Router as WouterRouter } from 'wouter';
+import { Route, Switch, Router as WouterRouter, useLocation } from 'wouter';
+import { useEffect } from 'react';
 
 const queryClient = new QueryClient();
 
+function ScrollToTop() {
+  const [location] = useLocation();
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [location]);
+  return null;
+}
+
 function Router() {
   return (
-    <Switch>
-      <Route path="/" component={Home} />
-      <Route path="/fall" component={Fall} />
-      <Route path="/winter" component={Winter} />
-      <Route path="/summer" component={Summer} />
-      <Route path="/portfolio" component={Portfolio} />
-      <Route component={NotFound} />
-    </Switch>
+    <>
+      <ScrollToTop />
+      <Switch>
+        <Route path="/" component={Home} />
+        <Route path="/fall" component={Fall} />
+        <Route path="/winter" component={Winter} />
+        <Route path="/summer" component={Summer} />
+        <Route path="/portfolio" component={Portfolio} />
+        <Route component={NotFound} />
+      </Switch>
+    </>
   );
 }
 
