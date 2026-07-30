@@ -8,7 +8,6 @@ export function Navigation() {
     { href: '/fall',      label: 'Fall' },
     { href: '/winter',    label: 'Winter' },
     { href: '/summer',    label: 'Summer' },
-    { href: '/portfolio', label: 'Portfolio' },
   ];
 
   return (

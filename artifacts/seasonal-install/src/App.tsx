@@ -6,7 +6,6 @@ import Home from '@/pages/home';
 import Fall from '@/pages/fall';
 import Winter from '@/pages/winter';
 import Summer from '@/pages/summer';
-import Portfolio from '@/pages/portfolio';
 import { Route, Switch, Router as WouterRouter, useLocation } from 'wouter';
 import { useEffect } from 'react';
 
@@ -29,7 +28,6 @@ function Router() {
         <Route path="/fall" component={Fall} />
         <Route path="/winter" component={Winter} />
         <Route path="/summer" component={Summer} />
-        <Route path="/portfolio" component={Portfolio} />
         <Route component={NotFound} />
       </Switch>
     </>
