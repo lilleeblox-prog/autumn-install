@@ -403,7 +403,7 @@ export default function Home() {
               className="text-3xl md:text-4xl lg:text-[3rem] font-serif font-medium leading-[1.1]"
               style={{ color: 'hsl(36 40% 96%)' }}
             >
-              Every season, some homes<br className="hidden sm:block" /> just feel ready. Yours should.
+              Welcome the fall season<br className="hidden sm:block" /> with a custom display.
             </h2>
             <p className="text-base leading-relaxed max-w-sm mx-auto" style={{ color: '#cfc6b8' }}>
               Spots fill neighborhood by neighborhood. This fall's waitlist is open now — no payment, just your name on the list.
