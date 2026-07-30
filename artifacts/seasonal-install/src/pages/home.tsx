@@ -15,15 +15,15 @@ const galleryImages = [
 const timelineSteps = [
   {
     num: '01',
-    title: 'Join the waitlist',
-    body: 'Reserve your spot now. Waitlist members get first access when booking opens mid-August.',
+    title: 'Register your address',
+    body: 'We accept a set number of homes per neighborhood. Submit your address to confirm availability in your zip code.',
     tag: 'Open now',
     active: true,
   },
   {
     num: '02',
     title: 'Place your order',
-    body: 'Choose your package and delivery week. Spots are limited and go quickly each year.',
+    body: 'Choose your package and install window. Each neighborhood has a fixed number of openings per season.',
     tag: 'Opens mid-August',
     active: false,
   },
@@ -124,7 +124,7 @@ export default function Home() {
               Natural pumpkins, bespoke arrangements, installed right at your doorway.
             </p>
 
-            <p className="text-sm font-medium text-primary mb-5">Currently accepting new addresses.</p>
+            <p className="text-sm font-medium text-primary mb-5">Accepting a limited number of addresses per neighborhood.</p>
 
             <ol className="space-y-3.5 mb-6">
               {[
@@ -154,7 +154,7 @@ export default function Home() {
               Join the waitlist <ArrowRight className="ml-2 w-3.5 h-3.5" />
             </Link>
             <p className="text-center text-[0.72rem] text-muted-foreground mt-3">
-              No payment now — just your spot in line.
+              No payment now — just your address on the list.
             </p>
           </motion.div>
         </div>
@@ -294,17 +294,17 @@ export default function Home() {
             className="space-y-5"
           >
             <span className="font-mono text-[0.7rem] tracking-[0.16em] uppercase text-primary block">
-              Reserve your spot
+              Fall 2026
             </span>
             <h2
               className="text-3xl md:text-4xl lg:text-5xl font-serif font-medium leading-tight max-w-2xl mx-auto"
               style={{ color: 'hsl(36 40% 96%)' }}
             >
-              Fall 26 just launched and we've reserved limited spots. Availability is limited.
+              We only install a set number of homes per neighborhood. Some zip codes are already spoken for.
             </h2>
             <p className="text-base md:text-lg leading-relaxed max-w-lg mx-auto" style={{ color: '#cfc6b8' }}>
-              Ordering opens mid-August and waitlist members get first pick of delivery dates. It takes
-              about a minute.
+              Register your address now. When ordering opens mid-August, we reach out directly to confirm
+              availability in your area. It takes about a minute.
             </p>
             <div className="pt-3">
               <Link
@@ -312,10 +312,10 @@ export default function Home() {
                 data-testid="button-cta-bottom-fall"
                 className="inline-flex items-center font-mono text-[0.8rem] tracking-[0.06em] uppercase bg-primary text-primary-foreground hover:bg-primary/90 px-8 py-[17px] transition-colors"
               >
-                Get first pick <ArrowRight className="ml-2 w-3.5 h-3.5" />
+                Register your address <ArrowRight className="ml-2 w-3.5 h-3.5" />
               </Link>
               <p className="text-[0.78rem] mt-3" style={{ color: '#7a6a5e' }}>
-                No payment now — just your spot in line.
+                No payment now — just your address on the list.
               </p>
             </div>
           </motion.div>

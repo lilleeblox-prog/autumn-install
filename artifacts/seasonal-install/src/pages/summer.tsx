@@ -68,7 +68,7 @@ export default function Summer() {
                   <li className="list-disc">Professional installation and care</li>
                 </ul>
                 <p className="text-sm pt-4">
-                  Join the waitlist to be notified when summer service becomes available.
+                  Register your address and we'll confirm availability in your area when summer service opens.
                 </p>
               </div>
             </div>
@@ -78,7 +78,7 @@ export default function Summer() {
               <div className="bg-card border border-border rounded-sm p-8 md:p-10">
                 <WaitlistForm
                   season="summer"
-                  description="We'll reach out as soon as summer service opens with details and availability."
+                  description="We'll confirm availability in your neighborhood when summer service launches."
                 />
               </div>
             </div>

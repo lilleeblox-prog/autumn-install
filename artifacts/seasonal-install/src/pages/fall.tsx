@@ -60,7 +60,7 @@ export default function Fall() {
 
             <motion.p variants={fadeInUp} className="text-xl text-muted-foreground leading-relaxed max-w-2xl">
               We deliver and install your fall setup — pumpkins, wreaths, dried botanicals — so your home looks warm
-              and welcoming the moment the season turns. Spots are limited each year.
+              and welcoming the moment the season turns. We install a set number of homes per neighborhood.
             </motion.p>
           </motion.div>
         </div>
@@ -105,7 +105,7 @@ export default function Fall() {
                 <div className="border-l-2 border-primary pl-6 py-2">
                   <p className="font-medium mb-1">Now — Mid-August</p>
                   <p className="text-sm text-muted-foreground">
-                    Join the waitlist to hold your spot. We'll contact you when booking officially opens.
+                    Register your address. We confirm availability for your zip code when booking opens.
                   </p>
                 </div>
                 <div className="border-l-2 border-primary/40 pl-6 py-2">
@@ -138,10 +138,10 @@ export default function Fall() {
             transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
           >
             <div className="text-center mb-12">
-              <h2 className="text-3xl md:text-4xl font-serif font-medium mb-3">Secure your spot</h2>
+              <h2 className="text-3xl md:text-4xl font-serif font-medium mb-3">Reserve your address</h2>
               <p className="text-muted-foreground max-w-xl mx-auto">
-                We take on a limited number of homes each fall. Fill out the form below and we'll be in touch as soon
-                as booking opens mid-August.
+                We install a fixed number of homes per neighborhood. Submit your address below — we'll confirm
+                availability for your zip code when ordering opens mid-August.
               </p>
             </div>
 
@@ -149,8 +149,8 @@ export default function Fall() {
               <div className="bg-card border border-border rounded-sm p-8 md:p-10">
                 <FallOrderForm
                   serviceType="waitlist"
-                  title="Join the Waitlist"
-                  description="Tell us a little about your home and we'll reach out with availability and pricing when orders open."
+                  title="Register Your Address"
+                  description="We'll confirm whether your zip code has availability and follow up with details when ordering opens."
                 />
               </div>
             </div>

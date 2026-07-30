@@ -68,7 +68,7 @@ export default function Winter() {
                   <li className="list-disc">Professional installation and removal</li>
                 </ul>
                 <p className="text-sm pt-4">
-                  Join the waitlist to be notified when winter service becomes available.
+                  Register your address and we'll confirm availability in your area when winter service opens.
                 </p>
               </div>
             </div>
@@ -78,7 +78,7 @@ export default function Winter() {
               <div className="bg-card border border-border rounded-sm p-8 md:p-10">
                 <WaitlistForm
                   season="winter"
-                  description="We'll reach out as soon as winter service opens with details and availability."
+                  description="We'll confirm availability in your neighborhood when winter service launches."
                 />
               </div>
             </div>
