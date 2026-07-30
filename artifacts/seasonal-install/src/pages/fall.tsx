@@ -109,7 +109,7 @@ export default function Fall() {
                     'Hay bales for height, structure, and that unmistakable fall feel',
                     'Planter styling with fall foliage and seasonal fillers',
                     'Full delivery and installation — we bring everything',
-                    'Optional removal before the holidays — we take it all back',
+                    'Optional removal mid-to-end of November — your entry is clear for December 1st',
                   ].map((item) => (
                     <li key={item} className="flex items-start gap-3 text-sm">
                       <span className="mt-[5px] w-1 h-1 rounded-full bg-primary shrink-0" />
@@ -118,7 +118,7 @@ export default function Fall() {
                   ))}
                 </ul>
                 <p className="text-sm pt-1">
-                  Every pumpkin and gourd is sourced fresh for the season. We do not offer storage — add the removal service and we collect everything before Thanksgiving, leaving your entry clean and ready for winter.
+                  Every pumpkin and gourd is sourced fresh for the season. We do not offer storage — add the removal service and we collect everything mid-to-end of November so your entry is clear and ready for December 1st.
                 </p>
               </div>
             </motion.div>
@@ -157,9 +157,9 @@ export default function Fall() {
                     body: 'Our team arrives with your pumpkins, gourds, and all the fall pieces. We arrange everything at your door by hand and leave when it looks exactly right.',
                   },
                   {
-                    period: 'Late November (optional)',
+                    period: 'Mid–End of November (optional)',
                     active: false,
-                    body: 'We come back to collect your pumpkins, gourds, and all the fall décor before the holidays. Nothing to bag up, nothing to store.',
+                    body: 'We come back to collect your pumpkins, gourds, and hay bales so your entry is clear and ready for December 1st. Nothing to bag up, nothing to store.',
                   },
                 ].map((step, i) => (
                   <div key={i} className="flex gap-5 py-5 border-b border-border last:border-0">
