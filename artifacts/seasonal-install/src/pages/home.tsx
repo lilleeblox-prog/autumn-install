@@ -323,6 +323,69 @@ export default function Home() {
         </div>
       </section>
 
+      {/* ── Other seasons ────────────────────────────────────── */}
+      <section className="py-20 md:py-24 bg-background border-t border-border">
+        <div className="max-w-6xl mx-auto px-6 lg:px-12">
+          <div className="mb-12">
+            <span className="font-mono text-[0.7rem] tracking-[0.16em] uppercase text-muted-foreground block mb-3">
+              Other seasons
+            </span>
+            <h2 className="text-2xl md:text-3xl font-serif font-medium leading-snug max-w-md">
+              We install year-round — winter and summer are coming.
+            </h2>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {[
+              {
+                season: 'Winter',
+                label: 'Winter 2026–27',
+                description:
+                  'Balsam garlands, lanterns, and seasonal evergreens. A welcome that holds through the holidays.',
+                status: 'Not yet open',
+                href: '/winter',
+              },
+              {
+                season: 'Summer',
+                label: 'Summer 2027',
+                description:
+                  'Bright botanicals, fresh arrangements, and sun-ready displays for your front entry.',
+                status: 'Not yet open',
+                href: '/summer',
+              },
+            ].map((item) => (
+              <motion.div
+                key={item.season}
+                initial={{ opacity: 0, y: 16 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.5 }}
+                className="border border-border p-7 flex flex-col gap-4"
+              >
+                <div className="flex items-start justify-between gap-4">
+                  <span className="font-mono text-[0.68rem] tracking-[0.12em] uppercase text-muted-foreground">
+                    {item.label}
+                  </span>
+                  <span className="font-mono text-[0.63rem] tracking-[0.06em] uppercase px-2.5 py-1 border border-border text-muted-foreground shrink-0">
+                    {item.status}
+                  </span>
+                </div>
+                <div>
+                  <h3 className="font-serif font-medium text-[1.15rem] mb-2">{item.season} installs</h3>
+                  <p className="text-sm text-muted-foreground leading-relaxed">{item.description}</p>
+                </div>
+                <Link
+                  href={item.href}
+                  className="mt-auto inline-flex items-center font-mono text-[0.72rem] tracking-[0.06em] uppercase text-muted-foreground hover:text-foreground transition-colors gap-1.5"
+                >
+                  Learn more <ArrowRight className="w-3 h-3" />
+                </Link>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* Footer */}
       <footer className="border-t border-border py-10 bg-background">
         <div className="max-w-6xl mx-auto px-6 lg:px-12 flex items-center justify-between flex-wrap gap-4">
