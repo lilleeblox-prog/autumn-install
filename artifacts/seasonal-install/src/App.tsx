@@ -3,6 +3,7 @@ import { Toaster } from '@/components/ui/toaster';
 import { TooltipProvider } from '@/components/ui/tooltip';
 import NotFound from '@/pages/not-found';
 import Home from '@/pages/home';
+import Contact from '@/pages/contact';
 import Fall from '@/pages/fall';
 import Winter from '@/pages/winter';
 import Summer from '@/pages/summer';
@@ -28,6 +29,7 @@ function Router() {
         <Route path="/fall" component={Fall} />
         <Route path="/winter" component={Winter} />
         <Route path="/summer" component={Summer} />
+        <Route path="/contact" component={Contact} />
         <Route component={NotFound} />
       </Switch>
     </>
