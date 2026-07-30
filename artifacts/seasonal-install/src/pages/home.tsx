@@ -15,8 +15,8 @@ const galleryImages = [
 const timelineSteps = [
   {
     num: '01',
-    title: 'Register your address',
-    body: 'We accept a set number of homes per neighborhood. Submit your address to confirm availability in your zip code.',
+    title: 'Reserve your address',
+    body: 'Spots are limited per neighborhood. Reserve your address now so your door is held before availability fills.',
     tag: 'Open now',
     active: true,
   },
@@ -128,9 +128,9 @@ export default function Home() {
 
             <ol className="space-y-3.5 mb-6">
               {[
-                'Register below to reserve your address',
-                "We'll confirm your delivery window and pricing",
-                'Our designer arrives and installs your display by hand',
+                'Reserve your address below — spots are limited per neighborhood',
+                'Full package details become available when ordering opens mid-August',
+                'Our designer arrives and installs your display',
               ].map((step, i) => (
                 <li key={i} className="flex gap-3.5 text-sm leading-snug">
                   <span className="font-mono text-[0.7rem] text-muted-foreground shrink-0 w-5 pt-0.5">
@@ -142,7 +142,7 @@ export default function Home() {
             </ol>
 
             <p className="text-xs text-muted-foreground leading-relaxed border-t border-dashed border-border pt-4 mb-6">
-              Each display is delivered and installed by hand, with optional end-of-season removal
+              Each display is delivered and installed with optional end-of-season removal
               — we take everything with us.
             </p>
 
@@ -303,8 +303,8 @@ export default function Home() {
               We only install a set number of homes per neighborhood. Some zip codes are already spoken for.
             </h2>
             <p className="text-base md:text-lg leading-relaxed max-w-lg mx-auto" style={{ color: '#cfc6b8' }}>
-              Register your address now. When ordering opens mid-August, we reach out directly to confirm
-              availability in your area. It takes about a minute.
+              Reserve your address now. When ordering opens mid-August, we reach out directly to confirm
+              your spot. It takes about a minute.
             </p>
             <div className="pt-3">
               <Link
@@ -312,7 +312,7 @@ export default function Home() {
                 data-testid="button-cta-bottom-fall"
                 className="inline-flex items-center font-mono text-[0.8rem] tracking-[0.06em] uppercase bg-primary text-primary-foreground hover:bg-primary/90 px-8 py-[17px] transition-colors"
               >
-                Register your address <ArrowRight className="ml-2 w-3.5 h-3.5" />
+                Reserve your address <ArrowRight className="ml-2 w-3.5 h-3.5" />
               </Link>
               <p className="text-[0.78rem] mt-3" style={{ color: '#7a6a5e' }}>
                 No payment now — just your address on the list.

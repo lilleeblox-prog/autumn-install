@@ -105,7 +105,7 @@ export default function Fall() {
                 <div className="border-l-2 border-primary pl-6 py-2">
                   <p className="font-medium mb-1">Now — Mid-August</p>
                   <p className="text-sm text-muted-foreground">
-                    Register your address. We confirm availability for your zip code when booking opens.
+                    Reserve your address. We hold your spot and reach out when booking opens mid-August.
                   </p>
                 </div>
                 <div className="border-l-2 border-primary/40 pl-6 py-2">
@@ -149,8 +149,8 @@ export default function Fall() {
               <div className="bg-card border border-border rounded-sm p-8 md:p-10">
                 <FallOrderForm
                   serviceType="waitlist"
-                  title="Register Your Address"
-                  description="We'll confirm whether your zip code has availability and follow up with details when ordering opens."
+                  title="Reserve Your Address"
+                  description="Reserve your spot now. Full package details become available when ordering opens mid-August — we'll reach out directly to confirm availability in your zip code."
                 />
               </div>
             </div>
