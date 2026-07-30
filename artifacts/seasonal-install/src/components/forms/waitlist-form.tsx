@@ -13,7 +13,7 @@ const waitlistSchema = z.object({
   firstName: z.string().min(1, 'First name is required'),
   lastName: z.string().min(1, 'Last name is required'),
   email: z.string().email('Valid email is required'),
-  phone: z.string().optional(),
+  phone: z.string().min(1, 'Phone number is required'),
   zipCode: z.string().optional(),
   notes: z.string().optional(),
 });
@@ -126,7 +126,7 @@ export function WaitlistForm({ season, title = 'Join the Waitlist', description 
             name="phone"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Phone (optional)</FormLabel>
+                <FormLabel>Phone</FormLabel>
                 <FormControl>
                   <Input {...field} type="tel" placeholder="(555) 123-4567" data-testid="input-phone" />
                 </FormControl>
