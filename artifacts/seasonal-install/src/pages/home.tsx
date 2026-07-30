@@ -16,21 +16,21 @@ const timelineSteps = [
   {
     num: '01',
     title: 'Reserve your address',
-    body: 'Spots are limited per neighborhood. Reserve your address now so your door is held before availability fills.',
+    body: 'Joining the waitlist holds your address. Spots are capped per neighborhood — once your area fills, we move on.',
     tag: 'Open now',
     active: true,
   },
   {
     num: '02',
-    title: 'Place your order',
-    body: 'Choose your package and install window. Each neighborhood has a fixed number of openings per season.',
+    title: 'Confirm your package',
+    body: 'When ordering opens mid-August, we reach out directly. Choose your package and install window then.',
     tag: 'Opens mid-August',
     active: false,
   },
   {
     num: '03',
     title: 'We deliver & style',
-    body: 'Our team arrives, arranges your display, and leaves your entry ready for guests.',
+    body: 'Our team arrives, arranges your display, and leaves your entry looking exactly as it should.',
     tag: 'Late Sept – Oct',
     active: false,
   },
@@ -60,7 +60,7 @@ export default function Home() {
           </span>
           <div className="space-y-7 pb-2">
             {[
-              { label: 'Current season', value: 'FALL 2026', open: false },
+              { label: 'Current season', value: 'FALL 2026',  open: false },
               { label: 'Booking opens',  value: 'MID AUGUST', open: false },
               { label: 'Waitlist',       value: 'OPEN NOW',   open: true  },
             ].map((item) => (
@@ -95,10 +95,10 @@ export default function Home() {
                 className="absolute inset-0 bg-cover"
                 style={{ backgroundImage: `url(${heroPath})`, backgroundPosition: 'center 28%' }}
               />
-              <div className="absolute inset-0 bg-gradient-to-b from-black/0 via-black/10 to-black/65" />
+              <div className="absolute inset-0 bg-gradient-to-b from-black/0 via-black/10 to-black/70" />
             </motion.div>
 
-            {/* Mobile: eyebrow text at bottom of photo */}
+            {/* Mobile eyebrow */}
             <div className="lg:hidden absolute bottom-5 left-6">
               <span className="font-mono text-[0.6rem] tracking-[0.14em] uppercase text-white/70">
                 Now Serving Tennessee · Fall 2026 · Waitlist Open
@@ -108,52 +108,50 @@ export default function Home() {
 
           {/* Floating card */}
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
+            initial={{ opacity: 0, y: 24 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.5, ease: [0.16, 1, 0.3, 1] }}
+            transition={{ duration: 0.9, delay: 0.5, ease: [0.16, 1, 0.3, 1] }}
             className="
               relative z-10
               mx-4 -mt-14 mb-10
-              lg:absolute lg:right-14 lg:top-1/2 lg:-translate-y-1/2 lg:w-[420px]
+              lg:absolute lg:right-14 lg:top-1/2 lg:-translate-y-1/2 lg:w-[400px]
               lg:mx-0 lg:mt-0 lg:mb-0
-              bg-background shadow-2xl p-8 lg:p-9
+              bg-background shadow-2xl p-9 lg:p-10
             "
           >
-            <p className="font-serif text-[1.2rem] leading-[1.42] text-muted-foreground mb-4">
-              <strong className="text-foreground font-semibold">An essence of fall.</strong>{' '}
-              Natural pumpkins, bespoke arrangements, installed right at your doorway.
+            {/* Eyebrow */}
+            <span className="font-mono text-[0.64rem] tracking-[0.14em] uppercase text-primary block mb-5">
+              Fall 2026 · Tennessee
+            </span>
+
+            {/* Lede */}
+            <p className="font-serif text-[1.35rem] leading-[1.38] text-foreground mb-5">
+              An essence of fall —{' '}
+              <span className="text-muted-foreground">
+                natural pumpkins, dried botanicals, installed and styled at your front door.
+              </span>
             </p>
 
-            <p className="text-sm font-medium text-primary mb-5">Accepting a limited number of addresses per neighborhood.</p>
+            {/* Divider */}
+            <div className="border-t border-dashed border-border mb-5" />
 
-            <ol className="space-y-3.5 mb-6">
-              {[
-                'Reserve your address below — spots are limited per neighborhood',
-                'Full package details become available when ordering opens mid-August',
-                'Our designer arrives and installs your display',
-              ].map((step, i) => (
-                <li key={i} className="flex gap-3.5 text-sm leading-snug">
-                  <span className="font-mono text-[0.7rem] text-muted-foreground shrink-0 w-5 pt-0.5">
-                    0{i + 1}
-                  </span>
-                  <span>{step}</span>
-                </li>
-              ))}
-            </ol>
-
-            <p className="text-xs text-muted-foreground leading-relaxed border-t border-dashed border-border pt-4 mb-6">
-              Each display is delivered and installed with optional end-of-season removal
-              — we take everything with us.
+            {/* Exclusivity + waitlist value prop */}
+            <p className="text-sm text-foreground font-medium leading-relaxed mb-2">
+              We install a limited number of homes per neighborhood.
+            </p>
+            <p className="text-sm text-muted-foreground leading-relaxed mb-7">
+              Join the waitlist to hold your address. When ordering opens mid-August, we reach out directly — your spot is already reserved.
             </p>
 
+            {/* CTA */}
             <Link
               href="/fall"
               data-testid="button-cta-fall"
-              className="flex items-center justify-center w-full font-mono text-[0.78rem] tracking-[0.08em] uppercase bg-primary text-primary-foreground hover:bg-primary/90 py-[17px] transition-colors"
+              className="flex items-center justify-center w-full font-mono text-[0.78rem] tracking-[0.08em] uppercase bg-primary text-primary-foreground hover:bg-primary/90 py-[18px] transition-colors"
             >
-              Join the waitlist <ArrowRight className="ml-2 w-3.5 h-3.5" />
+              Reserve your address <ArrowRight className="ml-2 w-3.5 h-3.5" />
             </Link>
-            <p className="text-center text-[0.72rem] text-muted-foreground mt-3">
+            <p className="text-center text-[0.7rem] text-muted-foreground mt-3 tracking-wide">
               No payment now — just your address on the list.
             </p>
           </motion.div>
@@ -161,14 +159,14 @@ export default function Home() {
       </section>
 
       {/* ── How it works ─────────────────────────────────────── */}
-      <section className="py-24 md:py-28 bg-background border-y border-border">
+      <section className="py-28 md:py-32 bg-background border-y border-border">
         <div className="max-w-6xl mx-auto px-6 lg:px-12">
-          <div className="text-center mb-16">
-            <span className="font-mono text-[0.7rem] tracking-[0.16em] uppercase text-primary block mb-3">
+          <div className="text-center mb-20">
+            <span className="font-mono text-[0.7rem] tracking-[0.16em] uppercase text-primary block mb-4">
               How it works
             </span>
-            <h2 className="text-3xl md:text-[2.4rem] font-serif font-medium leading-tight">
-              Four steps from signup to your doorstep.
+            <h2 className="text-3xl md:text-[2.5rem] font-serif font-medium leading-tight max-w-lg mx-auto">
+              From reservation to your doorstep.
             </h2>
           </div>
 
@@ -178,7 +176,7 @@ export default function Home() {
               className="hidden lg:block absolute top-[22px] left-0 right-0 h-px"
               style={{
                 backgroundImage:
-                  'repeating-linear-gradient(90deg, rgba(33,29,25,0.22) 0 8px, transparent 8px 16px)',
+                  'repeating-linear-gradient(90deg, rgba(33,29,25,0.20) 0 8px, transparent 8px 16px)',
               }}
             />
 
@@ -192,7 +190,7 @@ export default function Home() {
                 className="lg:pr-8 relative z-10"
               >
                 <div
-                  className={`w-11 h-11 rounded-full flex items-center justify-center font-mono text-sm font-medium mb-6 ${
+                  className={`w-11 h-11 rounded-full flex items-center justify-center font-mono text-sm font-medium mb-7 ${
                     step.active
                       ? 'bg-primary text-primary-foreground'
                       : 'bg-foreground text-background'
@@ -201,7 +199,7 @@ export default function Home() {
                   {step.num}
                 </div>
                 <h3 className="font-serif font-medium text-[1.1rem] mb-2">{step.title}</h3>
-                <p className="text-sm text-muted-foreground leading-relaxed mb-3">{step.body}</p>
+                <p className="text-sm text-muted-foreground leading-relaxed mb-4">{step.body}</p>
                 <span
                   className={`font-mono text-[0.63rem] tracking-[0.06em] uppercase px-2.5 py-1 border inline-block ${
                     step.active
@@ -218,17 +216,21 @@ export default function Home() {
       </section>
 
       {/* ── Gallery ──────────────────────────────────────────── */}
-      <section className="py-24 md:py-28 bg-background border-b border-border">
+      <section className="py-28 md:py-32 bg-background border-b border-border">
         <div className="max-w-6xl mx-auto px-6 lg:px-12">
-          <div className="text-center mb-14">
-            <span className="font-mono text-[0.7rem] tracking-[0.16em] uppercase text-primary block mb-3">
+          <div className="text-center mb-16">
+            <span className="font-mono text-[0.7rem] tracking-[0.16em] uppercase text-primary block mb-4">
               Recent work
             </span>
-            <h2 className="text-3xl md:text-[2.4rem] font-serif font-medium">See it at the door.</h2>
+            <h2 className="text-3xl md:text-[2.5rem] font-serif font-medium mb-4">
+              Every door, a little different.
+            </h2>
+            <p className="text-muted-foreground text-base max-w-xs mx-auto leading-relaxed">
+              Each install is designed for the home. No two displays are the same.
+            </p>
           </div>
 
           <div className="relative max-w-3xl mx-auto">
-            {/* Viewport */}
             <div className="overflow-hidden shadow-2xl aspect-[3/2]">
               <div
                 className="flex h-full transition-transform duration-500 ease-in-out"
@@ -245,29 +247,27 @@ export default function Home() {
               </div>
             </div>
 
-            {/* Prev / Next */}
             <button
               onClick={() => setGalleryIdx((i) => (i - 1 + galleryImages.length) % galleryImages.length)}
-              className="absolute -left-5 top-1/2 -translate-y-1/2 w-11 h-11 rounded-full bg-background shadow-lg flex items-center justify-center hover:bg-muted transition-colors"
+              className="absolute -left-5 top-1/2 -translate-y-1/2 w-11 h-11 bg-background shadow-lg flex items-center justify-center hover:bg-muted transition-colors"
               aria-label="Previous photo"
             >
               <ChevronLeft className="w-5 h-5" />
             </button>
             <button
               onClick={() => setGalleryIdx((i) => (i + 1) % galleryImages.length)}
-              className="absolute -right-5 top-1/2 -translate-y-1/2 w-11 h-11 rounded-full bg-background shadow-lg flex items-center justify-center hover:bg-muted transition-colors"
+              className="absolute -right-5 top-1/2 -translate-y-1/2 w-11 h-11 bg-background shadow-lg flex items-center justify-center hover:bg-muted transition-colors"
               aria-label="Next photo"
             >
               <ChevronRight className="w-5 h-5" />
             </button>
 
-            {/* Dots */}
-            <div className="flex justify-center gap-2.5 mt-5">
+            <div className="flex justify-center gap-3 mt-6">
               {galleryImages.map((_, i) => (
                 <button
                   key={i}
                   onClick={() => setGalleryIdx(i)}
-                  className={`w-2 h-2 rounded-full transition-colors border-0 p-0 ${
+                  className={`w-1.5 h-1.5 transition-colors border-0 p-0 ${
                     i === galleryIdx ? 'bg-primary' : 'bg-border'
                   }`}
                   aria-label={`Photo ${i + 1}`}
@@ -275,46 +275,125 @@ export default function Home() {
               ))}
             </div>
 
-            {/* Caption */}
-            <p className="text-center font-mono text-[0.72rem] text-muted-foreground mt-3 tracking-wide">
+            <p className="text-center font-mono text-[0.7rem] text-muted-foreground mt-4 tracking-wide">
               {galleryImages[galleryIdx].alt}
             </p>
           </div>
         </div>
       </section>
 
+      {/* ── All seasons brand section ─────────────────────────── */}
+      <section className="py-28 md:py-36 bg-card border-b border-border overflow-hidden">
+        <div className="max-w-6xl mx-auto px-6 lg:px-12">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-24 items-start">
+
+            {/* Left: brand statement */}
+            <motion.div
+              initial={{ opacity: 0, y: 24 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.7 }}
+              className="lg:sticky lg:top-28"
+            >
+              <span className="font-mono text-[0.7rem] tracking-[0.16em] uppercase text-muted-foreground block mb-6">
+                Every season
+              </span>
+              <h2 className="text-4xl md:text-5xl font-serif font-medium leading-[1.1] mb-7">
+                All seasons,<br />
+                curated by your<br />
+                <em className="not-italic text-primary">favorite team.</em>
+              </h2>
+              <p className="text-base text-muted-foreground leading-relaxed max-w-sm">
+                Fall pumpkins. Winter garland. Summer botanicals. The same designers, the same standard, at your door each season. Once you are in, you are in.
+              </p>
+            </motion.div>
+
+            {/* Right: winter + summer cards */}
+            <div className="space-y-5">
+              {[
+                {
+                  season: 'Winter',
+                  year: '2026–27',
+                  description:
+                    'Fresh evergreen garland, lanterns, and frosted botanicals. A welcome that carries through the holidays.',
+                  href: '/winter',
+                },
+                {
+                  season: 'Summer',
+                  year: '2027',
+                  description:
+                    'Bright blooms, natural textures, and living arrangements that celebrate the warmth of the season.',
+                  href: '/summer',
+                },
+              ].map((item, idx) => (
+                <motion.div
+                  key={item.season}
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.5, delay: idx * 0.12 }}
+                  className="bg-background border border-border p-8 group"
+                >
+                  <div className="flex items-start justify-between gap-4 mb-5">
+                    <div>
+                      <p className="font-serif text-[1.5rem] font-medium leading-none mb-1.5">
+                        {item.season}
+                      </p>
+                      <span className="font-mono text-[0.65rem] tracking-[0.1em] uppercase text-muted-foreground">
+                        {item.year}
+                      </span>
+                    </div>
+                    <span className="font-mono text-[0.6rem] tracking-[0.06em] uppercase px-2.5 py-1.5 border border-secondary/40 text-secondary shrink-0 mt-0.5">
+                      Interest list open
+                    </span>
+                  </div>
+                  <p className="text-sm text-muted-foreground leading-relaxed mb-6">
+                    {item.description}
+                  </p>
+                  <Link
+                    href={item.href}
+                    className="inline-flex items-center gap-2 font-mono text-[0.7rem] tracking-[0.06em] uppercase text-muted-foreground hover:text-primary transition-colors"
+                  >
+                    Reserve your interest <ArrowRight className="w-3 h-3" />
+                  </Link>
+                </motion.div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* ── Dark CTA ─────────────────────────────────────────── */}
-      <section className="py-24 md:py-28 bg-foreground">
-        <div className="max-w-4xl mx-auto px-6 lg:px-12 text-center">
+      <section className="py-28 md:py-36 bg-foreground">
+        <div className="max-w-3xl mx-auto px-6 lg:px-12 text-center">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: '-80px' }}
             transition={{ duration: 0.8 }}
-            className="space-y-5"
+            className="space-y-6"
           >
-            <span className="font-mono text-[0.7rem] tracking-[0.16em] uppercase text-primary block">
-              Fall 2026
+            <span className="font-mono text-[0.68rem] tracking-[0.18em] uppercase text-primary block">
+              Fall 2026 · Tennessee
             </span>
             <h2
-              className="text-3xl md:text-4xl lg:text-5xl font-serif font-medium leading-tight max-w-2xl mx-auto"
+              className="text-3xl md:text-4xl lg:text-[3rem] font-serif font-medium leading-[1.1]"
               style={{ color: 'hsl(36 40% 96%)' }}
             >
-              We only install a set number of homes per neighborhood. Some zip codes are already spoken for.
+              Your door should be<br className="hidden sm:block" /> the one that is ready.
             </h2>
-            <p className="text-base md:text-lg leading-relaxed max-w-lg mx-auto" style={{ color: '#cfc6b8' }}>
-              Reserve your address now. When ordering opens mid-August, we reach out directly to confirm
-              your spot. It takes about a minute.
+            <p className="text-base leading-relaxed max-w-sm mx-auto" style={{ color: '#cfc6b8' }}>
+              Spaces are limited per neighborhood. Join the waitlist — your address is held, and we reach out in mid-August to confirm your package and schedule.
             </p>
             <div className="pt-3">
               <Link
                 href="/fall"
                 data-testid="button-cta-bottom-fall"
-                className="inline-flex items-center font-mono text-[0.8rem] tracking-[0.06em] uppercase bg-primary text-primary-foreground hover:bg-primary/90 px-8 py-[17px] transition-colors"
+                className="inline-flex items-center font-mono text-[0.8rem] tracking-[0.07em] uppercase bg-primary text-primary-foreground hover:bg-primary/90 px-10 py-[18px] transition-colors"
               >
-                Reserve your address <ArrowRight className="ml-2 w-3.5 h-3.5" />
+                Reserve your address <ArrowRight className="ml-2.5 w-3.5 h-3.5" />
               </Link>
-              <p className="text-[0.78rem] mt-3" style={{ color: '#7a6a5e' }}>
+              <p className="text-[0.72rem] mt-4 tracking-wide" style={{ color: '#7a6a5e' }}>
                 No payment now — just your address on the list.
               </p>
             </div>
@@ -322,75 +401,12 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ── Other seasons ────────────────────────────────────── */}
-      <section className="py-20 md:py-24 bg-background border-t border-border">
-        <div className="max-w-6xl mx-auto px-6 lg:px-12">
-          <div className="mb-12">
-            <span className="font-mono text-[0.7rem] tracking-[0.16em] uppercase text-muted-foreground block mb-3">
-              Other seasons
-            </span>
-            <h2 className="text-2xl md:text-3xl font-serif font-medium leading-snug max-w-md">
-              We install year-round — winter and summer are coming.
-            </h2>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {[
-              {
-                season: 'Winter',
-                label: 'Winter 2026–27',
-                description:
-                  'Balsam garlands, lanterns, and seasonal evergreens. A welcome that holds through the holidays.',
-                status: 'Not yet open',
-                href: '/winter',
-              },
-              {
-                season: 'Summer',
-                label: 'Summer 2027',
-                description:
-                  'Bright botanicals, fresh arrangements, and sun-ready displays for your front entry.',
-                status: 'Not yet open',
-                href: '/summer',
-              },
-            ].map((item) => (
-              <motion.div
-                key={item.season}
-                initial={{ opacity: 0, y: 16 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.5 }}
-                className="border border-border p-7 flex flex-col gap-4"
-              >
-                <div className="flex items-start justify-between gap-4">
-                  <span className="font-mono text-[0.68rem] tracking-[0.12em] uppercase text-muted-foreground">
-                    {item.label}
-                  </span>
-                  <span className="font-mono text-[0.63rem] tracking-[0.06em] uppercase px-2.5 py-1 border border-border text-muted-foreground shrink-0">
-                    {item.status}
-                  </span>
-                </div>
-                <div>
-                  <h3 className="font-serif font-medium text-[1.15rem] mb-2">{item.season} installs</h3>
-                  <p className="text-sm text-muted-foreground leading-relaxed">{item.description}</p>
-                </div>
-                <Link
-                  href={item.href}
-                  className="mt-auto inline-flex items-center font-mono text-[0.72rem] tracking-[0.06em] uppercase text-muted-foreground hover:text-foreground transition-colors gap-1.5"
-                >
-                  Learn more <ArrowRight className="w-3 h-3" />
-                </Link>
-              </motion.div>
-            ))}
-          </div>
-        </div>
-      </section>
-
       {/* Footer */}
       <footer className="border-t border-border py-10 bg-background">
         <div className="max-w-6xl mx-auto px-6 lg:px-12 flex items-center justify-between flex-wrap gap-4">
           <span className="font-serif text-lg font-medium">Made to Welcome</span>
-          <span className="font-mono text-[0.75rem] text-muted-foreground tracking-wide">
-            Serving Tennessee · Fall 2026
+          <span className="font-mono text-[0.72rem] text-muted-foreground tracking-wide">
+            Seasonal décor · Delivery &amp; installation · Tennessee
           </span>
         </div>
       </footer>
