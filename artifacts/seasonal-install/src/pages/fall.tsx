@@ -48,7 +48,7 @@ export default function Fall() {
 
             {/* Sub */}
             <p className="text-white/75 text-lg leading-relaxed max-w-xl mb-10">
-              Organic pumpkins, heirloom gourds, and hay bales — arranged at your front door so your home feels ready the moment autumn arrives. A small number of homes per neighborhood, each one done by hand.
+              Organic pumpkins, heirloom gourds, and hay bales, arranged at your front door so your home feels ready the moment autumn arrives. A small number of homes per neighborhood, each one done by hand.
             </p>
 
             {/* CTA row */}
@@ -96,7 +96,7 @@ export default function Fall() {
                   The service
                 </span>
                 <h2 className="text-3xl md:text-4xl font-serif font-medium">
-                  Pumpkins, gourds, hay bales — all of it handled.
+                  Pumpkins, gourds, hay bales. All of it handled.
                 </h2>
               </div>
               <div className="space-y-4 text-muted-foreground leading-relaxed">
@@ -108,8 +108,8 @@ export default function Fall() {
                     'Organic pumpkins and heirloom gourds, arranged for your specific entry',
                     'Hay bales for height, structure, and that unmistakable fall feel',
                     'Planter styling with fall foliage and seasonal fillers',
-                    'Full delivery and installation — we bring everything',
-                    'Optional removal mid-to-end of November — your entry is clear for December 1st',
+                    'Full delivery and installation. We bring everything.',
+                    'Optional removal mid-to-end of November so your entry is clear for December 1st',
                   ].map((item) => (
                     <li key={item} className="flex items-start gap-3 text-sm">
                       <span className="mt-[5px] w-1 h-1 rounded-full bg-primary shrink-0" />
@@ -118,7 +118,7 @@ export default function Fall() {
                   ))}
                 </ul>
                 <p className="text-sm pt-1">
-                  Every pumpkin and gourd is sourced fresh for the season. We do not offer storage — add the removal service and we collect everything mid-to-end of November so your entry is clear and ready for December 1st.
+                  Every pumpkin and gourd is sourced fresh for the season. We do not offer storage. Add the removal service and we collect everything mid-to-end of November so your entry is clear and ready for December 1st.
                 </p>
               </div>
             </motion.div>
@@ -201,7 +201,7 @@ export default function Fall() {
                 Your pumpkins, your gourds,<br /> your fall — reserved.
               </h2>
               <p className="text-muted-foreground leading-relaxed mb-8">
-                We install a small number of homes per neighborhood each fall so every display gets the attention it deserves. Reserve your spot now and we reach out in mid-August with your fall package options — pumpkins, gourds, dried arrangements, and everything in between.
+                We install a small number of homes per neighborhood each fall so every display gets the attention it deserves. Reserve your spot now and we reach out in mid-August with your fall package options: pumpkins, gourds, hay bales, and everything in between.
               </p>
               <div className="space-y-3">
                 {[

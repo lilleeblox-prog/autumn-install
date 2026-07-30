@@ -55,8 +55,7 @@ export default function Summer() {
               <h2 className="text-3xl font-serif font-medium">What to expect</h2>
               <div className="space-y-4 text-muted-foreground leading-relaxed">
                 <p>
-                  Our summer service brings seasonal flag installs to your home — set up beautifully and removed
-                  when the season ends. Full details will be available when the service opens.
+                  Our summer service brings seasonal flag installs to your home, set up beautifully and removed when the season ends. Full details will be available when the service opens.
                 </p>
                 <p className="text-sm pt-2">
                   Reserve your zip code below and we will confirm availability in your area when summer service launches.

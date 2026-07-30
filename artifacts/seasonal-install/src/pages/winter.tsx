@@ -55,8 +55,7 @@ export default function Winter() {
               <h2 className="text-3xl font-serif font-medium">What to expect</h2>
               <div className="space-y-4 text-muted-foreground leading-relaxed">
                 <p>
-                  Our winter service brings beautifully dressed garland to your home — installed by hand and removed
-                  when the season ends. Full details will be shared when the service opens.
+                  Our winter service brings beautifully dressed garland to your home, installed by hand and removed when the season ends. Full details will be shared when the service opens.
                 </p>
                 <p className="text-sm pt-2">
                   Reserve your zip code below and we will confirm availability in your area when winter service launches.

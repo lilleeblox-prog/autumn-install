@@ -1,15 +1,16 @@
 import { useState } from 'react';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import { Link } from 'wouter';
 import { ArrowRight, ChevronLeft, ChevronRight } from 'lucide-react';
 import { Navigation } from '@/components/navigation';
+import { FallOrderForm } from '@/components/forms/fall-order-form';
 
 const heroPath = '/images/hero-doorway.jpg';
 
 const galleryImages = [
-  { src: '/images/portfolio-fall-1.png', alt: 'Modern Farmhouse Walkway — Franklin, TN' },
-  { src: '/images/portfolio-fall-2.png', alt: 'Rustic Timber Porch — Brentwood, TN' },
-  { src: '/images/portfolio-fall-3.png', alt: 'White Brick Entry — Belle Meade, TN' },
+  { src: '/images/portfolio-fall-1.png', alt: 'Modern Farmhouse Walkway, Franklin TN', location: 'Franklin, TN' },
+  { src: '/images/portfolio-fall-2.png', alt: 'Rustic Timber Porch, Brentwood TN', location: 'Brentwood, TN' },
+  { src: '/images/portfolio-fall-3.png', alt: 'White Brick Entry, Belle Meade TN', location: 'Belle Meade, TN' },
 ];
 
 const timelineSteps = [
@@ -23,7 +24,7 @@ const timelineSteps = [
   {
     num: '02',
     title: 'Choose your package',
-    body: 'When ordering opens, we reach out with everything you need — package options, available install dates, and all the details.',
+    body: 'When ordering opens, we reach out with everything you need: package options, available install dates, and all the details.',
     tag: 'Opens mid-August',
     active: false,
   },
@@ -45,6 +46,7 @@ const timelineSteps = [
 
 export default function Home() {
   const [galleryIdx, setGalleryIdx] = useState(0);
+  const [showForm, setShowForm] = useState(false);
 
   return (
     <div className="min-h-[100dvh]">
@@ -124,36 +126,61 @@ export default function Home() {
               Fall 2026 · Tennessee
             </span>
 
-            {/* Lede */}
-            <p className="font-serif text-[1.35rem] leading-[1.38] text-foreground mb-5">
-              Your home, dressed for the season.{' '}
-              <span className="text-muted-foreground">
-                We bring the pumpkins, the gourds, the hay bales — arranged by hand so your entry feels as warm as the season itself.
-              </span>
-            </p>
+            <AnimatePresence mode="wait">
+              {!showForm ? (
+                <motion.div
+                  key="card-content"
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                  transition={{ duration: 0.2 }}
+                >
+                  {/* Lede */}
+                  <p className="font-serif text-[1.35rem] leading-[1.38] text-foreground mb-5">
+                    Your home, dressed for the season.{' '}
+                    <span className="text-muted-foreground">
+                      We bring the pumpkins, the gourds, the hay bales, arranged by hand so your entry feels as warm as the season itself.
+                    </span>
+                  </p>
 
-            {/* Divider */}
-            <div className="border-t border-dashed border-border mb-5" />
+                  {/* Divider */}
+                  <div className="border-t border-dashed border-border mb-5" />
 
-            {/* Exclusivity + waitlist value prop */}
-            <p className="text-sm text-foreground font-medium leading-relaxed mb-2">
-              We keep our work personal — a small number of homes per neighborhood, each one thoughtfully attended to.
-            </p>
-            <p className="text-sm text-muted-foreground leading-relaxed mb-7">
-              Reserve your address now to hold your place. When ordering opens mid-August, we reach out to plan your install together.
-            </p>
+                  {/* Exclusivity + waitlist value prop */}
+                  <p className="text-sm text-foreground font-medium leading-relaxed mb-2">
+                    We keep our work personal. A small number of homes per neighborhood, each one thoughtfully attended to.
+                  </p>
+                  <p className="text-sm text-muted-foreground leading-relaxed mb-7">
+                    Reserve your address now to hold your place. When ordering opens mid-August, we reach out to plan your install together.
+                  </p>
 
-            {/* CTA */}
-            <Link
-              href="/fall"
-              data-testid="button-cta-fall"
-              className="flex items-center justify-center w-full font-mono text-[0.78rem] tracking-[0.08em] uppercase bg-primary text-primary-foreground hover:bg-primary/90 py-[18px] transition-colors"
-            >
-              Reserve your address <ArrowRight className="ml-2 w-3.5 h-3.5" />
-            </Link>
-            <p className="text-center text-[0.7rem] text-muted-foreground mt-3 tracking-wide">
-              No payment now. Just your address on the list.
-            </p>
+                  {/* CTA */}
+                  <button
+                    onClick={() => setShowForm(true)}
+                    data-testid="button-cta-fall"
+                    className="flex items-center justify-center w-full font-mono text-[0.78rem] tracking-[0.08em] uppercase bg-primary text-primary-foreground hover:bg-primary/90 py-[18px] transition-colors"
+                  >
+                    Reserve your address <ArrowRight className="ml-2 w-3.5 h-3.5" />
+                  </button>
+                  <p className="text-center text-[0.7rem] text-muted-foreground mt-3 tracking-wide">
+                    No payment now. Just your address on the list.
+                  </p>
+                </motion.div>
+              ) : (
+                <motion.div
+                  key="card-form"
+                  initial={{ opacity: 0, y: 8 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.3 }}
+                >
+                  <FallOrderForm
+                    serviceType="waitlist"
+                    title="Reserve Your Spot"
+                    description="Your spot is held the moment you submit. We reach out in mid-August with package details."
+                  />
+                </motion.div>
+              )}
+            </AnimatePresence>
           </motion.div>
         </div>
       </section>
@@ -226,7 +253,7 @@ export default function Home() {
               Every doorstep is a little different.
             </h2>
             <p className="text-muted-foreground text-base max-w-xs mx-auto leading-relaxed">
-              We design each install around the home in front of us. The proportions, the textures, the warmth — nothing is placed without care.
+              We design each install around the home in front of us. The proportions, the textures, the warmth. Nothing is placed without care.
             </p>
           </div>
 
@@ -276,7 +303,7 @@ export default function Home() {
             </div>
 
             <p className="text-center font-mono text-[0.7rem] text-muted-foreground mt-4 tracking-wide">
-              {galleryImages[galleryIdx].alt}
+              {galleryImages[galleryIdx].location}
             </p>
           </div>
         </div>
@@ -354,7 +381,7 @@ export default function Home() {
                     href={item.href}
                     className="inline-flex items-center gap-2 font-mono text-[0.7rem] tracking-[0.06em] uppercase text-muted-foreground hover:text-primary transition-colors"
                   >
-                    Reserve your interest <ArrowRight className="w-3 h-3" />
+                    Get notified when waitlist opens <ArrowRight className="w-3 h-3" />
                   </Link>
                 </motion.div>
               ))}
@@ -383,7 +410,7 @@ export default function Home() {
               Every season, some homes<br className="hidden sm:block" /> just feel ready. Yours should.
             </h2>
             <p className="text-base leading-relaxed max-w-sm mx-auto" style={{ color: '#cfc6b8' }}>
-              We keep the service intimate — a small number of homes per neighborhood, each one given our full attention. Reserve your address and we will be in touch in mid-August with everything you need.
+              We keep the service intimate. A small number of homes per neighborhood, each one given our full attention. Reserve your address and we will be in touch in mid-August with everything you need.
             </p>
             <div className="pt-3">
               <Link
