@@ -7,7 +7,6 @@ import { Navigation } from '@/components/navigation';
 const heroPath = '/images/hero-doorway.jpg';
 
 const galleryImages = [
-  { src: '/images/hero-doorway.jpg', alt: 'Classic Colonial Entry — Nashville, TN' },
   { src: '/images/portfolio-fall-1.png', alt: 'Modern Farmhouse Walkway — Franklin, TN' },
   { src: '/images/portfolio-fall-2.png', alt: 'Rustic Timber Porch — Brentwood, TN' },
   { src: '/images/portfolio-fall-3.png', alt: 'White Brick Entry — Belle Meade, TN' },
