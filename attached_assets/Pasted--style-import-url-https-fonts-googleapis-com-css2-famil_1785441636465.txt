@@ -1,0 +1,517 @@
+<style>
+  @import url("https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400&family=Work+Sans:wght@300;400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap");
+  :root{
+    --ink:#211d19;
+    --stone:#f1e9da;
+    --stone-deep:#e5dac5;
+    --pumpkin:#c1602c;
+    --pumpkin-deep:#9c4a20;
+    --sage:#5f6b4e;
+    --rose:#c48577;
+    --ink-soft:#4a423a;
+    --paper:#faf6ee;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  html{scroll-behavior:smooth;}
+  body{
+    background:var(--stone);
+    color:var(--ink);
+    font-family:'Work Sans', sans-serif;
+    font-weight:400;
+    line-height:1.5;
+    -webkit-font-smoothing:antialiased;
+  }
+  h1,h2,h3{
+    font-family:'Fraunces', serif;
+    font-weight:500;
+    line-height:1.05;
+    letter-spacing:-0.01em;
+    color:var(--ink);
+  }
+  a{color:inherit;}
+  .eyebrow{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:0.72rem;
+    letter-spacing:0.16em;
+    text-transform:uppercase;
+    color:var(--pumpkin-deep);
+    font-weight:500;
+  }
+  .wrap{max-width:1180px; margin:0 auto; padding:0 32px;}
+
+  nav{
+    position:sticky; top:0; z-index:50;
+    background:rgba(241,233,218,0.88);
+    backdrop-filter:blur(8px);
+    border-bottom:1px solid rgba(33,29,25,0.08);
+  }
+  nav .wrap{
+    display:flex; align-items:center; justify-content:space-between;
+    height:76px;
+  }
+  .wordmark{font-family:'Fraunces', serif; font-size:1.15rem; font-weight:500; letter-spacing:-0.01em;}
+  .wordmark span{color:var(--pumpkin);}
+  .wordmark-logo{height:44px; width:auto; display:block;}
+  .footer-logo{height:38px;}
+  .nav-cta{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:0.75rem;
+    letter-spacing:0.06em;
+    text-transform:uppercase;
+    background:var(--ink);
+    color:var(--paper);
+    padding:11px 20px;
+    border-radius:2px;
+    text-decoration:none;
+    transition:background 0.2s ease;
+    white-space:nowrap;
+  }
+  .nav-cta:hover{background:var(--pumpkin-deep);}
+
+  .hero{position:relative; display:flex; min-height:100vh; background:var(--paper);}
+  .hero-sidebar{
+    width:264px; flex-shrink:0; padding:44px 30px;
+    display:flex; flex-direction:column;
+    border-right:1px solid rgba(33,29,25,0.08);
+  }
+  .hero-sidebar .eyebrow{display:block; margin-bottom:44px;}
+  .hero-meta{display:flex; flex-direction:column; gap:22px;}
+  .hero-meta-row{display:flex; flex-direction:column; gap:9px;}
+  .hero-meta-label{font-size:0.86rem; color:var(--ink-soft);}
+  .hero-meta-pill{
+    font-family:'IBM Plex Mono', monospace; font-size:0.72rem; letter-spacing:0.05em;
+    background:var(--stone-deep); color:var(--ink); padding:9px 13px; border-radius:2px; width:fit-content;
+  }
+  .hero-meta-pill.open{background:rgba(95,107,78,0.16); color:var(--sage);}
+  .hero-photo-wrap{position:relative; flex:1; overflow:hidden; min-height:640px;}
+  .hero-photo{
+    position:absolute; inset:0;
+    background-image:
+      linear-gradient(180deg, rgba(20,17,14,0) 35%, rgba(20,17,14,0.8) 100%),
+      url({{ 'hero-doorway.jpg' | asset_url }});
+    background-size:cover;
+    background-position:center 28%;
+    filter:saturate(0.95);
+  }
+  .hero-card{
+    position:absolute; right:52px; top:50%; transform:translateY(-50%);
+    width:420px; max-width:calc(100% - 64px);
+    background:var(--paper); border-radius:4px; padding:36px 36px 32px;
+    box-shadow:0 34px 64px rgba(20,17,14,0.28); z-index:3;
+  }
+  .fh-lede{font-family:'Fraunces', serif; font-size:1.32rem; line-height:1.42; color:var(--ink-soft); font-weight:400;}
+  .fh-lede strong{color:var(--ink); font-weight:600;}
+  .fh-status{margin-top:15px; font-size:0.92rem; color:var(--pumpkin-deep); font-weight:500;}
+  .fh-status a{color:var(--pumpkin-deep); text-decoration:underline;}
+  .fh-steps{list-style:none; margin-top:24px; display:flex; flex-direction:column; gap:15px;}
+  .fh-steps li{display:flex; gap:14px; font-size:0.9rem; color:var(--ink); line-height:1.4;}
+  .fh-num{font-family:'IBM Plex Mono', monospace; font-size:0.78rem; color:var(--ink-soft); flex-shrink:0; width:20px; padding-top:1px;}
+  .fh-fine{margin-top:20px; padding-top:18px; border-top:1px dashed rgba(33,29,25,0.18); font-size:0.82rem; color:var(--ink-soft); line-height:1.45;}
+  .fh-cta{margin-top:26px;}
+  .fh-join{
+    display:flex; align-items:center; justify-content:center; width:100%;
+    font-family:'IBM Plex Mono', monospace; font-size:0.88rem; letter-spacing:0.08em; text-transform:uppercase;
+    background:var(--pumpkin); color:var(--paper); padding:18px 24px; border-radius:2px; border:none; cursor:pointer;
+    text-decoration:none; transition:background 0.2s ease, transform 0.2s ease;
+  }
+  .fh-join:hover{background:var(--pumpkin-deep); transform:translateY(-1px);}
+  .fh-mini-form{display:none; flex-direction:column; gap:12px;}
+  .fh-mini-row{display:grid; grid-template-columns:1fr 1fr; gap:10px;}
+  .fh-mini-field{display:flex; flex-direction:column; gap:5px;}
+  .fh-mini-field label{
+    font-family:'IBM Plex Mono', monospace; font-size:0.62rem; letter-spacing:0.05em;
+    text-transform:uppercase; color:var(--ink-soft);
+  }
+  .fh-mini-form input, .fh-mini-form select{
+    font-family:'Work Sans', sans-serif; font-size:0.88rem; padding:11px 12px;
+    border:1px solid rgba(33,29,25,0.2); border-radius:2px; background:var(--stone); color:var(--ink); width:100%;
+  }
+  .fh-mini-form input:focus, .fh-mini-form select:focus{
+    outline:2px solid var(--pumpkin); outline-offset:1px; background:var(--paper);
+  }
+  .fh-mini-submit{
+    margin-top:2px; display:flex; align-items:center; justify-content:center; width:100%;
+    font-family:'IBM Plex Mono', monospace; font-size:0.82rem; letter-spacing:0.06em; text-transform:uppercase;
+    background:var(--ink); color:var(--paper); border:none; padding:14px 22px; border-radius:2px; cursor:pointer;
+    transition:background 0.2s ease;
+  }
+  .fh-mini-submit:hover{background:var(--pumpkin-deep);}
+  .fh-mini-fine{font-size:0.76rem; color:var(--ink-soft); text-align:center;}
+  .fh-mini-success{display:none; font-size:0.9rem; color:var(--sage); font-weight:500; text-align:center;}
+  .fh-cta.show-form .fh-join{display:none;}
+  .fh-cta.show-form .fh-mini-form{display:flex;}
+  .fh-cta.submitted .fh-mini-form{display:none;}
+  .fh-cta.submitted .fh-mini-success{display:block;}
+  @media (max-width: 960px){
+    .hero{flex-direction:column; min-height:auto;}
+    .hero-sidebar{
+      width:100%; flex-direction:row; align-items:center; justify-content:space-between;
+      border-right:none; border-bottom:1px solid rgba(33,29,25,0.08); padding:20px 24px;
+    }
+    .hero-sidebar .eyebrow{margin-bottom:0;}
+    .hero-meta{flex-direction:row; gap:16px;}
+    .hero-meta-row{flex-direction:row; align-items:center; gap:8px;}
+    .hero-photo-wrap{min-height:56vh;}
+    .hero-card{position:static; width:auto; max-width:none; margin:-48px 20px 0; transform:none; box-shadow:0 20px 40px rgba(20,17,14,0.22);}
+  }
+  @media (max-width: 560px){ .hero-meta{display:none;} }
+  .btn-primary{
+    font-family:'IBM Plex Mono', monospace; font-size:0.82rem; letter-spacing:0.05em; text-transform:uppercase;
+    background:var(--pumpkin); color:var(--paper); padding:17px 30px; border-radius:2px; text-decoration:none;
+    display:inline-block; transition:background 0.2s ease, transform 0.2s ease; border:none; cursor:pointer;
+  }
+  .btn-primary:hover{background:#a8531f; transform:translateY(-1px);}
+  .hero-note{font-size:0.85rem; color:#cfc6b8;}
+  .hero-note strong{color:#f0d9be; font-weight:500;}
+
+  .timeline{background:var(--paper); padding:110px 0 100px; border-bottom:1px solid rgba(33,29,25,0.08);}
+  .section-head{max-width:640px; margin:0 auto 64px; text-align:center;}
+  .section-head .eyebrow{margin-bottom:14px; display:block;}
+  .section-head h2{font-size:clamp(1.8rem,3.4vw,2.6rem);}
+  .tl-grid{display:grid; grid-template-columns:repeat(4, 1fr); gap:0; position:relative;}
+  .tl-grid::before{
+    content:""; position:absolute; top:22px; left:0; right:0; height:1px;
+    background:repeating-linear-gradient(90deg, rgba(33,29,25,0.25) 0 8px, transparent 8px 16px);
+  }
+  .tl-item{padding:0 28px 0 0; position:relative;}
+  .tl-num{
+    font-family:'IBM Plex Mono', monospace; font-size:0.95rem; color:var(--paper); background:var(--ink);
+    width:44px; height:44px; border-radius:50%; display:flex; align-items:center; justify-content:center;
+    margin-bottom:26px; position:relative; z-index:2;
+  }
+  .tl-item.is-active .tl-num{background:var(--pumpkin);}
+  .tl-item h3{font-size:1.15rem; margin-bottom:10px; font-weight:500;}
+  .tl-item p{font-size:0.92rem; color:var(--ink-soft);}
+  .tl-tag{
+    display:inline-block; margin-top:14px; font-family:'IBM Plex Mono', monospace; font-size:0.68rem;
+    letter-spacing:0.06em; text-transform:uppercase; padding:5px 10px; border:1px solid rgba(33,29,25,0.2);
+    border-radius:2px; color:var(--ink-soft);
+  }
+  .tl-item.is-active .tl-tag{border-color:var(--pumpkin); color:var(--pumpkin-deep); background:rgba(193,96,44,0.08);}
+
+  .gallery{background:var(--paper); padding:110px 0; border-bottom:1px solid rgba(33,29,25,0.08);}
+  .carousel{position:relative; max-width:920px; margin:56px auto 0;}
+  .carousel-viewport{overflow:hidden; border-radius:4px; box-shadow:0 30px 60px rgba(20,17,14,0.22);}
+  .carousel-track{display:flex; transition:transform 0.45s ease;}
+  .carousel-track img{width:100%; flex:0 0 100%; display:block; aspect-ratio:3/2; object-fit:cover;}
+  .car-btn{
+    position:absolute; top:50%; transform:translateY(-50%); width:44px; height:44px; border-radius:50%;
+    border:none; background:var(--paper); color:var(--ink); font-family:'IBM Plex Mono', monospace; font-size:1rem;
+    cursor:pointer; box-shadow:0 8px 20px rgba(20,17,14,0.2); display:flex; align-items:center; justify-content:center;
+    transition:background 0.2s ease; z-index:3;
+  }
+  .car-btn:hover{background:var(--stone-deep);}
+  .car-prev{left:-20px;}
+  .car-next{right:-20px;}
+  .car-dots{display:flex; justify-content:center; gap:10px; margin-top:24px;}
+  .car-dot{width:8px; height:8px; border-radius:50%; background:rgba(33,29,25,0.22); border:none; cursor:pointer; padding:0; transition:background 0.2s ease;}
+  .car-dot.active{background:var(--pumpkin);}
+  @media (max-width: 640px){ .car-prev{left:8px;} .car-next{right:8px;} }
+
+  .packages{background:var(--stone-deep); padding:110px 0 120px;}
+  .pkg-row{display:grid; grid-template-columns:repeat(2, 1fr); gap:56px 48px; max-width:900px; margin:0 auto;}
+  .pkg-item{display:flex; flex-direction:column; align-items:center; text-align:center;}
+  .pkg-hand{font-family:'Fraunces', serif; font-size:1.3rem; font-weight:500; margin-bottom:8px; color:var(--ink);}
+  .pkg-logo{height:230px; width:auto; max-width:100%; margin-bottom:10px;}
+  .pkg-item p{font-size:0.85rem; color:var(--ink-soft); max-width:22ch;}
+  .pkg-flag{font-family:'IBM Plex Mono', monospace; font-size:0.62rem; letter-spacing:0.08em; text-transform:uppercase; color:var(--pumpkin-deep); margin-bottom:8px;}
+  .pkg-note{text-align:center; margin-top:56px; font-size:0.9rem; color:var(--ink-soft); font-style:italic;}
+  @media (max-width: 560px){ .pkg-row{grid-template-columns:1fr; gap:48px;} }
+
+  .waitlist{background:var(--ink); padding:110px 0 120px; color:var(--paper); scroll-margin-top:76px;}
+  .waitlist .section-head .eyebrow{color:#e8b98f;}
+  .waitlist .section-head h2{color:var(--paper);}
+  .waitlist .section-head p{color:#cfc6b8; margin-top:14px; max-width:52ch; font-size:1rem;}
+  .ticket{
+    background:var(--paper); color:var(--ink); border-radius:6px; display:grid;
+    grid-template-columns:280px 1px 1fr; max-width:960px; margin:56px auto 0;
+    box-shadow:0 30px 60px rgba(0,0,0,0.35); position:relative;
+  }
+  .ticket-stub{padding:40px 32px; display:flex; flex-direction:column; justify-content:space-between;}
+  .ticket-stub .eyebrow{margin-bottom:20px; display:block;}
+  .stub-line{display:flex; justify-content:space-between; font-family:'IBM Plex Mono', monospace; font-size:0.78rem; padding:10px 0; border-bottom:1px dashed rgba(33,29,25,0.18);}
+  .stub-line span:first-child{color:var(--ink-soft);}
+  .stub-line span:last-child{font-weight:500; text-align:right;}
+  .stub-foot{font-family:'IBM Plex Mono', monospace; font-size:0.68rem; letter-spacing:0.05em; color:var(--ink-soft); margin-top:24px;}
+  .perforation{
+    position:relative; background-image:radial-gradient(circle, var(--ink) 5px, transparent 5.5px);
+    background-size:100% 26px; background-repeat:repeat-y; background-position:center -13px;
+  }
+  .ticket-form{padding:40px 40px 40px 44px;}
+  .ticket-form h3{font-size:1.3rem; margin-bottom:6px;}
+  .ticket-form > p{font-size:0.88rem; color:var(--ink-soft); margin-bottom:26px;}
+  .field-row{display:grid; grid-template-columns:1fr 1fr; gap:16px; margin-bottom:16px;}
+  .field{display:flex; flex-direction:column; gap:6px;}
+  .field.full{grid-column:1 / -1;}
+  label{font-family:'IBM Plex Mono', monospace; font-size:0.68rem; letter-spacing:0.06em; text-transform:uppercase; color:var(--ink-soft);}
+  input, select{font-family:'Work Sans', sans-serif; font-size:0.95rem; padding:11px 12px; border:1px solid rgba(33,29,25,0.2); border-radius:2px; background:var(--stone); color:var(--ink);}
+  input:focus, select:focus{outline:2px solid var(--pumpkin); outline-offset:1px; background:var(--paper);}
+  .submit-row{margin-top:22px; display:flex; align-items:center; gap:18px; flex-wrap:wrap;}
+  .submit-row .fine{font-size:0.78rem; color:var(--ink-soft);}
+  .success-msg{display:none; background:rgba(95,107,78,0.12); border:1px solid var(--sage); color:var(--sage); padding:16px 18px; border-radius:3px; font-size:0.9rem; margin-top:18px;}
+  .success-msg.show{display:block;}
+
+  footer{background:var(--paper); padding:48px 0; border-top:1px solid rgba(33,29,25,0.08);}
+  footer .wrap{display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:16px;}
+  footer .fine{font-size:0.82rem; color:var(--ink-soft);}
+
+  @media (max-width: 860px){
+    .tl-grid{grid-template-columns:repeat(2, 1fr); row-gap:44px;}
+    .tl-grid::before{display:none;}
+    .ticket{grid-template-columns:1fr; margin:56px 16px 0;}
+    .perforation{background-image:radial-gradient(circle, var(--ink) 5px, transparent 5.5px); background-size:26px 100%; background-repeat:repeat-x; background-position:-13px center; height:2px; width:100%;}
+    .ticket-stub{border-bottom:1px solid rgba(33,29,25,0.08);}
+    .field-row{grid-template-columns:1fr;}
+    .hero{min-height:100vh;}
+  }
+  @media (prefers-reduced-motion: reduce){ *{transition:none !important;} }
+</style>
+
+<nav>
+  <div class="wrap">
+    <img src="{{ 'hello-harvest-logo.png' | asset_url }}" alt="Hello Harvest" class="wordmark-logo">
+    <a href="#waitlist" class="nav-cta">Join the waitlist</a>
+  </div>
+</nav>
+
+<section class="hero">
+  <div class="hero-sidebar">
+    <span class="eyebrow">Now Serving Tennessee</span>
+    <div class="hero-meta">
+      <div class="hero-meta-row"><span class="hero-meta-label">Current season</span><span class="hero-meta-pill">FALL 2026</span></div>
+      <div class="hero-meta-row"><span class="hero-meta-label">Booking opens</span><span class="hero-meta-pill">MID AUGUST</span></div>
+      <div class="hero-meta-row"><span class="hero-meta-label">Waitlist</span><span class="hero-meta-pill open">OPEN</span></div>
+    </div>
+  </div>
+  <div class="hero-photo-wrap">
+    <div class="hero-photo"></div>
+    <div class="hero-card">
+      <p class="fh-lede"><strong>An essence of fall.</strong> Natural pumpkins, limited routes, designed right at your doorway.</p>
+      <p class="fh-status">Currently accepting new addresses.</p>
+      <ol class="fh-steps">
+        <li><span class="fh-num">01</span><span>Register with our concierge to reserve your address</span></li>
+        <li><span class="fh-num">02</span><span>If you secure a spot, we'll confirm your delivery window and details</span></li>
+        <li><span class="fh-num">03</span><span>On your week, our designer arrives and installs your bespoke display in person</span></li>
+      </ol>
+      <p class="fh-fine">Each display is fully designed and installed by hand, with optional weekly removal through November.</p>
+      <div class="fh-cta" id="fhCta">
+        <button type="button" class="fh-join" id="fhJoinBtn">Join now</button>
+        <form class="fh-mini-form" id="fhMiniForm">
+          <div class="fh-mini-row">
+            <div class="fh-mini-field"><label for="fhName">Name</label><input type="text" id="fhName" required></div>
+            <div class="fh-mini-field"><label for="fhEmail">Email</label><input type="email" id="fhEmail" required></div>
+          </div>
+          <div class="fh-mini-row">
+            <div class="fh-mini-field"><label for="fhPhone">Phone (optional)</label><input type="tel" id="fhPhone"></div>
+            <div class="fh-mini-field"><label for="fhZip">Zip code</label><input type="text" id="fhZip" required></div>
+          </div>
+          <div class="fh-mini-field">
+            <label for="fhPackage">Leaning toward a package? (optional)</label>
+            <select id="fhPackage">
+              <option value="">Not sure yet</option>
+              <option value="petite-patch">Petite Patch</option>
+              <option value="cozy-corner">Cozy Corner</option>
+              <option value="fall-favorites">Fall Favorites — most popular</option>
+              <option value="grande-harvest">Grande Harvest</option>
+            </select>
+          </div>
+          <button type="submit" class="fh-mini-submit">Join the waitlist</button>
+          <p class="fh-mini-fine">No payment now — just your spot in line.</p>
+        </form>
+        <p class="fh-mini-success" id="fhMiniSuccess">You're on the list — we'll email you the moment booking opens.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="timeline" id="how-it-works">
+  <div class="wrap">
+    <div class="section-head">
+      <span class="eyebrow">How it works</span>
+      <h2>Four steps from your inbox to your doorstep.</h2>
+    </div>
+    <div class="tl-grid">
+      <div class="tl-item is-active">
+        <div class="tl-num">01</div>
+        <h3>Join the waitlist</h3>
+        <p>Reserve your spot now. Waitlist members get first access when booking opens.</p>
+        <span class="tl-tag">Open now — July</span>
+      </div>
+      <div class="tl-item">
+        <div class="tl-num">02</div>
+        <h3>Place your order</h3>
+        <p>Choose your package and delivery week. Spots are limited and go quickly.</p>
+        <span class="tl-tag">Opens mid-August</span>
+      </div>
+      <div class="tl-item">
+        <div class="tl-num">03</div>
+        <h3>We deliver &amp; style</h3>
+        <p>Our team arrives, arranges your display, and leaves your entry ready for guests.</p>
+        <span class="tl-tag">Late Sept – Oct</span>
+      </div>
+      <div class="tl-item">
+        <div class="tl-num">04</div>
+        <h3>Optional pickup</h3>
+        <p>Add weekly removal so your display disappears as quietly as it arrived.</p>
+        <span class="tl-tag">November · +$100/wk</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="gallery" id="gallery">
+  <div class="wrap">
+    <div class="section-head">
+      <span class="eyebrow">Recent work</span>
+      <h2>See it at the door.</h2>
+    </div>
+    <div class="carousel">
+      <div class="carousel-viewport">
+        <div class="carousel-track" id="carTrack">
+          <img src="{{ 'gallery-1.jpg' | asset_url }}" alt="Pumpkin display, brick ranch entrance">
+          <img src="{{ 'gallery-2.jpg' | asset_url }}" alt="Pumpkin display, modern farmhouse entrance">
+          <img src="{{ 'gallery-3.jpg' | asset_url }}" alt="Pumpkin display, wood door farmhouse entrance">
+          <img src="{{ 'gallery-4.jpg' | asset_url }}" alt="Pumpkin display, white brick modern entrance">
+        </div>
+      </div>
+      <button class="car-btn car-prev" id="carPrev" aria-label="Previous">&#8592;</button>
+      <button class="car-btn car-next" id="carNext" aria-label="Next">&#8594;</button>
+      <div class="car-dots" id="carDots">
+        <button class="car-dot active" data-i="0"></button>
+        <button class="car-dot" data-i="1"></button>
+        <button class="car-dot" data-i="2"></button>
+        <button class="car-dot" data-i="3"></button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="packages" id="packages">
+  <div class="wrap">
+    <div class="section-head">
+      <span class="eyebrow">The packages</span>
+      <h2>Four ways to fill a doorway.</h2>
+    </div>
+    <div class="pkg-row">
+      <div class="pkg-item tier-1">
+        <img src="{{ 'package-petite-patch.png' | asset_url }}" alt="Petite Patch" class="pkg-logo">
+        <p>A small delivery for an artful autumn entrance</p>
+      </div>
+      <div class="pkg-item tier-2">
+        <img src="{{ 'package-cozy-corner.png' | asset_url }}" alt="Cozy Corner" class="pkg-logo">
+        <p>A classic spread of your favorites for a cozy fall entrance</p>
+      </div>
+      <div class="pkg-item tier-3">
+        <img src="{{ 'package-fall-favorite.png' | asset_url }}" alt="Fall Favorites" class="pkg-logo">
+        <span class="pkg-flag">Most popular</span>
+        <p>A custom design of bold beautiful pumpkins all fall seasonal</p>
+      </div>
+      <div class="pkg-item tier-4">
+        <img src="{{ 'package-grande-harvest.png' | asset_url }}" alt="Grande Harvest" class="pkg-logo">
+        <p>Artistically designed for your entrance this is our show-stopping fall display</p>
+      </div>
+    </div>
+    <p class="pkg-note">Full package details and pricing become available when ordering opens in mid-August.</p>
+  </div>
+</section>
+
+<section class="waitlist" id="waitlist">
+  <div class="wrap">
+    <div class="section-head">
+      <span class="eyebrow">Reserve your spot</span>
+      <h2 style="font-size:1.4rem; font-weight:500; max-width:52ch; margin:0 auto;">Fall 26 just launched and we've reserved limited packages for new members. Availability is limited. To reserve a package, join below.</h2>
+      <p>Ordering opens mid-August, and waitlist members get first pick of delivery dates. It takes about a minute.</p>
+    </div>
+    <div class="ticket">
+      <div class="ticket-stub">
+        <div>
+          <span class="eyebrow">Reservation</span>
+          <div class="stub-line"><span>Waitlist opens</span><span>Now</span></div>
+          <div class="stub-line"><span>Orders open</span><span>Mid-August</span></div>
+          <div class="stub-line"><span>Delivery window</span><span>Late Sept – Oct</span></div>
+        </div>
+        <div class="stub-foot">NO. 000&nbsp;&nbsp;·&nbsp;&nbsp;ADMIT ONE DOORWAY</div>
+      </div>
+      <div class="perforation"></div>
+      <div class="ticket-form">
+        <h3>Get first pick.</h3>
+        <p>We'll email you the moment booking opens.</p>
+        <form id="waitlistForm">
+          <div class="field-row">
+            <div class="field"><label for="name">Name</label><input type="text" id="name" required></div>
+            <div class="field"><label for="email">Email</label><input type="email" id="email" required></div>
+          </div>
+          <div class="field-row">
+            <div class="field"><label for="phone">Phone (optional)</label><input type="tel" id="phone"></div>
+            <div class="field"><label for="zip">Zip code</label><input type="text" id="zip" required></div>
+          </div>
+          <div class="field-row">
+            <div class="field full">
+              <label for="package">Leaning toward a package? (optional)</label>
+              <select id="package">
+                <option value="">Not sure yet</option>
+                <option value="petite-patch">Petite Patch</option>
+                <option value="cozy-corner">Cozy Corner</option>
+                <option value="fall-favorites">Fall Favorites — most popular</option>
+                <option value="grande-harvest">Grande Harvest</option>
+              </select>
+            </div>
+          </div>
+          <div class="submit-row">
+            <button type="submit" class="btn-primary" style="border:none; cursor:pointer;">Join the waitlist</button>
+            <span class="fine">No payment now — just your spot in line.</span>
+          </div>
+          <div class="success-msg" id="successMsg">You're on the list. We'll email you the moment booking opens in mid-August.</div>
+        </form>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <img src="{{ 'hello-harvest-logo.png' | asset_url }}" alt="Hello Harvest" class="wordmark-logo footer-logo">
+    <div class="fine">Serving Tennessee · Fall 2026</div>
+  </div>
+</footer>
+
+<script>
+  (function(){
+    var cta = document.getElementById('fhCta');
+    var joinBtn = document.getElementById('fhJoinBtn');
+    var miniForm = document.getElementById('fhMiniForm');
+    joinBtn.addEventListener('click', function(){
+      cta.classList.add('show-form');
+      document.getElementById('fhEmail').focus();
+    });
+    miniForm.addEventListener('submit', function(e){
+      e.preventDefault();
+      cta.classList.add('submitted');
+    });
+  })();
+
+  (function(){
+    var track = document.getElementById('carTrack');
+    var dots = document.querySelectorAll('#carDots .car-dot');
+    var prev = document.getElementById('carPrev');
+    var next = document.getElementById('carNext');
+    var total = track.children.length;
+    var idx = 0;
+    function render(){
+      track.style.transform = 'translateX(-' + (idx * 100) + '%)';
+      dots.forEach(function(d, i){ d.classList.toggle('active', i === idx); });
+    }
+    prev.addEventListener('click', function(){ idx = (idx - 1 + total) % total; render(); });
+    next.addEventListener('click', function(){ idx = (idx + 1) % total; render(); });
+    dots.forEach(function(d){
+      d.addEventListener('click', function(){ idx = parseInt(d.dataset.i, 10); render(); });
+    });
+  })();
+
+  document.getElementById('waitlistForm').addEventListener('submit', function(e){
+    e.preventDefault();
+    document.getElementById('successMsg').classList.add('show');
+    this.querySelector('button[type="submit"]').textContent = 'You\'re on the list';
+    this.querySelector('button[type="submit"]').disabled = true;
+  });
+</script>
