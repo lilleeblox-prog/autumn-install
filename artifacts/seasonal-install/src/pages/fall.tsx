@@ -48,7 +48,7 @@ export default function Fall() {
 
             {/* Sub */}
             <p className="text-white/75 text-lg leading-relaxed max-w-xl mb-10">
-              Organic pumpkins, heirloom gourds, dried grasses and fall botanicals — arranged at your front door so your home feels ready the moment autumn arrives. A small number of homes per neighborhood, each one done by hand.
+              Organic pumpkins, heirloom gourds, and fall botanicals — arranged at your front door so your home feels ready the moment autumn arrives. A small number of homes per neighborhood, each one done by hand.
             </p>
 
             {/* CTA row */}
@@ -96,12 +96,12 @@ export default function Fall() {
                   The service
                 </span>
                 <h2 className="text-3xl md:text-4xl font-serif font-medium">
-                  Pumpkins, gourds, dried grasses — all of it handled.
+                  Pumpkins, gourds, botanicals — all of it handled.
                 </h2>
               </div>
               <div className="space-y-4 text-muted-foreground leading-relaxed">
                 <p>
-                  We select the pumpkins, source the dried grasses and gourds, and arrange everything at your front door. You never touch a thing. When autumn ends, we come back and collect it all if you want us to.
+                  We select the pumpkins, source the gourds and botanicals, and arrange everything at your front door. You never touch a thing. When autumn ends, we come back and collect it all if you want us to.
                 </p>
                 <ul className="space-y-2.5 pt-1">
                   {[
