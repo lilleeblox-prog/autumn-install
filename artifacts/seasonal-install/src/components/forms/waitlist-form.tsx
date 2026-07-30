@@ -26,7 +26,7 @@ interface WaitlistFormProps {
   description?: string;
 }
 
-export function WaitlistForm({ season, title = 'Join the Waitlist', description }: WaitlistFormProps) {
+export function WaitlistForm({ season, title = 'Receive notifications', description }: WaitlistFormProps) {
   const [submitted, setSubmitted] = useState(false);
   const joinWaitlist = useJoinWaitlist();
 
@@ -62,7 +62,7 @@ export function WaitlistForm({ season, title = 'Join the Waitlist', description 
     return (
       <ConfirmationMessage
         title="You're on the list"
-        message={`We'll reach out as soon as ${season === 'winter' ? 'winter' : 'summer'} service opens. Thank you for your interest.`}
+        message={`You'll be among the first to know when ${season === 'winter' ? 'winter' : 'summer'} service opens in your area.`}
       />
     );
   }
@@ -176,7 +176,7 @@ export function WaitlistForm({ season, title = 'Join the Waitlist', description 
             disabled={joinWaitlist.isPending}
             data-testid="button-submit-waitlist"
           >
-            {joinWaitlist.isPending ? 'Submitting...' : 'Join Waitlist'}
+            {joinWaitlist.isPending ? 'Submitting...' : 'Notify me'}
           </Button>
         </form>
       </Form>
