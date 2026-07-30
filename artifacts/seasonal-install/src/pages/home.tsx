@@ -432,44 +432,13 @@ export default function Home() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: '-80px' }}
               transition={{ duration: 0.8, delay: 0.15 }}
+              className="bg-background p-8 md:p-10"
             >
-              <AnimatePresence mode="wait">
-                {!showBottomForm ? (
-                  <motion.div
-                    key="bottom-cta"
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    exit={{ opacity: 0 }}
-                    transition={{ duration: 0.2 }}
-                    className="flex flex-col gap-4"
-                  >
-                    <button
-                      onClick={() => setShowBottomForm(true)}
-                      data-testid="button-cta-bottom-fall"
-                      className="inline-flex items-center justify-center font-mono text-[0.8rem] tracking-[0.07em] uppercase bg-primary text-primary-foreground hover:bg-primary/90 px-10 py-[18px] transition-colors w-full lg:w-auto"
-                    >
-                      Reserve your address <ArrowRight className="ml-2.5 w-3.5 h-3.5" />
-                    </button>
-                    <p className="text-[0.72rem] tracking-wide" style={{ color: '#7a6a5e' }}>
-                      No payment now. Just your address on the list.
-                    </p>
-                  </motion.div>
-                ) : (
-                  <motion.div
-                    key="bottom-form"
-                    initial={{ opacity: 0, y: 8 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.3 }}
-                    className="bg-background p-8 md:p-10"
-                  >
-                    <FallOrderForm
-                      serviceType="waitlist"
-                      title="Reserve Your Spot"
-                      description="Your spot is held the moment you submit. We reach out in mid-August with package details."
-                    />
-                  </motion.div>
-                )}
-              </AnimatePresence>
+              <FallOrderForm
+                serviceType="waitlist"
+                title="Reserve Your Spot"
+                description="Your spot is held the moment you submit. We reach out in mid-August with package details."
+              />
             </motion.div>
 
           </div>
