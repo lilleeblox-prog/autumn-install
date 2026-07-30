@@ -128,7 +128,7 @@ export default function Home() {
             <p className="font-serif text-[1.35rem] leading-[1.38] text-foreground mb-5">
               Your home, dressed for the season.{' '}
               <span className="text-muted-foreground">
-                We bring the pumpkins, the botanicals, the wreaths — arranged by hand so your entry feels as warm as the season itself.
+                We bring the pumpkins, the gourds, the botanicals — arranged by hand so your entry feels as warm as the season itself.
               </span>
             </p>
 

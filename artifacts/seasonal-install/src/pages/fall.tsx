@@ -48,7 +48,7 @@ export default function Fall() {
 
             {/* Sub */}
             <p className="text-white/75 text-lg leading-relaxed max-w-xl mb-10">
-              We bring the pumpkins, the wreaths, the botanicals — styled by hand and ready before the first leaf falls. A small number of homes per neighborhood. Reserve your spot now.
+              Organic pumpkins, heirloom gourds, dried grasses and fall botanicals — arranged at your front door so your home feels ready the moment autumn arrives. A small number of homes per neighborhood, each one done by hand.
             </p>
 
             {/* CTA row */}
@@ -96,21 +96,20 @@ export default function Fall() {
                   The service
                 </span>
                 <h2 className="text-3xl md:text-4xl font-serif font-medium">
-                  Everything taken care of.
+                  Pumpkins, gourds, dried grasses — all of it handled.
                 </h2>
               </div>
               <div className="space-y-4 text-muted-foreground leading-relaxed">
                 <p>
-                  From curation to the final arrangement, we handle it all. You never need to own a single pumpkin or store a single wreath. We bring everything, style it beautifully at your door, and take it all away when the season ends if you want us to.
+                  We select the pumpkins, source the dried grasses and gourds, and arrange everything at your front door. You never touch a thing. When autumn ends, we come back and collect it all if you want us to.
                 </p>
                 <ul className="space-y-2.5 pt-1">
                   {[
-                    'Custom wreath design in warm autumn tones',
-                    'Organic pumpkin and gourd arrangements',
-                    'Dried botanical accents and seasonal texture',
-                    'Planter styling for your entry',
-                    'Full delivery and professional installation',
-                    'Optional end-of-season removal',
+                    'Organic pumpkins and heirloom gourds, arranged for your specific entry',
+                    'Dried grasses, branches, and fall botanicals for depth and texture',
+                    'Planter styling with fall foliage and seasonal fillers',
+                    'Full delivery and installation — we bring everything',
+                    'Optional removal before the holidays — we take it all back',
                   ].map((item) => (
                     <li key={item} className="flex items-start gap-3 text-sm">
                       <span className="mt-[5px] w-1 h-1 rounded-full bg-primary shrink-0" />
@@ -119,7 +118,7 @@ export default function Fall() {
                   ))}
                 </ul>
                 <p className="text-sm pt-1">
-                  Everything arrives fresh each season. We do not offer storage — if you add the removal service, we take everything with us so your home stays effortlessly tidy.
+                  Every pumpkin and gourd is sourced fresh for the season. We do not offer storage — add the removal service and we collect everything before Thanksgiving, leaving your entry clean and ready for winter.
                 </p>
               </div>
             </motion.div>
@@ -155,12 +154,12 @@ export default function Fall() {
                   {
                     period: 'Late September – October',
                     active: false,
-                    body: 'Our team arrives with everything and styles your display by hand, leaving your entrance looking beautiful for the season.',
+                    body: 'Our team arrives with your pumpkins, gourds, and all the fall pieces. We arrange everything at your door by hand and leave when it looks exactly right.',
                   },
                   {
                     period: 'Late November (optional)',
                     active: false,
-                    body: 'We return to quietly take everything away. Nothing to store, nothing to manage.',
+                    body: 'We come back to collect your pumpkins, gourds, and all the fall décor before the holidays. Nothing to bag up, nothing to store.',
                   },
                 ].map((step, i) => (
                   <div key={i} className="flex gap-5 py-5 border-b border-border last:border-0">
@@ -199,16 +198,16 @@ export default function Fall() {
                 Fall 2026 · Waitlist
               </span>
               <h2 className="text-3xl md:text-4xl font-serif font-medium leading-snug mb-5">
-                Reserve your spot<br /> before your neighborhood fills.
+                Your pumpkins, your gourds,<br /> your fall — reserved.
               </h2>
               <p className="text-muted-foreground leading-relaxed mb-8">
-                We keep each neighborhood intentionally small so every home receives the care it deserves. Your spot is held the moment you submit — we reach out in mid-August with package details and scheduling.
+                We install a small number of homes per neighborhood each fall so every display gets the attention it deserves. Reserve your spot now and we reach out in mid-August with your fall package options — pumpkins, gourds, dried arrangements, and everything in between.
               </p>
               <div className="space-y-3">
                 {[
-                  'Your spot is held immediately',
-                  'No payment until ordering opens',
-                  'We contact you directly in mid-August',
+                  'Your fall install spot is held immediately',
+                  'No payment until fall packages open in mid-August',
+                  'We reach out directly with your fall package options',
                 ].map((point) => (
                   <div key={point} className="flex items-center gap-3 text-sm text-muted-foreground">
                     <span className="w-1 h-1 rounded-full bg-primary shrink-0" />
@@ -229,7 +228,7 @@ export default function Fall() {
                 <FallOrderForm
                   serviceType="waitlist"
                   title="Reserve Your Spot"
-                  description="Your spot is held the moment you submit. We reach out in mid-August with package details and scheduling."
+                  description="Your fall install spot is held the moment you submit. We reach out in mid-August with your package options — pumpkins, gourds, and all the seasonal details."
                 />
               </div>
             </motion.div>
