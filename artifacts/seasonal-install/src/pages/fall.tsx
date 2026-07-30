@@ -1,7 +1,7 @@
 import { motion } from 'framer-motion';
 import { Navigation } from '@/components/navigation';
 import { FallOrderForm } from '@/components/forms/fall-order-form';
-const heroHomePath = '/images/hero-fall_2.jpg';
+const heroPath = '/images/hero-doorway.jpg';
 
 const fadeInUp = {
   hidden: { opacity: 0, y: 30 },
@@ -9,7 +9,7 @@ const fadeInUp = {
 };
 
 export default function Fall() {
-  // Today is July 30, 2026 - orders open mid-August
+  // Today is July 30, 2026 — orders open mid-August
   const ordersOpen = false;
 
   return (
@@ -25,10 +25,10 @@ export default function Fall() {
           className="absolute inset-0 z-0"
         >
           <div
-            className="absolute inset-0 bg-cover bg-center"
-            style={{ backgroundImage: `url(${heroHomePath})` }}
+            className="absolute inset-0 bg-cover bg-center bg-no-repeat"
+            style={{ backgroundImage: `url(${heroPath})` }}
           />
-          <div className="absolute inset-0 bg-gradient-to-b from-background/50 via-background/70 to-background" />
+          <div className="absolute inset-0 bg-gradient-to-b from-background/40 via-background/60 to-background" />
         </motion.div>
 
         <div className="relative z-10 max-w-7xl mx-auto px-6 lg:px-12 py-20">
@@ -46,8 +46,8 @@ export default function Fall() {
             className="max-w-3xl space-y-6"
           >
             <motion.div variants={fadeInUp}>
-              <span className="inline-block px-3 py-1 text-xs font-medium tracking-wide uppercase bg-primary/10 text-primary border border-primary/20 rounded-sm mb-6">
-                Fall 2026
+              <span className="inline-block px-3 py-1 text-xs font-medium tracking-wide uppercase bg-primary text-primary-foreground rounded-sm mb-6">
+                Fall 2026 — Booking Opens Mid-August
               </span>
             </motion.div>
 
@@ -55,12 +55,12 @@ export default function Fall() {
               variants={fadeInUp}
               className="text-5xl md:text-7xl font-serif font-medium leading-[1.05] tracking-tight"
             >
-              Fall installation service
+              Fall is coming. Your door should be ready.
             </motion.h1>
 
             <motion.p variants={fadeInUp} className="text-xl text-muted-foreground leading-relaxed max-w-2xl">
-              Warm terracotta, dried botanicals, organic pumpkins, and rich autumn wreaths that welcome guests to your
-              door.
+              We deliver and install your fall setup — pumpkins, wreaths, dried botanicals — so your home looks warm
+              and welcoming the moment the season turns. Spots are limited each year.
             </motion.p>
           </motion.div>
         </div>
@@ -77,37 +77,54 @@ export default function Fall() {
             className="grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-24 mb-24"
           >
             <div className="space-y-6">
-              <h2 className="text-4xl font-serif font-medium">What's included</h2>
+              <h2 className="text-4xl font-serif font-medium">What we do</h2>
               <div className="space-y-4 text-muted-foreground leading-relaxed">
                 <p>
-                  Our fall service brings the warmth of autumn to your entrance with carefully curated seasonal décor
-                  that complements your home's architecture.
+                  We take care of everything from curation to installation. You don't need to own a single pumpkin or
+                  store a single wreath. We bring it all, set it up beautifully, and take it back at the end of the
+                  season if you want us to.
                 </p>
                 <ul className="space-y-3 ml-6">
                   <li className="list-disc">Custom wreath design in warm autumn tones</li>
                   <li className="list-disc">Organic pumpkin and gourd arrangements</li>
                   <li className="list-disc">Dried botanical accents and seasonal greenery</li>
                   <li className="list-disc">Planter styling with fall textures</li>
-                  <li className="list-disc">Professional installation and setup</li>
-                  <li className="list-disc">Seasonal removal and storage</li>
+                  <li className="list-disc">Full delivery and professional installation</li>
+                  <li className="list-disc">Optional end-of-season removal (add-on)</li>
                 </ul>
+                <p className="text-sm pt-2">
+                  <strong className="text-foreground">Note:</strong> We do not offer storage — all materials are
+                  delivered fresh each season and removed if you choose the removal add-on.
+                </p>
               </div>
             </div>
 
             <div className="space-y-6">
-              <h2 className="text-4xl font-serif font-medium">Timeline</h2>
+              <h2 className="text-4xl font-serif font-medium">How it works</h2>
               <div className="space-y-4">
                 <div className="border-l-2 border-primary pl-6 py-2">
+                  <p className="font-medium mb-1">Now — Mid-August</p>
+                  <p className="text-sm text-muted-foreground">
+                    Join the waitlist to hold your spot. We'll contact you when booking officially opens.
+                  </p>
+                </div>
+                <div className="border-l-2 border-primary/40 pl-6 py-2">
                   <p className="font-medium mb-1">Mid-August 2026</p>
-                  <p className="text-sm text-muted-foreground">Orders open for fall service</p>
+                  <p className="text-sm text-muted-foreground">
+                    Orders open. We confirm your details and schedule your install date.
+                  </p>
                 </div>
                 <div className="border-l-2 border-muted pl-6 py-2">
                   <p className="font-medium mb-1">Early September</p>
-                  <p className="text-sm text-muted-foreground">Installations begin</p>
+                  <p className="text-sm text-muted-foreground">
+                    We arrive, set everything up, and leave your entrance looking beautiful.
+                  </p>
                 </div>
                 <div className="border-l-2 border-muted pl-6 py-2">
-                  <p className="font-medium mb-1">Late November</p>
-                  <p className="text-sm text-muted-foreground">Seasonal removal and storage</p>
+                  <p className="font-medium mb-1">Late November (optional)</p>
+                  <p className="text-sm text-muted-foreground">
+                    We come back to remove everything — nothing left for you to deal with.
+                  </p>
                 </div>
               </div>
             </div>
@@ -119,33 +136,23 @@ export default function Fall() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: '-100px' }}
             transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-            className="grid grid-cols-1 lg:grid-cols-2 gap-12"
           >
-            {/* Waitlist Form */}
-            <div className="bg-card border border-border rounded-sm p-8 md:p-10">
-              <FallOrderForm
-                serviceType="waitlist"
-                title="Join the Waitlist"
-                description="Be the first to know when fall orders open in mid-August. We'll reach out with availability and pricing."
-              />
+            <div className="text-center mb-12">
+              <h2 className="text-3xl md:text-4xl font-serif font-medium mb-3">Secure your spot</h2>
+              <p className="text-muted-foreground max-w-xl mx-auto">
+                We take on a limited number of homes each fall. Fill out the form below and we'll be in touch as soon
+                as booking opens mid-August.
+              </p>
             </div>
 
-            {/* Order Form */}
-            <div className="bg-card border border-border rounded-sm p-8 md:p-10 relative">
-              {!ordersOpen && (
-                <div className="absolute top-4 right-4 px-3 py-1 text-xs font-medium tracking-wide uppercase bg-muted text-muted-foreground border border-border rounded-sm">
-                  Opens mid-August
-                </div>
-              )}
-              <FallOrderForm
-                serviceType="order"
-                title="Reserve Your Spot"
-                description={
-                  ordersOpen
-                    ? "Submit your fall installation inquiry and we'll confirm availability within 24 hours."
-                    : "Orders will open mid-August 2026. Fill out this form to express interest, and we'll contact you when booking opens."
-                }
-              />
+            <div className="max-w-2xl mx-auto">
+              <div className="bg-card border border-border rounded-sm p-8 md:p-10">
+                <FallOrderForm
+                  serviceType="waitlist"
+                  title="Join the Waitlist"
+                  description="Tell us a little about your home and we'll reach out with availability and pricing when orders open."
+                />
+              </div>
             </div>
           </motion.div>
         </div>
@@ -154,7 +161,7 @@ export default function Fall() {
       {/* Footer */}
       <footer className="border-t border-border py-12">
         <div className="max-w-7xl mx-auto px-6 lg:px-12 text-center text-sm text-muted-foreground">
-          <p>© 2026 Evergreen & Ember. Seasonal décor installation services.</p>
+          <p>© 2026 Made to Welcome. Seasonal décor delivery &amp; installation.</p>
         </div>
       </footer>
     </div>

@@ -20,7 +20,7 @@ export function Navigation() {
     >
       <div className="max-w-7xl mx-auto px-6 lg:px-12 py-6 flex items-center justify-between">
         <Link href="/" className="text-xl font-serif font-medium tracking-tight" data-testid="link-home">
-          Evergreen & Ember
+          Made to Welcome
         </Link>
         <div className="flex items-center gap-8">
           {links.map((link) => {

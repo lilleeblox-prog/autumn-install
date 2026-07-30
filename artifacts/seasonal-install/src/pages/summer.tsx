@@ -88,7 +88,7 @@ export default function Summer() {
 
       <footer className="border-t border-border py-12 mt-24">
         <div className="max-w-7xl mx-auto px-6 lg:px-12 text-center text-sm text-muted-foreground">
-          <p>© 2026 Evergreen & Ember. Seasonal décor installation services.</p>
+          <p>© 2026 Made to Welcome. Seasonal décor delivery &amp; installation.</p>
         </div>
       </footer>
     </div>
