@@ -189,7 +189,7 @@ export default function Home() {
               How it works
             </span>
             <h2 className="text-3xl md:text-[2.5rem] font-serif font-medium leading-tight max-w-lg mx-auto">
-              Simple from start to finish.
+              Four steps from your inbox to your doorstep.
             </h2>
           </div>
 
