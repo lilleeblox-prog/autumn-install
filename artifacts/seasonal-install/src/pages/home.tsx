@@ -139,19 +139,15 @@ export default function Home() {
                   <p className="font-serif text-[1.35rem] leading-[1.38] text-foreground mb-5">
                     Your home, dressed for the season.{' '}
                     <span className="text-muted-foreground">
-                      We bring the pumpkins, the gourds, the hay bales, arranged by hand so your entry feels as warm as the season itself.
+                      We deliver, we arrange, we come back when it's over. You walk outside and it's already there.
                     </span>
                   </p>
 
                   {/* Divider */}
                   <div className="border-t border-dashed border-border mb-5" />
 
-                  {/* Exclusivity + waitlist value prop */}
-                  <p className="text-sm text-foreground font-medium leading-relaxed mb-2">
-                    We keep our work personal. A small number of homes per neighborhood, each one thoughtfully attended to.
-                  </p>
                   <p className="text-sm text-muted-foreground leading-relaxed mb-7">
-                    Reserve your address now to hold your place. When ordering opens mid-August, we reach out to plan your install together.
+                    Fall 2026 waitlist is open now. Reserve your spot and we reach out in mid-August with everything you need to get started.
                   </p>
 
                   {/* CTA */}
@@ -193,7 +189,7 @@ export default function Home() {
               How it works
             </span>
             <h2 className="text-3xl md:text-[2.5rem] font-serif font-medium leading-tight max-w-lg mx-auto">
-              Everything taken care of, from the very first step.
+              Simple from start to finish.
             </h2>
           </div>
 
@@ -250,10 +246,10 @@ export default function Home() {
               Recent work
             </span>
             <h2 className="text-3xl md:text-[2.5rem] font-serif font-medium mb-4">
-              Every doorstep is a little different.
+              The work.
             </h2>
             <p className="text-muted-foreground text-base max-w-xs mx-auto leading-relaxed">
-              We design each install around the home in front of us. The proportions, the textures, the warmth. Nothing is placed without care.
+              Every install is designed around the home in front of us.
             </p>
           </div>
 
@@ -331,7 +327,7 @@ export default function Home() {
                 <em className="not-italic text-primary">favorite team.</em>
               </h2>
               <p className="text-base text-muted-foreground leading-relaxed max-w-sm">
-                The same designers, the same warmth, at your door every season. You step outside and love what you see. We take care of everything else.
+                Fall is just the beginning. We come back every season with the same team and the same care. Your door always feels ready.
               </p>
             </motion.div>
 
@@ -410,7 +406,7 @@ export default function Home() {
               Every season, some homes<br className="hidden sm:block" /> just feel ready. Yours should.
             </h2>
             <p className="text-base leading-relaxed max-w-sm mx-auto" style={{ color: '#cfc6b8' }}>
-              We keep the service intimate. A small number of homes per neighborhood, each one given our full attention. Reserve your address and we will be in touch in mid-August with everything you need.
+              Spots fill neighborhood by neighborhood. This fall's waitlist is open now — no payment, just your name on the list.
             </p>
             <div className="pt-3">
               <Link
