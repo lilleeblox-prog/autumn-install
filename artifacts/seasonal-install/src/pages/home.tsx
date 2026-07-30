@@ -16,29 +16,29 @@ const galleryImages = [
 const timelineSteps = [
   {
     num: '01',
-    title: 'Reserve your address',
-    body: 'Your address is held the moment you join. We take on a small number of homes per neighborhood so every install gets the attention it deserves.',
+    title: 'Secure your home',
+    body: 'Submit your address and your place is held. We work with a select number of homes in each neighborhood — enough to do the work beautifully, few enough that every door receives our full attention.',
     tag: 'Open now',
     active: true,
   },
   {
     num: '02',
-    title: 'Choose your package',
-    body: 'When ordering opens, we reach out with everything you need: package options, available install dates, and all the details.',
+    title: 'We reach out to you',
+    body: 'When ordering opens in mid-August, we contact you directly. We learn about your entry, walk through your options, and schedule a date that works.',
     tag: 'Opens mid-August',
     active: false,
   },
   {
     num: '03',
-    title: 'We arrive & style',
-    body: 'Our team brings everything and arranges your display by hand, leaving your entry looking warm and ready for the season.',
+    title: 'We compose your entry',
+    body: 'Our team arrives with everything and works until it looks exactly right. Pumpkins, gourds, hay bales — placed by hand, dressed for your specific door.',
     tag: 'Late Sept – Oct',
     active: false,
   },
   {
     num: '04',
-    title: 'Optional removal',
-    body: 'Add end-of-season pickup and everything is taken away as gently as it arrived. Nothing to store, nothing to manage.',
+    title: 'We collect everything',
+    body: 'Add the removal service and we return mid-to-end of November. Every piece leaves with us, and your entry is clear for whatever comes next.',
     tag: 'November · add-on',
     active: false,
   },
@@ -139,7 +139,7 @@ export default function Home() {
                   <p className="font-serif text-[1.35rem] leading-[1.38] text-foreground mb-5">
                     Your home, dressed for the season.{' '}
                     <span className="text-muted-foreground">
-                      We deliver, we arrange, we come back when it's over. You walk outside and it's already there.
+                      The pumpkins are on your step before you've thought to ask. The arrangement is composed around your entry — the proportions, the textures, the light. When autumn ends, it disappears just as quietly.
                     </span>
                   </p>
 
@@ -147,7 +147,7 @@ export default function Home() {
                   <div className="border-t border-dashed border-border mb-5" />
 
                   <p className="text-sm text-muted-foreground leading-relaxed mb-7">
-                    Fall 2026 waitlist is open now. Reserve your spot and we reach out in mid-August with everything you need to get started.
+                    We accept a select number of homes in each neighborhood. Fall 2026 is open now.
                   </p>
 
                   {/* CTA */}
@@ -159,7 +159,7 @@ export default function Home() {
                     Reserve your address <ArrowRight className="ml-2 w-3.5 h-3.5" />
                   </button>
                   <p className="text-center text-[0.7rem] text-muted-foreground mt-3 tracking-wide">
-                    No payment now. Just your address on the list.
+                    No payment until ordering opens in August.
                   </p>
                 </motion.div>
               ) : (
@@ -189,7 +189,7 @@ export default function Home() {
               How it works
             </span>
             <h2 className="text-3xl md:text-[2.5rem] font-serif font-medium leading-tight max-w-lg mx-auto">
-              Simple from start to finish.
+              Every detail attended to.
             </h2>
           </div>
 
@@ -246,10 +246,10 @@ export default function Home() {
               Recent work
             </span>
             <h2 className="text-3xl md:text-[2.5rem] font-serif font-medium mb-4">
-              The work.
+              Composed by hand.
             </h2>
             <p className="text-muted-foreground text-base max-w-xs mx-auto leading-relaxed">
-              Every install is designed around the home in front of us.
+              Each entry is different. We work with what is in front of us.
             </p>
           </div>
 
@@ -327,7 +327,7 @@ export default function Home() {
                 <em className="not-italic text-primary">favorite team.</em>
               </h2>
               <p className="text-base text-muted-foreground leading-relaxed max-w-sm">
-                Fall is just the beginning. We come back every season with the same team and the same care. Your door always feels ready.
+                The same hands return each season. New materials, the same unhurried attention. A home that is always dressed well is one that has always been cared for.
               </p>
             </motion.div>
 
@@ -338,14 +338,14 @@ export default function Home() {
                   season: 'Winter',
                   year: '2026–27',
                   description:
-                    'Custom garland installed and dressed for the season, then quietly removed when the holidays are over.',
+                    'Garland composed and installed for the holidays, then quietly collected when December gives way to January.',
                   href: '/winter',
                 },
                 {
                   season: 'Summer',
                   year: '2027',
                   description:
-                    'Seasonal flag installs that make your home feel festive and finished from the moment summer arrives.',
+                    'Flag installs that give your home a sense of occasion from the first warm weekend of the season.',
                   href: '/summer',
                 },
               ].map((item, idx) => (
@@ -403,10 +403,10 @@ export default function Home() {
               className="text-3xl md:text-4xl lg:text-[3rem] font-serif font-medium leading-[1.1]"
               style={{ color: 'hsl(36 40% 96%)' }}
             >
-              Every season, some homes<br className="hidden sm:block" /> just feel ready. Yours should.
+              Some homes just feel<br className="hidden sm:block" /> cared for. Yours should.
             </h2>
             <p className="text-base leading-relaxed max-w-sm mx-auto" style={{ color: '#cfc6b8' }}>
-              Spots fill neighborhood by neighborhood. This fall's waitlist is open now — no payment, just your name on the list.
+              We take on a select number of homes each season, by neighborhood. Fall 2026 is open now.
             </p>
             <div className="pt-3">
               <Link
@@ -417,7 +417,7 @@ export default function Home() {
                 Reserve your address <ArrowRight className="ml-2.5 w-3.5 h-3.5" />
               </Link>
               <p className="text-[0.72rem] mt-4 tracking-wide" style={{ color: '#7a6a5e' }}>
-                No payment now. Just your address on the list.
+                No payment until ordering opens in August.
               </p>
             </div>
           </motion.div>
