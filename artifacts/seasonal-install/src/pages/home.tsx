@@ -16,30 +16,23 @@ const galleryImages = [
 const timelineSteps = [
   {
     num: '01',
-    title: 'Reserve your address',
-    body: 'Your address is held the moment you join. We take on a small number of homes per neighborhood so every install gets the attention it deserves.',
+    title: 'Register your address',
+    body: 'Share your address with our concierge to hold your spot. We keep our routes small — a limited number of homes per neighborhood — so every doorway gets our full attention.',
     tag: 'Open now',
     active: true,
   },
   {
     num: '02',
-    title: 'Choose your package',
-    body: 'When ordering opens, we reach out with everything you need: package options, available install dates, and all the details.',
+    title: 'We confirm your window',
+    body: 'Once your spot is secured, we reach out with your delivery window, package details, and everything you need to prepare.',
     tag: 'Opens mid-August',
     active: false,
   },
   {
     num: '03',
-    title: 'We arrive & style',
-    body: 'Our team brings everything and arranges your display by hand, leaving your entry looking warm and ready for the season.',
+    title: 'Your display, installed in person',
+    body: 'On your scheduled week, our designer arrives with everything and arranges your bespoke fall display by hand, right at your doorway.',
     tag: 'Late Sept – Oct',
-    active: false,
-  },
-  {
-    num: '04',
-    title: 'Optional removal',
-    body: 'Add end-of-season pickup and everything is taken away as gently as it arrived. Nothing to store, nothing to manage.',
-    tag: 'November · add-on',
     active: false,
   },
 ];
@@ -189,11 +182,11 @@ export default function Home() {
               How it works
             </span>
             <h2 className="text-3xl md:text-[2.5rem] font-serif font-medium leading-tight max-w-lg mx-auto">
-              Four steps from your inbox to your doorstep.
+              Three steps from your inbox to your doorstep.
             </h2>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-10 lg:gap-0 relative">
+          <div className="grid grid-cols-1 sm:grid-cols-3 lg:grid-cols-3 gap-10 lg:gap-0 relative">
             {/* Dashed connector — desktop only */}
             <div
               className="hidden lg:block absolute top-[22px] left-0 right-0 h-px"
