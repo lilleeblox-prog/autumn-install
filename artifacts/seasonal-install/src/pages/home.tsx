@@ -16,28 +16,28 @@ const timelineSteps = [
   {
     num: '01',
     title: 'Reserve your address',
-    body: 'Joining the waitlist holds your address. Spots are capped per neighborhood — once your area fills, we move on.',
+    body: 'Your address is held the moment you join. We take on a small number of homes per neighborhood so every install gets the attention it deserves.',
     tag: 'Open now',
     active: true,
   },
   {
     num: '02',
-    title: 'Confirm your package',
-    body: 'When ordering opens mid-August, we reach out directly. Choose your package and install window then.',
+    title: 'Choose your package',
+    body: 'When ordering opens, we reach out with everything you need — package options, available install dates, and all the details.',
     tag: 'Opens mid-August',
     active: false,
   },
   {
     num: '03',
-    title: 'We deliver & style',
-    body: 'Our team arrives, arranges your display, and leaves your entry looking exactly as it should.',
+    title: 'We arrive & style',
+    body: 'Our team brings everything and arranges your display by hand, leaving your entry looking warm and ready for the season.',
     tag: 'Late Sept – Oct',
     active: false,
   },
   {
     num: '04',
     title: 'Optional removal',
-    body: 'Add end-of-season pickup and your display disappears as quietly as it arrived.',
+    body: 'Add end-of-season pickup and everything is taken away as gently as it arrived. Nothing to store, nothing to manage.',
     tag: 'November · add-on',
     active: false,
   },
@@ -126,9 +126,9 @@ export default function Home() {
 
             {/* Lede */}
             <p className="font-serif text-[1.35rem] leading-[1.38] text-foreground mb-5">
-              An essence of fall.{' '}
+              Your home, dressed for the season.{' '}
               <span className="text-muted-foreground">
-                Natural pumpkins, dried botanicals, installed and styled at your front door.
+                We bring the pumpkins, the botanicals, the wreaths — arranged by hand so your entry feels as warm as the season itself.
               </span>
             </p>
 
@@ -137,10 +137,10 @@ export default function Home() {
 
             {/* Exclusivity + waitlist value prop */}
             <p className="text-sm text-foreground font-medium leading-relaxed mb-2">
-              We install a limited number of homes per neighborhood.
+              We keep our work personal — a small number of homes per neighborhood, each one thoughtfully attended to.
             </p>
             <p className="text-sm text-muted-foreground leading-relaxed mb-7">
-              Join the waitlist to hold your address. When ordering opens mid-August, we reach out directly to confirm your spot.
+              Reserve your address now to hold your place. When ordering opens mid-August, we reach out to plan your install together.
             </p>
 
             {/* CTA */}
@@ -166,7 +166,7 @@ export default function Home() {
               How it works
             </span>
             <h2 className="text-3xl md:text-[2.5rem] font-serif font-medium leading-tight max-w-lg mx-auto">
-              From reservation to your doorstep.
+              Everything taken care of, from the very first step.
             </h2>
           </div>
 
@@ -223,10 +223,10 @@ export default function Home() {
               Recent work
             </span>
             <h2 className="text-3xl md:text-[2.5rem] font-serif font-medium mb-4">
-              Every door, a little different.
+              Every doorstep is a little different.
             </h2>
             <p className="text-muted-foreground text-base max-w-xs mx-auto leading-relaxed">
-              Each install is designed for the home. No two displays are the same.
+              We design each install around the home in front of us. The proportions, the textures, the warmth — nothing is placed without care.
             </p>
           </div>
 
@@ -304,7 +304,7 @@ export default function Home() {
                 <em className="not-italic text-primary">favorite team.</em>
               </h2>
               <p className="text-base text-muted-foreground leading-relaxed max-w-sm">
-                The same designers, the same standard, at your door each season. Fall, winter, summer — we take care of it so you never have to think about it.
+                The same designers, the same warmth, at your door every season. You step outside and love what you see. We take care of everything else.
               </p>
             </motion.div>
 
@@ -380,10 +380,10 @@ export default function Home() {
               className="text-3xl md:text-4xl lg:text-[3rem] font-serif font-medium leading-[1.1]"
               style={{ color: 'hsl(36 40% 96%)' }}
             >
-              Your door should be<br className="hidden sm:block" /> the one that is ready.
+              Every season, some homes<br className="hidden sm:block" /> just feel ready. Yours should.
             </h2>
             <p className="text-base leading-relaxed max-w-sm mx-auto" style={{ color: '#cfc6b8' }}>
-              Spaces are limited per neighborhood. Join the waitlist to hold your address, and we reach out in mid-August to confirm your package and schedule.
+              We keep the service intimate — a small number of homes per neighborhood, each one given our full attention. Reserve your address and we will be in touch in mid-August with everything you need.
             </p>
             <div className="pt-3">
               <Link

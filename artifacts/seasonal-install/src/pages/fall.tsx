@@ -59,8 +59,7 @@ export default function Fall() {
             </motion.h1>
 
             <motion.p variants={fadeInUp} className="text-xl text-muted-foreground leading-relaxed max-w-2xl">
-              We deliver and install your fall setup — pumpkins, wreaths, dried botanicals — so your home looks warm
-              and welcoming the moment the season turns. We install a set number of homes per neighborhood.
+              We bring the pumpkins, the wreaths, the dried botanicals — everything your doorstep needs to feel warm and welcoming the moment autumn arrives. Each neighborhood is kept intentionally small so every home receives our full care.
             </motion.p>
           </motion.div>
         </div>
@@ -80,9 +79,7 @@ export default function Fall() {
               <h2 className="text-4xl font-serif font-medium">What we do</h2>
               <div className="space-y-4 text-muted-foreground leading-relaxed">
                 <p>
-                  We take care of everything from curation to installation. You don't need to own a single pumpkin or
-                  store a single wreath. We bring it all, set it up beautifully, and take it back at the end of the
-                  season if you want us to.
+                  We take care of everything, from curation to the final arrangement. You never need to own a single pumpkin or store a single wreath. We bring it all, style it beautifully at your door, and take it all away at the end of the season if you want us to.
                 </p>
                 <ul className="space-y-3 ml-6">
                   <li className="list-disc">Custom wreath design in warm autumn tones</li>
@@ -93,8 +90,7 @@ export default function Fall() {
                   <li className="list-disc">Optional end-of-season removal (add-on)</li>
                 </ul>
                 <p className="text-sm pt-2">
-                  <strong className="text-foreground">Note:</strong> We do not offer storage — all materials are
-                  delivered fresh each season and removed if you choose the removal add-on.
+                  Everything arrives fresh each season. We do not offer storage — if you add the removal service, we take everything with us so your home stays effortlessly tidy.
                 </p>
               </div>
             </div>
@@ -103,27 +99,27 @@ export default function Fall() {
               <h2 className="text-4xl font-serif font-medium">How it works</h2>
               <div className="space-y-4">
                 <div className="border-l-2 border-primary pl-6 py-2">
-                  <p className="font-medium mb-1">Now — Mid-August</p>
+                  <p className="font-medium mb-1">Now through Mid-August</p>
                   <p className="text-sm text-muted-foreground">
-                    Reserve your address. We hold your spot and reach out when booking opens mid-August.
+                    Your address is held the moment you join. We reach out when ordering opens with everything you need to get started.
                   </p>
                 </div>
                 <div className="border-l-2 border-primary/40 pl-6 py-2">
                   <p className="font-medium mb-1">Mid-August 2026</p>
                   <p className="text-sm text-muted-foreground">
-                    Orders open. We confirm your details and schedule your install date.
+                    Ordering opens. We reach out to walk you through your package options and schedule your install date.
                   </p>
                 </div>
                 <div className="border-l-2 border-muted pl-6 py-2">
                   <p className="font-medium mb-1">Early September</p>
                   <p className="text-sm text-muted-foreground">
-                    We arrive, set everything up, and leave your entrance looking beautiful.
+                    Our team arrives with everything and styles your display by hand, leaving your entrance looking beautiful for the season.
                   </p>
                 </div>
                 <div className="border-l-2 border-muted pl-6 py-2">
                   <p className="font-medium mb-1">Late November (optional)</p>
                   <p className="text-sm text-muted-foreground">
-                    We come back to remove everything — nothing left for you to deal with.
+                    We return to quietly take everything away. Nothing to store, nothing to manage.
                   </p>
                 </div>
               </div>
@@ -140,8 +136,7 @@ export default function Fall() {
             <div className="text-center mb-12">
               <h2 className="text-3xl md:text-4xl font-serif font-medium mb-3">Reserve your address</h2>
               <p className="text-muted-foreground max-w-xl mx-auto">
-                We install a fixed number of homes per neighborhood. Submit your address below — we'll confirm
-                availability for your zip code when ordering opens mid-August.
+                We keep each neighborhood intentionally small so every home receives the care it deserves. Add your address below and we will reach out in mid-August with availability and package details.
               </p>
             </div>
 
@@ -150,7 +145,7 @@ export default function Fall() {
                 <FallOrderForm
                   serviceType="waitlist"
                   title="Reserve Your Address"
-                  description="Reserve your spot now. Full package details become available when ordering opens mid-August — we'll reach out directly to confirm availability in your zip code."
+                  description="Your address is held the moment you submit. Package details and scheduling open mid-August — we will reach out directly to take care of the rest."
                 />
               </div>
             </div>
