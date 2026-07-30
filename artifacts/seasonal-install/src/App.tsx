@@ -15,7 +15,7 @@ const queryClient = new QueryClient();
 function ScrollToTop() {
   const [location] = useLocation();
   useEffect(() => {
-    window.scrollTo(0, 0);
+    window.scrollTo({ top: 0, behavior: 'instant' });
   }, [location]);
   return null;
 }
