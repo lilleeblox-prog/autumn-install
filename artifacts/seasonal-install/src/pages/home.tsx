@@ -126,9 +126,9 @@ export default function Home() {
 
             {/* Lede */}
             <p className="font-serif text-[1.35rem] leading-[1.38] text-foreground mb-5">
-              An essence of fall —{' '}
+              An essence of fall.{' '}
               <span className="text-muted-foreground">
-                natural pumpkins, dried botanicals, installed and styled at your front door.
+                Natural pumpkins, dried botanicals, installed and styled at your front door.
               </span>
             </p>
 
@@ -140,7 +140,7 @@ export default function Home() {
               We install a limited number of homes per neighborhood.
             </p>
             <p className="text-sm text-muted-foreground leading-relaxed mb-7">
-              Join the waitlist to hold your address. When ordering opens mid-August, we reach out directly — your spot is already reserved.
+              Join the waitlist to hold your address. When ordering opens mid-August, we reach out directly to confirm your spot.
             </p>
 
             {/* CTA */}
@@ -152,7 +152,7 @@ export default function Home() {
               Reserve your address <ArrowRight className="ml-2 w-3.5 h-3.5" />
             </Link>
             <p className="text-center text-[0.7rem] text-muted-foreground mt-3 tracking-wide">
-              No payment now — just your address on the list.
+              No payment now. Just your address on the list.
             </p>
           </motion.div>
         </div>
@@ -304,7 +304,7 @@ export default function Home() {
                 <em className="not-italic text-primary">favorite team.</em>
               </h2>
               <p className="text-base text-muted-foreground leading-relaxed max-w-sm">
-                Fall pumpkins. Winter garland. Summer botanicals. The same designers, the same standard, at your door each season. Once you are in, you are in.
+                The same designers, the same standard, at your door each season. Fall, winter, summer — we take care of it so you never have to think about it.
               </p>
             </motion.div>
 
@@ -383,7 +383,7 @@ export default function Home() {
               Your door should be<br className="hidden sm:block" /> the one that is ready.
             </h2>
             <p className="text-base leading-relaxed max-w-sm mx-auto" style={{ color: '#cfc6b8' }}>
-              Spaces are limited per neighborhood. Join the waitlist — your address is held, and we reach out in mid-August to confirm your package and schedule.
+              Spaces are limited per neighborhood. Join the waitlist to hold your address, and we reach out in mid-August to confirm your package and schedule.
             </p>
             <div className="pt-3">
               <Link
@@ -394,7 +394,7 @@ export default function Home() {
                 Reserve your address <ArrowRight className="ml-2.5 w-3.5 h-3.5" />
               </Link>
               <p className="text-[0.72rem] mt-4 tracking-wide" style={{ color: '#7a6a5e' }}>
-                No payment now — just your address on the list.
+                No payment now. Just your address on the list.
               </p>
             </div>
           </motion.div>
