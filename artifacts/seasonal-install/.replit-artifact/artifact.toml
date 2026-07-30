@@ -1,0 +1,27 @@
+kind = "web"
+previewPath = "/"
+title = "Seasonal Install & Delivery"
+version = "1.0.0"
+id = "artifacts/seasonal-install"
+router = "path"
+
+[[services]]
+name = "web"
+paths = [ "/" ]
+localPort = 21618
+
+[services.development]
+run = "pnpm --filter @workspace/seasonal-install run dev"
+
+[services.production]
+build = [ "pnpm", "--filter", "@workspace/seasonal-install", "run", "build" ]
+serve = "static"
+publicDir = "artifacts/seasonal-install/dist/public"
+
+[[services.production.rewrites]]
+from = "/*"
+to = "/index.html"
+
+[services.env]
+PORT = "21618"
+BASE_PATH = "/"

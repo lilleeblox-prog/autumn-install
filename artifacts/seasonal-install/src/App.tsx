@@ -1,0 +1,40 @@
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { Toaster } from '@/components/ui/toaster';
+import { TooltipProvider } from '@/components/ui/tooltip';
+import NotFound from '@/pages/not-found';
+import Home from '@/pages/home';
+import Fall from '@/pages/fall';
+import Winter from '@/pages/winter';
+import Summer from '@/pages/summer';
+import Portfolio from '@/pages/portfolio';
+import { Route, Switch, Router as WouterRouter } from 'wouter';
+
+const queryClient = new QueryClient();
+
+function Router() {
+  return (
+    <Switch>
+      <Route path="/" component={Home} />
+      <Route path="/fall" component={Fall} />
+      <Route path="/winter" component={Winter} />
+      <Route path="/summer" component={Summer} />
+      <Route path="/portfolio" component={Portfolio} />
+      <Route component={NotFound} />
+    </Switch>
+  );
+}
+
+function App() {
+  return (
+    <QueryClientProvider client={queryClient}>
+      <TooltipProvider>
+        <WouterRouter base={import.meta.env.BASE_URL.replace(/\/$/, '')}>
+          <Router />
+        </WouterRouter>
+        <Toaster />
+      </TooltipProvider>
+    </QueryClientProvider>
+  );
+}
+
+export default App;

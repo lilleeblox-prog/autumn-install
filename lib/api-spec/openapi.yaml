@@ -3,13 +3,19 @@ info:
   # Do not change the title, if the title changes, the import paths will be broken
   title: Api
   version: 0.1.0
-  description: API specification
+  description: API specification for seasonal install & delivery service
 servers:
   - url: /api
     description: Base API path
 tags:
   - name: health
     description: Health operations
+  - name: waitlist
+    description: Seasonal waitlist submissions (winter & summer)
+  - name: orders
+    description: Fall order inquiries
+  - name: portfolio
+    description: Portfolio of completed installations
 paths:
   /healthz:
     get:
@@ -24,6 +30,87 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/HealthStatus"
+
+  /waitlist:
+    post:
+      operationId: joinWaitlist
+      tags: [waitlist]
+      summary: Join seasonal waitlist (winter or summer)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/WaitlistInput"
+      responses:
+        "201":
+          description: Successfully joined waitlist
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/WaitlistEntry"
+        "400":
+          description: Validation error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  /orders:
+    post:
+      operationId: submitFallOrder
+      tags: [orders]
+      summary: Submit a fall 2026 order inquiry
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/FallOrderInput"
+      responses:
+        "201":
+          description: Order inquiry submitted
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/FallOrder"
+        "400":
+          description: Validation error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  /portfolio:
+    get:
+      operationId: listPortfolioItems
+      tags: [portfolio]
+      summary: List all portfolio items
+      responses:
+        "200":
+          description: List of portfolio items
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/PortfolioItem"
+
+  /portfolio/featured:
+    get:
+      operationId: listFeaturedPortfolioItems
+      tags: [portfolio]
+      summary: List featured portfolio items for homepage
+      responses:
+        "200":
+          description: Featured portfolio items
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/PortfolioItem"
+
 components:
   schemas:
     HealthStatus:
@@ -34,3 +121,158 @@ components:
       required:
         - status
 
+    WaitlistInput:
+      type: object
+      required:
+        - firstName
+        - lastName
+        - email
+        - season
+      properties:
+        firstName:
+          type: string
+          minLength: 1
+        lastName:
+          type: string
+          minLength: 1
+        email:
+          type: string
+        phone:
+          type: ["string", "null"]
+        season:
+          type: string
+          enum: [winter, summer]
+        address:
+          type: ["string", "null"]
+        notes:
+          type: ["string", "null"]
+
+    WaitlistEntry:
+      type: object
+      required:
+        - id
+        - firstName
+        - lastName
+        - email
+        - season
+        - createdAt
+      properties:
+        id:
+          type: number
+        firstName:
+          type: string
+        lastName:
+          type: string
+        email:
+          type: string
+        phone:
+          type: ["string", "null"]
+        season:
+          type: string
+          enum: [winter, summer]
+        address:
+          type: ["string", "null"]
+        notes:
+          type: ["string", "null"]
+        createdAt:
+          type: string
+          format: date-time
+
+    FallOrderInput:
+      type: object
+      required:
+        - firstName
+        - lastName
+        - email
+        - serviceType
+      properties:
+        firstName:
+          type: string
+          minLength: 1
+        lastName:
+          type: string
+          minLength: 1
+        email:
+          type: string
+        phone:
+          type: ["string", "null"]
+        address:
+          type: ["string", "null"]
+        serviceType:
+          type: string
+          enum: [waitlist, order]
+          description: "waitlist = join fall waitlist now; order = place order (available mid-August)"
+        notes:
+          type: ["string", "null"]
+        propertySize:
+          type: ["string", "null"]
+
+    FallOrder:
+      type: object
+      required:
+        - id
+        - firstName
+        - lastName
+        - email
+        - serviceType
+        - createdAt
+      properties:
+        id:
+          type: number
+        firstName:
+          type: string
+        lastName:
+          type: string
+        email:
+          type: string
+        phone:
+          type: ["string", "null"]
+        address:
+          type: ["string", "null"]
+        serviceType:
+          type: string
+          enum: [waitlist, order]
+        notes:
+          type: ["string", "null"]
+        propertySize:
+          type: ["string", "null"]
+        createdAt:
+          type: string
+          format: date-time
+
+    PortfolioItem:
+      type: object
+      required:
+        - id
+        - title
+        - season
+        - imageUrl
+        - featured
+        - createdAt
+      properties:
+        id:
+          type: number
+        title:
+          type: string
+        season:
+          type: string
+          enum: [fall, winter, summer]
+        description:
+          type: ["string", "null"]
+        imageUrl:
+          type: string
+        location:
+          type: ["string", "null"]
+        featured:
+          type: boolean
+        createdAt:
+          type: string
+          format: date-time
+
+    ErrorResponse:
+      type: object
+      required:
+        - error
+      properties:
+        error:
+          type: string
