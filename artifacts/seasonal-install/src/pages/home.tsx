@@ -47,6 +47,7 @@ const timelineSteps = [
 export default function Home() {
   const [galleryIdx, setGalleryIdx] = useState(0);
   const [showForm, setShowForm] = useState(false);
+  const [showBottomForm, setShowBottomForm] = useState(false);
 
   return (
     <div className="min-h-[100dvh]">
@@ -388,51 +389,90 @@ export default function Home() {
 
       {/* ── Dark CTA ─────────────────────────────────────────── */}
       <section className="py-28 md:py-36 bg-foreground">
-        <div className="max-w-3xl mx-auto px-6 lg:px-12 text-center">
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, margin: '-80px' }}
-            transition={{ duration: 0.8 }}
-            className="space-y-6"
-          >
-            <span className="font-mono text-[0.68rem] tracking-[0.18em] uppercase text-primary block">
-              Fall 2026 · Tennessee
-            </span>
-            <h2
-              className="text-3xl md:text-4xl lg:text-[3rem] font-serif font-medium leading-[1.1]"
-              style={{ color: 'hsl(36 40% 96%)' }}
+        <div className="max-w-6xl mx-auto px-6 lg:px-12">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-24 items-start">
+
+            {/* Left — copy */}
+            <motion.div
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: '-80px' }}
+              transition={{ duration: 0.8 }}
+              className="space-y-6"
             >
-              Welcome the fall season<br className="hidden sm:block" /> with a custom display.
-            </h2>
-            <p className="text-base leading-relaxed" style={{ color: '#cfc6b8' }}>
-              Currently accepting new addresses.
-            </p>
-            <div className="text-left max-w-sm mx-auto space-y-4 pt-2">
-              {[
-                { num: '01', text: 'Register with our concierge to reserve your address' },
-                { num: '02', text: "If you secure a spot, we'll confirm your delivery window and details" },
-                { num: '03', text: 'On your week, our designer arrives and installs your bespoke display in person' },
-              ].map(({ num, text }) => (
-                <div key={num} className="flex gap-4">
-                  <span className="font-mono text-[0.68rem] tracking-[0.1em] shrink-0 mt-[3px]" style={{ color: '#7a6a5e' }}>{num}</span>
-                  <p className="text-sm leading-relaxed" style={{ color: '#cfc6b8' }}>{text}</p>
-                </div>
-              ))}
-            </div>
-            <div className="pt-3">
-              <Link
-                href="/fall"
-                data-testid="button-cta-bottom-fall"
-                className="inline-flex items-center font-mono text-[0.8rem] tracking-[0.07em] uppercase bg-primary text-primary-foreground hover:bg-primary/90 px-10 py-[18px] transition-colors"
+              <span className="font-mono text-[0.68rem] tracking-[0.18em] uppercase text-primary block">
+                Fall 2026 · Tennessee
+              </span>
+              <h2
+                className="text-3xl md:text-4xl lg:text-[3rem] font-serif font-medium leading-[1.1]"
+                style={{ color: 'hsl(36 40% 96%)' }}
               >
-                Reserve your address <ArrowRight className="ml-2.5 w-3.5 h-3.5" />
-              </Link>
-              <p className="text-[0.72rem] mt-4 tracking-wide" style={{ color: '#7a6a5e' }}>
-                No payment now. Just your address on the list.
+                Welcome the fall season with a custom display.
+              </h2>
+              <p className="text-base leading-relaxed" style={{ color: '#cfc6b8' }}>
+                Currently accepting new addresses.
               </p>
-            </div>
-          </motion.div>
+              <div className="space-y-4 pt-2">
+                {[
+                  { num: '01', text: 'Register with our concierge to reserve your address' },
+                  { num: '02', text: "If you secure a spot, we'll confirm your delivery window and details" },
+                  { num: '03', text: 'On your week, our designer arrives and installs your bespoke display in person' },
+                ].map(({ num, text }) => (
+                  <div key={num} className="flex gap-4">
+                    <span className="font-mono text-[0.68rem] tracking-[0.1em] shrink-0 mt-[3px]" style={{ color: '#7a6a5e' }}>{num}</span>
+                    <p className="text-sm leading-relaxed" style={{ color: '#cfc6b8' }}>{text}</p>
+                  </div>
+                ))}
+              </div>
+            </motion.div>
+
+            {/* Right — form */}
+            <motion.div
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: '-80px' }}
+              transition={{ duration: 0.8, delay: 0.15 }}
+            >
+              <AnimatePresence mode="wait">
+                {!showBottomForm ? (
+                  <motion.div
+                    key="bottom-cta"
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    exit={{ opacity: 0 }}
+                    transition={{ duration: 0.2 }}
+                    className="flex flex-col gap-4"
+                  >
+                    <button
+                      onClick={() => setShowBottomForm(true)}
+                      data-testid="button-cta-bottom-fall"
+                      className="inline-flex items-center justify-center font-mono text-[0.8rem] tracking-[0.07em] uppercase bg-primary text-primary-foreground hover:bg-primary/90 px-10 py-[18px] transition-colors w-full lg:w-auto"
+                    >
+                      Reserve your address <ArrowRight className="ml-2.5 w-3.5 h-3.5" />
+                    </button>
+                    <p className="text-[0.72rem] tracking-wide" style={{ color: '#7a6a5e' }}>
+                      No payment now. Just your address on the list.
+                    </p>
+                  </motion.div>
+                ) : (
+                  <motion.div
+                    key="bottom-form"
+                    initial={{ opacity: 0, y: 8 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.3 }}
+                    className="bg-background p-8 md:p-10"
+                  >
+                    <FallOrderForm
+                      serviceType="waitlist"
+                      title="Reserve Your Spot"
+                      description="Your spot is held the moment you submit. We reach out in mid-August with package details."
+                    />
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </motion.div>
+
+          </div>
         </div>
       </section>
 
