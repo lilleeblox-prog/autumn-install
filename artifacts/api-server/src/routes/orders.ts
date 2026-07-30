@@ -18,10 +18,9 @@ router.post("/orders", async (req, res): Promise<void> => {
       lastName: parsed.data.lastName,
       email: parsed.data.email,
       phone: parsed.data.phone ?? null,
-      address: parsed.data.address ?? null,
+      zipCode: parsed.data.zipCode ?? null,
       serviceType: parsed.data.serviceType,
       notes: parsed.data.notes ?? null,
-      propertySize: parsed.data.propertySize ?? null,
     })
     .returning();
 

@@ -16,7 +16,7 @@ export interface FallOrderInput {
   /** @nullable */
   phone?: string | null;
   /** @nullable */
-  address?: string | null;
+  zipCode?: string | null;
   /** waitlist = join fall waitlist now; order = place order (available mid-August) */
   serviceType: FallOrderInputServiceType;
   /** @nullable */

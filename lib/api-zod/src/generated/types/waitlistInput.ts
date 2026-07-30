@@ -17,7 +17,7 @@ export interface WaitlistInput {
   phone?: string | null;
   season: WaitlistInputSeason;
   /** @nullable */
-  address?: string | null;
+  zipCode?: string | null;
   /** @nullable */
   notes?: string | null;
 }

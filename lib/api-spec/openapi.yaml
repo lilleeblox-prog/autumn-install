@@ -142,7 +142,7 @@ components:
         season:
           type: string
           enum: [winter, summer]
-        address:
+        zipCode:
           type: ["string", "null"]
         notes:
           type: ["string", "null"]
@@ -170,7 +170,7 @@ components:
         season:
           type: string
           enum: [winter, summer]
-        address:
+        zipCode:
           type: ["string", "null"]
         notes:
           type: ["string", "null"]
@@ -196,7 +196,7 @@ components:
           type: string
         phone:
           type: ["string", "null"]
-        address:
+        zipCode:
           type: ["string", "null"]
         serviceType:
           type: string
@@ -227,7 +227,7 @@ components:
           type: string
         phone:
           type: ["string", "null"]
-        address:
+        zipCode:
           type: ["string", "null"]
         serviceType:
           type: string

@@ -40,8 +40,7 @@ export default function Winter() {
             </motion.h1>
 
             <motion.p variants={fadeInUp} className="text-xl text-muted-foreground leading-relaxed max-w-2xl mx-auto">
-              Fresh evergreen garland, frosted branches, elegant lighting, and seasonal greenery that brings warmth to
-              the coldest months.
+              Beautiful garland, installed and dressed for the season, then quietly removed when the holidays are over.
             </motion.p>
           </motion.div>
 
@@ -56,19 +55,11 @@ export default function Winter() {
               <h2 className="text-3xl font-serif font-medium">What to expect</h2>
               <div className="space-y-4 text-muted-foreground leading-relaxed">
                 <p>
-                  Our winter service will offer professionally designed seasonal installations featuring fresh evergreen
-                  arrangements, natural elements, and understated elegance.
+                  Our winter service brings beautifully dressed garland to your home — installed by hand and removed
+                  when the season ends. Full details will be shared when the service opens.
                 </p>
-                <p className="text-sm">Anticipated features:</p>
-                <ul className="space-y-2 ml-6 text-sm">
-                  <li className="list-disc">Fresh evergreen wreaths and garland</li>
-                  <li className="list-disc">Frosted botanical accents</li>
-                  <li className="list-disc">Elegant seasonal lighting</li>
-                  <li className="list-disc">Natural pinecones and winter greenery</li>
-                  <li className="list-disc">Professional installation and removal</li>
-                </ul>
-                <p className="text-sm pt-4">
-                  Register your address and we'll confirm availability in your area when winter service opens.
+                <p className="text-sm pt-2">
+                  Reserve your zip code below and we will confirm availability in your area when winter service launches.
                 </p>
               </div>
             </div>

@@ -27,7 +27,7 @@ export interface WaitlistInput {
   phone?: string | null;
   season: WaitlistInputSeason;
   /** @nullable */
-  address?: string | null;
+  zipCode?: string | null;
   /** @nullable */
   notes?: string | null;
 }
@@ -49,7 +49,7 @@ export interface WaitlistEntry {
   phone?: string | null;
   season: WaitlistEntrySeason;
   /** @nullable */
-  address?: string | null;
+  zipCode?: string | null;
   /** @nullable */
   notes?: string | null;
   createdAt: string;
@@ -75,7 +75,7 @@ export interface FallOrderInput {
   /** @nullable */
   phone?: string | null;
   /** @nullable */
-  address?: string | null;
+  zipCode?: string | null;
   /** waitlist = join fall waitlist now; order = place order (available mid-August) */
   serviceType: FallOrderInputServiceType;
   /** @nullable */
@@ -100,7 +100,7 @@ export interface FallOrder {
   /** @nullable */
   phone?: string | null;
   /** @nullable */
-  address?: string | null;
+  zipCode?: string | null;
   serviceType: FallOrderServiceType;
   /** @nullable */
   notes?: string | null;

@@ -9,7 +9,7 @@ export const waitlistTable = pgTable("waitlist", {
   email: text("email").notNull(),
   phone: text("phone"),
   season: text("season").notNull(), // 'winter' | 'summer'
-  address: text("address"),
+  zipCode: text("zip_code"),
   notes: text("notes"),
   createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
 });

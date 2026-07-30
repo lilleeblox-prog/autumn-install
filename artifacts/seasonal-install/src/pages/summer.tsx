@@ -40,8 +40,7 @@ export default function Summer() {
             </motion.h1>
 
             <motion.p variants={fadeInUp} className="text-xl text-muted-foreground leading-relaxed max-w-2xl mx-auto">
-              Bright blooms, natural textures, coastal elegance, and breezy botanicals that celebrate the warmth and
-              light of summer.
+              Seasonal flag installs that make your home feel festive and finished from the moment summer arrives.
             </motion.p>
           </motion.div>
 
@@ -56,19 +55,11 @@ export default function Summer() {
               <h2 className="text-3xl font-serif font-medium">What to expect</h2>
               <div className="space-y-4 text-muted-foreground leading-relaxed">
                 <p>
-                  Our summer service will bring fresh, vibrant arrangements that celebrate the season's natural beauty
-                  with understated elegance.
+                  Our summer service brings seasonal flag installs to your home — set up beautifully and removed
+                  when the season ends. Full details will be available when the service opens.
                 </p>
-                <p className="text-sm">Anticipated features:</p>
-                <ul className="space-y-2 ml-6 text-sm">
-                  <li className="list-disc">Fresh seasonal blooms and greenery</li>
-                  <li className="list-disc">Natural fiber and linen accents</li>
-                  <li className="list-disc">Coastal-inspired botanicals</li>
-                  <li className="list-disc">Potted herbs and living arrangements</li>
-                  <li className="list-disc">Professional installation and care</li>
-                </ul>
-                <p className="text-sm pt-4">
-                  Register your address and we'll confirm availability in your area when summer service opens.
+                <p className="text-sm pt-2">
+                  Reserve your zip code below and we will confirm availability in your area when summer service launches.
                 </p>
               </div>
             </div>

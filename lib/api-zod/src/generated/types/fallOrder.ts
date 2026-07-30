@@ -15,7 +15,7 @@ export interface FallOrder {
   /** @nullable */
   phone?: string | null;
   /** @nullable */
-  address?: string | null;
+  zipCode?: string | null;
   serviceType: FallOrderServiceType;
   /** @nullable */
   notes?: string | null;

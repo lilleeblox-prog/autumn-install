@@ -19,7 +19,7 @@ router.post("/waitlist", async (req, res): Promise<void> => {
       email: parsed.data.email,
       phone: parsed.data.phone ?? null,
       season: parsed.data.season,
-      address: parsed.data.address ?? null,
+      zipCode: parsed.data.zipCode ?? null,
       notes: parsed.data.notes ?? null,
     })
     .returning();

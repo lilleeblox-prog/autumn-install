@@ -8,7 +8,7 @@ export const fallOrdersTable = pgTable("fall_orders", {
   lastName: text("last_name").notNull(),
   email: text("email").notNull(),
   phone: text("phone"),
-  address: text("address"),
+  zipCode: text("zip_code"),
   serviceType: text("service_type").notNull(), // 'waitlist' | 'order'
   notes: text("notes"),
   propertySize: text("property_size"),

@@ -315,14 +315,14 @@ export default function Home() {
                   season: 'Winter',
                   year: '2026–27',
                   description:
-                    'Fresh evergreen garland, lanterns, and frosted botanicals. A welcome that carries through the holidays.',
+                    'Custom garland installed and dressed for the season, then quietly removed when the holidays are over.',
                   href: '/winter',
                 },
                 {
                   season: 'Summer',
                   year: '2027',
                   description:
-                    'Bright blooms, natural textures, and living arrangements that celebrate the warmth of the season.',
+                    'Seasonal flag installs that make your home feel festive and finished from the moment summer arrives.',
                   href: '/summer',
                 },
               ].map((item, idx) => (

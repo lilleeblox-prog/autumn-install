@@ -30,7 +30,7 @@ export const JoinWaitlistBody = zod.object({
   "email": zod.string(),
   "phone": zod.string().nullish(),
   "season": zod.enum(['winter', 'summer']),
-  "address": zod.string().nullish(),
+  "zipCode": zod.string().nullish(),
   "notes": zod.string().nullish()
 })
 
@@ -41,7 +41,7 @@ export const JoinWaitlistResponse = zod.object({
   "email": zod.string(),
   "phone": zod.string().nullish(),
   "season": zod.enum(['winter', 'summer']),
-  "address": zod.string().nullish(),
+  "zipCode": zod.string().nullish(),
   "notes": zod.string().nullish(),
   "createdAt": zod.coerce.date()
 })
@@ -59,7 +59,7 @@ export const SubmitFallOrderBody = zod.object({
   "lastName": zod.string().min(1),
   "email": zod.string(),
   "phone": zod.string().nullish(),
-  "address": zod.string().nullish(),
+  "zipCode": zod.string().nullish(),
   "serviceType": zod.enum(['waitlist', 'order']).describe('waitlist = join fall waitlist now; order = place order (available mid-August)'),
   "notes": zod.string().nullish(),
   "propertySize": zod.string().nullish()
@@ -71,7 +71,7 @@ export const SubmitFallOrderResponse = zod.object({
   "lastName": zod.string(),
   "email": zod.string(),
   "phone": zod.string().nullish(),
-  "address": zod.string().nullish(),
+  "zipCode": zod.string().nullish(),
   "serviceType": zod.enum(['waitlist', 'order']),
   "notes": zod.string().nullish(),
   "propertySize": zod.string().nullish(),
