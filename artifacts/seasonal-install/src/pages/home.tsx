@@ -405,9 +405,21 @@ export default function Home() {
             >
               Welcome the fall season<br className="hidden sm:block" /> with a custom display.
             </h2>
-            <p className="text-base leading-relaxed max-w-sm mx-auto" style={{ color: '#cfc6b8' }}>
-              Spots fill neighborhood by neighborhood. This fall's waitlist is open now — no payment, just your name on the list.
+            <p className="text-base leading-relaxed" style={{ color: '#cfc6b8' }}>
+              Currently accepting new addresses.
             </p>
+            <div className="text-left max-w-sm mx-auto space-y-4 pt-2">
+              {[
+                { num: '01', text: 'Register with our concierge to reserve your address' },
+                { num: '02', text: "If you secure a spot, we'll confirm your delivery window and details" },
+                { num: '03', text: 'On your week, our designer arrives and installs your bespoke display in person' },
+              ].map(({ num, text }) => (
+                <div key={num} className="flex gap-4">
+                  <span className="font-mono text-[0.68rem] tracking-[0.1em] shrink-0 mt-[3px]" style={{ color: '#7a6a5e' }}>{num}</span>
+                  <p className="text-sm leading-relaxed" style={{ color: '#cfc6b8' }}>{text}</p>
+                </div>
+              ))}
+            </div>
             <div className="pt-3">
               <Link
                 href="/fall"
