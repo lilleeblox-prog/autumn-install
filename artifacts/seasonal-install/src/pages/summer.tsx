@@ -76,9 +76,12 @@ export default function Summer() {
         </div>
       </section>
 
-      <footer className="border-t border-border py-12 mt-24">
-        <div className="max-w-7xl mx-auto px-6 lg:px-12 text-center text-sm text-muted-foreground">
-          <p>© 2026 Made to Welcome. Seasonal décor delivery &amp; installation.</p>
+      <footer className="border-t border-border py-10">
+        <div className="max-w-6xl mx-auto px-6 lg:px-12 flex items-center justify-between flex-wrap gap-4">
+          <span className="font-serif text-lg font-medium">Made to Welcome</span>
+          <span className="font-mono text-[0.72rem] text-muted-foreground tracking-wide">
+            © 2026 · Seasonal décor · Delivery &amp; installation · Tennessee
+          </span>
         </div>
       </footer>
     </div>

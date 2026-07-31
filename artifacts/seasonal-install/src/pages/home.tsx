@@ -449,7 +449,7 @@ export default function Home() {
         <div className="max-w-6xl mx-auto px-6 lg:px-12 flex items-center justify-between flex-wrap gap-4">
           <span className="font-serif text-lg font-medium">Made to Welcome</span>
           <span className="font-mono text-[0.72rem] text-muted-foreground tracking-wide">
-            Seasonal décor · Delivery &amp; installation · Tennessee
+            © 2026 · Seasonal décor · Delivery &amp; installation · Tennessee
           </span>
         </div>
       </footer>
