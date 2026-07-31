@@ -140,7 +140,7 @@ export default function Home() {
                   <p className="font-serif text-[1.35rem] leading-[1.38] text-foreground mb-5">
                     Your home, dressed for the season.{' '}
                     <span className="text-muted-foreground">
-                      We deliver, we arrange, we come back when it's over. You walk outside and it's already there.
+                      We deliver, we arrange, we come back when it's over.
                     </span>
                   </p>
 
