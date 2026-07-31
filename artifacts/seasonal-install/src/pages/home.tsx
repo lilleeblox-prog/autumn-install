@@ -378,7 +378,7 @@ export default function Home() {
                     href={item.href}
                     className="inline-flex items-center gap-2 font-mono text-[0.7rem] tracking-[0.06em] uppercase text-muted-foreground hover:text-primary transition-colors"
                   >
-                    Add name <ArrowRight className="w-3 h-3" />
+                    Add your name <ArrowRight className="w-3 h-3" />
                   </Link>
                 </motion.div>
               ))}
