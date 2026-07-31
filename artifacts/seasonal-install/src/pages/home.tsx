@@ -157,7 +157,7 @@ export default function Home() {
                     data-testid="button-cta-fall"
                     className="flex items-center justify-center w-full font-mono text-[0.78rem] tracking-[0.08em] uppercase bg-primary text-primary-foreground hover:bg-primary/90 py-[18px] transition-colors"
                   >
-                    Add your name <ArrowRight className="ml-2 w-3.5 h-3.5" />
+                    Join waitlist <ArrowRight className="ml-2 w-3.5 h-3.5" />
                   </button>
                   <p className="text-center text-[0.7rem] text-muted-foreground mt-3 tracking-wide">
                     We'll be in touch in mid-August when ordering opens.
