@@ -154,7 +154,7 @@ export default function Fall() {
                   {
                     period: 'Late September – October',
                     active: false,
-                    body: 'Our team arrives with your pumpkins, gourds, and all the fall pieces. We arrange everything at your door by hand and leave when it looks exactly right.',
+                    body: 'Our team arrives with your pumpkins, gourds, and all the fall pieces. We arrange everything at your door by hand.',
                   },
                   {
                     period: 'Mid–End of November (optional)',
