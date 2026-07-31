@@ -205,7 +205,7 @@ export default function Fall() {
               </p>
               <div className="space-y-3">
                 {[
-                  'Your fall install spot is held immediately',
+                  'Your fall install spot is reserved',
                   'No payment until fall packages open in mid-August',
                   'We reach out directly with your fall package options',
                 ].map((point) => (
