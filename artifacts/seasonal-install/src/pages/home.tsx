@@ -138,9 +138,9 @@ export default function Home() {
                 >
                   {/* Lede */}
                   <p className="font-serif text-[1.35rem] leading-[1.38] text-foreground mb-5">
-                    Your home, dressed for the season.{' '}
+                    Your seasonal home concierge.{' '}
                     <span className="text-muted-foreground">
-                      We deliver, we arrange, we come back when it's over.
+                      We deliver, we arrange, we magically make it disappear.
                     </span>
                   </p>
 
