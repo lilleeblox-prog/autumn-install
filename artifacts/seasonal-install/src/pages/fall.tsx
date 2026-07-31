@@ -206,7 +206,7 @@ export default function Fall() {
               <div className="space-y-3">
                 {[
                   'Your fall install spot is reserved',
-                  'No payment until fall packages open in mid-August',
+                  'Fall packages open in mid-August',
                   'We reach out directly with your fall package options',
                 ].map((point) => (
                   <div key={point} className="flex items-center gap-3 text-sm text-muted-foreground">
