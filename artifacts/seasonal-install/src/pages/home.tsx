@@ -338,6 +338,7 @@ export default function Home() {
                 {
                   season: 'Winter',
                   year: '2026–27',
+                  badge: '2026 ledger',
                   description:
                     'Custom garland installed and dressed for the season, then quietly removed when the holidays are over.',
                   href: '/winter',
@@ -345,6 +346,7 @@ export default function Home() {
                 {
                   season: 'Summer',
                   year: '2027',
+                  badge: '2027 ledger',
                   description:
                     'Seasonal flag installs that make your home feel festive and finished from the moment summer arrives.',
                   href: '/summer',
@@ -368,7 +370,7 @@ export default function Home() {
                       </span>
                     </div>
                     <span className="font-mono text-[0.6rem] tracking-[0.06em] uppercase px-2.5 py-1.5 border border-secondary/40 text-secondary shrink-0 mt-0.5">
-                      2027 ledger
+                      {item.badge}
                     </span>
                   </div>
                   <p className="text-sm text-muted-foreground leading-relaxed mb-6">
