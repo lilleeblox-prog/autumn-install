@@ -16,7 +16,7 @@ const galleryImages = [
 const timelineSteps = [
   {
     num: '01',
-    title: 'Add your name',
+    title: 'Join waitlist',
     body: 'Add your name and we\'ll reach out in mid-August when ordering opens. No payment now — this is just your place on the list.',
     tag: 'Open now',
     active: true,
