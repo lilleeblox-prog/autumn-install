@@ -57,7 +57,7 @@ export default function Fall() {
                 href="#reserve"
                 className="font-mono text-[0.78rem] tracking-[0.08em] uppercase bg-primary text-primary-foreground hover:bg-primary/90 px-8 py-[17px] transition-colors inline-flex items-center gap-2"
               >
-                Reserve your spot
+                Add your name
                 <svg width="14" height="14" viewBox="0 0 14 14" fill="none" className="shrink-0">
                   <path d="M1 7h12M8 2l5 5-5 5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
                 </svg>
@@ -144,7 +144,7 @@ export default function Fall() {
                   {
                     period: 'Now through Mid-August',
                     active: true,
-                    body: 'Your spot is held the moment you join. We reach out when ordering opens with everything you need to get started.',
+                    body: 'Add your name and we\'ll reach out when ordering opens in mid-August. No payment now.',
                   },
                   {
                     period: 'Mid-August 2026',
@@ -201,11 +201,11 @@ export default function Fall() {
                 Your pumpkins, your gourds,<br /> your fall — reserved.
               </h2>
               <p className="text-muted-foreground leading-relaxed mb-8">
-                We install a small number of homes per neighborhood each fall so every display gets the attention it deserves. Reserve your spot now and we reach out in mid-August with your fall package options: pumpkins, gourds, hay bales, and everything in between.
+                We install a small number of homes per neighborhood each fall so every display gets the attention it deserves. Add your name and we'll reach out in mid-August when ordering opens with your package options.
               </p>
               <div className="space-y-3">
                 {[
-                  'Your fall install spot is reserved',
+                  'You\'re on the list — no payment now',
                   'Fall packages open in mid-August',
                   'We reach out directly with your fall package options',
                 ].map((point) => (
@@ -227,8 +227,8 @@ export default function Fall() {
               <div className="bg-background border border-border p-8 md:p-10">
                 <FallOrderForm
                   serviceType="waitlist"
-                  title="Reserve Your Spot"
-                  description="Your fall install spot is held the moment you submit. We reach out in mid-August with your package options — pumpkins, gourds, and all the seasonal details."
+                  title="Add Your Name"
+                  description="We'll reach out in mid-August when ordering opens. No payment now."
                 />
               </div>
             </motion.div>

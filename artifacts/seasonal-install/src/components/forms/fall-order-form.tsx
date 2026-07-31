@@ -61,10 +61,10 @@ export function FallOrderForm({ serviceType, title, description }: FallOrderForm
   if (submitted) {
     return (
       <ConfirmationMessage
-        title={serviceType === 'waitlist' ? "You're on the list" : 'Thank you for your order'}
+        title={serviceType === 'waitlist' ? "You're on the list." : 'Thank you for your order'}
         message={
           serviceType === 'waitlist'
-            ? "We'll reach out as soon as fall orders open in mid-August. Thank you for your interest."
+            ? "We'll be in touch in mid-August when ordering opens. No payment until then."
             : "Your fall installation inquiry has been received. We'll be in touch within 24 hours to confirm details."
         }
       />

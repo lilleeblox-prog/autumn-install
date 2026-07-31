@@ -53,7 +53,7 @@ export function Navigation() {
             className="font-mono text-[0.72rem] tracking-[0.06em] uppercase bg-foreground text-background hover:bg-primary px-5 py-2.5 transition-colors"
             data-testid="link-nav-cta"
           >
-            Join the waitlist
+            Add your name
           </Link>
         </div>
       </div>
