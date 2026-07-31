@@ -368,7 +368,7 @@ export default function Home() {
                       </span>
                     </div>
                     <span className="font-mono text-[0.6rem] tracking-[0.06em] uppercase px-2.5 py-1.5 border border-secondary/40 text-secondary shrink-0 mt-0.5">
-                      On the ledger
+                      2027 ledger
                     </span>
                   </div>
                   <p className="text-sm text-muted-foreground leading-relaxed mb-6">
