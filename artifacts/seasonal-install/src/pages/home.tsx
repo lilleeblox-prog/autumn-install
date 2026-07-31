@@ -16,8 +16,8 @@ const galleryImages = [
 const timelineSteps = [
   {
     num: '01',
-    title: 'Reserve your address',
-    body: 'Your address is held the moment you join. We take on a small number of homes per neighborhood so every install gets the attention it deserves.',
+    title: 'Reserve your door',
+    body: 'Your door is held the moment you join. We take on a small number of homes per neighborhood so every install gets the attention it deserves.',
     tag: 'Open now',
     active: true,
   },
@@ -157,10 +157,10 @@ export default function Home() {
                     data-testid="button-cta-fall"
                     className="flex items-center justify-center w-full font-mono text-[0.78rem] tracking-[0.08em] uppercase bg-primary text-primary-foreground hover:bg-primary/90 py-[18px] transition-colors"
                   >
-                    Reserve your address <ArrowRight className="ml-2 w-3.5 h-3.5" />
+                    Reserve your door <ArrowRight className="ml-2 w-3.5 h-3.5" />
                   </button>
                   <p className="text-center text-[0.7rem] text-muted-foreground mt-3 tracking-wide">
-                    No payment now. Just your address on the list.
+                    No payment now. Just your door on the list.
                   </p>
                 </motion.div>
               ) : (
@@ -411,12 +411,9 @@ export default function Home() {
               >
                 Welcome the fall season with a custom display.
               </h2>
-              <p className="text-base leading-relaxed" style={{ color: '#cfc6b8' }}>
-                Currently accepting new addresses.
-              </p>
               <div className="space-y-4 pt-2">
                 {[
-                  { num: '01', text: 'Register with our concierge to reserve your address' },
+                  { num: '01', text: 'Register with our concierge to reserve your door' },
                   { num: '02', text: "If you secure a spot, we'll confirm your delivery window and details" },
                   { num: '03', text: 'On your week, our designer arrives and installs your bespoke display in person' },
                 ].map(({ num, text }) => (

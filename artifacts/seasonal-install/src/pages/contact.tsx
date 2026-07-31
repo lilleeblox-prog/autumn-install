@@ -75,7 +75,7 @@ export default function Contact() {
               </div>
               <div className="space-y-2">
                 <p className="font-mono text-[0.7rem] tracking-[0.12em] uppercase text-muted-foreground">Season</p>
-                <p className="text-foreground leading-relaxed">Fall 2026 is currently accepting new addresses. Winter and Summer services are coming soon.</p>
+                <p className="text-foreground leading-relaxed">Fall 2026 is currently accepting new doors. Winter and Summer services are coming soon.</p>
               </div>
               <div className="space-y-2">
                 <p className="font-mono text-[0.7rem] tracking-[0.12em] uppercase text-muted-foreground">Response time</p>
