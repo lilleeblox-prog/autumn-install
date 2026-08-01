@@ -1,0 +1,76 @@
+<section class="mtw-section mtw-section--bordered">
+  <div class="mtw-container">
+    <div class="mtw-section-header">
+      <span class="mtw-mono mtw-eyebrow mtw-eyebrow--muted">Our work</span>
+      <h2 class="mtw-h2">Tennessee doors, dressed for fall.</h2>
+    </div>
+
+    <div class="mtw-gallery">
+      <div class="mtw-gallery__track-wrap">
+        <div class="mtw-gallery__track" id="gallery-track">
+          {%- for i in (1..section.blocks.size) -%}
+            {%- assign block = section.blocks[forloop.index0] -%}
+            {%- if block.settings.image != blank -%}
+              <div class="mtw-gallery__slide" {{ block.shopify_attributes }}>
+                <img
+                  src="{{ block.settings.image | image_url: width: 900 }}"
+                  alt="{{ block.settings.image.alt | default: block.settings.location | escape }}"
+                  class="mtw-gallery__img"
+                  loading="lazy"
+                >
+              </div>
+            {%- endif -%}
+          {%- endfor -%}
+        </div>
+      </div>
+
+      <button class="mtw-gallery__btn mtw-gallery__btn--prev" id="gallery-prev" aria-label="Previous photo">
+        <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+          <path d="M12 4l-6 6 6 6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+      <button class="mtw-gallery__btn mtw-gallery__btn--next" id="gallery-next" aria-label="Next photo">
+        <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+          <path d="M8 4l6 6-6 6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+
+      <div class="mtw-gallery__dots" id="gallery-dots">
+        {%- for block in section.blocks -%}
+          <button class="mtw-gallery__dot{% if forloop.first %} mtw-gallery__dot--active{% endif %}" data-index="{{ forloop.index0 }}" aria-label="Photo {{ forloop.index }}"></button>
+        {%- endfor -%}
+      </div>
+
+      <p class="mtw-mono mtw-gallery__location" id="gallery-location">
+        {%- if section.blocks.first -%}{{ section.blocks.first.settings.location }}{%- endif -%}
+      </p>
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Gallery",
+  "max_blocks": 6,
+  "blocks": [
+    {
+      "type": "photo",
+      "name": "Photo",
+      "settings": [
+        { "type": "image_picker", "id": "image", "label": "Photo" },
+        { "type": "text", "id": "location", "label": "Location label", "placeholder": "Franklin, TN" }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Gallery",
+      "blocks": [
+        { "type": "photo" },
+        { "type": "photo" },
+        { "type": "photo" }
+      ]
+    }
+  ]
+}
+{% endschema %}

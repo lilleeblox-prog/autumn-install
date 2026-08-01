@@ -1,0 +1,81 @@
+<section class="mtw-section mtw-coming-soon">
+  <div class="mtw-container">
+    <div class="mtw-coming-soon__header">
+      <span class="mtw-badge mtw-badge--sage">Coming Soon</span>
+      <h1 class="mtw-coming-soon__headline">{{ section.settings.headline }}</h1>
+      <p class="mtw-coming-soon__sub">{{ section.settings.subheading }}</p>
+    </div>
+
+    <div class="mtw-two-col mtw-two-col--asymmetric">
+      <div class="mtw-two-col__col">
+        <h2 class="mtw-h3">What to expect</h2>
+        <div class="mtw-prose">
+          <p>{{ section.settings.description }}</p>
+          <p class="mtw-body-sm" style="padding-top:0.5rem">
+            Reserve your zip code below and we will confirm availability in your area when this service launches.
+          </p>
+        </div>
+      </div>
+
+      <div class="mtw-two-col__col">
+        <div class="mtw-form-card">
+          <h3 class="mtw-form-title">Receive notifications</h3>
+          <p class="mtw-form-desc">{{ section.settings.form_description }}</p>
+          {%- form 'contact' -%}
+            <input type="hidden" name="contact[season]" value="{{ section.settings.season_tag }}">
+            <input type="hidden" name="contact[tags]" value="waitlist,{{ section.settings.season_tag | downcase | replace: ' ', '-' }}">
+
+            {%- if form.posted_successfully? -%}
+              <div class="mtw-form-success">
+                <p class="mtw-form-success__title">You're on the list.</p>
+                <p class="mtw-form-success__body">We'll be in touch when this season opens in your area.</p>
+              </div>
+            {%- else -%}
+              <div class="mtw-form-row mtw-form-row--2col">
+                <div class="mtw-form-field">
+                  <label class="mtw-label" for="{{ section.id }}-first">First name</label>
+                  <input class="mtw-input" type="text" id="{{ section.id }}-first" name="contact[first_name]" placeholder="Jane" required>
+                </div>
+                <div class="mtw-form-field">
+                  <label class="mtw-label" for="{{ section.id }}-last">Last name</label>
+                  <input class="mtw-input" type="text" id="{{ section.id }}-last" name="contact[last_name]" placeholder="Smith" required>
+                </div>
+              </div>
+              <div class="mtw-form-field">
+                <label class="mtw-label" for="{{ section.id }}-email">Email</label>
+                <input class="mtw-input" type="email" id="{{ section.id }}-email" name="contact[email]" placeholder="jane@example.com" required>
+              </div>
+              <div class="mtw-form-field">
+                <label class="mtw-label" for="{{ section.id }}-phone">Phone</label>
+                <input class="mtw-input" type="tel" id="{{ section.id }}-phone" name="contact[phone]" placeholder="(615) 555-0100" required>
+              </div>
+              <div class="mtw-form-field">
+                <label class="mtw-label" for="{{ section.id }}-zip">Zip code</label>
+                <input class="mtw-input" type="text" id="{{ section.id }}-zip" name="contact[zip_code]" placeholder="37064" required>
+              </div>
+              <button type="submit" class="mtw-btn mtw-btn--primary mtw-btn--full" style="margin-top:0.5rem">
+                Notify me
+              </button>
+            {%- endif -%}
+          {%- endform -%}
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Coming Soon",
+  "settings": [
+    { "type": "text",     "id": "headline",         "label": "Headline",          "default": "Winter service" },
+    { "type": "textarea", "id": "subheading",        "label": "Subheading",        "default": "Beautiful garland, installed and dressed for the season, then quietly removed when the holidays are over." },
+    { "type": "textarea", "id": "description",       "label": "Description",       "default": "Our winter service brings beautifully dressed garland to your home, installed by hand and removed when the season ends. Full details will be shared when the service opens." },
+    { "type": "text",     "id": "season_tag",        "label": "Season tag",        "default": "Winter 2026" },
+    { "type": "text",     "id": "form_description",  "label": "Form description",  "default": "We'll confirm availability in your neighborhood when this service launches." }
+  ],
+  "presets": [
+    { "name": "Coming Soon" }
+  ]
+}
+{% endschema %}

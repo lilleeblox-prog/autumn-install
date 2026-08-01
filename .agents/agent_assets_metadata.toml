@@ -1,0 +1,9 @@
+uploads = []
+generated = []
+
+[[outputs]]
+id = "udtP1ep0oTg8PyeEJbFEf"
+uri = "file://made-to-welcome-theme.zip"
+type = "unspecified"
+title = "Made to Welcome — Shopify Theme"
+description = "Complete Liquid theme. Upload to Shopify admin → Online Store → Themes → Add theme → Upload zip file."

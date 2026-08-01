@@ -1,0 +1,13 @@
+{
+  "sections": {
+    "contact-form": {
+      "type": "contact-form",
+      "settings": {}
+    },
+    "footer": {
+      "type": "footer",
+      "settings": {}
+    }
+  },
+  "order": ["contact-form", "footer"]
+}

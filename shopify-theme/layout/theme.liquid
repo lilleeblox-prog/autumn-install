@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="{{ request.locale.iso_code }}">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="index, follow">
+
+  {%- if page_title -%}
+    <title>{{ page_title }} — Made to Welcome</title>
+  {%- else -%}
+    <title>Made to Welcome — Seasonal Décor Delivery & Installation</title>
+  {%- endif -%}
+
+  {%- if page_description -%}
+    <meta name="description" content="{{ page_description | escape }}">
+  {%- else -%}
+    <meta name="description" content="White-glove seasonal décor delivery and installation for Tennessee homes. Fall 2026 waitlist open — ordering begins mid-August.">
+  {%- endif -%}
+
+  <meta property="og:site_name" content="Made to Welcome">
+  <meta property="og:title" content="{{ page_title | default: 'Made to Welcome — Seasonal Décor' }}">
+  <meta property="og:description" content="{{ page_description | default: 'White-glove seasonal décor delivery and installation for Tennessee homes.' }}">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="{{ canonical_url }}">
+  {%- if settings.og_image != blank -%}
+    <meta property="og:image" content="{{ settings.og_image | image_url: width: 1200 }}">
+    <meta name="twitter:image" content="{{ settings.og_image | image_url: width: 1200 }}">
+  {%- endif -%}
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="{{ page_title | default: 'Made to Welcome — Seasonal Décor' }}">
+  <meta name="twitter:description" content="{{ page_description | default: 'White-glove seasonal décor delivery and installation for Tennessee homes.' }}">
+
+  <link rel="canonical" href="{{ canonical_url }}">
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400&family=IBM+Plex+Mono:wght@400;500&family=Work+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+  {{ content_for_header }}
+
+  {{ 'theme.css' | asset_url | stylesheet_tag }}
+</head>
+
+<body class="mtw-body">
+
+  {%- sections 'header' -%}
+
+  <main id="main-content">
+    {{ content_for_layout }}
+  </main>
+
+  {{ 'theme.js' | asset_url | script_tag }}
+</body>
+</html>

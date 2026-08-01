@@ -1,0 +1,21 @@
+{
+  "sections": {
+    "fall-hero": {
+      "type": "fall-hero",
+      "settings": {}
+    },
+    "fall-content": {
+      "type": "fall-content",
+      "settings": {}
+    },
+    "fall-form": {
+      "type": "fall-form",
+      "settings": {}
+    },
+    "footer": {
+      "type": "footer",
+      "settings": {}
+    }
+  },
+  "order": ["fall-hero", "fall-content", "fall-form", "footer"]
+}

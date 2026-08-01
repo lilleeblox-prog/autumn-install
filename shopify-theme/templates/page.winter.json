@@ -1,0 +1,19 @@
+{
+  "sections": {
+    "coming-soon": {
+      "type": "coming-soon",
+      "settings": {
+        "headline": "Winter service",
+        "subheading": "Beautiful garland, installed and dressed for the season, then quietly removed when the holidays are over.",
+        "description": "Our winter service brings beautifully dressed garland to your home, installed by hand and removed when the season ends. Full details will be shared when the service opens.",
+        "season_tag": "Winter 2026",
+        "form_description": "We'll confirm availability in your neighborhood when winter service launches."
+      }
+    },
+    "footer": {
+      "type": "footer",
+      "settings": {}
+    }
+  },
+  "order": ["coming-soon", "footer"]
+}
