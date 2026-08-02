@@ -1,0 +1,35 @@
+{
+  "sections": {
+    "hero-home": {
+      "type": "hero-home",
+      "settings": {}
+    },
+    "how-it-works": {
+      "type": "how-it-works",
+      "settings": {}
+    },
+    "gallery": {
+      "type": "gallery",
+      "settings": {},
+      "blocks": {
+        "slide-1": { "type": "photo", "settings": { "location": "Franklin, TN" } },
+        "slide-2": { "type": "photo", "settings": { "location": "Brentwood, TN" } },
+        "slide-3": { "type": "photo", "settings": { "location": "Belle Meade, TN" } }
+      },
+      "block_order": ["slide-1", "slide-2", "slide-3"]
+    },
+    "season-cards": {
+      "type": "season-cards",
+      "settings": {}
+    },
+    "cta-dark": {
+      "type": "cta-dark",
+      "settings": {}
+    },
+    "footer": {
+      "type": "footer",
+      "settings": {}
+    }
+  },
+  "order": ["hero-home", "how-it-works", "gallery", "season-cards", "cta-dark", "footer"]
+}

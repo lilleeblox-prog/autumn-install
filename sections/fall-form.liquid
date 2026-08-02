@@ -1,0 +1,75 @@
+<section id="reserve" class="mtw-section mtw-section--card-bg mtw-scroll-mt">
+  <div class="mtw-container">
+    <div class="mtw-two-col mtw-two-col--form">
+
+      <!-- Left: context -->
+      <div class="mtw-two-col__col">
+        <span class="mtw-mono mtw-eyebrow mtw-eyebrow--muted">Fall 2026 · Waitlist</span>
+        <h2 class="mtw-h2" style="margin-bottom:1.25rem">Your pumpkins, your gourds,<br> your fall — reserved.</h2>
+        <p class="mtw-body mtw-text-muted" style="margin-bottom:2rem">
+          We install a small number of homes per neighborhood each fall so every display gets the attention it deserves. Add your name and we'll reach out in mid-August when ordering opens with your package options.
+        </p>
+        <ul class="mtw-checklist mtw-checklist--compact">
+          <li>You're on the list — no payment now</li>
+          <li>Fall packages open in mid-August</li>
+          <li>We reach out directly with your fall package options</li>
+        </ul>
+      </div>
+
+      <!-- Right: form -->
+      <div class="mtw-two-col__col">
+        <div class="mtw-form-card">
+          <h3 class="mtw-form-title">Add Your Name</h3>
+          <p class="mtw-form-desc">We'll reach out in mid-August when ordering opens. No payment now.</p>
+          {%- form 'contact', id: 'fall-reserve-form' -%}
+            <input type="hidden" name="contact[season]" value="Fall 2026">
+            <input type="hidden" name="contact[tags]" value="waitlist,fall-2026">
+
+            {%- if form.posted_successfully? -%}
+              <div class="mtw-form-success">
+                <p class="mtw-form-success__title">You're on the list.</p>
+                <p class="mtw-form-success__body">We'll be in touch in mid-August when ordering opens. No payment until then.</p>
+              </div>
+            {%- else -%}
+              <div class="mtw-form-row mtw-form-row--2col">
+                <div class="mtw-form-field">
+                  <label class="mtw-label" for="fall-first-name">First name</label>
+                  <input class="mtw-input" type="text" id="fall-first-name" name="contact[first_name]" placeholder="Jane" required>
+                </div>
+                <div class="mtw-form-field">
+                  <label class="mtw-label" for="fall-last-name">Last name</label>
+                  <input class="mtw-input" type="text" id="fall-last-name" name="contact[last_name]" placeholder="Smith" required>
+                </div>
+              </div>
+              <div class="mtw-form-field">
+                <label class="mtw-label" for="fall-email">Email</label>
+                <input class="mtw-input" type="email" id="fall-email" name="contact[email]" placeholder="jane@example.com" required>
+              </div>
+              <div class="mtw-form-field">
+                <label class="mtw-label" for="fall-phone">Phone</label>
+                <input class="mtw-input" type="tel" id="fall-phone" name="contact[phone]" placeholder="(615) 555-0100" required>
+              </div>
+              <div class="mtw-form-field">
+                <label class="mtw-label" for="fall-zip">Zip code</label>
+                <input class="mtw-input" type="text" id="fall-zip" name="contact[zip_code]" placeholder="37064" required>
+              </div>
+              <button type="submit" class="mtw-btn mtw-btn--primary mtw-btn--full" style="margin-top:0.5rem">
+                Submit
+              </button>
+            {%- endif -%}
+          {%- endform -%}
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Fall — Form",
+  "settings": [],
+  "presets": [
+    { "name": "Fall — Form" }
+  ]
+}
+{% endschema %}

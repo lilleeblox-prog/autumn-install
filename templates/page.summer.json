@@ -1,0 +1,19 @@
+{
+  "sections": {
+    "coming-soon": {
+      "type": "coming-soon",
+      "settings": {
+        "headline": "Summer service",
+        "subheading": "Seasonal flag installs that make your home feel festive and finished from the moment summer arrives.",
+        "description": "Our summer service brings beautifully arranged seasonal flags and plantings to your front entry, installed by hand. Full details will be shared when the service opens.",
+        "season_tag": "Summer 2027",
+        "form_description": "We'll confirm availability in your neighborhood when summer service launches."
+      }
+    },
+    "footer": {
+      "type": "footer",
+      "settings": {}
+    }
+  },
+  "order": ["coming-soon", "footer"]
+}

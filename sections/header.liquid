@@ -1,0 +1,32 @@
+<header class="mtw-header">
+  <div class="mtw-header__inner">
+    <a href="{{ routes.root_url }}" class="mtw-header__logo">Made to Welcome</a>
+
+    <nav class="mtw-header__nav" aria-label="Main navigation">
+      <a href="/pages/fall" class="mtw-nav-link">Fall</a>
+      <a href="/pages/winter" class="mtw-nav-link">Winter</a>
+      <a href="/pages/summer" class="mtw-nav-link">Summer</a>
+      <a href="/pages/contact" class="mtw-nav-link">Contact</a>
+      <a href="/pages/fall#reserve" class="mtw-btn mtw-btn--dark">Join waitlist</a>
+    </nav>
+
+    <button class="mtw-header__hamburger" aria-label="Open menu" aria-expanded="false" id="hamburger-btn">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+
+  <div class="mtw-mobile-nav" id="mobile-nav" aria-hidden="true">
+    <a href="/pages/fall" class="mtw-mobile-nav__link">Fall</a>
+    <a href="/pages/winter" class="mtw-mobile-nav__link">Winter</a>
+    <a href="/pages/summer" class="mtw-mobile-nav__link">Summer</a>
+    <a href="/pages/contact" class="mtw-mobile-nav__link">Contact</a>
+    <a href="/pages/fall#reserve" class="mtw-btn mtw-btn--dark" style="display:inline-block;margin-top:0.5rem">Join waitlist</a>
+  </div>
+</header>
+
+{% schema %}
+{
+  "name": "Header",
+  "settings": []
+}
+{% endschema %}
