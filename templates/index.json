@@ -1,8 +1,19 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
 {
   "sections": {
     "hero-home": {
       "type": "hero-home",
-      "settings": {}
+      "settings": {
+        "hero_image": "shopify://shop_images/hero_banner.png"
+      }
     },
     "how-it-works": {
       "type": "how-it-works",
@@ -10,13 +21,35 @@
     },
     "gallery": {
       "type": "gallery",
-      "settings": {},
       "blocks": {
-        "slide-1": { "type": "photo", "settings": { "location": "Franklin, TN" } },
-        "slide-2": { "type": "photo", "settings": { "location": "Brentwood, TN" } },
-        "slide-3": { "type": "photo", "settings": { "location": "Belle Meade, TN" } }
+        "slide-1": {
+          "type": "photo",
+          "settings": {
+            "image": "shopify://shop_images/example_2.png",
+            "location": "Franklin, TN"
+          }
+        },
+        "slide-2": {
+          "type": "photo",
+          "settings": {
+            "image": "shopify://shop_images/example_3.png",
+            "location": "Brentwood, TN"
+          }
+        },
+        "slide-3": {
+          "type": "photo",
+          "settings": {
+            "image": "shopify://shop_images/example_4_ebc81660-2ee0-497d-a0b0-a33ddd8aefe1.png",
+            "location": "Belle Meade, TN"
+          }
+        }
       },
-      "block_order": ["slide-1", "slide-2", "slide-3"]
+      "block_order": [
+        "slide-1",
+        "slide-2",
+        "slide-3"
+      ],
+      "settings": {}
     },
     "season-cards": {
       "type": "season-cards",
@@ -31,5 +64,12 @@
       "settings": {}
     }
   },
-  "order": ["hero-home", "how-it-works", "gallery", "season-cards", "cta-dark", "footer"]
+  "order": [
+    "hero-home",
+    "how-it-works",
+    "gallery",
+    "season-cards",
+    "cta-dark",
+    "footer"
+  ]
 }
