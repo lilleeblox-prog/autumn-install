@@ -1,0 +1,2 @@
+- [Artifact recovery](artifact-recovery.md) — call verifyAndReplaceArtifactToml with existing .replit-artifact/artifact.toml paths to re-register removed artifacts
+- [Shopify branch workflow](shopify-branch-workflow.md) — shopify branch is an orphan at repo root; never use git checkout or git worktree to update it — it deregisters artifacts
