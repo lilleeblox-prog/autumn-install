@@ -4,59 +4,39 @@
 
       <!-- Left: brand statement -->
       <div class="mtw-season-statement">
-        <span class="mtw-mono mtw-eyebrow mtw-eyebrow--muted">Every season</span>
+        <span class="mtw-mono mtw-eyebrow mtw-eyebrow--muted">{{ section.settings.eyebrow }}</span>
         <h2 class="mtw-h1-display">
-          All seasons,<br>
-          curated by your<br>
-          <em class="mtw-text-primary" style="font-style:normal">favorite team.</em>
+          {{ section.settings.headline | newline_to_br }}
         </h2>
         <p class="mtw-body mtw-text-muted" style="max-width:22rem">
-          Fall is just the beginning. We come back every season with the same team and the same care. Your door always feels ready.
+          {{ section.settings.body }}
         </p>
       </div>
 
       <!-- Right: season cards -->
       <div class="mtw-season-cards">
-
-        <div class="mtw-season-card">
-          <div class="mtw-season-card__header">
-            <div>
-              <p class="mtw-season-card__name">Winter</p>
-              <span class="mtw-mono mtw-text-muted" style="font-size:0.65rem;letter-spacing:0.1em;text-transform:uppercase">2026–27</span>
+        {%- for block in section.blocks -%}
+          <div class="mtw-season-card" {{ block.shopify_attributes }}>
+            <div class="mtw-season-card__header">
+              <div>
+                <p class="mtw-season-card__name">{{ block.settings.name }}</p>
+                <span class="mtw-mono mtw-text-muted" style="font-size:0.65rem;letter-spacing:0.1em;text-transform:uppercase">{{ block.settings.year_range }}</span>
+              </div>
+              <span class="mtw-badge mtw-badge--sage">{{ block.settings.badge }}</span>
             </div>
-            <span class="mtw-badge mtw-badge--sage">2026 ledger</span>
+            <p class="mtw-body-sm mtw-text-muted" style="margin-bottom:1.5rem">
+              {{ block.settings.description }}
+            </p>
+            <a href="{{ block.settings.link }}" class="mtw-link-arrow">
+              {{ block.settings.cta }}
+              <svg width="12" height="12" viewBox="0 0 14 14" fill="none">
+                <path d="M1 7h12M8 2l5 5-5 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </a>
           </div>
-          <p class="mtw-body-sm mtw-text-muted" style="margin-bottom:1.5rem">
-            Custom garland installed and dressed for the season, then quietly removed when the holidays are over.
-          </p>
-          <a href="/pages/winter" class="mtw-link-arrow">
-            Add your name
-            <svg width="12" height="12" viewBox="0 0 14 14" fill="none">
-              <path d="M1 7h12M8 2l5 5-5 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-            </svg>
-          </a>
-        </div>
-
-        <div class="mtw-season-card">
-          <div class="mtw-season-card__header">
-            <div>
-              <p class="mtw-season-card__name">Summer</p>
-              <span class="mtw-mono mtw-text-muted" style="font-size:0.65rem;letter-spacing:0.1em;text-transform:uppercase">2027</span>
-            </div>
-            <span class="mtw-badge mtw-badge--sage">2027 ledger</span>
-          </div>
-          <p class="mtw-body-sm mtw-text-muted" style="margin-bottom:1.5rem">
-            Seasonal flag installs that make your home feel festive and finished from the moment summer arrives.
-          </p>
-          <a href="/pages/summer" class="mtw-link-arrow">
-            Add your name
-            <svg width="12" height="12" viewBox="0 0 14 14" fill="none">
-              <path d="M1 7h12M8 2l5 5-5 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-            </svg>
-          </a>
-        </div>
-
+        {%- endfor -%}
       </div>
+
     </div>
   </div>
 </section>
@@ -64,9 +44,48 @@
 {% schema %}
 {
   "name": "Season Cards",
-  "settings": [],
+  "settings": [
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Eyebrow label",
+      "default": "Every season"
+    },
+    {
+      "type": "textarea",
+      "id": "headline",
+      "label": "Headline (use line breaks for wrapping)",
+      "default": "All seasons,\ncurated by your\nfavorite team."
+    },
+    {
+      "type": "textarea",
+      "id": "body",
+      "label": "Body text",
+      "default": "Fall is just the beginning. We come back every season with the same team and the same care. Your door always feels ready."
+    }
+  ],
+  "blocks": [
+    {
+      "type": "season_card",
+      "name": "Season card",
+      "settings": [
+        { "type": "text", "id": "name", "label": "Season name", "default": "Winter" },
+        { "type": "text", "id": "year_range", "label": "Year / date range", "default": "2026–27" },
+        { "type": "text", "id": "badge", "label": "Badge label", "default": "2026 ledger" },
+        { "type": "textarea", "id": "description", "label": "Description", "default": "Custom garland installed and dressed for the season, then quietly removed when the holidays are over." },
+        { "type": "url", "id": "link", "label": "Card link", "default": "/pages/winter" },
+        { "type": "text", "id": "cta", "label": "Link text", "default": "Add your name" }
+      ]
+    }
+  ],
   "presets": [
-    { "name": "Season Cards" }
+    {
+      "name": "Season Cards",
+      "blocks": [
+        { "type": "season_card", "settings": { "name": "Winter", "year_range": "2026–27", "badge": "2026 ledger", "description": "Custom garland installed and dressed for the season, then quietly removed when the holidays are over.", "link": "/pages/winter", "cta": "Add your name" } },
+        { "type": "season_card", "settings": { "name": "Summer", "year_range": "2027", "badge": "2027 ledger", "description": "Seasonal flag installs that make your home feel festive and finished from the moment summer arrives.", "link": "/pages/summer", "cta": "Add your name" } }
+      ]
+    }
   ]
 }
 {% endschema %}
