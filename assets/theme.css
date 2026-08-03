@@ -543,7 +543,7 @@ button { cursor: pointer; background: none; border: none; }
     gap: 6rem;
     align-items: start;
   }
-  .mtw-season-statement { position: sticky; top: 7rem; }
+  .mtw-season-statement { position: static; }
 }
 
 .mtw-season-cards { display: flex; flex-direction: column; gap: 1.25rem; }
