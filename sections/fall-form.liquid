@@ -19,18 +19,22 @@
       <!-- Right: form -->
       <div class="mtw-two-col__col">
         <div class="mtw-form-card">
-          <h3 class="mtw-form-title">{{ section.settings.form_title }}</h3>
-          <p class="mtw-form-desc">{{ section.settings.form_desc }}</p>
           {%- form 'contact', id: 'fall-reserve-form' -%}
             <input type="hidden" name="contact[season]" value="Fall 2026">
             <input type="hidden" name="contact[tags]" value="waitlist,fall-2026">
 
             {%- if form.posted_successfully? -%}
               <div class="mtw-form-success">
+                <svg class="mtw-form-success__icon" width="56" height="56" viewBox="0 0 56 56" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <circle cx="28" cy="28" r="26" stroke="#7A9E82" stroke-width="1.5"/>
+                  <path d="M17 28.5l8 8 14-16" stroke="#7A9E82" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
                 <p class="mtw-form-success__title">{{ section.settings.form_success_title }}</p>
                 <p class="mtw-form-success__body">{{ section.settings.form_success_body }}</p>
               </div>
             {%- else -%}
+              <h3 class="mtw-form-title">{{ section.settings.form_title }}</h3>
+              <p class="mtw-form-desc">{{ section.settings.form_desc }}</p>
               <div class="mtw-form-row mtw-form-row--2col">
                 <div class="mtw-form-field">
                   <label class="mtw-label" for="fall-first-name">First name</label>
@@ -62,6 +66,17 @@
       </div>
     </div>
   </div>
+<script>
+  (function(){
+    var success = document.querySelector('#reserve .mtw-form-success');
+    if (success) {
+      var left = document.querySelector('#reserve .mtw-two-col__col');
+      if (left) left.style.display = 'none';
+      var grid = document.querySelector('#reserve .mtw-two-col--form');
+      if (grid) grid.style.justifyContent = 'center';
+    }
+  })();
+</script>
 </section>
 
 {% schema %}
