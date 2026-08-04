@@ -21,3 +21,8 @@ Any `git checkout shopify` or `git worktree add ... shopify` operation causes Re
 - Find another credential mechanism
 
 **Why:** `gitPush` uses GitHub's "publish branch" API which only works for new branches. For updates to existing branches a regular git push is needed, but HTTPS credentials aren't configured for shell.
+
+## Shopify can overwrite files via GitHub
+When the user saves in Shopify's theme editor (Customize), Shopify commits back to the repo as `shopify[bot]`. This can overwrite `config/settings_schema.json` with `[]`, removing `theme_info` and breaking the theme entirely (causes 404 on the live site). Always `git pull --rebase` before pushing, and restore `settings_schema.json` if it gets wiped.
+
+The required `settings_schema.json` content must always start with the `theme_info` block — without it Shopify refuses to serve the theme.
