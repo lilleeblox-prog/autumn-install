@@ -1,1 +1,21 @@
-[]
+[
+  {
+    "name": "theme_info",
+    "theme_name": "Made to Welcome",
+    "theme_version": "1.0.0",
+    "theme_author": "Made to Welcome",
+    "theme_documentation_url": "",
+    "theme_support_url": ""
+  },
+  {
+    "name": "Social & SEO",
+    "settings": [
+      {
+        "type": "image_picker",
+        "id": "og_image",
+        "label": "Social sharing image",
+        "info": "Used when sharing your site on Facebook, Twitter, etc. Recommended size: 1200×630px."
+      }
+    ]
+  }
+]
