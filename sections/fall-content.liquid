@@ -4,58 +4,39 @@
 
       <!-- What we do -->
       <div class="mtw-two-col__col">
-        <span class="mtw-mono mtw-eyebrow mtw-eyebrow--muted">The service</span>
-        <h2 class="mtw-h2" style="margin-bottom:1.75rem">Pumpkins, gourds, hay bales. All of it handled.</h2>
+        <span class="mtw-mono mtw-eyebrow mtw-eyebrow--muted">{{ section.settings.service_eyebrow }}</span>
+        <h2 class="mtw-h2" style="margin-bottom:1.75rem">{{ section.settings.service_headline }}</h2>
         <div class="mtw-prose">
-          <p>
-            We select the pumpkins, source the gourds and hay bales, and arrange everything at your front door. You never touch a thing. When autumn ends, we come back and collect it all if you want us to.
-          </p>
+          <p>{{ section.settings.service_body_1 }}</p>
           <ul class="mtw-checklist">
-            <li>Organic pumpkins and heirloom gourds, arranged for your specific entry</li>
-            <li>Hay bales for height, structure, and that unmistakable fall feel</li>
-            <li>Planter styling with fall foliage and seasonal fillers</li>
-            <li>Full delivery and installation. We bring everything.</li>
-            <li>Optional removal mid-to-end of November so your entry is clear for December 1st</li>
+            {%- for block in section.blocks -%}
+              {%- if block.type == 'checklist_item' -%}
+                <li {{ block.shopify_attributes }}>{{ block.settings.text }}</li>
+              {%- endif -%}
+            {%- endfor -%}
           </ul>
-          <p>
-            Every pumpkin and gourd is sourced fresh for the season. We do not offer storage. Add the removal service and we collect everything mid-to-end of November so your entry is clear and ready for December 1st.
-          </p>
+          <p>{{ section.settings.service_body_2 }}</p>
         </div>
       </div>
 
       <!-- How it unfolds -->
       <div class="mtw-two-col__col">
-        <span class="mtw-mono mtw-eyebrow mtw-eyebrow--muted">The process</span>
-        <h2 class="mtw-h2" style="margin-bottom:1.75rem">How it unfolds.</h2>
+        <span class="mtw-mono mtw-eyebrow mtw-eyebrow--muted">{{ section.settings.process_eyebrow }}</span>
+        <h2 class="mtw-h2" style="margin-bottom:1.75rem">{{ section.settings.process_headline }}</h2>
         <div class="mtw-process-list">
-          <div class="mtw-process-item mtw-process-item--active">
-            <div class="mtw-process-item__dot mtw-process-item__dot--active"></div>
-            <div>
-              <p class="mtw-process-item__period">Now through Mid-August</p>
-              <p class="mtw-process-item__body">Add your name and we'll reach out when ordering opens in mid-August. No payment now.</p>
-            </div>
-          </div>
-          <div class="mtw-process-item mtw-process-item--active">
-            <div class="mtw-process-item__dot mtw-process-item__dot--active"></div>
-            <div>
-              <p class="mtw-process-item__period">Mid-August 2026</p>
-              <p class="mtw-process-item__body">Ordering opens. We reach out to walk you through your package options and schedule your install.</p>
-            </div>
-          </div>
-          <div class="mtw-process-item">
-            <div class="mtw-process-item__dot"></div>
-            <div>
-              <p class="mtw-process-item__period">Late September – October</p>
-              <p class="mtw-process-item__body">Our team arrives with your pumpkins, gourds, and all the fall pieces. We arrange everything at your door by hand.</p>
-            </div>
-          </div>
-          <div class="mtw-process-item">
-            <div class="mtw-process-item__dot"></div>
-            <div>
-              <p class="mtw-process-item__period">Mid–End of November (optional)</p>
-              <p class="mtw-process-item__body">We come back to collect your pumpkins, gourds, and hay bales so your entry is clear and ready for December 1st. Nothing to bag up, nothing to store.</p>
-            </div>
-          </div>
+          {%- assign process_index = 0 -%}
+          {%- for block in section.blocks -%}
+            {%- if block.type == 'process_item' -%}
+              {%- assign process_index = process_index | plus: 1 -%}
+              <div class="mtw-process-item{% if process_index <= 2 %} mtw-process-item--active{% endif %}" {{ block.shopify_attributes }}>
+                <div class="mtw-process-item__dot{% if process_index <= 2 %} mtw-process-item__dot--active{% endif %}"></div>
+                <div>
+                  <p class="mtw-process-item__period">{{ block.settings.period }}</p>
+                  <p class="mtw-process-item__body">{{ block.settings.body }}</p>
+                </div>
+              </div>
+            {%- endif -%}
+          {%- endfor -%}
         </div>
       </div>
 
@@ -66,9 +47,138 @@
 {% schema %}
 {
   "name": "Fall — Content",
-  "settings": [],
+  "settings": [
+    {
+      "type": "header",
+      "content": "The service column"
+    },
+    {
+      "type": "text",
+      "id": "service_eyebrow",
+      "label": "Service eyebrow",
+      "default": "The service"
+    },
+    {
+      "type": "text",
+      "id": "service_headline",
+      "label": "Service headline",
+      "default": "Pumpkins, gourds, hay bales. All of it handled."
+    },
+    {
+      "type": "textarea",
+      "id": "service_body_1",
+      "label": "Service body (above checklist)",
+      "default": "We select the pumpkins, source the gourds and hay bales, and arrange everything at your front door. You never touch a thing. When autumn ends, we come back and collect it all if you want us to."
+    },
+    {
+      "type": "textarea",
+      "id": "service_body_2",
+      "label": "Service body (below checklist)",
+      "default": "Every pumpkin and gourd is sourced fresh for the season. We do not offer storage. Add the removal service and we collect everything mid-to-end of November so your entry is clear and ready for December 1st."
+    },
+    {
+      "type": "header",
+      "content": "The process column"
+    },
+    {
+      "type": "text",
+      "id": "process_eyebrow",
+      "label": "Process eyebrow",
+      "default": "The process"
+    },
+    {
+      "type": "text",
+      "id": "process_headline",
+      "label": "Process headline",
+      "default": "How it unfolds."
+    }
+  ],
+  "blocks": [
+    {
+      "type": "checklist_item",
+      "name": "Checklist item",
+      "settings": [
+        {
+          "type": "text",
+          "id": "text",
+          "label": "Item text",
+          "default": "Checklist item"
+        }
+      ]
+    },
+    {
+      "type": "process_item",
+      "name": "Process step",
+      "settings": [
+        {
+          "type": "text",
+          "id": "period",
+          "label": "Time period",
+          "default": "Time period"
+        },
+        {
+          "type": "textarea",
+          "id": "body",
+          "label": "Step description",
+          "default": "Step description."
+        }
+      ]
+    }
+  ],
   "presets": [
-    { "name": "Fall — Content" }
+    {
+      "name": "Fall — Content",
+      "blocks": [
+        {
+          "type": "checklist_item",
+          "settings": { "text": "Organic pumpkins and heirloom gourds, arranged for your specific entry" }
+        },
+        {
+          "type": "checklist_item",
+          "settings": { "text": "Hay bales for height, structure, and that unmistakable fall feel" }
+        },
+        {
+          "type": "checklist_item",
+          "settings": { "text": "Planter styling with fall foliage and seasonal fillers" }
+        },
+        {
+          "type": "checklist_item",
+          "settings": { "text": "Full delivery and installation. We bring everything." }
+        },
+        {
+          "type": "checklist_item",
+          "settings": { "text": "Optional removal mid-to-end of November so your entry is clear for December 1st" }
+        },
+        {
+          "type": "process_item",
+          "settings": {
+            "period": "Now through Mid-August",
+            "body": "Add your name and we'll reach out when ordering opens in mid-August. No payment now."
+          }
+        },
+        {
+          "type": "process_item",
+          "settings": {
+            "period": "Mid-August 2026",
+            "body": "Ordering opens. We reach out to walk you through your package options and schedule your install."
+          }
+        },
+        {
+          "type": "process_item",
+          "settings": {
+            "period": "Late September – October",
+            "body": "Our team arrives with your pumpkins, gourds, and all the fall pieces. We arrange everything at your door by hand."
+          }
+        },
+        {
+          "type": "process_item",
+          "settings": {
+            "period": "Mid–End of November (optional)",
+            "body": "We come back to collect your pumpkins, gourds, and hay bales so your entry is clear and ready for December 1st. Nothing to bag up, nothing to store."
+          }
+        }
+      ]
+    }
   ]
 }
 {% endschema %}

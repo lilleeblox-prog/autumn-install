@@ -1,75 +1,152 @@
-/*
- * ------------------------------------------------------------
- * IMPORTANT: The contents of this file are auto-generated.
- *
- * This file may be updated by the Shopify admin theme editor
- * or related systems. Please exercise caution as any changes
- * made to this file may be overwritten.
- * ------------------------------------------------------------
- */
 {
   "sections": {
     "hero-home": {
       "type": "hero-home",
       "settings": {
-        "hero_image": "shopify://shop_images/hero_banner.png"
+        "sidebar_eyebrow": "Now serving Tennessee",
+        "sidebar_season_label": "Current season",
+        "sidebar_season_value": "FALL 2026",
+        "sidebar_booking_label": "Booking opens",
+        "sidebar_booking_value": "MID AUGUST",
+        "sidebar_waitlist_label": "Waitlist",
+        "sidebar_waitlist_value": "OPEN NOW",
+        "mobile_eyebrow": "Now Serving Tennessee · Fall 2026 · Waitlist Open",
+        "card_eyebrow": "Fall 2026 · Tennessee",
+        "hero_lede": "Your seasonal home concierge.",
+        "hero_lede_muted": "We deliver, we arrange, we magically make it disappear.",
+        "hero_body": "Add your name and we'll reach out in mid-August when ordering opens. No payment now.",
+        "hero_cta_text": "Join waitlist",
+        "hero_cta_note": "We'll be in touch in mid-August when ordering opens.",
+        "form_title": "Add Your Name",
+        "form_desc": "We'll reach out in mid-August when ordering opens. No payment now.",
+        "form_success_title": "You're on the list.",
+        "form_success_body": "We'll be in touch in mid-August when ordering opens. No payment until then."
       }
     },
     "how-it-works": {
       "type": "how-it-works",
-      "settings": {}
-    },
-    "gallery": {
-      "type": "gallery",
+      "settings": {
+        "eyebrow": "How it works",
+        "headline": "Four steps from your inbox to your doorstep."
+      },
       "blocks": {
-        "slide-1": {
-          "type": "photo",
+        "step-1": {
+          "type": "step",
           "settings": {
-            "image": "shopify://shop_images/example_2.png",
-            "location": "Franklin, TN"
+            "title": "Join waitlist",
+            "body": "Add your name and we'll reach out in mid-August when ordering opens. No payment now — this is just your place on the list.",
+            "tag": "Open now"
           }
         },
-        "slide-2": {
-          "type": "photo",
+        "step-2": {
+          "type": "step",
           "settings": {
-            "image": "shopify://shop_images/example_3.png",
-            "location": "Brentwood, TN"
+            "title": "Choose your package",
+            "body": "When ordering opens, we reach out with everything you need: package options, available install dates, and all the details.",
+            "tag": "Opens mid-August"
           }
         },
-        "slide-3": {
-          "type": "photo",
+        "step-3": {
+          "type": "step",
           "settings": {
-            "image": "shopify://shop_images/example_4_ebc81660-2ee0-497d-a0b0-a33ddd8aefe1.png",
-            "location": "Belle Meade, TN"
+            "title": "We arrive & style",
+            "body": "Our team brings everything and arranges your display by hand, leaving your entry looking warm and ready for the season.",
+            "tag": "Late Sept – Oct"
+          }
+        },
+        "step-4": {
+          "type": "step",
+          "settings": {
+            "title": "Optional removal",
+            "body": "Add end-of-season pickup and everything is taken away as gently as it arrived. Nothing to store, nothing to manage.",
+            "tag": "November · add-on"
           }
         }
       },
-      "block_order": [
-        "slide-1",
-        "slide-2",
-        "slide-3"
-      ],
-      "settings": {}
+      "block_order": ["step-1", "step-2", "step-3", "step-4"]
+    },
+    "gallery": {
+      "type": "gallery",
+      "settings": {},
+      "blocks": {
+        "slide-1": { "type": "photo", "settings": { "location": "Franklin, TN" } },
+        "slide-2": { "type": "photo", "settings": { "location": "Brentwood, TN" } },
+        "slide-3": { "type": "photo", "settings": { "location": "Belle Meade, TN" } }
+      },
+      "block_order": ["slide-1", "slide-2", "slide-3"]
     },
     "season-cards": {
       "type": "season-cards",
-      "settings": {}
+      "settings": {
+        "eyebrow": "Every season",
+        "headline": "All seasons,\ncurated by your\nfavorite team.",
+        "body": "Fall is just the beginning. We come back every season with the same team and the same care. Your door always feels ready."
+      },
+      "blocks": {
+        "winter-card": {
+          "type": "season_card",
+          "settings": {
+            "name": "Winter",
+            "year_range": "2026–27",
+            "badge": "2026 ledger",
+            "description": "Custom garland installed and dressed for the season, then quietly removed when the holidays are over.",
+            "link": "/pages/winter",
+            "cta": "Add your name"
+          }
+        },
+        "summer-card": {
+          "type": "season_card",
+          "settings": {
+            "name": "Summer",
+            "year_range": "2027",
+            "badge": "2027 ledger",
+            "description": "Seasonal flag installs that make your home feel festive and finished from the moment summer arrives.",
+            "link": "/pages/summer",
+            "cta": "Add your name"
+          }
+        }
+      },
+      "block_order": ["winter-card", "summer-card"]
     },
     "cta-dark": {
       "type": "cta-dark",
-      "settings": {}
+      "settings": {
+        "eyebrow": "Fall 2026 · Tennessee",
+        "headline": "Welcome the fall season with a custom display.",
+        "form_title": "Add Your Name",
+        "form_desc": "We'll reach out in mid-August when ordering opens. No payment now.",
+        "form_success_title": "You're on the list.",
+        "form_success_body": "We'll be in touch in mid-August when ordering opens. No payment until then."
+      },
+      "blocks": {
+        "cta-step-1": {
+          "type": "step",
+          "settings": {
+            "text": "Add your name — we'll reach out when ordering opens in mid-August"
+          }
+        },
+        "cta-step-2": {
+          "type": "step",
+          "settings": {
+            "text": "If you secure a spot, we'll confirm your delivery window and details"
+          }
+        },
+        "cta-step-3": {
+          "type": "step",
+          "settings": {
+            "text": "On your week, our designer arrives and installs your bespoke display in person"
+          }
+        }
+      },
+      "block_order": ["cta-step-1", "cta-step-2", "cta-step-3"]
     },
     "footer": {
       "type": "footer",
-      "settings": {}
+      "settings": {
+        "brand_name": "Made to Welcome",
+        "tagline": "Seasonal décor · Delivery & installation · Tennessee"
+      }
     }
   },
-  "order": [
-    "hero-home",
-    "how-it-works",
-    "gallery",
-    "season-cards",
-    "cta-dark",
-    "footer"
-  ]
+  "order": ["hero-home", "how-it-works", "gallery", "season-cards", "cta-dark", "footer"]
 }

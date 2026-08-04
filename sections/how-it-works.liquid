@@ -1,56 +1,25 @@
 <section class="mtw-section mtw-section--bordered">
   <div class="mtw-container">
     <div class="mtw-section-header">
-      <span class="mtw-mono mtw-eyebrow mtw-eyebrow--primary">How it works</span>
-      <h2 class="mtw-h2">Four steps from your inbox to your doorstep.</h2>
+      <span class="mtw-mono mtw-eyebrow mtw-eyebrow--primary">{{ section.settings.eyebrow }}</span>
+      <h2 class="mtw-h2">{{ section.settings.headline }}</h2>
     </div>
 
     <div class="mtw-timeline">
       <div class="mtw-timeline__connector" aria-hidden="true"></div>
 
-      <div class="mtw-timeline__step">
-        <div class="mtw-timeline__num mtw-timeline__num--active">01</div>
-        <div class="mtw-timeline__body">
-          <div class="mtw-timeline__tag mtw-timeline__tag--active">Open now</div>
-          <h3 class="mtw-timeline__title">Join waitlist</h3>
-          <p class="mtw-timeline__text">
-            Add your name and we'll reach out in mid-August when ordering opens. No payment now — this is just your place on the list.
-          </p>
+      {%- for block in section.blocks -%}
+        <div class="mtw-timeline__step" {{ block.shopify_attributes }}>
+          <div class="mtw-timeline__num{% if forloop.first %} mtw-timeline__num--active{% endif %}">{{ forloop.index | prepend: '0' | slice: -2, 2 }}</div>
+          <div class="mtw-timeline__body">
+            <h3 class="mtw-timeline__title">{{ block.settings.title }}</h3>
+            <p class="mtw-timeline__text">
+              {{ block.settings.body }}
+            </p>
+            <div class="mtw-timeline__tag{% if forloop.first %} mtw-timeline__tag--active{% endif %}">{{ block.settings.tag }}</div>
+          </div>
         </div>
-      </div>
-
-      <div class="mtw-timeline__step">
-        <div class="mtw-timeline__num">02</div>
-        <div class="mtw-timeline__body">
-          <div class="mtw-timeline__tag">Opens mid-August</div>
-          <h3 class="mtw-timeline__title">Choose your package</h3>
-          <p class="mtw-timeline__text">
-            When ordering opens, we reach out with everything you need: package options, available install dates, and all the details.
-          </p>
-        </div>
-      </div>
-
-      <div class="mtw-timeline__step">
-        <div class="mtw-timeline__num">03</div>
-        <div class="mtw-timeline__body">
-          <div class="mtw-timeline__tag">Late Sept – Oct</div>
-          <h3 class="mtw-timeline__title">We arrive &amp; style</h3>
-          <p class="mtw-timeline__text">
-            Our team brings everything and arranges your display by hand, leaving your entry looking warm and ready for the season.
-          </p>
-        </div>
-      </div>
-
-      <div class="mtw-timeline__step">
-        <div class="mtw-timeline__num">04</div>
-        <div class="mtw-timeline__body">
-          <div class="mtw-timeline__tag">November · add-on</div>
-          <h3 class="mtw-timeline__title">Optional removal</h3>
-          <p class="mtw-timeline__text">
-            Add end-of-season pickup and everything is taken away as gently as it arrived. Nothing to store, nothing to manage.
-          </p>
-        </div>
-      </div>
+      {%- endfor -%}
     </div>
   </div>
 </section>
@@ -58,9 +27,84 @@
 {% schema %}
 {
   "name": "How It Works",
-  "settings": [],
+  "settings": [
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Eyebrow",
+      "default": "How it works"
+    },
+    {
+      "type": "text",
+      "id": "headline",
+      "label": "Headline",
+      "default": "Four steps from your inbox to your doorstep."
+    }
+  ],
+  "blocks": [
+    {
+      "type": "step",
+      "name": "Step",
+      "settings": [
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Step title",
+          "default": "Step title"
+        },
+        {
+          "type": "textarea",
+          "id": "body",
+          "label": "Step description",
+          "default": "Step description."
+        },
+        {
+          "type": "text",
+          "id": "tag",
+          "label": "Tag / status badge",
+          "default": "Coming soon"
+        }
+      ]
+    }
+  ],
   "presets": [
-    { "name": "How It Works" }
+    {
+      "name": "How It Works",
+      "blocks": [
+        {
+          "type": "step",
+          "settings": {
+            "title": "Join waitlist",
+            "body": "Add your name and we'll reach out in mid-August when ordering opens. No payment now — this is just your place on the list.",
+            "tag": "Open now"
+          }
+        },
+        {
+          "type": "step",
+          "settings": {
+            "title": "Choose your package",
+            "body": "When ordering opens, we reach out with everything you need: package options, available install dates, and all the details.",
+            "tag": "Opens mid-August"
+          }
+        },
+        {
+          "type": "step",
+          "settings": {
+            "title": "We arrive & style",
+            "body": "Our team brings everything and arranges your display by hand, leaving your entry looking warm and ready for the season.",
+            "tag": "Late Sept – Oct"
+          }
+        },
+        {
+          "type": "step",
+          "settings": {
+            "title": "Optional removal",
+            "body": "Add end-of-season pickup and everything is taken away as gently as it arrived. Nothing to store, nothing to manage.",
+            "tag": "November · add-on"
+          }
+        }
+      ]
+    }
   ]
 }
 {% endschema %}

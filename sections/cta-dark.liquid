@@ -4,36 +4,30 @@
 
       <!-- Left: copy -->
       <div class="mtw-cta-dark__copy">
-        <span class="mtw-mono mtw-eyebrow mtw-eyebrow--primary">Fall 2026 · Tennessee</span>
-        <h2 class="mtw-cta-dark__headline">Welcome the fall season with a custom display.</h2>
+        <span class="mtw-mono mtw-eyebrow mtw-eyebrow--primary">{{ section.settings.eyebrow }}</span>
+        <h2 class="mtw-cta-dark__headline">{{ section.settings.headline }}</h2>
         <div class="mtw-cta-dark__steps">
-          <div class="mtw-cta-dark__step">
-            <span class="mtw-mono mtw-cta-dark__num">01</span>
-            <p class="mtw-cta-dark__step-text">Add your name — we'll reach out when ordering opens in mid-August</p>
-          </div>
-          <div class="mtw-cta-dark__step">
-            <span class="mtw-mono mtw-cta-dark__num">02</span>
-            <p class="mtw-cta-dark__step-text">If you secure a spot, we'll confirm your delivery window and details</p>
-          </div>
-          <div class="mtw-cta-dark__step">
-            <span class="mtw-mono mtw-cta-dark__num">03</span>
-            <p class="mtw-cta-dark__step-text">On your week, our designer arrives and installs your bespoke display in person</p>
-          </div>
+          {%- for block in section.blocks -%}
+            <div class="mtw-cta-dark__step" {{ block.shopify_attributes }}>
+              <span class="mtw-mono mtw-cta-dark__num">{{ forloop.index | prepend: '0' | slice: -2, 2 }}</span>
+              <p class="mtw-cta-dark__step-text">{{ block.settings.text }}</p>
+            </div>
+          {%- endfor -%}
         </div>
       </div>
 
       <!-- Right: form -->
       <div class="mtw-cta-dark__form-wrap">
-        <h3 class="mtw-form-title">Add Your Name</h3>
-        <p class="mtw-form-desc">We'll reach out in mid-August when ordering opens. No payment now.</p>
+        <h3 class="mtw-form-title">{{ section.settings.form_title }}</h3>
+        <p class="mtw-form-desc">{{ section.settings.form_desc }}</p>
         {%- form 'contact', id: 'cta-dark-form' -%}
           <input type="hidden" name="contact[season]" value="Fall 2026">
           <input type="hidden" name="contact[tags]" value="waitlist,fall-2026">
 
           {%- if form.posted_successfully? -%}
             <div class="mtw-form-success">
-              <p class="mtw-form-success__title">You're on the list.</p>
-              <p class="mtw-form-success__body">We'll be in touch in mid-August when ordering opens. No payment until then.</p>
+              <p class="mtw-form-success__title">{{ section.settings.form_success_title }}</p>
+              <p class="mtw-form-success__body">{{ section.settings.form_success_body }}</p>
             </div>
           {%- else -%}
             <div class="mtw-form-row mtw-form-row--2col">
@@ -72,9 +66,86 @@
 {% schema %}
 {
   "name": "CTA — Dark",
-  "settings": [],
+  "settings": [
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Eyebrow",
+      "default": "Fall 2026 · Tennessee"
+    },
+    {
+      "type": "text",
+      "id": "headline",
+      "label": "Headline",
+      "default": "Welcome the fall season with a custom display."
+    },
+    {
+      "type": "header",
+      "content": "Waitlist form"
+    },
+    {
+      "type": "text",
+      "id": "form_title",
+      "label": "Form title",
+      "default": "Add Your Name"
+    },
+    {
+      "type": "text",
+      "id": "form_desc",
+      "label": "Form description",
+      "default": "We'll reach out in mid-August when ordering opens. No payment now."
+    },
+    {
+      "type": "text",
+      "id": "form_success_title",
+      "label": "Success title",
+      "default": "You're on the list."
+    },
+    {
+      "type": "textarea",
+      "id": "form_success_body",
+      "label": "Success body",
+      "default": "We'll be in touch in mid-August when ordering opens. No payment until then."
+    }
+  ],
+  "blocks": [
+    {
+      "type": "step",
+      "name": "Step",
+      "settings": [
+        {
+          "type": "textarea",
+          "id": "text",
+          "label": "Step text",
+          "default": "Step description."
+        }
+      ]
+    }
+  ],
   "presets": [
-    { "name": "CTA — Dark" }
+    {
+      "name": "CTA — Dark",
+      "blocks": [
+        {
+          "type": "step",
+          "settings": {
+            "text": "Add your name — we'll reach out when ordering opens in mid-August"
+          }
+        },
+        {
+          "type": "step",
+          "settings": {
+            "text": "If you secure a spot, we'll confirm your delivery window and details"
+          }
+        },
+        {
+          "type": "step",
+          "settings": {
+            "text": "On your week, our designer arrives and installs your bespoke display in person"
+          }
+        }
+      ]
+    }
   ]
 }
 {% endschema %}
