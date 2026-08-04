@@ -15,23 +15,23 @@
 
   <div class="mtw-fall-hero__content">
     <span class="mtw-mono mtw-eyebrow mtw-eyebrow--primary" style="font-size:0.68rem;letter-spacing:0.18em;margin-bottom:1.25rem;display:block">
-      Fall 2026 · Tennessee · Waitlist open
+      {{ section.settings.eyebrow }}
     </span>
     <h1 class="mtw-fall-hero__headline">
-      The season starts<br class="mtw-hidden-sm"> at your door.
+      {{ section.settings.headline }}
     </h1>
     <p class="mtw-fall-hero__sub">
-      Organic pumpkins, heirloom gourds, and hay bales, arranged at your front door so your home feels ready the moment autumn arrives. A small number of homes per neighborhood, each one done by hand.
+      {{ section.settings.subtext }}
     </p>
     <div class="mtw-fall-hero__cta-row">
       <a href="#reserve" class="mtw-btn mtw-btn--primary">
-        Add your name
+        {{ section.settings.cta_text }}
         <svg width="14" height="14" viewBox="0 0 14 14" fill="none" style="margin-left:0.5rem;flex-shrink:0">
           <path d="M1 7h12M8 2l5 5-5 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
         </svg>
       </a>
       <span class="mtw-mono" style="font-size:0.68rem;letter-spacing:0.1em;text-transform:uppercase;color:rgba(255,255,255,0.5)">
-        No payment now
+        {{ section.settings.no_payment_note }}
       </span>
     </div>
   </div>
@@ -39,7 +39,7 @@
   <div class="mtw-fall-hero__status">
     <span class="mtw-fall-hero__dot"></span>
     <span class="mtw-mono" style="font-size:0.65rem;letter-spacing:0.1em;text-transform:uppercase;color:rgba(255,255,255,0.6)">
-      Ordering opens mid-August
+      {{ section.settings.status_text }}
     </span>
   </div>
 </section>
@@ -52,6 +52,42 @@
       "type": "image_picker",
       "id": "hero_image",
       "label": "Hero image"
+    },
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Eyebrow",
+      "default": "Fall 2026 · Tennessee · Waitlist open"
+    },
+    {
+      "type": "textarea",
+      "id": "headline",
+      "label": "Headline",
+      "default": "The season starts at your door."
+    },
+    {
+      "type": "textarea",
+      "id": "subtext",
+      "label": "Subtext",
+      "default": "Organic pumpkins, heirloom gourds, and hay bales, arranged at your front door so your home feels ready the moment autumn arrives. A small number of homes per neighborhood, each one done by hand."
+    },
+    {
+      "type": "text",
+      "id": "cta_text",
+      "label": "CTA button text",
+      "default": "Add your name"
+    },
+    {
+      "type": "text",
+      "id": "no_payment_note",
+      "label": "Below-button note",
+      "default": "No payment now"
+    },
+    {
+      "type": "text",
+      "id": "status_text",
+      "label": "Status bar text",
+      "default": "Ordering opens mid-August"
     }
   ],
   "presets": [

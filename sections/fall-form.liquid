@@ -4,31 +4,31 @@
 
       <!-- Left: context -->
       <div class="mtw-two-col__col">
-        <span class="mtw-mono mtw-eyebrow mtw-eyebrow--muted">Fall 2026 · Waitlist</span>
-        <h2 class="mtw-h2" style="margin-bottom:1.25rem">Your pumpkins, your gourds,<br> your fall — reserved.</h2>
+        <span class="mtw-mono mtw-eyebrow mtw-eyebrow--muted">{{ section.settings.eyebrow }}</span>
+        <h2 class="mtw-h2" style="margin-bottom:1.25rem">{{ section.settings.headline }}</h2>
         <p class="mtw-body mtw-text-muted" style="margin-bottom:2rem">
-          We install a small number of homes per neighborhood each fall so every display gets the attention it deserves. Add your name and we'll reach out in mid-August when ordering opens with your package options.
+          {{ section.settings.body }}
         </p>
         <ul class="mtw-checklist mtw-checklist--compact">
-          <li>You're on the list — no payment now</li>
-          <li>Fall packages open in mid-August</li>
-          <li>We reach out directly with your fall package options</li>
+          {%- for block in section.blocks -%}
+            <li {{ block.shopify_attributes }}>{{ block.settings.text }}</li>
+          {%- endfor -%}
         </ul>
       </div>
 
       <!-- Right: form -->
       <div class="mtw-two-col__col">
         <div class="mtw-form-card">
-          <h3 class="mtw-form-title">Add Your Name</h3>
-          <p class="mtw-form-desc">We'll reach out in mid-August when ordering opens. No payment now.</p>
+          <h3 class="mtw-form-title">{{ section.settings.form_title }}</h3>
+          <p class="mtw-form-desc">{{ section.settings.form_desc }}</p>
           {%- form 'contact', id: 'fall-reserve-form' -%}
             <input type="hidden" name="contact[season]" value="Fall 2026">
             <input type="hidden" name="contact[tags]" value="waitlist,fall-2026">
 
             {%- if form.posted_successfully? -%}
               <div class="mtw-form-success">
-                <p class="mtw-form-success__title">You're on the list.</p>
-                <p class="mtw-form-success__body">We'll be in touch in mid-August when ordering opens. No payment until then.</p>
+                <p class="mtw-form-success__title">{{ section.settings.form_success_title }}</p>
+                <p class="mtw-form-success__body">{{ section.settings.form_success_body }}</p>
               </div>
             {%- else -%}
               <div class="mtw-form-row mtw-form-row--2col">
@@ -67,9 +67,86 @@
 {% schema %}
 {
   "name": "Fall — Form",
-  "settings": [],
+  "settings": [
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Eyebrow",
+      "default": "Fall 2026 · Waitlist"
+    },
+    {
+      "type": "textarea",
+      "id": "headline",
+      "label": "Headline",
+      "default": "Your pumpkins, your gourds, your fall — reserved."
+    },
+    {
+      "type": "textarea",
+      "id": "body",
+      "label": "Body text",
+      "default": "We install a small number of homes per neighborhood each fall so every display gets the attention it deserves. Add your name and we'll reach out in mid-August when ordering opens with your package options."
+    },
+    {
+      "type": "header",
+      "content": "Waitlist form"
+    },
+    {
+      "type": "text",
+      "id": "form_title",
+      "label": "Form title",
+      "default": "Add Your Name"
+    },
+    {
+      "type": "text",
+      "id": "form_desc",
+      "label": "Form description",
+      "default": "We'll reach out in mid-August when ordering opens. No payment now."
+    },
+    {
+      "type": "text",
+      "id": "form_success_title",
+      "label": "Success title",
+      "default": "You're on the list."
+    },
+    {
+      "type": "textarea",
+      "id": "form_success_body",
+      "label": "Success body",
+      "default": "We'll be in touch in mid-August when ordering opens. No payment until then."
+    }
+  ],
+  "blocks": [
+    {
+      "type": "checklist_item",
+      "name": "Checklist item",
+      "settings": [
+        {
+          "type": "text",
+          "id": "text",
+          "label": "Item text",
+          "default": "Checklist item"
+        }
+      ]
+    }
+  ],
   "presets": [
-    { "name": "Fall — Form" }
+    {
+      "name": "Fall — Form",
+      "blocks": [
+        {
+          "type": "checklist_item",
+          "settings": { "text": "You're on the list — no payment now" }
+        },
+        {
+          "type": "checklist_item",
+          "settings": { "text": "Fall packages open in mid-August" }
+        },
+        {
+          "type": "checklist_item",
+          "settings": { "text": "We reach out directly with your fall package options" }
+        }
+      ]
+    }
   ]
 }
 {% endschema %}
