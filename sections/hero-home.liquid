@@ -70,7 +70,44 @@
 
       <!-- Inline form (hidden by default) -->
       <div id="hero-form" class="mtw-hero__card-form" style="display:none">
-        <div data-form-id="1100878"></div>
+        <h3 class="mtw-form-title">{{ section.settings.form_title }}</h3>
+        <p class="mtw-form-desc">{{ section.settings.form_desc }}</p>
+        {%- form 'contact' -%}
+          <input type="hidden" name="contact[season]" value="Fall 2026">
+          <input type="hidden" name="contact[tags]" value="waitlist,fall-2026">
+          {%- if form.posted_successfully? -%}
+            <div class="mtw-form-success">
+              <p class="mtw-form-success__title">{{ section.settings.form_success_title }}</p>
+              <p class="mtw-form-success__body">{{ section.settings.form_success_body }}</p>
+            </div>
+          {%- else -%}
+            <div class="mtw-form-row mtw-form-row--2col">
+              <div class="mtw-form-field">
+                <label class="mtw-label" for="hero-first-name">First name</label>
+                <input class="mtw-input" type="text" id="hero-first-name" name="contact[first_name]" placeholder="Jane" required>
+              </div>
+              <div class="mtw-form-field">
+                <label class="mtw-label" for="hero-last-name">Last name</label>
+                <input class="mtw-input" type="text" id="hero-last-name" name="contact[last_name]" placeholder="Smith" required>
+              </div>
+            </div>
+            <div class="mtw-form-field">
+              <label class="mtw-label" for="hero-email">Email</label>
+              <input class="mtw-input" type="email" id="hero-email" name="contact[email]" placeholder="jane@example.com" required>
+            </div>
+            <div class="mtw-form-field">
+              <label class="mtw-label" for="hero-phone">Phone</label>
+              <input class="mtw-input" type="tel" id="hero-phone" name="contact[phone]" placeholder="(615) 555-0100" required>
+            </div>
+            <div class="mtw-form-field">
+              <label class="mtw-label" for="hero-zip">Zip code</label>
+              <input class="mtw-input" type="text" id="hero-zip" name="contact[zip_code]" placeholder="37064" required>
+            </div>
+            <button type="submit" class="mtw-btn mtw-btn--primary mtw-btn--full" style="margin-top:0.5rem">
+              Submit
+            </button>
+          {%- endif -%}
+        {%- endform -%}
       </div>
     </div>
   </div>

@@ -29,7 +29,34 @@
       <!-- Right: form -->
       <div class="mtw-two-col__col">
         <div class="mtw-form-card">
-          <div data-form-id="1100878"></div>
+          {%- form 'contact' -%}
+            {%- if form.posted_successfully? -%}
+              <div class="mtw-form-success">
+                <p class="mtw-form-success__title">Message received.</p>
+                <p class="mtw-form-success__body">Thank you for reaching out. We'll be in touch within one business day.</p>
+              </div>
+            {%- else -%}
+              <div class="mtw-form-row mtw-form-row--2col">
+                <div class="mtw-form-field">
+                  <label class="mtw-label" for="contact-name">Name</label>
+                  <input class="mtw-input" type="text" id="contact-name" name="contact[name]" placeholder="Jane Smith" required>
+                </div>
+                <div class="mtw-form-field">
+                  <label class="mtw-label" for="contact-email">Email</label>
+                  <input class="mtw-input" type="email" id="contact-email" name="contact[email]" placeholder="jane@example.com" required>
+                </div>
+              </div>
+              <div class="mtw-form-field">
+                <label class="mtw-label" for="contact-phone">Phone</label>
+                <input class="mtw-input" type="tel" id="contact-phone" name="contact[phone]" placeholder="(615) 555-0100" required>
+              </div>
+              <div class="mtw-form-field">
+                <label class="mtw-label" for="contact-body">Message</label>
+                <textarea class="mtw-input mtw-textarea" id="contact-body" name="contact[body]" rows="5" placeholder="Tell us about your home, neighborhood, or any questions you have." required></textarea>
+              </div>
+              <button type="submit" class="mtw-btn mtw-btn--primary">Send message</button>
+            {%- endif -%}
+          {%- endform -%}
         </div>
       </div>
 
