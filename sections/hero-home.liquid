@@ -68,9 +68,13 @@
         </p>
       </div>
 
-      <!-- Inline form (hidden by default) — add Shopify Forms app block here via theme editor -->
+      <!-- Inline form (hidden by default) — Shopify Forms app block renders here -->
       <div id="hero-form" class="mtw-hero__card-form" style="display:none">
-        {{ section.blocks | where: 'type', '@app' | map: 'content' | join: '' }}
+        {%- for block in section.blocks -%}
+          {%- if block.type == '@app' -%}
+            {% render block %}
+          {%- endif -%}
+        {%- endfor -%}
       </div>
     </div>
   </div>
