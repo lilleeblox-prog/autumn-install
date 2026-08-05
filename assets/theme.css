@@ -450,15 +450,15 @@ button { cursor: pointer; background: none; border: none; }
 }
 
 .mtw-timeline__tag {
-  font-family: var(--mtw-font-mono);
-  font-size: 0.65rem;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
+  font-family: var(--mtw-font-sans);
+  font-style: italic;
+  font-size: 0.75rem;
   color: var(--mtw-muted-fg);
   padding: 0.3rem 0.6rem;
   border: 1px solid var(--mtw-border);
   display: inline-block;
   align-self: flex-start;
+  margin-top: 1rem;
 }
 .mtw-timeline__tag--active {
   background: rgba(138,197,150,0.12);
