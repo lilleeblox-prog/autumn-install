@@ -22,34 +22,36 @@
     },
     "fall-content": {
       "type": "fall-content",
-      "settings": {
-        "service_eyebrow": "The service",
-        "service_headline": "Pumpkins, gourds, hay bales. All of it handled.",
-        "service_body_1": "We select the pumpkins, source the gourds and hay bales, and arrange everything at your front door. You never touch a thing. When autumn ends, we come back and collect it all if you want us to.",
-        "service_body_2": "Every pumpkin and gourd is sourced fresh for the season. We do not offer storage. Add the removal service and we collect everything mid-to-end of November so your entry is clear and ready for December 1st.",
-        "process_eyebrow": "The process",
-        "process_headline": "How it unfolds."
-      },
       "blocks": {
         "check-1": {
           "type": "checklist_item",
-          "settings": { "text": "Organic pumpkins and heirloom gourds, arranged for your specific entry" }
+          "settings": {
+            "text": "Organic pumpkins and heirloom gourds, arranged for your specific entry"
+          }
         },
         "check-2": {
           "type": "checklist_item",
-          "settings": { "text": "Hay bales for height, structure, and that unmistakable fall feel" }
+          "settings": {
+            "text": "Hay bales for height, structure, and that unmistakable fall feel"
+          }
         },
         "check-3": {
           "type": "checklist_item",
-          "settings": { "text": "Planter styling with fall foliage and seasonal fillers" }
+          "settings": {
+            "text": "Planter styling with fall foliage and seasonal fillers"
+          }
         },
         "check-4": {
           "type": "checklist_item",
-          "settings": { "text": "Full delivery and installation. We bring everything." }
+          "settings": {
+            "text": "Full delivery and installation. We bring everything."
+          }
         },
         "check-5": {
           "type": "checklist_item",
-          "settings": { "text": "Optional removal mid-to-end of November so your entry is clear for December 1st" }
+          "settings": {
+            "text": "Optional removal mid-to-end of November so your entry is clear for December 1st"
+          }
         },
         "proc-1": {
           "type": "process_item",
@@ -80,10 +82,71 @@
           }
         }
       },
-      "block_order": ["check-1", "check-2", "check-3", "check-4", "check-5", "proc-1", "proc-2", "proc-3", "proc-4"]
+      "block_order": [
+        "check-1",
+        "check-2",
+        "check-3",
+        "check-4",
+        "check-5",
+        "proc-1",
+        "proc-2",
+        "proc-3",
+        "proc-4"
+      ],
+      "settings": {
+        "service_eyebrow": "The service",
+        "service_headline": "Pumpkins, gourds, hay bales. All of it handled.",
+        "service_body_1": "We select the pumpkins, source the gourds and hay bales, and arrange everything at your front door. You never touch a thing. When autumn ends, we come back and collect it all if you want us to.",
+        "service_body_2": "Every pumpkin and gourd is sourced fresh for the season. We do not offer storage. Add the removal service and we collect everything mid-to-end of November so your entry is clear and ready for December 1st.",
+        "process_eyebrow": "The process",
+        "process_headline": "How it unfolds."
+      }
     },
     "fall-form": {
       "type": "fall-form",
+      "blocks": {
+        "forms_inline_WqGtmh": {
+          "type": "shopify://apps/forms/blocks/inline/8744a304-fcb1-4347-b211-bb6b4759a76a",
+          "settings": {
+            "form_id": "1100922",
+            "text_color": "#202020",
+            "button_background_color": "#202020",
+            "button_label_color": "#FFFFFF",
+            "links_color": "#1878B9",
+            "errors_color": "#E02229",
+            "text_alignment": "center",
+            "form_alignment": "center",
+            "padding_top": 0,
+            "padding_bottom": 24,
+            "padding_right": 0,
+            "padding_left": 0
+          }
+        },
+        "fcheck-1": {
+          "type": "checklist_item",
+          "settings": {
+            "text": "You're on the list — no payment now"
+          }
+        },
+        "fcheck-2": {
+          "type": "checklist_item",
+          "settings": {
+            "text": "Fall packages open in mid-August"
+          }
+        },
+        "fcheck-3": {
+          "type": "checklist_item",
+          "settings": {
+            "text": "We reach out directly with your fall package options"
+          }
+        }
+      },
+      "block_order": [
+        "forms_inline_WqGtmh",
+        "fcheck-1",
+        "fcheck-2",
+        "fcheck-3"
+      ],
       "settings": {
         "eyebrow": "Fall 2026 · Waitlist",
         "headline": "Your pumpkins, your gourds, your fall — reserved.",
@@ -92,22 +155,7 @@
         "form_desc": "We'll reach out in mid-August when ordering opens. No payment now.",
         "form_success_title": "You're on the list.",
         "form_success_body": "We'll be in touch in mid-August when ordering opens. No payment until then."
-      },
-      "blocks": {
-        "fcheck-1": {
-          "type": "checklist_item",
-          "settings": { "text": "You're on the list — no payment now" }
-        },
-        "fcheck-2": {
-          "type": "checklist_item",
-          "settings": { "text": "Fall packages open in mid-August" }
-        },
-        "fcheck-3": {
-          "type": "checklist_item",
-          "settings": { "text": "We reach out directly with your fall package options" }
-        }
-      },
-      "block_order": ["fcheck-1", "fcheck-2", "fcheck-3"]
+      }
     },
     "footer": {
       "type": "footer",
@@ -117,5 +165,10 @@
       }
     }
   },
-  "order": ["fall-hero", "fall-content", "fall-form", "footer"]
+  "order": [
+    "fall-hero",
+    "fall-content",
+    "fall-form",
+    "footer"
+  ]
 }
