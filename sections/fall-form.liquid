@@ -11,7 +11,9 @@
         </p>
         <ul class="mtw-checklist mtw-checklist--compact">
           {%- for block in section.blocks -%}
-            <li {{ block.shopify_attributes }}>{{ block.settings.text }}</li>
+            {%- if block.type == 'checklist_item' -%}
+              <li {{ block.shopify_attributes }}>{{ block.settings.text }}</li>
+            {%- endif -%}
           {%- endfor -%}
         </ul>
       </div>
