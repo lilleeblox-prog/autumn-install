@@ -792,4 +792,4 @@ button { cursor: pointer; background: none; border: none; }
 }
 
 /* ── Utility ─────────────────────────────────────────── */
-.mtw-body { padding-top: 4.5rem; } /* offset for fixed header */
+body { padding-top: 4.5rem; } /* offset for fixed header */
