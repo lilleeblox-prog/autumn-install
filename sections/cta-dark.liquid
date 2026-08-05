@@ -18,45 +18,7 @@
 
       <!-- Right: form -->
       <div class="mtw-cta-dark__form-wrap">
-        <h3 class="mtw-form-title">{{ section.settings.form_title }}</h3>
-        <p class="mtw-form-desc">{{ section.settings.form_desc }}</p>
-        {%- form 'contact', id: 'cta-dark-form' -%}
-          <input type="hidden" name="contact[season]" value="Fall 2026">
-          <input type="hidden" name="contact[tags]" value="waitlist,fall-2026">
-
-          {%- if form.posted_successfully? -%}
-            <div class="mtw-form-success">
-              <p class="mtw-form-success__title">{{ section.settings.form_success_title }}</p>
-              <p class="mtw-form-success__body">{{ section.settings.form_success_body }}</p>
-            </div>
-          {%- else -%}
-            <div class="mtw-form-row mtw-form-row--2col">
-              <div class="mtw-form-field">
-                <label class="mtw-label" for="cta-first-name">First name</label>
-                <input class="mtw-input" type="text" id="cta-first-name" name="contact[first_name]" placeholder="Jane" required>
-              </div>
-              <div class="mtw-form-field">
-                <label class="mtw-label" for="cta-last-name">Last name</label>
-                <input class="mtw-input" type="text" id="cta-last-name" name="contact[last_name]" placeholder="Smith" required>
-              </div>
-            </div>
-            <div class="mtw-form-field">
-              <label class="mtw-label" for="cta-email">Email</label>
-              <input class="mtw-input" type="email" id="cta-email" name="contact[email]" placeholder="jane@example.com" required>
-            </div>
-            <div class="mtw-form-field">
-              <label class="mtw-label" for="cta-phone">Phone</label>
-              <input class="mtw-input" type="tel" id="cta-phone" name="contact[phone]" placeholder="(615) 555-0100" required>
-            </div>
-            <div class="mtw-form-field">
-              <label class="mtw-label" for="cta-zip">Zip code</label>
-              <input class="mtw-input" type="text" id="cta-zip" name="contact[zip_code]" placeholder="37064" required>
-            </div>
-            <button type="submit" class="mtw-btn mtw-btn--primary mtw-btn--full" style="margin-top:0.5rem">
-              Submit
-            </button>
-          {%- endif -%}
-        {%- endform -%}
+        <div data-form-id="1100878"></div>
       </div>
 
     </div>
