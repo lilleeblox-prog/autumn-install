@@ -791,5 +791,125 @@ button { cursor: pointer; background: none; border: none; }
   letter-spacing: 0.05em;
 }
 
+/* ── Packages Grid ───────────────────────────────────── */
+.mtw-packages { padding-block: 6rem; }
+.mtw-packages__header {
+  text-align: center;
+  margin-bottom: 3.5rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+}
+.mtw-packages__grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1.25rem;
+  align-items: stretch;
+}
+@media (max-width: 1100px) { .mtw-packages__grid { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 640px)  { .mtw-packages__grid { grid-template-columns: 1fr; } }
+
+.mtw-pkg-card {
+  display: flex;
+  flex-direction: column;
+  border: 1.5px solid var(--mtw-border);
+  border-radius: 10px;
+  overflow: hidden;
+  background: var(--mtw-bg);
+  transition: box-shadow 0.2s;
+}
+.mtw-pkg-card:hover { box-shadow: 0 4px 24px rgba(0,0,0,0.07); }
+
+.mtw-pkg-card__head {
+  padding: 1.5rem 1.5rem 1.25rem;
+  border-bottom: 1px solid var(--mtw-border);
+  background: var(--mtw-card-bg, #faf9f7);
+}
+.mtw-pkg-card__label {
+  font-size: 0.62rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--mtw-accent);
+  display: block;
+  margin-bottom: 0.35rem;
+}
+.mtw-pkg-card__name {
+  font-family: var(--mtw-font-serif);
+  font-size: 1.35rem;
+  font-weight: 500;
+  color: var(--mtw-text);
+  margin-bottom: 0.5rem;
+}
+.mtw-pkg-card__price {
+  font-family: var(--mtw-font-mono);
+  font-size: 0.78rem;
+  color: var(--mtw-text-muted);
+  letter-spacing: 0.04em;
+}
+
+.mtw-pkg-card__body {
+  flex: 1;
+  padding: 1.25rem 1.5rem;
+}
+.mtw-pkg-card__list {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+}
+.mtw-pkg-card__list li {
+  font-size: 0.875rem;
+  color: var(--mtw-text);
+  line-height: 1.4;
+  padding-left: 1rem;
+  position: relative;
+}
+.mtw-pkg-card__list li::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0.55em;
+  width: 0.25rem;
+  height: 0.25rem;
+  border-radius: 50%;
+  background: var(--mtw-accent);
+}
+.mtw-pkg-card__addons {
+  padding-top: 1rem;
+  border-top: 1px dashed var(--mtw-border);
+}
+.mtw-pkg-card__addon-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+.mtw-pkg-card__addon-list li {
+  font-size: 0.8rem;
+  color: var(--mtw-text-muted);
+  padding-left: 1rem;
+  position: relative;
+}
+.mtw-pkg-card__addon-list li::before {
+  content: '+';
+  position: absolute;
+  left: 0;
+  color: var(--mtw-accent);
+  font-size: 0.75rem;
+}
+
+.mtw-pkg-card__foot {
+  padding: 1.25rem 1.5rem;
+  border-top: 1px solid var(--mtw-border);
+}
+
+/* ── Install Week ─────────────────────────────────────── */
+.mtw-install-week { padding-block: 5rem; background: var(--mtw-card-bg, #faf9f7); }
+
 /* ── Utility ─────────────────────────────────────────── */
 body { padding-top: 4.5rem; } /* offset for fixed header */
