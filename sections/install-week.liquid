@@ -51,7 +51,13 @@
           <input type="radio" name="install_week" value="oct-19-late" class="mtw-week-radio">
           <span class="mtw-week-card mtw-week-card--late">
             <span class="mtw-week-card__date">Oct 19 – 25</span>
-            <span class="mtw-week-card__tag mtw-week-card__tag--late">Late install{{ section.settings.late_fee != blank | append: ' · +' | append: section.settings.late_fee }}</span>
+            <span class="mtw-week-card__tag mtw-week-card__tag--late">
+              {%- if section.settings.late_fee != blank -%}
+                Late install · +{{ section.settings.late_fee }}
+              {%- else -%}
+                Late install
+              {%- endif -%}
+            </span>
           </span>
         </label>
 
@@ -59,7 +65,13 @@
           <input type="radio" name="install_week" value="oct-26-late" class="mtw-week-radio">
           <span class="mtw-week-card mtw-week-card--late">
             <span class="mtw-week-card__date">Oct 26 – Nov 1</span>
-            <span class="mtw-week-card__tag mtw-week-card__tag--late">Late install{{ section.settings.late_fee != blank | append: ' · +' | append: section.settings.late_fee }}</span>
+            <span class="mtw-week-card__tag mtw-week-card__tag--late">
+              {%- if section.settings.late_fee != blank -%}
+                Late install · +{{ section.settings.late_fee }}
+              {%- else -%}
+                Late install
+              {%- endif -%}
+            </span>
           </span>
         </label>
 
