@@ -1,3 +1,12 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
 {
   "sections": {
     "hero-home": {
@@ -76,7 +85,12 @@
           }
         }
       },
-      "block_order": ["p1", "p2", "p3", "p4"],
+      "block_order": [
+        "p1",
+        "p2",
+        "p3",
+        "p4"
+      ],
       "settings": {
         "eyebrow": "Hello Harvest · Fall 2026",
         "headline": "Choose your package.",
@@ -129,7 +143,12 @@
           }
         }
       },
-      "block_order": ["step-1", "step-2", "step-3", "step-4"],
+      "block_order": [
+        "step-1",
+        "step-2",
+        "step-3",
+        "step-4"
+      ],
       "settings": {
         "eyebrow": "How it works",
         "headline": "Four steps from your order to your doorstep."
@@ -160,11 +179,12 @@
           }
         }
       },
-      "block_order": ["slide-1", "slide-2", "slide-3"],
-      "settings": {
-        "eyebrow": "Our work",
-        "headline": "Styled for Tennessee homes."
-      }
+      "block_order": [
+        "slide-1",
+        "slide-2",
+        "slide-3"
+      ],
+      "settings": {}
     },
     "footer": {
       "type": "footer",
