@@ -1,0 +1,25 @@
+name: Deploy ordering branch → Shopify draft theme
+
+on:
+  push:
+    branches:
+      - ordering
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout ordering branch
+        uses: actions/checkout@v4
+
+      - name: Install Shopify CLI
+        run: npm install -g @shopify/cli @shopify/theme
+
+      - name: Push theme to Shopify ordering draft
+        run: |
+          shopify theme push \
+            --store=${{ secrets.SHOPIFY_STORE }} \
+            --theme-id=${{ secrets.ORDERING_THEME_ID }} \
+            --no-color
+        env:
+          SHOPIFY_CLI_THEME_TOKEN: ${{ secrets.SHOPIFY_CLI_THEME_TOKEN }}
