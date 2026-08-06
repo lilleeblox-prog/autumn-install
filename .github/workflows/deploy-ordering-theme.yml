@@ -1,9 +1,10 @@
-name: Deploy ordering branch → Shopify draft theme
+name: Deploy ordering to Shopify
 
 on:
   push:
     branches:
       - ordering
+  workflow_dispatch:
 
 jobs:
   deploy:
@@ -23,4 +24,3 @@ jobs:
             --no-color
         env:
           SHOPIFY_CLI_THEME_TOKEN: ${{ secrets.SHOPIFY_CLI_THEME_TOKEN }}
-          
