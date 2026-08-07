@@ -903,6 +903,14 @@ button { cursor: pointer; background: none; border: none; }
   font-size: 0.75rem;
 }
 
+.mtw-pkg-card__image { width:100%; aspect-ratio:4/3; overflow:hidden; }
+.mtw-pkg-card__img { width:100%; height:100%; object-fit:cover; display:block; }
+.mtw-pkg-card__desc { font-size:0.9rem; color:var(--mtw-text-muted); line-height:1.6; }
+
+.mtw-pkg-card__image { width:100%; aspect-ratio:4/3; overflow:hidden; }
+.mtw-pkg-card__img { width:100%; height:100%; object-fit:cover; display:block; }
+.mtw-pkg-card__desc { font-size:0.9rem; color:var(--mtw-text-muted); line-height:1.6; }
+
 .mtw-pkg-card__foot {
   padding: 1.25rem 1.5rem;
   border-top: 1px solid var(--mtw-border);
