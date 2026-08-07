@@ -18,6 +18,36 @@
         "reassurance": "We will follow up to confirm your install week and details."
       },
       "blocks": {
+        "inc-1": {
+          "type": "include_item",
+          "settings": {
+            "detail": "6 Large Jack O’Lantern Pumpkins"
+          }
+        },
+        "inc-2": {
+          "type": "include_item",
+          "settings": {
+            "detail": "6 Medium Jack O’Lantern Pumpkins"
+          }
+        },
+        "inc-3": {
+          "type": "include_item",
+          "settings": {
+            "detail": "6 White Ghost Pumpkins"
+          }
+        },
+        "inc-4": {
+          "type": "include_item",
+          "settings": {
+            "detail": "8 Specialty Pumpkins"
+          }
+        },
+        "inc-5": {
+          "type": "include_item",
+          "settings": {
+            "detail": "Assortment of Pie Pumpkins"
+          }
+        },
         "addon-hay": {
           "type": "addon",
           "settings": {
@@ -44,6 +74,11 @@
         }
       },
       "block_order": [
+        "inc-1",
+        "inc-2",
+        "inc-3",
+        "inc-4",
+        "inc-5",
         "addon-hay",
         "addon-design",
         "addon-remove"
@@ -53,7 +88,7 @@
       "type": "footer",
       "settings": {
         "brand_name": "Made to Welcome",
-        "tagline": "Seasonal decor"
+        "tagline": "Seasonal decor - Delivery and installation - Tennessee"
       }
     }
   },

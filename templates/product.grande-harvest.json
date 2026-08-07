@@ -18,6 +18,60 @@
         "reassurance": "We will follow up to confirm your install week and details."
       },
       "blocks": {
+        "inc-1": {
+          "type": "include_item",
+          "settings": {
+            "detail": "10 Large Jack O’Lantern Pumpkins"
+          }
+        },
+        "inc-2": {
+          "type": "include_item",
+          "settings": {
+            "detail": "8 Medium Jack O’Lantern Pumpkins"
+          }
+        },
+        "inc-3": {
+          "type": "include_item",
+          "settings": {
+            "detail": "8 White Ghost Pumpkins"
+          }
+        },
+        "inc-4": {
+          "type": "include_item",
+          "settings": {
+            "detail": "16 Specialty Pumpkins"
+          }
+        },
+        "inc-5": {
+          "type": "include_item",
+          "settings": {
+            "detail": "Assortment of Pie Pumpkins"
+          }
+        },
+        "inc-6": {
+          "type": "include_item",
+          "settings": {
+            "detail": "Mini White Pumpkins"
+          }
+        },
+        "inc-7": {
+          "type": "include_item",
+          "settings": {
+            "detail": "Mini Orange Pumpkins"
+          }
+        },
+        "inc-8": {
+          "type": "include_item",
+          "settings": {
+            "detail": "Ornamental Gourds"
+          }
+        },
+        "inc-9": {
+          "type": "include_item",
+          "settings": {
+            "detail": "2 Hay Bales"
+          }
+        },
         "addon-remove": {
           "type": "addon",
           "settings": {
@@ -28,6 +82,15 @@
         }
       },
       "block_order": [
+        "inc-1",
+        "inc-2",
+        "inc-3",
+        "inc-4",
+        "inc-5",
+        "inc-6",
+        "inc-7",
+        "inc-8",
+        "inc-9",
         "addon-remove"
       ]
     },
@@ -35,7 +98,7 @@
       "type": "footer",
       "settings": {
         "brand_name": "Made to Welcome",
-        "tagline": "Seasonal decor"
+        "tagline": "Seasonal decor - Delivery and installation - Tennessee"
       }
     }
   },
