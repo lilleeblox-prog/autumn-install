@@ -1,50 +1,31 @@
+{% assign addon_blocks = section.blocks | where: "type", "addon" %}
 <div class="mtw-product">
   <div class="mtw-product__image-col">
     {% if section.settings.image %}
-      <img src="{{ section.settings.image | img_url: '800x' }}" alt="{{ product.title }}" class="mtw-product__img">
+      <img src="{{ section.settings.image | img_url: "800x" }}" alt="{{ product.title }}" class="mtw-product__img">
     {% elsif product.featured_image %}
-      <img src="{{ product.featured_image | img_url: '800x' }}" alt="{{ product.title }}" class="mtw-product__img">
+      <img src="{{ product.featured_image | img_url: "800x" }}" alt="{{ product.title }}" class="mtw-product__img">
     {% endif %}
   </div>
-
   <div class="mtw-product__details-col">
     <p class="mtw-product__vendor">{{ product.vendor }}</p>
     <h1 class="mtw-product__title">{{ product.title }}</h1>
     <p class="mtw-product__price" id="product-price">{{ product.selected_or_first_available_variant.price | money }}</p>
     <div class="mtw-product__desc">{{ product.description }}</div>
-
     <form id="mtw-product-form">
       <input type="hidden" id="main-variant-id" value="{{ product.selected_or_first_available_variant.id }}">
-
-      {% if product.variants.size > 1 %}
-        <div class="mtw-product__field">
-          <label class="mtw-product__label">OPTION</label>
-          <select id="variant-select" class="mtw-product__select">
-            {% for variant in product.variants %}
-              <option value="{{ variant.id }}" data-price="{{ variant.price }}">
-                {{ variant.title }} — {{ variant.price | money }}
-              </option>
-            {% endfor %}
-          </select>
-        </div>
-      {% endif %}
-
       <div class="mtw-product__field">
         <label class="mtw-product__label" for="install-week">INSTALL WEEK</label>
         <select id="install-week" class="mtw-product__select" required>
           <option value="">Choose your week...</option>
-          {% assign weeks = section.settings.install_weeks | newline_to_br | split: '<br />' %}
+          {% assign weeks = section.settings.install_weeks | newline_to_br | split: "<br />" %}
           {% for week in weeks %}
-            {% assign week_clean = week | strip %}
-            {% if week_clean != '' %}
-              <option value="{{ week_clean }}">{{ week_clean }}</option>
-            {% endif %}
+            {% assign wk = week | strip %}
+            {% if wk != "" %}<option value="{{ wk }}">{{ wk }}</option>{% endif %}
           {% endfor %}
         </select>
         <p class="mtw-product__hint">We'll confirm your exact install date closer to the week.</p>
       </div>
-
-      {% assign addon_blocks = section.blocks | where: 'type', 'addon' %}
       {% if addon_blocks.size > 0 %}
         <div class="mtw-product__addons">
           <p class="mtw-product__label">ADD-ONS <span class="mtw-product__optional">(optional)</span></p>
@@ -55,48 +36,86 @@
                 <span class="mtw-addon__box"></span>
                 <span class="mtw-addon__text">
                   <span class="mtw-addon__name"></span>
-                  {% if block.settings.note != blank %}
-                    <span class="mtw-addon__note">{{ block.settings.note }}</span>
-                  {% endif %}
+                  {% if block.settings.note != blank %}<span class="mtw-addon__note">{{ block.settings.note }}</span>{% endif %}
                 </span>
               </label>
             {% endif %}
           {% endfor %}
         </div>
       {% endif %}
-
       {% if section.settings.show_notes %}
         <div class="mtw-product__field">
           <label class="mtw-product__label" for="order-notes">ANYTHING WE SHOULD KNOW? <span class="mtw-product__optional">(optional)</span></label>
           <textarea id="order-notes" class="mtw-product__notes" placeholder="Gate code, parking notes, porch layout..."></textarea>
         </div>
       {% endif %}
-
-      <button type="submit" class="mtw-product__btn" id="add-to-cart-btn">
-        {{ section.settings.cta_text | default: 'Book this package' }}
-      </button>
+      <button type="submit" class="mtw-product__btn" id="add-to-cart-btn">{{ section.settings.cta_text | default: "Book this package" }}</button>
     </form>
-
     {% if section.settings.reassurance != blank %}
       <p class="mtw-product__reassurance">{{ section.settings.reassurance }}</p>
     {% endif %}
   </div>
 </div>
-
 <script>
-(function () {
-  var form      = document.getElementById('mtw-product-form');
-  var priceEl   = document.getElementById('product-price');
-  var weekSel   = document.getElementById('install-week');
-  var varSel    = document.getElementById('variant-select');
-  var mainId    = document.getElementById('main-variant-id');
-  var basePrice = {{ product.selected_or_first_available_variant.price }};
-
-  document.querySelectorAll('.mtw-addon[data-handle]').forEach(function (label) {
-    var handle = label.getAttribute('data-handle');
-    fetch('/products/' + handle + '.json')
-      .then(function (r) { return r.json(); })
-      .then(function (data) {
-        var v = data.product.variants[0];
-        var cb = label.querySelector('.mtw-addon__check');
-        cb.setAttribute('data-variant-id', v.id);
+(function(){
+  var form=document.getElementById("mtw-product-form");
+  var priceEl=document.getElementById("product-price");
+  var weekSel=document.getElementById("install-week");
+  var mainId=document.getElementById("main-variant-id");
+  var basePrice={{ product.selected_or_first_available_variant.price }};
+  document.querySelectorAll(".mtw-addon[data-handle]").forEach(function(label){
+    var handle=label.getAttribute("data-handle");
+    fetch("/products/"+handle+".json")
+      .then(function(r){return r.json();})
+      .then(function(data){
+        var v=data.product.variants[0];
+        var cb=label.querySelector(".mtw-addon__check");
+        cb.setAttribute("data-variant-id",v.id);
+        cb.setAttribute("data-price",Math.round(parseFloat(v.price)*100));
+        cb.addEventListener("change",updateTotal);
+        var nameEl=label.querySelector(".mtw-addon__name");
+        nameEl.textContent=data.product.title;
+        if(parseFloat(v.price)>0){
+          var ps=document.createElement("span");
+          ps.className="mtw-addon__price";
+          ps.textContent=" + $"+parseFloat(v.price).toFixed(2).replace(/\.00$/,"");
+          nameEl.after(ps);
+        }
+        label.style.display="";
+      }).catch(function(){});
+  });
+  function updateTotal(){
+    var total=basePrice;
+    document.querySelectorAll(".mtw-addon__check").forEach(function(cb){if(cb.checked)total+=parseInt(cb.getAttribute("data-price"));});
+    priceEl.textContent="$"+(total/100).toFixed(2).replace(/\.00$/,"");
+  }
+  form.addEventListener("submit",function(e){
+    e.preventDefault();
+    if(!weekSel.value){weekSel.style.borderColor="#c0392b";weekSel.focus();return;}
+    var btn=document.getElementById("add-to-cart-btn");
+    btn.textContent="Adding...";btn.disabled=true;
+    var notes=document.getElementById("order-notes");
+    var items=[{id:parseInt(mainId.value),quantity:1,properties:{"Install Week":weekSel.value,"Notes":notes?notes.value:""}}];
+    document.querySelectorAll(".mtw-addon__check").forEach(function(cb){if(cb.checked)items.push({id:parseInt(cb.getAttribute("data-variant-id")),quantity:1});});
+    fetch("/cart/clear.js",{method:"POST"})
+      .then(function(){return fetch("/cart/add.js",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({items:items})});})
+      .then(function(r){return r.json();})
+      .then(function(){window.location.href="/checkout";})
+      .catch(function(){btn.textContent="Book this package";btn.disabled=false;alert("Something went wrong. Please try again.");});
+  });
+})();
+</script>
+{% schema %}
+{
+  "name": "Product",
+  "settings": [
+    {"type":"image_picker","id":"image","label":"Override product image"},
+    {"type":"textarea","id":"install_weeks","label":"Install weeks (one per line)","default":"Sept 29 - Oct 3\nOct 6 - Oct 10\nOct 13 - Oct 17\nOct 20 - Oct 24\nOct 27 - Oct 31"},
+    {"type":"checkbox","id":"show_notes","label":"Show notes field","default":true},
+    {"type":"text","id":"cta_text","label":"Button text","default":"Book this package"},
+    {"type":"text","id":"reassurance","label":"Reassurance text below button","default":"We'll follow up to confirm your install week and details."}
+  ],
+  "blocks":[{"type":"addon","name":"Add-on","settings":[{"type":"text","id":"handle","label":"Add-on product handle"},{"type":"text","id":"note","label":"Optional note"}]}],
+  "presets":[{"name":"Product"}]
+}
+{% endschema %}
