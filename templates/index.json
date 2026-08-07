@@ -41,9 +41,9 @@
           "settings": {
             "label": "P1",
             "name": "Petite Patch",
+            "product": "asset-pack-89144131586-example-product-4",
             "price_placeholder": "Pricing coming soon",
-            "included": "4 Large Jack O Lantern\n4 Medium Jack O Lantern\n4 White Ghost\n6 Specialty Pumpkins\nAssortment of Pie Pumpkins",
-            "addons": "Hay Bale — $40\nDesign — $75\nRemoval — $75",
+            "description": "A curated mix of pumpkins and gourds, hand-arranged and delivered to your door.",
             "cta_text": "Book this package",
             "cta_url": "/products/petite-patch"
           }
@@ -53,9 +53,9 @@
           "settings": {
             "label": "P2",
             "name": "Cozy Corner",
+            "product": "asset-pack-89144131586-example-product-3",
             "price_placeholder": "Pricing coming soon",
-            "included": "6 Large Jack O Lantern\n6 Medium Jack O Lantern\n6 White Ghost\n8 Specialty Pumpkins\nAssortment of Pie Pumpkins",
-            "addons": "Hay Bale — $40\nDesign — $100\nRemoval — $100",
+            "description": "A curated mix of pumpkins and gourds, hand-arranged and delivered to your door.",
             "cta_text": "Book this package",
             "cta_url": "/products/cozy-corner"
           }
@@ -65,9 +65,9 @@
           "settings": {
             "label": "P3",
             "name": "Fall Favorites",
+            "product": "asset-pack-89144131586-example-product-2",
             "price_placeholder": "Pricing coming soon",
-            "included": "8 Large Jack O Lantern\n8 Medium Jack O Lantern\n8 White Ghost\n14 Specialty Pumpkins\n2 Hay Bales\nAssortment of Pie Pumpkins",
-            "addons": "Residential Gate Pumpkins & Design\nRemoval — $150",
+            "description": "A curated mix of pumpkins and gourds, hand-arranged and delivered to your door.",
             "cta_text": "Book this package",
             "cta_url": "/products/fall-favorites"
           }
@@ -77,9 +77,9 @@
           "settings": {
             "label": "P4",
             "name": "Grande Harvest",
+            "product": "asset-pack-89144131586-example-product-1",
             "price_placeholder": "Pricing coming soon",
-            "included": "10 Large Jack O Lantern\n8 Medium Jack O Lantern\n8 White Ghost\n16 Specialty Pumpkins\n2 Hay Bales\nMini White & Mini Orange\nOrnamental Gourds\nAssortment of Pie Pumpkins",
-            "addons": "Residential Gate Pumpkins & Design\nRemoval — $200",
+            "description": "A curated mix of pumpkins and gourds, hand-arranged and delivered to your door.",
             "cta_text": "Book this package",
             "cta_url": "/products/grande-harvest"
           }
