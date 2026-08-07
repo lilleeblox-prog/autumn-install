@@ -49,20 +49,12 @@
         <div class="mtw-product__addons">
           <p class="mtw-product__label">ADD-ONS <span class="mtw-product__optional">(optional)</span></p>
           {% for block in addon_blocks %}
-            {% assign ap = all_products[block.settings.handle] %}
-            {% if ap != empty %}
-              {% assign av = ap.selected_or_first_available_variant %}
-              <label class="mtw-addon" {{ block.shopify_attributes }}>
-                <input type="checkbox"
-                       class="mtw-addon__check"
-                       data-variant-id="{{ av.id }}"
-                       data-price="{{ av.price }}">
+            {% if block.settings.handle != blank %}
+              <label class="mtw-addon" data-handle="{{ block.settings.handle }}" style="display:none" {{ block.shopify_attributes }}>
+                <input type="checkbox" class="mtw-addon__check" data-variant-id="" data-price="0">
                 <span class="mtw-addon__box"></span>
                 <span class="mtw-addon__text">
-                  {{ ap.title }}
-                  {% if av.price > 0 %}
-                    <span class="mtw-addon__price">+ {{ av.price | money }}</span>
-                  {% endif %}
+                  <span class="mtw-addon__name"></span>
                   {% if block.settings.note != blank %}
                     <span class="mtw-addon__note">{{ block.settings.note }}</span>
                   {% endif %}
@@ -100,88 +92,11 @@
   var mainId    = document.getElementById('main-variant-id');
   var basePrice = {{ product.selected_or_first_available_variant.price }};
 
-  if (varSel) {
-    varSel.addEventListener('change', function () {
-      mainId.value = this.value;
-      basePrice = parseInt(this.options[this.selectedIndex].getAttribute('data-price'));
-      updateTotal();
-    });
-  }
-
-  var checks = document.querySelectorAll('.mtw-addon__check');
-  checks.forEach(function (cb) { cb.addEventListener('change', updateTotal); });
-
-  function updateTotal() {
-    var total = basePrice;
-    checks.forEach(function (cb) {
-      if (cb.checked) total += parseInt(cb.getAttribute('data-price'));
-    });
-    priceEl.textContent = '$' + (total / 100).toFixed(2).replace(/\.00$/, '');
-  }
-
-  form.addEventListener('submit', function (e) {
-    e.preventDefault();
-    if (!weekSel.value) {
-      weekSel.style.borderColor = '#c0392b';
-      weekSel.focus();
-      return;
-    }
-    var btn = document.getElementById('add-to-cart-btn');
-    btn.textContent = 'Adding...';
-    btn.disabled = true;
-
-    var notes = document.getElementById('order-notes');
-    var items = [{
-      id: parseInt(mainId.value),
-      quantity: 1,
-      properties: {
-        'Install Week': weekSel.value,
-        'Notes': notes ? notes.value : ''
-      }
-    }];
-    checks.forEach(function (cb) {
-      if (cb.checked) items.push({ id: parseInt(cb.getAttribute('data-variant-id')), quantity: 1 });
-    });
-
-    fetch('/cart/clear.js', { method: 'POST' })
-      .then(function () {
-        return fetch('/cart/add.js', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ items: items })
-        });
-      })
+  document.querySelectorAll('.mtw-addon[data-handle]').forEach(function (label) {
+    var handle = label.getAttribute('data-handle');
+    fetch('/products/' + handle + '.json')
       .then(function (r) { return r.json(); })
-      .then(function () { window.location.href = '/checkout'; })
-      .catch(function () {
-        btn.textContent = '{{ section.settings.cta_text | default: "Book this package" }}';
-        btn.disabled = false;
-        alert('Something went wrong. Please try again.');
-      });
-  });
-})();
-</script>
-
-{% schema %}
-{
-  "name": "Product",
-  "settings": [
-    { "type": "image_picker", "id": "image", "label": "Override product image" },
-    { "type": "textarea", "id": "install_weeks", "label": "Install weeks (one per line)", "default": "Sept 29 - Oct 3\nOct 6 - Oct 10\nOct 13 - Oct 17\nOct 20 - Oct 24\nOct 27 - Oct 31" },
-    { "type": "checkbox", "id": "show_notes", "label": "Show notes field", "default": true },
-    { "type": "text", "id": "cta_text", "label": "Button text", "default": "Book this package" },
-    { "type": "text", "id": "reassurance", "label": "Reassurance text below button", "default": "We'll follow up to confirm your install week and details." }
-  ],
-  "blocks": [
-    {
-      "type": "addon",
-      "name": "Add-on",
-      "settings": [
-        { "type": "text", "id": "handle", "label": "Add-on product handle" },
-        { "type": "text", "id": "note", "label": "Optional note below add-on name" }
-      ]
-    }
-  ],
-  "presets": [{ "name": "Product" }]
-}
-{% endschema %}
+      .then(function (data) {
+        var v = data.product.variants[0];
+        var cb = label.querySelector('.mtw-addon__check');
+        cb.setAttribute('data-variant-id', v.id);
