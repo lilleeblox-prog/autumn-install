@@ -41,7 +41,9 @@
           "settings": {
             "label": "P1",
             "name": "Petite Patch",
+            "product": "petite-patch",
             "price_placeholder": "Pricing coming soon",
+            "description": "A curated mix of pumpkins and gourds, hand-arranged and delivered to your door.",
             "cta_text": "Book this package",
             "cta_url": "/products/petite-patch"
           }
@@ -51,7 +53,9 @@
           "settings": {
             "label": "P2",
             "name": "Cozy Corner",
+            "product": "cozy-corner",
             "price_placeholder": "Pricing coming soon",
+            "description": "A curated mix of pumpkins and gourds, hand-arranged and delivered to your door.",
             "cta_text": "Book this package",
             "cta_url": "/products/cozy-corner"
           }
@@ -61,7 +65,9 @@
           "settings": {
             "label": "P3",
             "name": "Fall Favorites",
+            "product": "fall-favorite",
             "price_placeholder": "Pricing coming soon",
+            "description": "A curated mix of pumpkins and gourds, hand-arranged and delivered to your door.",
             "cta_text": "Book this package",
             "cta_url": "/products/fall-favorites"
           }
@@ -71,7 +77,9 @@
           "settings": {
             "label": "P4",
             "name": "Grande Harvest",
+            "product": "grande-harvest",
             "price_placeholder": "Pricing coming soon",
+            "description": "A curated mix of pumpkins and gourds, hand-arranged and delivered to your door.",
             "cta_text": "Book this package",
             "cta_url": "/products/grande-harvest"
           }
