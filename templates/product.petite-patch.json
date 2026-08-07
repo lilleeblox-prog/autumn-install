@@ -11,15 +11,54 @@
   "sections": {
     "main": {
       "type": "main-product",
-      "settings": { "install_weeks": "Sept 29 – Oct 3\nOct 6 – Oct 10\nOct 13 – Oct 17\nOct 20 – Oct 24\nOct 27 – Oct 31", "show_notes": true, "cta_text": "Book this package", "reassurance": "We'll follow up to confirm your install week and details." },
-      "blocks": {
-        "addon-hay":    { "type": "addon", "settings": { "name": "Hay Bale", "price": "$40" } },
-        "addon-design": { "type": "addon", "settings": { "name": "Design",   "price": "$75" } },
-        "addon-remove": { "type": "addon", "settings": { "name": "Removal",  "price": "$75" } }
+      "settings": {
+        "install_weeks": "Sept 29 - Oct 3\nOct 6 - Oct 10\nOct 13 - Oct 17\nOct 20 - Oct 24\nOct 27 - Oct 31",
+        "show_notes": true,
+        "cta_text": "Book this package",
+        "reassurance": "We will follow up to confirm your install week and details."
       },
-      "block_order": ["addon-hay", "addon-design", "addon-remove"]
+      "blocks": {
+        "addon-hay": {
+          "type": "addon",
+          "settings": {
+            "name": "Hay Bale",
+            "price": "40",
+            "note": ""
+          }
+        },
+        "addon-design": {
+          "type": "addon",
+          "settings": {
+            "name": "Design",
+            "price": "75",
+            "note": ""
+          }
+        },
+        "addon-remove": {
+          "type": "addon",
+          "settings": {
+            "name": "Removal",
+            "price": "75",
+            "note": "We collect everything mid-to-end of November."
+          }
+        }
+      },
+      "block_order": [
+        "addon-hay",
+        "addon-design",
+        "addon-remove"
+      ]
     },
-    "footer": { "type": "footer", "settings": { "brand_name": "Made to Welcome", "tagline": "Seasonal décor · Delivery & installation · Tennessee" } }
+    "footer": {
+      "type": "footer",
+      "settings": {
+        "brand_name": "Made to Welcome",
+        "tagline": "Seasonal decor"
+      }
+    }
   },
-  "order": ["main", "footer"]
+  "order": [
+    "main",
+    "footer"
+  ]
 }

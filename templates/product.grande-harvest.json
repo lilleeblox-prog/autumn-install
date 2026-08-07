@@ -11,24 +11,25 @@
   "sections": {
     "main": {
       "type": "main-product",
+      "settings": {
+        "install_weeks": "Sept 29 - Oct 3\nOct 6 - Oct 10\nOct 13 - Oct 17\nOct 20 - Oct 24\nOct 27 - Oct 31",
+        "show_notes": true,
+        "cta_text": "Book this package",
+        "reassurance": "We will follow up to confirm your install week and details."
+      },
       "blocks": {
         "addon-remove": {
           "type": "addon",
           "settings": {
-            "name": "Removal Service",
+            "name": "Removal",
+            "price": "200",
             "note": "We collect everything mid-to-end of November."
           }
         }
       },
       "block_order": [
         "addon-remove"
-      ],
-      "settings": {
-        "install_weeks": "Sept 29 - Oct 3\nOct 6 - Oct 10\nOct 13 - Oct 17\nOct 20 - Oct 24\nOct 27 - Oct 31",
-        "show_notes": true,
-        "cta_text": "Book this package",
-        "reassurance": "We will follow up to confirm your install week and details."
-      }
+      ]
     },
     "footer": {
       "type": "footer",
