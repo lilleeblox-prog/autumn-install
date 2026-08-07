@@ -267,13 +267,13 @@
             <label class="mtw-addon" {{ block.shopify_attributes }}>
               <input type="checkbox" class="mtw-addon__check"
                      name="properties[Add-on: {{ block.settings.name }}]"
-                     value="{{ block.settings.name }} (+${{ block.settings.price }})"
+                     value="{{ block.settings.name }} (+${{ block.settings.price | remove: "$" }})"
                      data-price="{{ block.settings.price }}">
               <span class="mtw-addon__box"></span>
               <span class="mtw-addon__text">
                 <span class="mtw-addon__name">{{ block.settings.name }}</span>
                 {% if block.settings.price != blank %}
-                  <span class="mtw-addon__price"> + ${{ block.settings.price }}</span>
+                  <span class="mtw-addon__price"> + ${{ block.settings.price | remove: "$" }}</span>
                 {% endif %}
                 {% if block.settings.note != blank %}
                   <span class="mtw-addon__note">{{ block.settings.note }}</span>
