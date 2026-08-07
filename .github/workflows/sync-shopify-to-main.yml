@@ -1,0 +1,50 @@
+name: Sync Shopify theme to main
+
+# Runs whenever shopify[bot] (or anyone) pushes to the shopify branch.
+# Copies the theme files from the root of `shopify` into shopify-theme/ on `main`.
+
+on:
+  push:
+    branches: [shopify]
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout main
+        uses: actions/checkout@v4
+        with:
+          ref: main
+          token: ${{ secrets.GITHUB_TOKEN }}
+          fetch-depth: 0
+
+      - name: Fetch shopify branch
+        run: git fetch origin shopify
+
+      - name: Copy theme files into shopify-theme/
+        run: |
+          mkdir -p shopify-theme
+
+          for dir in assets config layout locales sections snippets templates; do
+            if git ls-tree -d origin/shopify "$dir" > /dev/null 2>&1; then
+              rm -rf "shopify-theme/$dir"
+              git checkout origin/shopify -- "$dir"
+              mv "$dir" "shopify-theme/$dir"
+            fi
+          done
+
+      - name: Commit and push if anything changed
+        run: |
+          git add shopify-theme/
+          if git diff --cached --quiet; then
+            echo "No changes to sync."
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          SHOPIFY_SHA=$(git rev-parse --short origin/shopify)
+          git commit -m "Sync shopify-theme/ from shopify branch (${SHOPIFY_SHA}) [skip ci]"
+          git push origin main
