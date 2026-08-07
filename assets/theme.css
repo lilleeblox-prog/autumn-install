@@ -793,3 +793,35 @@ button { cursor: pointer; background: none; border: none; }
 
 /* ── Utility ─────────────────────────────────────────── */
 body { padding-top: 4.5rem; } /* offset for fixed header */
+
+.mtw-product__includes {
+  margin-bottom: 2rem;
+  padding-bottom: 2rem;
+  border-bottom: 1px solid var(--mtw-border);
+}
+.mtw-product__includes-list {
+  list-style: none;
+  margin: 0.75rem 0 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+.mtw-product__includes-list li {
+  display: flex;
+  align-items: baseline;
+  gap: 0.6rem;
+  font-size: 0.9rem;
+  color: var(--mtw-text);
+  line-height: 1.5;
+}
+.mtw-product__includes-list li::before {
+  content: '';
+  display: inline-block;
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: var(--mtw-accent);
+  flex-shrink: 0;
+  margin-top: 6px;
+}
