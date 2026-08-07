@@ -11,7 +11,19 @@
       {%- for block in section.blocks -%}
         {%- if block.type == 'package' -%}
 
+          {%- assign card_image = block.settings.image -%}
+          {%- if card_image == blank and block.settings.product != blank -%}
+            {%- assign card_image = block.settings.product.featured_image -%}
+          {%- endif -%}
+
           <div class="mtw-pkg-card" {{ block.shopify_attributes }}>
+
+            {%- if card_image != blank -%}
+              <div class="mtw-pkg-card__image">
+                {{ card_image | image_url: width: 600 | image_tag: loading: 'lazy', alt: block.settings.name, class: 'mtw-pkg-card__img' }}
+              </div>
+            {%- endif -%}
+
             <div class="mtw-pkg-card__head">
               <span class="mtw-mono mtw-pkg-card__label">{{ block.settings.label }}</span>
               <h3 class="mtw-pkg-card__name">{{ block.settings.name }}</h3>
@@ -25,39 +37,19 @@
             </div>
 
             <div class="mtw-pkg-card__body">
-              <p class="mtw-mono" style="font-size:0.65rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--mtw-text-muted);margin-bottom:0.75rem">What's included</p>
-              <ul class="mtw-pkg-card__list">
-                {%- assign items = block.settings.included | newline_to_br | split: '<br />' -%}
-                {%- for item in items -%}
-                  {%- unless item == blank -%}
-                    <li>{{ item | strip }}</li>
-                  {%- endunless -%}
-                {%- endfor -%}
-              </ul>
-
-              {%- if block.settings.addons != blank -%}
-                <div class="mtw-pkg-card__addons">
-                  <p class="mtw-mono" style="font-size:0.65rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--mtw-text-muted);margin-bottom:0.5rem">Available add-ons</p>
-                  <ul class="mtw-pkg-card__addon-list">
-                    {%- assign addons = block.settings.addons | newline_to_br | split: '<br />' -%}
-                    {%- for addon in addons -%}
-                      {%- unless addon == blank -%}
-                        <li>{{ addon | strip }}</li>
-                      {%- endunless -%}
-                    {%- endfor -%}
-                  </ul>
-                </div>
+              {%- if block.settings.description != blank -%}
+                <p class="mtw-pkg-card__desc">{{ block.settings.description }}</p>
               {%- endif -%}
             </div>
 
             <div class="mtw-pkg-card__foot">
               {%- if block.settings.product != blank -%}
                 <a href="{{ block.settings.product.url }}" class="mtw-btn mtw-btn--primary mtw-btn--full">
-                  {{ block.settings.cta_text | default: 'Book this package' }}
+                  {{ block.settings.cta_text | default: 'View package details' }}
                 </a>
               {%- else -%}
                 <a href="{{ block.settings.cta_url | default: '#' }}" class="mtw-btn mtw-btn--primary mtw-btn--full">
-                  {{ block.settings.cta_text | default: 'Book this package' }}
+                  {{ block.settings.cta_text | default: 'View package details' }}
                 </a>
               {%- endif -%}
             </div>
@@ -83,15 +75,18 @@
       "type": "package",
       "name": "Package",
       "settings": [
-        { "type": "text",         "id": "label",            "label": "Label (e.g. P1)",          "default": "P1" },
-        { "type": "text",         "id": "name",             "label": "Package name",             "default": "Petite Patch" },
-        { "type": "product",      "id": "product",          "label": "Shopify product (optional — links price + Buy button)" },
-        { "type": "text",         "id": "price_placeholder","label": "Price (if no product linked)","default": "Pricing coming soon" },
-        { "type": "textarea",     "id": "included",         "label": "Included items (one per line)",
+        { "type": "text",         "id": "label",            "label": "Label (e.g. P1)",                          "default": "P1" },
+        { "type": "text",         "id": "name",             "label": "Package name",                             "default": "Petite Patch" },
+        { "type": "image_picker", "id": "image",            "label": "Package photo (overrides product image)" },
+        { "type": "product",      "id": "product",          "label": "Shopify product (links price + Buy button)" },
+        { "type": "text",         "id": "price_placeholder","label": "Price (if no product linked)",             "default": "Pricing coming soon" },
+        { "type": "textarea",     "id": "description",      "label": "Description",
+          "default": "Perfect for a welcoming front stoop. A curated mix of pumpkins and gourds, hand-arranged and delivered to your door." },
+        { "type": "textarea",     "id": "included",         "label": "What's included (one per line)",
           "default": "4 Large Jack O Lantern\n4 Medium Jack O Lantern\n4 White Ghost\n6 Specialty Pumpkins\nAssortment of Pie Pumpkins" },
         { "type": "textarea",     "id": "addons",           "label": "Add-ons (one per line)",
           "default": "Hay Bale — $40\nDesign — $75\nRemoval — $75" },
-        { "type": "text",         "id": "cta_text",         "label": "Button text",              "default": "Book this package" },
+        { "type": "text",         "id": "cta_text",         "label": "Button text",                              "default": "View package details" },
         { "type": "url",          "id": "cta_url",          "label": "Button URL (if no product linked)" }
       ]
     }
@@ -100,46 +95,10 @@
     {
       "name": "Packages Grid",
       "blocks": [
-        {
-          "type": "package",
-          "settings": {
-            "label": "P1",
-            "name": "Petite Patch",
-            "price_placeholder": "Pricing coming soon",
-            "included": "4 Large Jack O Lantern\n4 Medium Jack O Lantern\n4 White Ghost\n6 Specialty Pumpkins\nAssortment of Pie Pumpkins",
-            "addons": "Hay Bale — $40\nDesign — $75\nRemoval — $75"
-          }
-        },
-        {
-          "type": "package",
-          "settings": {
-            "label": "P2",
-            "name": "Cozy Corner",
-            "price_placeholder": "Pricing coming soon",
-            "included": "6 Large Jack O Lantern\n6 Medium Jack O Lantern\n6 White Ghost\n8 Specialty Pumpkins\nAssortment of Pie Pumpkins",
-            "addons": "Hay Bale — $40\nDesign — $100\nRemoval — $100"
-          }
-        },
-        {
-          "type": "package",
-          "settings": {
-            "label": "P3",
-            "name": "Fall Favorites",
-            "price_placeholder": "Pricing coming soon",
-            "included": "8 Large Jack O Lantern\n8 Medium Jack O Lantern\n8 White Ghost\n14 Specialty Pumpkins\n2 Hay Bales\nAssortment of Pie Pumpkins",
-            "addons": "Residential Gate Pumpkins & Design\nRemoval — $150"
-          }
-        },
-        {
-          "type": "package",
-          "settings": {
-            "label": "P4",
-            "name": "Grande Harvest",
-            "price_placeholder": "Pricing coming soon",
-            "included": "10 Large Jack O Lantern\n8 Medium Jack O Lantern\n8 White Ghost\n16 Specialty Pumpkins\n2 Hay Bales\nMini White & Mini Orange\nOrnamental Gourds\nAssortment of Pie Pumpkins",
-            "addons": "Residential Gate Pumpkins & Design\nRemoval — $200"
-          }
-        }
+        { "type": "package", "settings": { "label": "P1", "name": "Petite Patch", "price_placeholder": "Pricing coming soon", "description": "Perfect for a welcoming front stoop. A curated mix of pumpkins and gourds, hand-arranged and delivered to your door." } },
+        { "type": "package", "settings": { "label": "P2", "name": "Cozy Corner",  "price_placeholder": "Pricing coming soon", "description": "A fuller display for a porch or entry that deserves more. More pumpkins, more gourds, same careful arrangement." } },
+        { "type": "package", "settings": { "label": "P3", "name": "Fall Favorites","price_placeholder": "Pricing coming soon", "description": "Our most popular display. Hay bales, a generous mix of pumpkins and specialty gourds — everything it takes to make a real impression." } },
+        { "type": "package", "settings": { "label": "P4", "name": "Grande Harvest","price_placeholder": "Pricing coming soon", "description": "The full treatment. Hay bales, ornamental gourds, pie pumpkins, mini varieties — a display that carries the whole season." } }
       ]
     }
   ]
