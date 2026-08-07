@@ -1,0 +1,181 @@
+<div class="mtw-product" id="product-{{ product.id }}">
+  <div class="mtw-container mtw-product__wrap">
+
+    <!-- Image -->
+    <div class="mtw-product__media">
+      {%- if product.featured_image -%}
+        <div class="mtw-product__img-wrap">
+          {{ product.featured_image | image_url: width: 900 | image_tag: loading: 'eager', alt: product.title, class: 'mtw-product__img' }}
+        </div>
+      {%- endif -%}
+    </div>
+
+    <!-- Info + form -->
+    <div class="mtw-product__info">
+
+      <div class="mtw-product__meta">
+        {%- if product.vendor != blank -%}
+          <span class="mtw-mono mtw-product__vendor">{{ product.vendor }}</span>
+        {%- endif -%}
+        <h1 class="mtw-product__title">{{ product.title }}</h1>
+        <p class="mtw-product__price" id="product-price">
+          {{ product.selected_or_first_available_variant.price | money }}
+        </p>
+      </div>
+
+      {%- if product.description != blank -%}
+        <div class="mtw-product__desc">{{ product.description }}</div>
+      {%- endif -%}
+
+      <form action="/cart/add" method="post" class="mtw-product__form" id="product-form-{{ product.id }}">
+        <input type="hidden" name="form_type" value="product">
+        <input type="hidden" name="utf8" value="✓">
+
+        <!-- Variant selector -->
+        {%- if product.variants.size > 1 -%}
+          <div class="mtw-product__field">
+            <label class="mtw-product__label" for="variant-select-{{ product.id }}">
+              {{ product.options.first }}
+            </label>
+            <div class="mtw-product__select-wrap">
+              <select
+                id="variant-select-{{ product.id }}"
+                name="id"
+                class="mtw-product__select"
+              >
+                {%- for variant in product.variants -%}
+                  <option
+                    value="{{ variant.id }}"
+                    {%- if variant == product.selected_or_first_available_variant %} selected{%- endif -%}
+                    {%- unless variant.available %} disabled{%- endunless -%}
+                  >
+                    {{ variant.title }} — {{ variant.price | money }}
+                  </option>
+                {%- endfor -%}
+              </select>
+            </div>
+          </div>
+        {%- else -%}
+          <input type="hidden" name="id" value="{{ product.variants.first.id }}">
+        {%- endif -%}
+
+        <!-- Install week -->
+        {%- if section.settings.install_weeks != blank -%}
+          {%- assign weeks = section.settings.install_weeks | newline_to_br | split: '<br />' -%}
+          <div class="mtw-product__field">
+            <label class="mtw-product__label" for="install-week-{{ product.id }}">
+              Install week
+            </label>
+            <div class="mtw-product__select-wrap">
+              <select id="install-week-{{ product.id }}" name="properties[Install week]" class="mtw-product__select" required>
+                <option value="">Choose your week…</option>
+                {%- for week in weeks -%}
+                  {%- unless week == blank -%}
+                    <option value="{{ week | strip }}">{{ week | strip }}</option>
+                  {%- endunless -%}
+                {%- endfor -%}
+              </select>
+            </div>
+            <p class="mtw-product__hint">We'll confirm your exact install date closer to the week.</p>
+          </div>
+        {%- endif -%}
+
+        <!-- Add-ons -->
+        {%- assign addon_blocks = section.blocks | where: 'type', 'addon' -%}
+        {%- if addon_blocks.size > 0 -%}
+          <div class="mtw-product__field">
+            <p class="mtw-product__label">Add-ons <span class="mtw-product__optional">(optional)</span></p>
+            <div class="mtw-product__addons">
+              {%- for block in addon_blocks -%}
+                <label class="mtw-addon" {{ block.shopify_attributes }}>
+                  <input
+                    type="checkbox"
+                    name="properties[Add-on: {{ block.settings.name }}]"
+                    value="{{ block.settings.price }}"
+                    class="mtw-addon__check"
+                  >
+                  <span class="mtw-addon__box"></span>
+                  <span class="mtw-addon__text">
+                    {{ block.settings.name }}
+                    {%- if block.settings.price != blank -%}
+                      <span class="mtw-addon__price">+ {{ block.settings.price }}</span>
+                    {%- endif -%}
+                    {%- if block.settings.note != blank -%}
+                      <span class="mtw-addon__note">{{ block.settings.note }}</span>
+                    {%- endif -%}
+                  </span>
+                </label>
+              {%- endfor -%}
+            </div>
+          </div>
+        {%- endif -%}
+
+        <!-- Notes -->
+        {%- if section.settings.show_notes -%}
+          <div class="mtw-product__field">
+            <label class="mtw-product__label" for="notes-{{ product.id }}">
+              Anything we should know? <span class="mtw-product__optional">(optional)</span>
+            </label>
+            <textarea
+              id="notes-{{ product.id }}"
+              name="properties[Notes]"
+              class="mtw-product__textarea"
+              rows="3"
+              placeholder="Gate code, parking notes, porch layout…"
+            ></textarea>
+          </div>
+        {%- endif -%}
+
+        <button type="submit" class="mtw-btn mtw-btn--primary mtw-btn--full mtw-product__submit">
+          {{ section.settings.cta_text | default: 'Book this package' }}
+        </button>
+
+        {%- if section.settings.reassurance != blank -%}
+          <p class="mtw-product__reassurance">{{ section.settings.reassurance }}</p>
+        {%- endif -%}
+
+      </form>
+    </div>
+  </div>
+</div>
+
+<script>
+  (function() {
+    var select = document.getElementById('variant-select-{{ product.id }}');
+    var priceEl = document.getElementById('product-price');
+    var variants = {{ product.variants | json }};
+    if (!select || !priceEl) return;
+    select.addEventListener('change', function() {
+      var chosen = variants.find(function(v){ return v.id == parseInt(select.value); });
+      if (chosen) priceEl.textContent = '$' + (chosen.price / 100).toFixed(2).replace(/\.00$/, '');
+    });
+  })();
+</script>
+
+{% schema %}
+{
+  "name": "Product",
+  "settings": [
+    { "type": "textarea", "id": "install_weeks", "label": "Install weeks (one per line)",
+      "default": "Sept 29 – Oct 3\nOct 6 – Oct 10\nOct 13 – Oct 17\nOct 20 – Oct 24\nOct 27 – Oct 31",
+      "info": "Customers choose from this list when booking." },
+    { "type": "checkbox", "id": "show_notes", "label": "Show notes field", "default": true },
+    { "type": "text",     "id": "cta_text",   "label": "Button text", "default": "Book this package" },
+    { "type": "text",     "id": "reassurance","label": "Reassurance line below button",
+      "default": "We'll follow up to confirm your install week and details." }
+  ],
+  "blocks": [
+    {
+      "type": "addon",
+      "name": "Add-on",
+      "settings": [
+        { "type": "text", "id": "name",  "label": "Add-on name",       "default": "Hay Bale" },
+        { "type": "text", "id": "price", "label": "Price (e.g. $40)",   "default": "$40" },
+        { "type": "text", "id": "note",  "label": "Short note (optional)" }
+      ]
+    }
+  ],
+  "max_blocks": 8,
+  "presets": [{ "name": "Product" }]
+}
+{% endschema %}
