@@ -1,4 +1,5 @@
 {% assign addon_blocks = section.blocks | where: 'type', 'addon' %}
+{% assign include_blocks = section.blocks | where: 'type', 'include_item' %}
 
 <style>
 .mtw-product {
@@ -45,9 +46,49 @@
 .mtw-product__desc {
   color: #5a4a3a;
   line-height: 1.65;
+  margin-bottom: 20px;
+}
+.mtw-product__includes {
   margin-bottom: 28px;
   border-bottom: 1px solid #e0d8ce;
   padding-bottom: 28px;
+}
+.mtw-product__includes-label {
+  font-size: 10px;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: #7a6a5a;
+  font-weight: 600;
+  margin: 0 0 10px;
+}
+.mtw-product__includes-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.mtw-product__includes-list li {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  color: #3a2e26;
+  font-size: 14px;
+  line-height: 1.5;
+  padding: 3px 0;
+}
+.mtw-product__includes-list li::before {
+  content: '';
+  display: inline-block;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: #b45c3e;
+  flex-shrink: 0;
+  margin-top: 5px;
+}
+.mtw-product__divider {
+  border: none;
+  border-top: 1px solid #e0d8ce;
+  margin: 0 0 28px;
 }
 .mtw-product__field { margin-bottom: 22px; }
 .mtw-product__label {
@@ -191,6 +232,20 @@
     <h1 class="mtw-product__title">{{ product.title }}</h1>
     <p class="mtw-product__price" id="product-price">{{ product.selected_or_first_available_variant.price | money }}</p>
     <div class="mtw-product__desc">{{ product.description }}</div>
+    {% if include_blocks.size > 0 %}
+      <div class="mtw-product__includes">
+        <p class="mtw-product__includes-label">What's included</p>
+        <ul class="mtw-product__includes-list">
+          {% for block in include_blocks %}
+            {% if block.settings.detail != blank %}
+              <li {{ block.shopify_attributes }}>{{ block.settings.detail }}</li>
+            {% endif %}
+          {% endfor %}
+        </ul>
+      </div>
+    {% else %}
+      <hr class="mtw-product__divider">
+    {% endif %}
     <form id="mtw-product-form">
       <input type="hidden" id="main-variant-id" value="{{ product.selected_or_first_available_variant.id }}">
       <div class="mtw-product__field">
@@ -288,15 +343,24 @@
     {"type":"text","id":"cta_text","label":"Button text","default":"Book this package"},
     {"type":"text","id":"reassurance","label":"Reassurance text below button","default":"We will follow up to confirm your install week and details."}
   ],
-  "blocks":[{
-    "type":"addon",
-    "name":"Add-on",
-    "settings":[
-      {"type":"text","id":"name","label":"Add-on name"},
-      {"type":"text","id":"price","label":"Price in dollars (e.g. 200)"},
-      {"type":"text","id":"note","label":"Optional note"}
-    ]
-  }],
+  "blocks":[
+    {
+      "type":"include_item",
+      "name":"What's included item",
+      "settings":[
+        {"type":"text","id":"detail","label":"Detail line","placeholder":"e.g. 6 large pumpkins"}
+      ]
+    },
+    {
+      "type":"addon",
+      "name":"Add-on",
+      "settings":[
+        {"type":"text","id":"name","label":"Add-on name"},
+        {"type":"text","id":"price","label":"Price in dollars (e.g. 200)"},
+        {"type":"text","id":"note","label":"Optional note"}
+      ]
+    }
+  ],
   "presets":[{"name":"Product"}]
 }
 {% endschema %}
