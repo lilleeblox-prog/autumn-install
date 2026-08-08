@@ -53,7 +53,7 @@
           "settings": {
             "label": "P2",
             "name": "Cozy Corner",
-            "product": "cozy-corner",
+            "product": "product-cozy-corner",
             "price_placeholder": "Pricing coming soon",
             "description": "A curated mix of pumpkins and gourds, hand-arranged and delivered to your door.",
             "cta_text": "Book this package",
