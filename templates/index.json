@@ -41,7 +41,7 @@
           "settings": {
             "label": "P1",
             "name": "Petite Patch",
-            "product": "petite-patch",
+            "product": "product-petite-patch",
             "price_placeholder": "Pricing coming soon",
             "description": "A curated mix of pumpkins and gourds, hand-arranged and delivered to your door.",
             "cta_text": "Book this package",
