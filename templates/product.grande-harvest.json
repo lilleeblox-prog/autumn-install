@@ -1,0 +1,109 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "main": {
+      "type": "main-product",
+      "settings": {
+        "install_weeks": "Sept 29 – Oct 3\nOct 6 – Oct 10\nOct 13 – Oct 17\nOct 20 – Oct 24\nOct 27 – Oct 31",
+        "show_notes": true,
+        "cta_text": "Book this package",
+        "reassurance": "We’ll follow up to confirm your install week and details."
+      },
+      "blocks": {
+        "inc-1": {
+          "type": "include_item",
+          "settings": {
+            "detail": "10 Large Jack O’Lantern Pumpkins"
+          }
+        },
+        "inc-2": {
+          "type": "include_item",
+          "settings": {
+            "detail": "8 Medium Jack O’Lantern Pumpkins"
+          }
+        },
+        "inc-3": {
+          "type": "include_item",
+          "settings": {
+            "detail": "8 White Ghost Pumpkins"
+          }
+        },
+        "inc-4": {
+          "type": "include_item",
+          "settings": {
+            "detail": "16 Specialty Pumpkins"
+          }
+        },
+        "inc-5": {
+          "type": "include_item",
+          "settings": {
+            "detail": "Assortment of Pie Pumpkins"
+          }
+        },
+        "inc-6": {
+          "type": "include_item",
+          "settings": {
+            "detail": "Mini White Pumpkins"
+          }
+        },
+        "inc-7": {
+          "type": "include_item",
+          "settings": {
+            "detail": "Mini Orange Pumpkins"
+          }
+        },
+        "inc-8": {
+          "type": "include_item",
+          "settings": {
+            "detail": "Ornamental Gourds"
+          }
+        },
+        "inc-9": {
+          "type": "include_item",
+          "settings": {
+            "detail": "2 Hay Bales"
+          }
+        },
+        "addon-remove": {
+          "type": "addon",
+          "settings": {
+            "name": "Removal",
+            "price": "$200",
+            "note": "We collect everything mid-to-end of November."
+          }
+        }
+      },
+      "block_order": [
+        "inc-1",
+        "inc-2",
+        "inc-3",
+        "inc-4",
+        "inc-5",
+        "inc-6",
+        "inc-7",
+        "inc-8",
+        "inc-9",
+        "addon-remove"
+      ]
+    },
+    "footer": {
+      "type": "footer",
+      "settings": {
+        "brand_name": "Made to Welcome",
+        "tagline": "Seasonal décor · Delivery & installation · Tennessee"
+      }
+    }
+  },
+  "order": [
+    "main",
+    "footer"
+  ]
+}
