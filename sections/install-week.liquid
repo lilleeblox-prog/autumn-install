@@ -1,0 +1,157 @@
+<section class="mtw-section mtw-install-week" id="install-week">
+  <div class="mtw-container mtw-install-week__wrap">
+
+    <div class="mtw-install-week__copy">
+      <span class="mtw-mono mtw-eyebrow mtw-eyebrow--primary">{{ section.settings.eyebrow }}</span>
+      <h2 class="mtw-h2" style="margin-bottom:1rem">{{ section.settings.headline }}</h2>
+      <p class="mtw-body mtw-text-muted">{{ section.settings.body }}</p>
+    </div>
+
+    <div class="mtw-install-week__picker">
+
+      <p class="mtw-mono" style="font-size:0.65rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--mtw-text-muted);margin-bottom:1rem">Select your install week</p>
+
+      <div class="mtw-week-grid">
+
+        <!-- Regular weeks -->
+        <label class="mtw-week-option">
+          <input type="radio" name="install_week" value="sept-21" class="mtw-week-radio">
+          <span class="mtw-week-card">
+            <span class="mtw-week-card__date">Sept 21 – 27</span>
+            <span class="mtw-week-card__tag">Standard</span>
+          </span>
+        </label>
+
+        <label class="mtw-week-option">
+          <input type="radio" name="install_week" value="sept-28" class="mtw-week-radio">
+          <span class="mtw-week-card">
+            <span class="mtw-week-card__date">Sept 28 – Oct 4</span>
+            <span class="mtw-week-card__tag">Standard</span>
+          </span>
+        </label>
+
+        <label class="mtw-week-option">
+          <input type="radio" name="install_week" value="oct-5" class="mtw-week-radio">
+          <span class="mtw-week-card">
+            <span class="mtw-week-card__date">Oct 5 – 11</span>
+            <span class="mtw-week-card__tag">Standard</span>
+          </span>
+        </label>
+
+        <label class="mtw-week-option">
+          <input type="radio" name="install_week" value="oct-12" class="mtw-week-radio">
+          <span class="mtw-week-card">
+            <span class="mtw-week-card__date">Oct 12 – 18</span>
+            <span class="mtw-week-card__tag">Standard</span>
+          </span>
+        </label>
+
+        <!-- Late install weeks -->
+        <label class="mtw-week-option">
+          <input type="radio" name="install_week" value="oct-19-late" class="mtw-week-radio">
+          <span class="mtw-week-card mtw-week-card--late">
+            <span class="mtw-week-card__date">Oct 19 – 25</span>
+            <span class="mtw-week-card__tag mtw-week-card__tag--late">
+              {%- if section.settings.late_fee != blank -%}
+                Late install · +{{ section.settings.late_fee }}
+              {%- else -%}
+                Late install
+              {%- endif -%}
+            </span>
+          </span>
+        </label>
+
+        <label class="mtw-week-option">
+          <input type="radio" name="install_week" value="oct-26-late" class="mtw-week-radio">
+          <span class="mtw-week-card mtw-week-card--late">
+            <span class="mtw-week-card__date">Oct 26 – Nov 1</span>
+            <span class="mtw-week-card__tag mtw-week-card__tag--late">
+              {%- if section.settings.late_fee != blank -%}
+                Late install · +{{ section.settings.late_fee }}
+              {%- else -%}
+                Late install
+              {%- endif -%}
+            </span>
+          </span>
+        </label>
+
+      </div>
+
+      <p class="mtw-body-sm mtw-text-muted" style="margin-top:1rem;font-style:italic">
+        {{ section.settings.week_note }}
+      </p>
+
+    </div>
+  </div>
+</section>
+
+<style>
+  .mtw-install-week__wrap {
+    display: grid;
+    grid-template-columns: 1fr 1.5fr;
+    gap: 4rem;
+    align-items: start;
+  }
+  .mtw-week-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.75rem;
+  }
+  .mtw-week-option { display: contents; }
+  .mtw-week-radio { display: none; }
+  .mtw-week-card {
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+    padding: 1rem 1.1rem;
+    border: 1.5px solid var(--mtw-border);
+    border-radius: 6px;
+    cursor: pointer;
+    transition: border-color 0.15s, background 0.15s;
+  }
+  .mtw-week-radio:checked + .mtw-week-card {
+    border-color: var(--mtw-accent);
+    background: rgba(139,94,60,0.06);
+  }
+  .mtw-week-card--late {
+    border-style: dashed;
+    opacity: 0.85;
+  }
+  .mtw-week-radio:checked + .mtw-week-card--late {
+    border-style: dashed;
+    border-color: var(--mtw-accent);
+  }
+  .mtw-week-card__date {
+    font-family: var(--mtw-font-serif);
+    font-size: 0.95rem;
+    color: var(--mtw-text);
+  }
+  .mtw-week-card__tag {
+    font-family: var(--mtw-font-mono);
+    font-size: 0.6rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--mtw-text-muted);
+  }
+  .mtw-week-card__tag--late { color: var(--mtw-accent); }
+  @media (max-width: 768px) {
+    .mtw-install-week__wrap { grid-template-columns: 1fr; gap: 2rem; }
+    .mtw-week-grid { grid-template-columns: 1fr; }
+  }
+</style>
+
+{% schema %}
+{
+  "name": "Install Week Picker",
+  "settings": [
+    { "type": "text",     "id": "eyebrow",   "label": "Eyebrow",     "default": "Step 2 · Choose your week" },
+    { "type": "text",     "id": "headline",  "label": "Headline",    "default": "When would you like us to arrive?" },
+    { "type": "textarea","id": "body",      "label": "Body text",   "default": "We install Monday through Friday within your selected week. You'll receive a confirmed day and arrival window after booking." },
+    { "type": "text",     "id": "late_fee",  "label": "Late install surcharge (e.g. $50) — leave blank if TBD" },
+    { "type": "text",     "id": "week_note", "label": "Note below weeks", "default": "Exact install day confirmed after booking. Limited slots per week." }
+  ],
+  "presets": [
+    { "name": "Install Week Picker" }
+  ]
+}
+{% endschema %}

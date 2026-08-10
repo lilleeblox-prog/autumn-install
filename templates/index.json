@@ -37,7 +37,7 @@
           "settings": {
             "label": "P1",
             "name": "Petite Patch",
-            "price_placeholder": "$385",
+            "price_placeholder": "Pricing coming soon",
             "description": "Perfect for a welcoming front stoop. A curated mix of pumpkins and gourds, hand-arranged and delivered to your door.",
             "included": "4 Large Jack O Lantern\n4 Medium Jack O Lantern\n4 White Ghost\n6 Specialty Pumpkins\nAssortment of Pie Pumpkins",
             "addons": "Hay Bale — $40\nDesign — $75\nRemoval — $75",
@@ -50,7 +50,7 @@
           "settings": {
             "label": "P2",
             "name": "Cozy Corner",
-            "price_placeholder": "$585",
+            "price_placeholder": "Pricing coming soon",
             "description": "A fuller display for a porch or entry that deserves more. More pumpkins, more gourds, same careful arrangement.",
             "included": "6 Large Jack O Lantern\n6 Medium Jack O Lantern\n6 White Ghost\n8 Specialty Pumpkins\nAssortment of Pie Pumpkins",
             "addons": "Hay Bale — $40\nDesign — $100\nRemoval — $100",
@@ -63,7 +63,7 @@
           "settings": {
             "label": "P3",
             "name": "Fall Favorites",
-            "price_placeholder": "$885",
+            "price_placeholder": "Pricing coming soon",
             "description": "Our most popular display. Hay bales, a generous mix of pumpkins and specialty gourds — everything it takes to make a real impression.",
             "included": "8 Large Jack O Lantern\n8 Medium Jack O Lantern\n8 White Ghost\n14 Specialty Pumpkins\n2 Hay Bales\nAssortment of Pie Pumpkins",
             "addons": "Residential Gate Pumpkins & Design\nRemoval — $150",
@@ -76,7 +76,7 @@
           "settings": {
             "label": "P4",
             "name": "Grande Harvest",
-            "price_placeholder": "$1,285",
+            "price_placeholder": "Pricing coming soon",
             "description": "The full treatment. Hay bales, ornamental gourds, pie pumpkins, mini varieties — a display that carries the whole season.",
             "included": "10 Large Jack O Lantern\n8 Medium Jack O Lantern\n8 White Ghost\n16 Specialty Pumpkins\n2 Hay Bales\nMini White & Mini Orange\nOrnamental Gourds\nAssortment of Pie Pumpkins",
             "addons": "Residential Gate Pumpkins & Design\nRemoval — $200",
@@ -94,9 +94,17 @@
       "settings": {
         "eyebrow": "Hello Harvest · Fall 2026",
         "headline": "Choose your package.",
-        "subheading": "Every package includes delivery and hand-installation by our team. Not sure which size is right? Send us a photo of your entryway and we’ll recommend the best fit.",
-        "photo_email": "hello@madetowelcome.com",
-        "photo_cta_text": "Not sure which fits? Send us a photo of your entryway →"
+        "subheading": "Every package includes delivery and hand-installation by our team. Select a package to choose your install week and add-ons."
+      }
+    },
+    "install-week": {
+      "type": "install-week",
+      "settings": {
+        "eyebrow": "Every package · Step 2",
+        "headline": "When would you like us to arrive?",
+        "body": "We install Monday through Friday within your selected week. You'll receive a confirmed day and arrival window after booking.",
+        "late_fee": "",
+        "week_note": "Exact install day confirmed after booking. Limited slots per week."
       }
     },
     "how-it-works": {
@@ -106,7 +114,7 @@
           "type": "step",
           "settings": {
             "title": "Choose your package",
-            "body": "Pick from four sizes — Petite Patch through Grande Harvest. Add extras like hay bales, custom design, or end-of-season removal.",
+            "body": "Pick from four sizes — Petite Patch through Grande Harvest. Add extras like design, hay bales, or end-of-season removal.",
             "tag": "Step 1"
           }
         },
@@ -114,15 +122,15 @@
           "type": "step",
           "settings": {
             "title": "Select your install week",
-            "body": "Pick the week that works for you — September through late October. We'll confirm your exact day and arrival window after your order.",
+            "body": "Pick the week that works for you. We'll confirm your exact day and arrival window after your order is placed.",
             "tag": "Step 2"
           }
         },
         "step-3": {
           "type": "step",
           "settings": {
-            "title": "We arrive and style",
-            "body": "Our team brings everything and arranges your display by hand. No heavy lifting, no coordination — just open your door to a finished entry.",
+            "title": "We arrive & style",
+            "body": "Our team brings everything and arranges your display by hand, leaving your entry warm and ready for the season.",
             "tag": "Step 3"
           }
         },
@@ -130,7 +138,7 @@
           "type": "step",
           "settings": {
             "title": "Optional removal",
-            "body": "Add end-of-season pickup at checkout and everything is taken away as carefully as it arrived. Nothing to store, nothing to manage.",
+            "body": "Add end-of-season pickup and everything is taken away as gently as it arrived. Nothing to store, nothing to manage.",
             "tag": "November · add-on"
           }
         }
@@ -143,7 +151,7 @@
       ],
       "settings": {
         "eyebrow": "How it works",
-        "headline": "Four steps from order to doorstep."
+        "headline": "Four steps from your order to your doorstep."
       }
     },
     "gallery": {
@@ -217,33 +225,33 @@
     "cta-dark": {
       "type": "cta-dark",
       "blocks": {
-        "photo-step-1": {
+        "cta-step-1": {
           "type": "step",
           "settings": {
-            "text": "Fill out the short form and attach a photo of your front entry — porch, stoop, or driveway gate"
+            "text": "Select your package — four sizes, from a welcoming front stoop to a full grand-entrance display"
           }
         },
-        "photo-step-2": {
+        "cta-step-2": {
           "type": "step",
           "settings": {
-            "text": "Our design team reviews your space and replies with a package recommendation, usually within one business day"
+            "text": "Choose your install week — Sept through late October, with exact day confirmed after booking"
           }
         },
-        "photo-step-3": {
+        "cta-step-3": {
           "type": "step",
           "settings": {
-            "text": "Book the package that fits — we handle delivery, installation, and styling from there"
+            "text": "Our team arrives and styles your display by hand — add removal at checkout for end-of-season pickup"
           }
         }
       },
       "block_order": [
-        "photo-step-1",
-        "photo-step-2",
-        "photo-step-3"
+        "cta-step-1",
+        "cta-step-2",
+        "cta-step-3"
       ],
       "settings": {
-        "eyebrow": "Not sure which package fits?",
-        "headline": "Send us a photo.\nWe'll recommend the right one."
+        "eyebrow": "Ready to book",
+        "headline": "Ordering is open for Fall 2026."
       }
     },
     "footer": {
@@ -256,11 +264,12 @@
   },
   "order": [
     "hero-home",
-    "how-it-works",
     "packages-grid",
-    "cta-dark",
+    "install-week",
+    "how-it-works",
     "gallery",
     "season-cards",
+    "cta-dark",
     "footer"
   ]
 }
