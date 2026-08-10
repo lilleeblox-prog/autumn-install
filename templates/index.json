@@ -18,9 +18,9 @@
             "form_id": "1100922",
             "text_color": "#202020",
             "button_background_color": "#202020",
-            "button_label_color": "#FFFFFF",
-            "links_color": "#1878B9",
-            "errors_color": "#E02229",
+            "button_label_color": "#ffffff",
+            "links_color": "#1878b9",
+            "errors_color": "#e02229",
             "text_alignment": "center",
             "form_alignment": "center",
             "padding_top": 0,
@@ -38,9 +38,9 @@
         "sidebar_eyebrow": "Now serving Tennessee",
         "sidebar_season_label": "Current season",
         "sidebar_season_value": "FALL 2026",
-        "sidebar_booking_label": "Booking opens",
-        "sidebar_booking_value": "MID AUGUST",
-        "sidebar_waitlist_label": "Waitlist",
+        "sidebar_booking_label": "Installations",
+        "sidebar_booking_value": "SEPT-OCT",
+        "sidebar_waitlist_label": "Orders",
         "sidebar_waitlist_value": "OPEN NOW",
         "mobile_eyebrow": "Now Serving Tennessee · Fall 2026 · Waitlist Open",
         "card_eyebrow": "Fall Collection",
@@ -55,22 +55,26 @@
         "form_success_body": "We'll be in touch in mid-August when ordering opens. No payment until then."
       }
     },
+    "1786390530e59b76e0": {
+      "type": "_blocks",
+      "settings": {}
+    },
     "how-it-works": {
       "type": "how-it-works",
       "blocks": {
         "step-1": {
           "type": "step",
           "settings": {
-            "title": "Join waitlist",
-            "body": "Add your name and we'll reach out in mid-August when ordering opens. No payment now — this is just your place on the list.",
+            "title": "Choose your package",
+            "body": "Choose the package you best think fits your home. If you need help, our design team would be happy to make recommendations.",
             "tag": "Open now"
           }
         },
         "step-2": {
           "type": "step",
           "settings": {
-            "title": "Choose your package",
-            "body": "When ordering opens, we reach out with everything you need: package options, available install dates, and all the details.",
+            "title": "Choose your date",
+            "body": "Choose the week you'd like us to drop off your pumpkins. We'll reach out to confirm a final date and time that works best for you.",
             "tag": "Opens mid-August"
           }
         },
@@ -100,6 +104,71 @@
       "settings": {
         "eyebrow": "How it works",
         "headline": "Four steps from your inbox to your doorstep."
+      }
+    },
+    "packages_grid_Xdj4hL": {
+      "type": "packages-grid",
+      "blocks": {
+        "package_riqhEw": {
+          "type": "package",
+          "settings": {
+            "label": "P1",
+            "name": "Petite Patch",
+            "product": "product-petite-patch",
+            "price_placeholder": "Pricing coming soon",
+            "description": "A curated mix of pumpkins and gourds, hand-arranged and delivered to your door.",
+            "cta_text": "View package details",
+            "cta_url": ""
+          }
+        },
+        "package_xaUCpT": {
+          "type": "package",
+          "settings": {
+            "label": "P2",
+            "name": "Cozy Corner",
+            "product": "product-cozy-corner",
+            "price_placeholder": "Pricing coming soon",
+            "description": "A curated mix of pumpkins and gourds, hand-arranged and delivered to your door.",
+            "cta_text": "View package details",
+            "cta_url": ""
+          }
+        },
+        "package_afRDM8": {
+          "type": "package",
+          "settings": {
+            "label": "P3",
+            "name": "Fall Favorites",
+            "product": "fall-favorite",
+            "price_placeholder": "Pricing coming soon",
+            "description": "A curated mix of pumpkins and gourds, hand-arranged and delivered to your door.",
+            "cta_text": "View package details",
+            "cta_url": ""
+          }
+        },
+        "package_6Uixtj": {
+          "type": "package",
+          "settings": {
+            "label": "P4",
+            "name": "Grande Harvest",
+            "product": "fall-favorite",
+            "price_placeholder": "Pricing coming soon",
+            "description": "A curated mix of pumpkins and gourds, hand-arranged and delivered to your door.",
+            "cta_text": "View package details",
+            "cta_url": ""
+          }
+        }
+      },
+      "block_order": [
+        "package_riqhEw",
+        "package_xaUCpT",
+        "package_afRDM8",
+        "package_6Uixtj"
+      ],
+      "name": "Packages Grid",
+      "settings": {
+        "eyebrow": "Hello Harvest - Fall 2026",
+        "headline": "Choose your package.",
+        "subheading": "Every package includes delivery and hand-installation by our team."
       }
     },
     "gallery": {
@@ -179,9 +248,9 @@
             "form_id": "1100922",
             "text_color": "#202020",
             "button_background_color": "#202020",
-            "button_label_color": "#FFFFFF",
-            "links_color": "#1878B9",
-            "errors_color": "#E02229",
+            "button_label_color": "#ffffff",
+            "links_color": "#1878b9",
+            "errors_color": "#e02229",
             "text_alignment": "center",
             "form_alignment": "center",
             "padding_top": 0,
@@ -234,7 +303,9 @@
   },
   "order": [
     "hero-home",
+    "1786390530e59b76e0",
     "how-it-works",
+    "packages_grid_Xdj4hL",
     "gallery",
     "season-cards",
     "cta-dark",
