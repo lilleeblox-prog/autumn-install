@@ -11,6 +11,7 @@
   "sections": {
     "fall-hero": {
       "type": "fall-hero",
+      "disabled": true,
       "settings": {
         "eyebrow": "Fall 2026 · Tennessee · Waitlist open",
         "headline": "The season starts at your door.",
@@ -225,8 +226,8 @@
   },
   "order": [
     "fall-hero",
-    "fall-content",
     "packages_grid_XAxhhG",
+    "fall-content",
     "fall-form",
     "footer"
   ]
