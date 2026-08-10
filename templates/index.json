@@ -62,7 +62,7 @@
           "type": "step",
           "settings": {
             "title": "Choose your package",
-            "body": "Pick from four sizes — Petite Patch through Grande Harvest. Add extras like hay bales, custom design, or end-of-season removal.",
+            "body": "Pick from four sizes, Petite Patch through Grande Harvest. Add extras like hay bales, custom design, or end-of-season removal.",
             "tag": "Open now"
           }
         },
@@ -70,7 +70,7 @@
           "type": "step",
           "settings": {
             "title": "Select your install week",
-            "body": "Pick the week that works for you — September through late October. We'll confirm your exact day and arrival window after your order.",
+            "body": "Pick the week that works for you, September through late October. We'll confirm your exact day and arrival window after your order.",
             "tag": "Sept-Oct"
           }
         },
@@ -164,7 +164,7 @@
       "settings": {
         "eyebrow": "Hello Harvest - Fall 2026",
         "headline": "Choose your package.",
-        "subheading": "Every package includes delivery and hand-installation by our team."
+        "subheading": "Each package includes white‑glove delivery from our team, bringing your fall installation directly to your doorstep."
       }
     },
     "gallery": {
