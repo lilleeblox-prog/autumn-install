@@ -7,10 +7,12 @@
         <span class="mtw-mono mtw-eyebrow mtw-eyebrow--primary">{{ section.settings.eyebrow }}</span>
         <h2 class="mtw-cta-dark__headline">{{ section.settings.headline }}</h2>
         <div class="mtw-cta-dark__steps">
+          {%- assign step_num = 0 -%}
           {%- for block in section.blocks -%}
             {%- if block.type == 'step' -%}
+              {%- assign step_num = step_num | plus: 1 -%}
               <div class="mtw-cta-dark__step" {{ block.shopify_attributes }}>
-                <span class="mtw-mono mtw-cta-dark__num">{{ forloop.index | prepend: '0' | slice: -2, 2 }}</span>
+                <span class="mtw-mono mtw-cta-dark__num">{{ step_num | prepend: '0' | slice: -2, 2 }}</span>
                 <p class="mtw-cta-dark__step-text">{{ block.settings.text }}</p>
               </div>
             {%- endif -%}
@@ -18,13 +20,32 @@
         </div>
       </div>
 
-      <!-- Right: form — add Shopify Forms app block here via theme editor -->
+      <!-- Right: CTA button (ordering mode) or inline form (waitlist mode) -->
       <div class="mtw-cta-dark__form-wrap">
+        {%- assign has_app_block = false -%}
         {%- for block in section.blocks -%}
-          {%- if block.type == '@app' -%}
-            {% render block %}
-          {%- endif -%}
+          {%- if block.type == '@app' -%}{%- assign has_app_block = true -%}{%- endif -%}
         {%- endfor -%}
+
+        {%- if has_app_block -%}
+          {%- for block in section.blocks -%}
+            {%- if block.type == '@app' -%}
+              {% render block %}
+            {%- endif -%}
+          {%- endfor -%}
+        {%- elsif section.settings.cta_button_text != blank -%}
+          <div class="mtw-cta-dark__cta-block">
+            {%- if section.settings.cta_body != blank -%}
+              <p class="mtw-body mtw-text-muted" style="margin-bottom:2rem;line-height:1.65">{{ section.settings.cta_body }}</p>
+            {%- endif -%}
+            <a href="{{ section.settings.cta_button_url | default: '#packages' }}" class="mtw-btn mtw-btn--primary mtw-btn--full">
+              {{ section.settings.cta_button_text }}
+              <svg width="14" height="14" viewBox="0 0 14 14" fill="none" style="margin-left:0.5rem;flex-shrink:0">
+                <path d="M1 7h12M8 2l5 5-5 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </a>
+          </div>
+        {%- endif -%}
       </div>
 
     </div>
@@ -46,6 +67,28 @@
       "id": "headline",
       "label": "Headline",
       "default": "Welcome the fall season with a custom display."
+    },
+    {
+      "type": "header",
+      "content": "CTA button"
+    },
+    {
+      "type": "textarea",
+      "id": "cta_body",
+      "label": "Supporting body text",
+      "default": "Not sure which package fits your space? Send our design team a photo of your entryway and we'll point you to the best fit."
+    },
+    {
+      "type": "text",
+      "id": "cta_button_text",
+      "label": "Button label",
+      "default": "Send us a photo"
+    },
+    {
+      "type": "url",
+      "id": "cta_button_url",
+      "label": "Button URL",
+      "info": "Defaults to #packages if left blank"
     },
     {
       "type": "header",
