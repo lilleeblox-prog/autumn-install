@@ -124,7 +124,7 @@
             "name": "Cozy Corner",
             "product": "",
             "price_placeholder": "Pricing coming soon",
-            "description": "A curated mix of pumpkins and gourds, hand-arranged and delivered to your door.",
+            "description": "Ideal for a standard single-door home with a modest porch.",
             "cta_text": "View package details",
             "cta_url": ""
           }
@@ -136,7 +136,7 @@
             "name": "Fall Favorites",
             "product": "",
             "price_placeholder": "Pricing coming soon",
-            "description": "A curated mix of pumpkins and gourds, hand-arranged and delivered to your door.",
+            "description": "Made for wider porches and double-door entries.",
             "cta_text": "View package details",
             "cta_url": ""
           }
@@ -148,7 +148,7 @@
             "name": "Grande Harvest",
             "product": "",
             "price_placeholder": "Pricing coming soon",
-            "description": "A curated mix of pumpkins and gourds, hand-arranged and delivered to your door.",
+            "description": "Built for grand entrances, large double doors, and expansive front porches.",
             "cta_text": "View package details",
             "cta_url": ""
           }
