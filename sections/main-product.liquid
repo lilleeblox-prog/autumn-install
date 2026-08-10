@@ -124,7 +124,7 @@
         {%- assign addon_blocks = section.blocks | where: 'type', 'addon' -%}
         {%- if addon_blocks.size > 0 -%}
           <div class="mtw-product__field">
-            <p class="mtw-product__label">Add-ons <span class="mtw-product__optional">(optional)</span></p>
+            <p class="mtw-product__label">Customize your order <span class="mtw-product__optional">(optional)</span></p>
             <div class="mtw-product__addons">
               {%- for block in addon_blocks -%}
                 <label class="mtw-addon" {{ block.shopify_attributes }}>
