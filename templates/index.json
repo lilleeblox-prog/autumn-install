@@ -43,8 +43,8 @@
             "name": "Petite Patch",
             "product": "product-petite-patch",
             "price_placeholder": "Pricing coming soon",
-            "description": "A curated mix of pumpkins and gourds, hand-arranged and delivered to your door.",
-            "cta_text": "Book this package",
+            "description": "Perfect for a single door with a small stoop or landing.",
+            "cta_text": "See Details",
             "cta_url": "/products/petite-patch"
           }
         },
@@ -55,8 +55,8 @@
             "name": "Cozy Corner",
             "product": "product-cozy-corner",
             "price_placeholder": "Pricing coming soon",
-            "description": "A curated mix of pumpkins and gourds, hand-arranged and delivered to your door.",
-            "cta_text": "Book this package",
+            "description": "Ideal for a standard single-door home with a modest porch.",
+            "cta_text": "See Details",
             "cta_url": "/products/cozy-corner"
           }
         },
@@ -67,8 +67,8 @@
             "name": "Fall Favorites",
             "product": "fall-favorite",
             "price_placeholder": "Pricing coming soon",
-            "description": "A curated mix of pumpkins and gourds, hand-arranged and delivered to your door.",
-            "cta_text": "Book this package",
+            "description": "Made for wider porches and double-door entries.",
+            "cta_text": "See Details",
             "cta_url": "/products/fall-favorites"
           }
         },
@@ -79,8 +79,8 @@
             "name": "Grande Harvest",
             "product": "product-grande-harvest",
             "price_placeholder": "Pricing coming soon",
-            "description": "A curated mix of pumpkins and gourds, hand-arranged and delivered to your door.",
-            "cta_text": "Book this package",
+            "description": "Built for grand entrances, large double doors, and expansive front porches",
+            "cta_text": "See Details",
             "cta_url": "/products/grande-harvest"
           }
         }
@@ -94,7 +94,7 @@
       "settings": {
         "eyebrow": "Hello Harvest · Fall 2026",
         "headline": "Choose your package.",
-        "subheading": "Every package includes delivery and hand-installation by our team. Select a package to choose your install week and add-ons."
+        "subheading": "Every package includes delivery by our team. Select a package to choose your install week and add-ons."
       }
     },
     "install-week": {
