@@ -1125,11 +1125,16 @@ button { cursor: pointer; background: none; border: none; }
   transition: border-color 0.15s, background 0.15s;
 }
 .mtw-addon:hover { border-color: var(--mtw-accent); background: var(--mtw-card-bg, #faf9f7); }
-.mtw-addon__check { position: absolute; opacity: 0; pointer-events: none; }
+.mtw-addon__check {
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
 .mtw-addon__box {
   width: 1.1rem;
   height: 1.1rem;
-  border: 1.5px solid var(--mtw-border);
+  border: 1.5px solid #aaa;
   border-radius: 3px;
   flex-shrink: 0;
   margin-top: 0.1rem;
@@ -1137,19 +1142,20 @@ button { cursor: pointer; background: none; border: none; }
   display: flex;
   align-items: center;
   justify-content: center;
+  background: #fff;
 }
 .mtw-addon__check:checked + .mtw-addon__box {
-  background: var(--mtw-accent);
-  border-color: var(--mtw-accent);
+  background: var(--mtw-fg, #1a1714);
+  border-color: var(--mtw-fg, #1a1714);
 }
 .mtw-addon__check:checked + .mtw-addon__box::after {
   content: '';
+  display: block;
   width: 0.4rem;
   height: 0.25rem;
-  border-left: 1.5px solid #fff;
-  border-bottom: 1.5px solid #fff;
+  border-left: 2px solid #fff;
+  border-bottom: 2px solid #fff;
   transform: rotate(-45deg) translateY(-1px);
-  display: block;
 }
 .mtw-addon__text { font-size: 0.9rem; color: var(--mtw-text); line-height: 1.4; }
 .mtw-addon__price { font-family: var(--mtw-font-mono); font-size: 0.78rem; color: var(--mtw-text-muted); margin-left: 0.5rem; }
