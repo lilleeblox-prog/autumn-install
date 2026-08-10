@@ -45,22 +45,11 @@
             <div class="mtw-pkg-card__foot">
               {%- if block.settings.product != blank -%}
                 <a href="{{ block.settings.product.url }}" class="mtw-btn mtw-btn--primary mtw-btn--full">
-                  {{ block.settings.cta_text | default: 'Book this package' }}
+                  {{ block.settings.cta_text | default: 'View package details' }}
                 </a>
               {%- else -%}
                 <a href="{{ block.settings.cta_url | default: '#' }}" class="mtw-btn mtw-btn--primary mtw-btn--full">
-                  {{ block.settings.cta_text | default: 'Book this package' }}
-                </a>
-              {%- endif -%}
-
-              {%- if section.settings.photo_email != blank -%}
-                {%- assign photo_subject = 'Help me choose the right package — ' | append: block.settings.name -%}
-                {%- assign photo_body = "Hi! I'm not sure which package is right for my home. I'd love your help — I'll send over a photo of my entryway so you can recommend the best fit." -%}
-                <a
-                  href="mailto:{{ section.settings.photo_email }}?subject={{ photo_subject | url_encode }}&body={{ photo_body | url_encode }}"
-                  class="mtw-pkg-card__photo-link"
-                >
-                  {{ section.settings.photo_cta_text | default: 'Not sure? Send us a photo of your entryway →' }}
+                  {{ block.settings.cta_text | default: 'View package details' }}
                 </a>
               {%- endif -%}
             </div>
@@ -79,10 +68,7 @@
   "settings": [
     { "type": "text",     "id": "eyebrow",     "label": "Eyebrow",     "default": "Hello Harvest · Fall 2026" },
     { "type": "text",     "id": "headline",    "label": "Headline",    "default": "Choose your package." },
-    { "type": "textarea","id": "subheading",  "label": "Subheading",  "default": "Every package includes delivery and hand-installation by our team. Select a package below to choose your install week and add-ons." },
-    { "type": "header",  "content": "Not sure? Photo advice CTA" },
-    { "type": "text",    "id": "photo_email",    "label": "Your email address", "info": "Customers who aren't sure which package fits will email you a photo of their entryway. Leave blank to hide this link." },
-    { "type": "text",    "id": "photo_cta_text", "label": "Link text", "default": "Not sure which fits? Send us a photo of your entryway →" }
+    { "type": "textarea","id": "subheading",  "label": "Subheading",  "default": "Every package includes delivery and hand-installation by our team. Select a package below to choose your install week and add-ons." }
   ],
   "blocks": [
     {

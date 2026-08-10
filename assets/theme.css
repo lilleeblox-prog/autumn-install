@@ -427,7 +427,6 @@ button { cursor: pointer; background: none; border: none; }
 }
 
 .mtw-timeline__step { display: flex; flex-direction: column; gap: 1rem; }
-.mtw-timeline__body { display: flex; flex-direction: column; flex: 1; }
 @media (min-width: 64rem) { .mtw-timeline__step { padding-right: 2rem; } }
 
 .mtw-timeline__num {
@@ -459,8 +458,7 @@ button { cursor: pointer; background: none; border: none; }
   border: 1px solid var(--mtw-border);
   display: inline-block;
   align-self: flex-start;
-  margin-top: auto;
-  padding-top: 1rem;
+  margin-top: 1rem;
 }
 .mtw-timeline__tag--active {
   background: rgba(138,197,150,0.12);
@@ -942,19 +940,6 @@ button { cursor: pointer; background: none; border: none; }
   padding: 1.25rem 1.5rem;
   border-top: 1px solid var(--mtw-border);
 }
-.mtw-pkg-card__photo-link {
-  display: block;
-  text-align: center;
-  margin-top: 0.875rem;
-  font-family: var(--mtw-font-sans);
-  font-style: italic;
-  font-size: 0.8rem;
-  color: var(--mtw-muted-fg);
-  text-decoration: none;
-  line-height: 1.4;
-  transition: color 0.15s;
-}
-.mtw-pkg-card__photo-link:hover { color: var(--mtw-fg); }
 
 /* ── Product Page ─────────────────────────────────────── */
 .mtw-product { padding-block: 4rem 6rem; }
@@ -1090,27 +1075,6 @@ button { cursor: pointer; background: none; border: none; }
   color: var(--mtw-text-muted);
   margin-top: 0.25rem;
 }
-
-.mtw-product__input {
-  width: 100%;
-  padding: 0.7rem 1rem;
-  border: 1px solid var(--mtw-border);
-  background: #fff;
-  font-family: var(--mtw-font-sans);
-  font-size: 0.95rem;
-  color: var(--mtw-fg);
-  appearance: none;
-  transition: border-color 0.15s;
-}
-.mtw-product__input:focus { outline: none; border-color: var(--mtw-accent); }
-.mtw-product__input--error { border-color: #c0392b !important; }
-.mtw-product__zip-error {
-  font-size: 0.78rem;
-  color: #c0392b;
-  margin-top: 0.35rem;
-  line-height: 1.5;
-}
-.mtw-product__zip-error-link { color: inherit; text-decoration: underline; }
 
 .mtw-product__addons { display: flex; flex-direction: column; gap: 0.6rem; }
 
