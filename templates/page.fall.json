@@ -106,7 +106,7 @@
             "price_placeholder": "Pricing coming soon",
             "description": "Perfect for a single door with a small stoop or landing.",
             "cta_text": "View package details",
-            "cta_url": ""
+            "cta_url": "shopify://products/product-petite-patch"
           }
         },
         "package_g6GUn7": {
@@ -118,7 +118,7 @@
             "price_placeholder": "Pricing coming soon",
             "description": "Ideal for a standard single-door home with a modest porch.",
             "cta_text": "View package details",
-            "cta_url": ""
+            "cta_url": "shopify://products/product-cozy-corner"
           }
         },
         "package_xiFHVq": {
@@ -130,7 +130,7 @@
             "price_placeholder": "Pricing coming soon",
             "description": "Made for wider porches and double-door entries.",
             "cta_text": "View package details",
-            "cta_url": ""
+            "cta_url": "shopify://products/fall-favorite"
           }
         },
         "package_yHVtWR": {
@@ -142,7 +142,7 @@
             "price_placeholder": "Pricing coming soon",
             "description": "Built for grand entrances, large double doors, and expansive front porches.",
             "cta_text": "View package details",
-            "cta_url": ""
+            "cta_url": "shopify://products/product-grande-harvest"
           }
         }
       },
@@ -204,6 +204,7 @@
         "fcheck-2",
         "fcheck-3"
       ],
+      "disabled": true,
       "settings": {
         "eyebrow": "Fall 2026 · Waitlist",
         "headline": "Your pumpkins, your gourds, your fall — reserved.",
