@@ -44,9 +44,9 @@
         "sidebar_waitlist_value": "OPEN NOW",
         "mobile_eyebrow": "Now Serving Tennessee · Fall 2026 · Waitlist Open",
         "card_eyebrow": "Fall Collection",
-        "hero_lede": "Your most welcoming fall yet.",
-        "hero_lede_muted": "Without lifting a pumpkin.",
-        "hero_body": "Thoughtfully designed seasonal entrances, delivered and styled for you. Made to Welcome begins this fall with our Hello Harvest collection.",
+        "hero_lede": "Your seassonal concierge",
+        "hero_lede_muted": "bringing fall right too your dooYour fall concierge—bringing the season to you with e",
+        "hero_body": "Unsure which package is the best fit? Simply send a photo of your entrée, and our team will curate the ideal package for you.",
         "hero_cta_text": "Join waitlist",
         "hero_cta_note": "Join our Founding Season list for first access to our limited 2026 installation calendar.",
         "form_title": "Add Your Name",
@@ -71,7 +71,7 @@
           "settings": {
             "title": "Select your install week",
             "body": "Pick the week that works for you — September through late October. We'll confirm your exact day and arrival window after your order.",
-            "tag": "Opens mid-August"
+            "tag": "Sept-Oct"
           }
         },
         "step-3": {
@@ -79,7 +79,7 @@
           "settings": {
             "title": "We arrive & style",
             "body": "Our team brings everything and arranges your display by hand, leaving your entry looking warm and ready for the season.",
-            "tag": "Late Sept – Oct"
+            "tag": "Sept-Oct"
           }
         },
         "step-4": {
@@ -87,7 +87,7 @@
           "settings": {
             "title": "Optional removal",
             "body": "Add end-of-season pickup and everything is taken away as gently as it arrived. Nothing to store, nothing to manage.",
-            "tag": "November · add-on"
+            "tag": "November"
           }
         }
       },
