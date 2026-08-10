@@ -32,6 +32,8 @@
             "product": "product-petite-patch",
             "price_placeholder": "Pricing coming soon",
             "description": "Perfect for a single door with a small stoop or landing.",
+            "included": "4 Large Jack O Lantern\n4 Medium Jack O Lantern\n4 White Ghost\n6 Specialty Pumpkins\nAssortment of Pie Pumpkins",
+            "addons": "Hay Bale — $40\nDesign — $75\nRemoval — $75",
             "cta_text": "View package details",
             "cta_url": "shopify://products/product-petite-patch"
           }
@@ -44,6 +46,8 @@
             "product": "product-cozy-corner",
             "price_placeholder": "Pricing coming soon",
             "description": "Ideal for a standard single-door home with a modest porch.",
+            "included": "4 Large Jack O Lantern\n4 Medium Jack O Lantern\n4 White Ghost\n6 Specialty Pumpkins\nAssortment of Pie Pumpkins",
+            "addons": "Hay Bale — $40\nDesign — $75\nRemoval — $75",
             "cta_text": "View package details",
             "cta_url": "shopify://products/product-cozy-corner"
           }
@@ -56,6 +60,8 @@
             "product": "fall-favorite",
             "price_placeholder": "Pricing coming soon",
             "description": "Made for wider porches and double-door entries.",
+            "included": "4 Large Jack O Lantern\n4 Medium Jack O Lantern\n4 White Ghost\n6 Specialty Pumpkins\nAssortment of Pie Pumpkins",
+            "addons": "Hay Bale — $40\nDesign — $75\nRemoval — $75",
             "cta_text": "View package details",
             "cta_url": "shopify://products/fall-favorite"
           }
@@ -68,6 +74,8 @@
             "product": "product-grande-harvest",
             "price_placeholder": "Pricing coming soon",
             "description": "Built for grand entrances, large double doors, and expansive front porches.",
+            "included": "4 Large Jack O Lantern\n4 Medium Jack O Lantern\n4 White Ghost\n6 Specialty Pumpkins\nAssortment of Pie Pumpkins",
+            "addons": "Hay Bale — $40\nDesign — $75\nRemoval — $75",
             "cta_text": "View package details",
             "cta_url": "shopify://products/product-grande-harvest"
           }
@@ -83,7 +91,9 @@
       "settings": {
         "eyebrow": "Hello Harvest - Fall 2026",
         "headline": "Choose your package.",
-        "subheading": "Every package includes delivery by our team."
+        "subheading": "Every package includes delivery by our team.",
+        "photo_email": "",
+        "photo_cta_text": "Not sure which fits? Send us a photo of your entryway →"
       }
     },
     "fall-content": {
