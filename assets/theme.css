@@ -1,3 +1,35 @@
+
+/* ── Product Page ─────────────────────────────────────── */
+.mtw-product { padding-block: 4rem 6rem; }
+.mtw-product__wrap { display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: start; }
+@media (max-width: 860px) { .mtw-product__wrap { grid-template-columns: 1fr; gap: 2rem; } }
+.mtw-product__img-wrap { position: sticky; top: 6rem; border-radius: 8px; overflow: hidden; aspect-ratio: 4/3; }
+.mtw-product__img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.mtw-product__vendor { font-size: 0.65rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--mtw-accent); display: block; margin-bottom: 0.5rem; }
+.mtw-product__title { font-family: var(--mtw-font-serif); font-size: 2.2rem; font-weight: 500; color: var(--mtw-text); margin-bottom: 0.5rem; line-height: 1.15; }
+.mtw-product__price { font-family: var(--mtw-font-mono); font-size: 1rem; color: var(--mtw-text-muted); }
+.mtw-product__desc { font-size: 0.95rem; color: var(--mtw-text-muted); line-height: 1.7; margin-bottom: 2rem; padding-bottom: 2rem; border-bottom: 1px solid var(--mtw-border); }
+.mtw-product__form { display: flex; flex-direction: column; gap: 1.5rem; }
+.mtw-product__field { display: flex; flex-direction: column; gap: 0.5rem; }
+.mtw-product__label { font-family: var(--mtw-font-mono); font-size: 0.68rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--mtw-text); }
+.mtw-product__optional { font-size: 0.62rem; color: var(--mtw-text-muted); text-transform: none; letter-spacing: 0; }
+.mtw-product__select-wrap { position: relative; }
+.mtw-product__select-wrap::after { content: "↓"; position: absolute; right: 1rem; top: 50%; transform: translateY(-50%); color: var(--mtw-text-muted); font-size: 0.8rem; pointer-events: none; }
+.mtw-product__select { width: 100%; appearance: none; background: var(--mtw-bg); border: 1.5px solid var(--mtw-border); padding: 0.75rem 2.5rem 0.75rem 1rem; font-size: 0.9rem; color: var(--mtw-text); border-radius: 6px; cursor: pointer; }
+.mtw-product__select:focus { outline: none; border-color: var(--mtw-accent); }
+.mtw-product__hint { font-size: 0.78rem; color: var(--mtw-text-muted); }
+.mtw-product__addons { display: flex; flex-direction: column; gap: 0.6rem; }
+.mtw-addon { display: flex; align-items: flex-start; gap: 0.75rem; cursor: pointer; padding: 0.75rem 1rem; border: 1.5px solid var(--mtw-border); border-radius: 6px; transition: border-color 0.15s; }
+.mtw-addon:hover, .mtw-addon:has(.mtw-addon__check:checked) { border-color: var(--mtw-accent); background: var(--mtw-card-bg, #faf9f7); }
+.mtw-addon__check { position: absolute; opacity: 0; pointer-events: none; }
+.mtw-addon__box { width: 1.1rem; height: 1.1rem; border: 1.5px solid var(--mtw-border); border-radius: 3px; flex-shrink: 0; margin-top: 0.1rem; transition: background 0.15s; }
+.mtw-addon__check:checked ~ .mtw-addon__text { color: var(--mtw-text); }
+.mtw-addon__text { font-size: 0.9rem; color: var(--mtw-text); }
+.mtw-addon__price { font-family: var(--mtw-font-mono); font-size: 0.78rem; color: var(--mtw-text-muted); margin-left: 0.5rem; }
+.mtw-product__textarea { width: 100%; border: 1.5px solid var(--mtw-border); border-radius: 6px; padding: 0.75rem 1rem; font-size: 0.9rem; color: var(--mtw-text); resize: vertical; font-family: inherit; background: var(--mtw-bg); }
+.mtw-product__textarea:focus { outline: none; border-color: var(--mtw-accent); }
+.mtw-product__reassurance { font-size: 0.78rem; color: var(--mtw-text-muted); text-align: center; }
+
 /* ═══════════════════════════════════════════════════════
    Made to Welcome — Theme CSS
    ═══════════════════════════════════════════════════════ */
@@ -791,37 +823,133 @@ button { cursor: pointer; background: none; border: none; }
   letter-spacing: 0.05em;
 }
 
-/* ── Utility ─────────────────────────────────────────── */
-body { padding-top: 4.5rem; } /* offset for fixed header */
-
-.mtw-product__includes {
-  margin-bottom: 2rem;
-  padding-bottom: 2rem;
-  border-bottom: 1px solid var(--mtw-border);
-}
-.mtw-product__includes-list {
-  list-style: none;
-  margin: 0.75rem 0 0;
-  padding: 0;
+/* ── Packages Grid ───────────────────────────────────── */
+.mtw-packages { padding-block: 6rem; }
+.mtw-packages__header {
+  text-align: center;
+  margin-bottom: 3.5rem;
   display: flex;
   flex-direction: column;
-  gap: 0.4rem;
+  align-items: center;
+  gap: 1rem;
 }
-.mtw-product__includes-list li {
+.mtw-packages__grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1.25rem;
+  align-items: stretch;
+}
+@media (max-width: 1100px) { .mtw-packages__grid { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 640px)  { .mtw-packages__grid { grid-template-columns: 1fr; } }
+
+.mtw-pkg-card {
   display: flex;
-  align-items: baseline;
-  gap: 0.6rem;
-  font-size: 0.9rem;
-  color: var(--mtw-text);
-  line-height: 1.5;
+  flex-direction: column;
+  border: 1.5px solid var(--mtw-border);
+  border-radius: 10px;
+  overflow: hidden;
+  background: var(--mtw-bg);
+  transition: box-shadow 0.2s;
 }
-.mtw-product__includes-list li::before {
+.mtw-pkg-card:hover { box-shadow: 0 4px 24px rgba(0,0,0,0.07); }
+
+.mtw-pkg-card__head {
+  padding: 1.5rem 1.5rem 1.25rem;
+  border-bottom: 1px solid var(--mtw-border);
+  background: var(--mtw-card-bg, #faf9f7);
+}
+.mtw-pkg-card__label {
+  font-size: 0.62rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--mtw-accent);
+  display: block;
+  margin-bottom: 0.35rem;
+}
+.mtw-pkg-card__name {
+  font-family: var(--mtw-font-serif);
+  font-size: 1.35rem;
+  font-weight: 500;
+  color: var(--mtw-text);
+  margin-bottom: 0.5rem;
+}
+.mtw-pkg-card__price {
+  font-family: var(--mtw-font-mono);
+  font-size: 0.78rem;
+  color: var(--mtw-text-muted);
+  letter-spacing: 0.04em;
+}
+
+.mtw-pkg-card__body {
+  flex: 1;
+  padding: 1.25rem 1.5rem;
+}
+.mtw-pkg-card__list {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+}
+.mtw-pkg-card__list li {
+  font-size: 0.875rem;
+  color: var(--mtw-text);
+  line-height: 1.4;
+  padding-left: 1rem;
+  position: relative;
+}
+.mtw-pkg-card__list li::before {
   content: '';
-  display: inline-block;
-  width: 4px;
-  height: 4px;
+  position: absolute;
+  left: 0;
+  top: 0.55em;
+  width: 0.25rem;
+  height: 0.25rem;
   border-radius: 50%;
   background: var(--mtw-accent);
-  flex-shrink: 0;
-  margin-top: 6px;
 }
+.mtw-pkg-card__addons {
+  padding-top: 1rem;
+  border-top: 1px dashed var(--mtw-border);
+}
+.mtw-pkg-card__addon-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+.mtw-pkg-card__addon-list li {
+  font-size: 0.8rem;
+  color: var(--mtw-text-muted);
+  padding-left: 1rem;
+  position: relative;
+}
+.mtw-pkg-card__addon-list li::before {
+  content: '+';
+  position: absolute;
+  left: 0;
+  color: var(--mtw-accent);
+  font-size: 0.75rem;
+}
+
+.mtw-pkg-card__image { width:100%; aspect-ratio:4/3; overflow:hidden; }
+.mtw-pkg-card__img { width:100%; height:100%; object-fit:cover; display:block; }
+.mtw-pkg-card__desc { font-size:0.9rem; color:var(--mtw-text-muted); line-height:1.6; }
+
+.mtw-pkg-card__image { width:100%; aspect-ratio:4/3; overflow:hidden; }
+.mtw-pkg-card__img { width:100%; height:100%; object-fit:cover; display:block; }
+.mtw-pkg-card__desc { font-size:0.9rem; color:var(--mtw-text-muted); line-height:1.6; }
+
+.mtw-pkg-card__foot {
+  padding: 1.25rem 1.5rem;
+  border-top: 1px solid var(--mtw-border);
+}
+
+/* ── Install Week ─────────────────────────────────────── */
+.mtw-install-week { padding-block: 5rem; background: var(--mtw-card-bg, #faf9f7); }
+
+/* ── Utility ─────────────────────────────────────────── */
+body { padding-top: 4.5rem; } /* offset for fixed header */
