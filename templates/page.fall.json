@@ -53,13 +53,6 @@
             "text": "Optional removal mid-to-end of November so your entry is clear for December 1st"
           }
         },
-        "proc-1": {
-          "type": "process_item",
-          "settings": {
-            "period": "Now through Mid-August",
-            "body": "Add your name and we'll reach out when ordering opens in mid-August. No payment now."
-          }
-        },
         "proc-2": {
           "type": "process_item",
           "settings": {
@@ -88,7 +81,6 @@
         "check-3",
         "check-4",
         "check-5",
-        "proc-1",
         "proc-2",
         "proc-3",
         "proc-4"
@@ -102,6 +94,71 @@
         "process_headline": "How it unfolds."
       }
     },
+    "packages_grid_XAxhhG": {
+      "type": "packages-grid",
+      "blocks": {
+        "package_PYqUCD": {
+          "type": "package",
+          "settings": {
+            "label": "P1",
+            "name": "Petite Patch",
+            "product": "product-petite-patch",
+            "price_placeholder": "Pricing coming soon",
+            "description": "Perfect for a single door with a small stoop or landing.",
+            "cta_text": "View package details",
+            "cta_url": ""
+          }
+        },
+        "package_g6GUn7": {
+          "type": "package",
+          "settings": {
+            "label": "P2",
+            "name": "Cozy Corner",
+            "product": "product-cozy-corner",
+            "price_placeholder": "Pricing coming soon",
+            "description": "Ideal for a standard single-door home with a modest porch.",
+            "cta_text": "View package details",
+            "cta_url": ""
+          }
+        },
+        "package_xiFHVq": {
+          "type": "package",
+          "settings": {
+            "label": "P3",
+            "name": "Fall Favorites",
+            "product": "fall-favorite",
+            "price_placeholder": "Pricing coming soon",
+            "description": "Made for wider porches and double-door entries.",
+            "cta_text": "View package details",
+            "cta_url": ""
+          }
+        },
+        "package_yHVtWR": {
+          "type": "package",
+          "settings": {
+            "label": "P4",
+            "name": "Grande Harvest",
+            "product": "product-grande-harvest",
+            "price_placeholder": "Pricing coming soon",
+            "description": "Built for grand entrances, large double doors, and expansive front porches.",
+            "cta_text": "View package details",
+            "cta_url": ""
+          }
+        }
+      },
+      "block_order": [
+        "package_PYqUCD",
+        "package_g6GUn7",
+        "package_xiFHVq",
+        "package_yHVtWR"
+      ],
+      "name": "Packages Grid",
+      "settings": {
+        "eyebrow": "Hello Harvest - Fall 2026",
+        "headline": "Choose your package.",
+        "subheading": "Every package includes delivery and hand-installation by our team."
+      }
+    },
     "fall-form": {
       "type": "fall-form",
       "blocks": {
@@ -111,9 +168,9 @@
             "form_id": "1100922",
             "text_color": "#202020",
             "button_background_color": "#202020",
-            "button_label_color": "#FFFFFF",
-            "links_color": "#1878B9",
-            "errors_color": "#E02229",
+            "button_label_color": "#ffffff",
+            "links_color": "#1878b9",
+            "errors_color": "#e02229",
             "text_alignment": "center",
             "form_alignment": "center",
             "padding_top": 0,
@@ -168,6 +225,7 @@
   "order": [
     "fall-hero",
     "fall-content",
+    "packages_grid_XAxhhG",
     "fall-form",
     "footer"
   ]
