@@ -161,6 +161,7 @@
         "proc-3",
         "proc-4"
       ],
+      "disabled": true,
       "settings": {
         "service_eyebrow": "The service",
         "service_headline": "Pumpkins, gourds, hay bales. All of it handled.",
@@ -226,6 +227,61 @@
         "form_success_body": "We'll be in touch in mid-August when ordering opens. No payment until then."
       }
     },
+    "cta_dark_mHgAa3": {
+      "type": "cta-dark",
+      "blocks": {
+        "forms_inline_Ch8L4h": {
+          "type": "shopify://apps/forms/blocks/inline/8744a304-fcb1-4347-b211-bb6b4759a76a",
+          "settings": {
+            "form_id": "1103400",
+            "text_color": "#202020",
+            "button_background_color": "#202020",
+            "button_label_color": "#FFFFFF",
+            "links_color": "#1878B9",
+            "errors_color": "#E02229",
+            "text_alignment": "center",
+            "form_alignment": "center",
+            "padding_top": 0,
+            "padding_bottom": 24,
+            "padding_right": 0,
+            "padding_left": 0
+          }
+        },
+        "step_mRpGMU": {
+          "type": "step",
+          "settings": {
+            "text": "Fill out the short form and attach a photo of your front entry — porch, stoop, or driveway gate"
+          }
+        },
+        "step_fgyAdB": {
+          "type": "step",
+          "settings": {
+            "text": "Our design team reviews your space and replies with a package recommendation, usually within one business day"
+          }
+        },
+        "step_rckCz8": {
+          "type": "step",
+          "settings": {
+            "text": "Book the package that fits — we handle delivery, installation, and styling from there"
+          }
+        }
+      },
+      "block_order": [
+        "forms_inline_Ch8L4h",
+        "step_mRpGMU",
+        "step_fgyAdB",
+        "step_rckCz8"
+      ],
+      "name": "CTA — Dark",
+      "settings": {
+        "eyebrow": "Hello Harvest · Tennessee",
+        "headline": "Not Sure Which Package Fits?",
+        "form_title": "Add Your Name",
+        "form_desc": "We'll reach out in mid-August when ordering opens. No payment now.",
+        "form_success_title": "You're on the list.",
+        "form_success_body": "We'll be in touch in mid-August when ordering opens. No payment until then."
+      }
+    },
     "footer": {
       "type": "footer",
       "settings": {
@@ -239,6 +295,7 @@
     "packages_grid_XAxhhG",
     "fall-content",
     "fall-form",
+    "cta_dark_mHgAa3",
     "footer"
   ]
 }
