@@ -65,7 +65,7 @@
           "settings": {
             "label": "P3",
             "name": "Fall Favorites",
-            "product": "",
+            "product": "fall-favorite",
             "price_placeholder": "Pricing coming soon",
             "description": "A curated mix of pumpkins and gourds, hand-arranged and delivered to your door.",
             "cta_text": "Book this package",
@@ -77,7 +77,7 @@
           "settings": {
             "label": "P4",
             "name": "Grande Harvest",
-            "product": "",
+            "product": "product-grande-harvest",
             "price_placeholder": "Pricing coming soon",
             "description": "A curated mix of pumpkins and gourds, hand-arranged and delivered to your door.",
             "cta_text": "Book this package",
