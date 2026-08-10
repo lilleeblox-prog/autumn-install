@@ -102,6 +102,71 @@
         "headline": "Four steps from order to doorstep."
       }
     },
+    "packages_grid_3Rbgxx": {
+      "type": "packages-grid",
+      "blocks": {
+        "package_hpxL6T": {
+          "type": "package",
+          "settings": {
+            "label": "P1",
+            "name": "Petite Patch",
+            "product": "",
+            "price_placeholder": "Pricing coming soon",
+            "description": "Perfect for a single door with a small stoop or landing.",
+            "cta_text": "View package details",
+            "cta_url": ""
+          }
+        },
+        "package_RXAyhT": {
+          "type": "package",
+          "settings": {
+            "label": "P2",
+            "name": "Cozy Corner",
+            "product": "",
+            "price_placeholder": "Pricing coming soon",
+            "description": "A curated mix of pumpkins and gourds, hand-arranged and delivered to your door.",
+            "cta_text": "View package details",
+            "cta_url": ""
+          }
+        },
+        "package_BqqimM": {
+          "type": "package",
+          "settings": {
+            "label": "P3",
+            "name": "Fall Favorites",
+            "product": "",
+            "price_placeholder": "Pricing coming soon",
+            "description": "A curated mix of pumpkins and gourds, hand-arranged and delivered to your door.",
+            "cta_text": "View package details",
+            "cta_url": ""
+          }
+        },
+        "package_34a7Eg": {
+          "type": "package",
+          "settings": {
+            "label": "P4",
+            "name": "Grande Harvest",
+            "product": "",
+            "price_placeholder": "Pricing coming soon",
+            "description": "A curated mix of pumpkins and gourds, hand-arranged and delivered to your door.",
+            "cta_text": "View package details",
+            "cta_url": ""
+          }
+        }
+      },
+      "block_order": [
+        "package_hpxL6T",
+        "package_RXAyhT",
+        "package_BqqimM",
+        "package_34a7Eg"
+      ],
+      "name": "Packages Grid",
+      "settings": {
+        "eyebrow": "Hello Harvest - Fall 2026",
+        "headline": "Choose your package.",
+        "subheading": "Every package includes delivery and hand-installation by our team."
+      }
+    },
     "gallery": {
       "type": "gallery",
       "blocks": {
@@ -235,6 +300,7 @@
   "order": [
     "hero-home",
     "how-it-works",
+    "packages_grid_3Rbgxx",
     "gallery",
     "season-cards",
     "cta-dark",
