@@ -186,6 +186,43 @@
       ],
       "settings": {}
     },
+    "season_cards_UL66gQ": {
+      "type": "season-cards",
+      "blocks": {
+        "season_card_bBNBxF": {
+          "type": "season_card",
+          "settings": {
+            "name": "Winter",
+            "year_range": "2026–27",
+            "badge": "2026 ledger",
+            "description": "Custom garland installed and dressed for the season, then quietly removed when the holidays are over.",
+            "link": "/pages/winter",
+            "cta": "Add your name"
+          }
+        },
+        "season_card_Ewtyr8": {
+          "type": "season_card",
+          "settings": {
+            "name": "Summer",
+            "year_range": "2027",
+            "badge": "2027 ledger",
+            "description": "Seasonal flag installs that make your home feel festive and finished from the moment summer arrives.",
+            "link": "/pages/summer",
+            "cta": "Add your name"
+          }
+        }
+      },
+      "block_order": [
+        "season_card_bBNBxF",
+        "season_card_Ewtyr8"
+      ],
+      "name": "Season Cards",
+      "settings": {
+        "eyebrow": "Every season",
+        "headline": "All seasons,\ncurated by your\nfavorite team.",
+        "body": "Fall is just the beginning. We come back every season with the same team and the same care. Your door always feels ready."
+      }
+    },
     "footer": {
       "type": "footer",
       "settings": {
@@ -200,6 +237,7 @@
     "packages-grid",
     "install-week",
     "gallery",
+    "season_cards_UL66gQ",
     "footer"
   ]
 }
