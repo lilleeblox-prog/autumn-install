@@ -1,23 +1,29 @@
 <section class="mtw-section mtw-packages" id="packages">
   <div class="mtw-container">
+
     <div class="mtw-packages__header">
       <span class="mtw-mono mtw-eyebrow mtw-eyebrow--primary">{{ section.settings.eyebrow }}</span>
       <h2 class="mtw-h2">{{ section.settings.headline }}</h2>
       <p class="mtw-body mtw-text-muted" style="max-width:36rem;margin:0 auto">{{ section.settings.subheading }}</p>
     </div>
+
     <div class="mtw-packages__grid">
       {%- for block in section.blocks -%}
         {%- if block.type == 'package' -%}
+
           {%- assign card_image = block.settings.image -%}
           {%- if card_image == blank and block.settings.product != blank -%}
             {%- assign card_image = block.settings.product.featured_image -%}
           {%- endif -%}
+
           <div class="mtw-pkg-card" {{ block.shopify_attributes }}>
+
             {%- if card_image != blank -%}
               <div class="mtw-pkg-card__image">
                 {{ card_image | image_url: width: 600 | image_tag: loading: 'lazy', alt: block.settings.name, class: 'mtw-pkg-card__img' }}
               </div>
             {%- endif -%}
+
             <div class="mtw-pkg-card__head">
               <span class="mtw-mono mtw-pkg-card__label">{{ block.settings.label }}</span>
               <h3 class="mtw-pkg-card__name">{{ block.settings.name }}</h3>
@@ -29,49 +35,73 @@
                 {%- endif -%}
               </p>
             </div>
+
             <div class="mtw-pkg-card__body">
               {%- if block.settings.description != blank -%}
                 <p class="mtw-pkg-card__desc">{{ block.settings.description }}</p>
               {%- endif -%}
             </div>
+
             <div class="mtw-pkg-card__foot">
               {%- if block.settings.product != blank -%}
                 <a href="{{ block.settings.product.url }}" class="mtw-btn mtw-btn--primary mtw-btn--full">
-                  {{ block.settings.cta_text | default: 'View package details' }}
+                  {{ block.settings.cta_text | default: 'Book this package' }}
                 </a>
               {%- else -%}
                 <a href="{{ block.settings.cta_url | default: '#' }}" class="mtw-btn mtw-btn--primary mtw-btn--full">
-                  {{ block.settings.cta_text | default: 'View package details' }}
+                  {{ block.settings.cta_text | default: 'Book this package' }}
+                </a>
+              {%- endif -%}
+
+              {%- if section.settings.photo_email != blank -%}
+                {%- assign photo_subject = 'Help me choose the right package — ' | append: block.settings.name -%}
+                {%- assign photo_body = "Hi! I'm not sure which package is right for my home. I'd love your help — I'll send over a photo of my entryway so you can recommend the best fit." -%}
+                <a
+                  href="mailto:{{ section.settings.photo_email }}?subject={{ photo_subject | url_encode }}&body={{ photo_body | url_encode }}"
+                  class="mtw-pkg-card__photo-link"
+                >
+                  {{ section.settings.photo_cta_text | default: 'Not sure? Send us a photo of your entryway →' }}
                 </a>
               {%- endif -%}
             </div>
           </div>
+
         {%- endif -%}
       {%- endfor -%}
     </div>
+
   </div>
 </section>
+
 {% schema %}
 {
   "name": "Packages Grid",
   "settings": [
-    { "type": "text",    "id": "eyebrow",    "label": "Eyebrow",    "default": "Hello Harvest - Fall 2026" },
-    { "type": "text",    "id": "headline",   "label": "Headline",   "default": "Choose your package." },
-    { "type": "textarea","id": "subheading", "label": "Subheading", "default": "Every package includes delivery and hand-installation by our team." }
+    { "type": "text",     "id": "eyebrow",     "label": "Eyebrow",     "default": "Hello Harvest · Fall 2026" },
+    { "type": "text",     "id": "headline",    "label": "Headline",    "default": "Choose your package." },
+    { "type": "textarea","id": "subheading",  "label": "Subheading",  "default": "Every package includes delivery and hand-installation by our team. Select a package below to choose your install week and add-ons." },
+    { "type": "header",  "content": "Not sure? Photo advice CTA" },
+    { "type": "text",    "id": "photo_email",    "label": "Your email address", "info": "Customers who aren't sure which package fits will email you a photo of their entryway. Leave blank to hide this link." },
+    { "type": "text",    "id": "photo_cta_text", "label": "Link text", "default": "Not sure which fits? Send us a photo of your entryway →" }
   ],
   "blocks": [
     {
       "type": "package",
       "name": "Package",
       "settings": [
-        { "type": "text",         "id": "label",             "label": "Label (e.g. P1)",               "default": "P1" },
-        { "type": "text",         "id": "name",              "label": "Package name",                  "default": "Petite Patch" },
-        { "type": "image_picker", "id": "image",             "label": "Package photo (overrides product image)" },
-        { "type": "product",      "id": "product",           "label": "Shopify product" },
-        { "type": "text",         "id": "price_placeholder", "label": "Price (if no product linked)",  "default": "Pricing coming soon" },
-        { "type": "textarea",     "id": "description",       "label": "Description",                   "default": "A curated mix of pumpkins and gourds, hand-arranged and delivered to your door." },
-        { "type": "text",         "id": "cta_text",          "label": "Button text",                   "default": "View package details" },
-        { "type": "url",          "id": "cta_url",           "label": "Button URL (if no product linked)" }
+        { "type": "text",         "id": "label",            "label": "Label (e.g. P1)",                          "default": "P1" },
+        { "type": "text",         "id": "name",             "label": "Package name",                             "default": "Petite Patch" },
+        { "type": "image_picker", "id": "image",            "label": "Package photo (overrides product image)" },
+        { "type": "product",      "id": "product",          "label": "Shopify product (links price + Buy button)" },
+        { "type": "text",         "id": "price_placeholder","label": "Price (if no product linked)",             "default": "Pricing coming soon" },
+        { "type": "textarea",     "id": "description",      "label": "Description",
+          "default": "Perfect for a welcoming front stoop. A curated mix of pumpkins and gourds, hand-arranged and delivered to your door." },
+        { "type": "textarea",     "id": "included",         "label": "What's included (one per line — used on waitlist site)",
+          "default": "4 Large Jack O Lantern\n4 Medium Jack O Lantern\n4 White Ghost\n6 Specialty Pumpkins\nAssortment of Pie Pumpkins" },
+        { "type": "textarea",     "id": "addons",           "label": "Add-ons (one per line — used on waitlist site)",
+          "default": "Hay Bale — $40\nDesign — $75\nRemoval — $75" },
+        { "type": "text",         "id": "cta_text",         "label": "Button text",                              "default": "View package details" },
+        { "type": "url",          "id": "cta_url",          "label": "Button URL (if no product linked)" }
       ]
     }
   ],
@@ -79,10 +109,50 @@
     {
       "name": "Packages Grid",
       "blocks": [
-        { "type": "package", "settings": { "label": "P1", "name": "Petite Patch",   "price_placeholder": "Pricing coming soon" } },
-        { "type": "package", "settings": { "label": "P2", "name": "Cozy Corner",    "price_placeholder": "Pricing coming soon" } },
-        { "type": "package", "settings": { "label": "P3", "name": "Fall Favorites", "price_placeholder": "Pricing coming soon" } },
-        { "type": "package", "settings": { "label": "P4", "name": "Grande Harvest", "price_placeholder": "Pricing coming soon" } }
+        {
+          "type": "package",
+          "settings": {
+            "label": "P1",
+            "name": "Petite Patch",
+            "price_placeholder": "Pricing coming soon",
+            "description": "Perfect for a welcoming front stoop. A curated mix of pumpkins and gourds, hand-arranged and delivered to your door.",
+            "included": "4 Large Jack O Lantern\n4 Medium Jack O Lantern\n4 White Ghost\n6 Specialty Pumpkins\nAssortment of Pie Pumpkins",
+            "addons": "Hay Bale — $40\nDesign — $75\nRemoval — $75"
+          }
+        },
+        {
+          "type": "package",
+          "settings": {
+            "label": "P2",
+            "name": "Cozy Corner",
+            "price_placeholder": "Pricing coming soon",
+            "description": "A fuller display for a porch or entry that deserves more. More pumpkins, more gourds, same careful arrangement.",
+            "included": "6 Large Jack O Lantern\n6 Medium Jack O Lantern\n6 White Ghost\n8 Specialty Pumpkins\nAssortment of Pie Pumpkins",
+            "addons": "Hay Bale — $40\nDesign — $100\nRemoval — $100"
+          }
+        },
+        {
+          "type": "package",
+          "settings": {
+            "label": "P3",
+            "name": "Fall Favorites",
+            "price_placeholder": "Pricing coming soon",
+            "description": "Our most popular display. Hay bales, a generous mix of pumpkins and specialty gourds — everything it takes to make a real impression.",
+            "included": "8 Large Jack O Lantern\n8 Medium Jack O Lantern\n8 White Ghost\n14 Specialty Pumpkins\n2 Hay Bales\nAssortment of Pie Pumpkins",
+            "addons": "Residential Gate Pumpkins & Design\nRemoval — $150"
+          }
+        },
+        {
+          "type": "package",
+          "settings": {
+            "label": "P4",
+            "name": "Grande Harvest",
+            "price_placeholder": "Pricing coming soon",
+            "description": "The full treatment. Hay bales, ornamental gourds, pie pumpkins, mini varieties — a display that carries the whole season.",
+            "included": "10 Large Jack O Lantern\n8 Medium Jack O Lantern\n8 White Ghost\n16 Specialty Pumpkins\n2 Hay Bales\nMini White & Mini Orange\nOrnamental Gourds\nAssortment of Pie Pumpkins",
+            "addons": "Residential Gate Pumpkins & Design\nRemoval — $200"
+          }
+        }
       ]
     }
   ]
