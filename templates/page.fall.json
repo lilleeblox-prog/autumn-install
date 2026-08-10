@@ -250,7 +250,7 @@
         "step_mRpGMU": {
           "type": "step",
           "settings": {
-            "text": "Fill out the short form and attach a photo of your front entry — porch, stoop, or driveway gate"
+            "text": "Fill out the form and attach a photo of your front entry — porch, stoop, or driveway gate"
           }
         },
         "step_fgyAdB": {
@@ -275,7 +275,7 @@
       "name": "CTA — Dark",
       "settings": {
         "eyebrow": "Hello Harvest · Tennessee",
-        "headline": "Not Sure Which Package Fits?",
+        "headline": "Not Sure what fits best?",
         "form_title": "Add Your Name",
         "form_desc": "We'll reach out in mid-August when ordering opens. No payment now.",
         "form_success_title": "You're on the list.",
