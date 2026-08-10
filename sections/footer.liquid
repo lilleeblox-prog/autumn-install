@@ -1,8 +1,8 @@
 <footer class="mtw-footer">
   <div class="mtw-container mtw-footer__inner">
-    <span class="mtw-footer__brand">{{ section.settings.brand_name }}</span>
+    <span class="mtw-footer__brand">Made to Welcome</span>
     <span class="mtw-mono mtw-footer__copy">
-      © {{ 'now' | date: '%Y' }} · {{ section.settings.tagline }}
+      © {{ 'now' | date: '%Y' }} · Seasonal décor · Delivery &amp; installation · Tennessee
     </span>
   </div>
 </footer>
@@ -10,19 +10,6 @@
 {% schema %}
 {
   "name": "Footer",
-  "settings": [
-    {
-      "type": "text",
-      "id": "brand_name",
-      "label": "Brand name",
-      "default": "Made to Welcome"
-    },
-    {
-      "type": "text",
-      "id": "tagline",
-      "label": "Tagline (after copyright year)",
-      "default": "Seasonal décor · Delivery & installation · Tennessee"
-    }
-  ]
+  "settings": []
 }
 {% endschema %}

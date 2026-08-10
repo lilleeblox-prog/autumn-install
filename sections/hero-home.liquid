@@ -2,19 +2,19 @@
 
   <!-- Sidebar (desktop) -->
   <aside class="mtw-hero__sidebar">
-    <span class="mtw-mono mtw-eyebrow mtw-eyebrow--primary">{{ section.settings.sidebar_eyebrow }}</span>
+    <span class="mtw-mono mtw-eyebrow mtw-eyebrow--primary">Now serving Tennessee</span>
     <div class="mtw-hero__sidebar-pills">
       <div class="mtw-sidebar-item">
-        <p class="mtw-sidebar-label">{{ section.settings.sidebar_season_label }}</p>
-        <span class="mtw-pill">{{ section.settings.sidebar_season_value }}</span>
+        <p class="mtw-sidebar-label">Current season</p>
+        <span class="mtw-pill">FALL 2026</span>
       </div>
       <div class="mtw-sidebar-item">
-        <p class="mtw-sidebar-label">{{ section.settings.sidebar_booking_label }}</p>
-        <span class="mtw-pill">{{ section.settings.sidebar_booking_value }}</span>
+        <p class="mtw-sidebar-label">Booking opens</p>
+        <span class="mtw-pill">MID AUGUST</span>
       </div>
       <div class="mtw-sidebar-item">
-        <p class="mtw-sidebar-label">{{ section.settings.sidebar_waitlist_label }}</p>
-        <span class="mtw-pill mtw-pill--open">{{ section.settings.sidebar_waitlist_value }}</span>
+        <p class="mtw-sidebar-label">Waitlist</p>
+        <span class="mtw-pill mtw-pill--open">OPEN NOW</span>
       </div>
     </div>
   </aside>
@@ -36,7 +36,7 @@
       <div class="mtw-hero__photo-overlay"></div>
       <div class="mtw-hero__mobile-eyebrow">
         <span class="mtw-mono" style="font-size:0.6rem;letter-spacing:0.14em;text-transform:uppercase;color:rgba(255,255,255,0.7)">
-          {{ section.settings.mobile_eyebrow }}
+          Now Serving Tennessee · Fall 2026 · Waitlist Open
         </span>
       </div>
     </div>
@@ -44,37 +44,71 @@
     <!-- Floating card -->
     <div class="mtw-hero__card">
       <span class="mtw-mono mtw-eyebrow mtw-eyebrow--primary" style="font-size:0.64rem;margin-bottom:1.25rem;display:block">
-        {{ section.settings.card_eyebrow }}
+        Fall 2026 · Tennessee
       </span>
 
       <!-- Card content (shown by default) -->
       <div id="hero-card-content" class="mtw-hero__card-content">
         <p class="mtw-hero__lede">
-          {{ section.settings.hero_lede }}
-          <span class="mtw-hero__lede--muted">{{ section.settings.hero_lede_muted }}</span>
+          Your seasonal home concierge.
+          <span class="mtw-hero__lede--muted">We deliver, we arrange, we magically make it disappear.</span>
         </p>
         <div class="mtw-divider-dashed"></div>
         <p class="mtw-body-sm mtw-text-muted" style="margin-bottom:1.75rem;line-height:1.65">
-          {{ section.settings.hero_body }}
+          Add your name and we'll reach out in mid-August when ordering opens. No payment now.
         </p>
         <a href="#hero-form" class="mtw-btn mtw-btn--primary mtw-btn--full" id="hero-show-form-btn">
-          {{ section.settings.hero_cta_text }}
+          Join waitlist
           <svg width="14" height="14" viewBox="0 0 14 14" fill="none" style="margin-left:0.5rem;flex-shrink:0">
             <path d="M1 7h12M8 2l5 5-5 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
           </svg>
         </a>
-        <p class="mtw-text-muted" style="font-family:var(--mtw-font-sans);font-style:italic;font-size:0.8rem;text-align:center;margin-top:0.75rem">
-          {{ section.settings.hero_cta_note }}
+        <p class="mtw-mono mtw-text-muted" style="font-size:0.7rem;text-align:center;margin-top:0.75rem;letter-spacing:0.05em">
+          We'll be in touch in mid-August when ordering opens.
         </p>
       </div>
 
-      <!-- Inline form (hidden by default) — Shopify Forms app block renders here -->
+      <!-- Inline form (hidden by default) -->
       <div id="hero-form" class="mtw-hero__card-form" style="display:none">
-        {%- for block in section.blocks -%}
-          {%- if block.type == '@app' -%}
-            {% render block %}
+        <h3 class="mtw-form-title">Add Your Name</h3>
+        <p class="mtw-form-desc">We'll reach out in mid-August when ordering opens. No payment now.</p>
+        {%- form 'contact' -%}
+          <input type="hidden" name="contact[season]" value="Fall 2026">
+          <input type="hidden" name="contact[tags]" value="waitlist,fall-2026">
+
+          {%- if form.posted_successfully? -%}
+            <div class="mtw-form-success">
+              <p class="mtw-form-success__title">You're on the list.</p>
+              <p class="mtw-form-success__body">We'll be in touch in mid-August when ordering opens. No payment until then.</p>
+            </div>
+          {%- else -%}
+            <div class="mtw-form-row mtw-form-row--2col">
+              <div class="mtw-form-field">
+                <label class="mtw-label" for="hero-first-name">First name</label>
+                <input class="mtw-input" type="text" id="hero-first-name" name="contact[first_name]" placeholder="Jane" required>
+              </div>
+              <div class="mtw-form-field">
+                <label class="mtw-label" for="hero-last-name">Last name</label>
+                <input class="mtw-input" type="text" id="hero-last-name" name="contact[last_name]" placeholder="Smith" required>
+              </div>
+            </div>
+            <div class="mtw-form-field">
+              <label class="mtw-label" for="hero-email">Email</label>
+              <input class="mtw-input" type="email" id="hero-email" name="contact[email]" placeholder="jane@example.com" required>
+            </div>
+            <div class="mtw-form-field">
+              <label class="mtw-label" for="hero-phone">Phone</label>
+              <input class="mtw-input" type="tel" id="hero-phone" name="contact[phone]" placeholder="(615) 555-0100" required>
+            </div>
+            <div class="mtw-form-field">
+              <label class="mtw-label" for="hero-zip">Zip code</label>
+              <input class="mtw-input" type="text" id="hero-zip" name="contact[zip_code]" placeholder="37064" required>
+            </div>
+            <button type="submit" class="mtw-btn mtw-btn--primary mtw-btn--full" style="margin-top:0.5rem">
+              Submit
+            </button>
           {%- endif -%}
-        {%- endfor -%}
+        {%- endform -%}
       </div>
     </div>
   </div>
@@ -88,130 +122,7 @@
       "type": "image_picker",
       "id": "hero_image",
       "label": "Hero background image"
-    },
-    {
-      "type": "header",
-      "content": "Sidebar labels"
-    },
-    {
-      "type": "text",
-      "id": "sidebar_eyebrow",
-      "label": "Sidebar eyebrow",
-      "default": "Now serving Tennessee"
-    },
-    {
-      "type": "text",
-      "id": "sidebar_season_label",
-      "label": "Season row label",
-      "default": "Current season"
-    },
-    {
-      "type": "text",
-      "id": "sidebar_season_value",
-      "label": "Season pill value",
-      "default": "FALL 2026"
-    },
-    {
-      "type": "text",
-      "id": "sidebar_booking_label",
-      "label": "Booking row label",
-      "default": "Booking opens"
-    },
-    {
-      "type": "text",
-      "id": "sidebar_booking_value",
-      "label": "Booking pill value",
-      "default": "MID AUGUST"
-    },
-    {
-      "type": "text",
-      "id": "sidebar_waitlist_label",
-      "label": "Waitlist row label",
-      "default": "Waitlist"
-    },
-    {
-      "type": "text",
-      "id": "sidebar_waitlist_value",
-      "label": "Waitlist pill value",
-      "default": "OPEN NOW"
-    },
-    {
-      "type": "text",
-      "id": "mobile_eyebrow",
-      "label": "Mobile eyebrow text",
-      "default": "Now Serving Tennessee · Fall 2026 · Waitlist Open"
-    },
-    {
-      "type": "header",
-      "content": "Card content"
-    },
-    {
-      "type": "text",
-      "id": "card_eyebrow",
-      "label": "Card eyebrow",
-      "default": "Fall 2026 · Tennessee"
-    },
-    {
-      "type": "text",
-      "id": "hero_lede",
-      "label": "Lede — bold part",
-      "default": "Your seasonal home concierge."
-    },
-    {
-      "type": "text",
-      "id": "hero_lede_muted",
-      "label": "Lede — muted part",
-      "default": "We deliver, we arrange, we magically make it disappear."
-    },
-    {
-      "type": "textarea",
-      "id": "hero_body",
-      "label": "Body text",
-      "default": "Add your name and we'll reach out in mid-August when ordering opens. No payment now."
-    },
-    {
-      "type": "text",
-      "id": "hero_cta_text",
-      "label": "CTA button text",
-      "default": "Join waitlist"
-    },
-    {
-      "type": "text",
-      "id": "hero_cta_note",
-      "label": "Below-button note",
-      "default": "We'll be in touch in mid-August when ordering opens."
-    },
-    {
-      "type": "header",
-      "content": "Waitlist form"
-    },
-    {
-      "type": "text",
-      "id": "form_title",
-      "label": "Form title",
-      "default": "Add Your Name"
-    },
-    {
-      "type": "text",
-      "id": "form_desc",
-      "label": "Form description",
-      "default": "We'll reach out in mid-August when ordering opens. No payment now."
-    },
-    {
-      "type": "text",
-      "id": "form_success_title",
-      "label": "Success title",
-      "default": "You're on the list."
-    },
-    {
-      "type": "textarea",
-      "id": "form_success_body",
-      "label": "Success body",
-      "default": "We'll be in touch in mid-August when ordering opens. No payment until then."
     }
-  ],
-  "blocks": [
-    { "type": "@app" }
   ],
   "presets": [
     { "name": "Hero — Home" }

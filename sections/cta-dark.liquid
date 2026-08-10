@@ -4,27 +4,65 @@
 
       <!-- Left: copy -->
       <div class="mtw-cta-dark__copy">
-        <span class="mtw-mono mtw-eyebrow mtw-eyebrow--primary">{{ section.settings.eyebrow }}</span>
-        <h2 class="mtw-cta-dark__headline">{{ section.settings.headline }}</h2>
+        <span class="mtw-mono mtw-eyebrow mtw-eyebrow--primary">Fall 2026 · Tennessee</span>
+        <h2 class="mtw-cta-dark__headline">Welcome the fall season with a custom display.</h2>
         <div class="mtw-cta-dark__steps">
-          {%- for block in section.blocks -%}
-            {%- if block.type == 'step' -%}
-              <div class="mtw-cta-dark__step" {{ block.shopify_attributes }}>
-                <span class="mtw-mono mtw-cta-dark__num">{{ forloop.index | prepend: '0' | slice: -2, 2 }}</span>
-                <p class="mtw-cta-dark__step-text">{{ block.settings.text }}</p>
-              </div>
-            {%- endif -%}
-          {%- endfor -%}
+          <div class="mtw-cta-dark__step">
+            <span class="mtw-mono mtw-cta-dark__num">01</span>
+            <p class="mtw-cta-dark__step-text">Add your name — we'll reach out when ordering opens in mid-August</p>
+          </div>
+          <div class="mtw-cta-dark__step">
+            <span class="mtw-mono mtw-cta-dark__num">02</span>
+            <p class="mtw-cta-dark__step-text">If you secure a spot, we'll confirm your delivery window and details</p>
+          </div>
+          <div class="mtw-cta-dark__step">
+            <span class="mtw-mono mtw-cta-dark__num">03</span>
+            <p class="mtw-cta-dark__step-text">On your week, our designer arrives and installs your bespoke display in person</p>
+          </div>
         </div>
       </div>
 
-      <!-- Right: form — add Shopify Forms app block here via theme editor -->
+      <!-- Right: form -->
       <div class="mtw-cta-dark__form-wrap">
-        {%- for block in section.blocks -%}
-          {%- if block.type == '@app' -%}
-            {% render block %}
+        <h3 class="mtw-form-title">Add Your Name</h3>
+        <p class="mtw-form-desc">We'll reach out in mid-August when ordering opens. No payment now.</p>
+        {%- form 'contact', id: 'cta-dark-form' -%}
+          <input type="hidden" name="contact[season]" value="Fall 2026">
+          <input type="hidden" name="contact[tags]" value="waitlist,fall-2026">
+
+          {%- if form.posted_successfully? -%}
+            <div class="mtw-form-success">
+              <p class="mtw-form-success__title">You're on the list.</p>
+              <p class="mtw-form-success__body">We'll be in touch in mid-August when ordering opens. No payment until then.</p>
+            </div>
+          {%- else -%}
+            <div class="mtw-form-row mtw-form-row--2col">
+              <div class="mtw-form-field">
+                <label class="mtw-label" for="cta-first-name">First name</label>
+                <input class="mtw-input" type="text" id="cta-first-name" name="contact[first_name]" placeholder="Jane" required>
+              </div>
+              <div class="mtw-form-field">
+                <label class="mtw-label" for="cta-last-name">Last name</label>
+                <input class="mtw-input" type="text" id="cta-last-name" name="contact[last_name]" placeholder="Smith" required>
+              </div>
+            </div>
+            <div class="mtw-form-field">
+              <label class="mtw-label" for="cta-email">Email</label>
+              <input class="mtw-input" type="email" id="cta-email" name="contact[email]" placeholder="jane@example.com" required>
+            </div>
+            <div class="mtw-form-field">
+              <label class="mtw-label" for="cta-phone">Phone</label>
+              <input class="mtw-input" type="tel" id="cta-phone" name="contact[phone]" placeholder="(615) 555-0100" required>
+            </div>
+            <div class="mtw-form-field">
+              <label class="mtw-label" for="cta-zip">Zip code</label>
+              <input class="mtw-input" type="text" id="cta-zip" name="contact[zip_code]" placeholder="37064" required>
+            </div>
+            <button type="submit" class="mtw-btn mtw-btn--primary mtw-btn--full" style="margin-top:0.5rem">
+              Submit
+            </button>
           {%- endif -%}
-        {%- endfor -%}
+        {%- endform -%}
       </div>
 
     </div>
@@ -34,87 +72,9 @@
 {% schema %}
 {
   "name": "CTA — Dark",
-  "settings": [
-    {
-      "type": "text",
-      "id": "eyebrow",
-      "label": "Eyebrow",
-      "default": "Fall 2026 · Tennessee"
-    },
-    {
-      "type": "text",
-      "id": "headline",
-      "label": "Headline",
-      "default": "Welcome the fall season with a custom display."
-    },
-    {
-      "type": "header",
-      "content": "Waitlist form"
-    },
-    {
-      "type": "text",
-      "id": "form_title",
-      "label": "Form title",
-      "default": "Add Your Name"
-    },
-    {
-      "type": "text",
-      "id": "form_desc",
-      "label": "Form description",
-      "default": "We'll reach out in mid-August when ordering opens. No payment now."
-    },
-    {
-      "type": "text",
-      "id": "form_success_title",
-      "label": "Success title",
-      "default": "You're on the list."
-    },
-    {
-      "type": "textarea",
-      "id": "form_success_body",
-      "label": "Success body",
-      "default": "We'll be in touch in mid-August when ordering opens. No payment until then."
-    }
-  ],
-  "blocks": [
-    { "type": "@app" },
-    {
-      "type": "step",
-      "name": "Step",
-      "settings": [
-        {
-          "type": "textarea",
-          "id": "text",
-          "label": "Step text",
-          "default": "Step description."
-        }
-      ]
-    }
-  ],
+  "settings": [],
   "presets": [
-    {
-      "name": "CTA — Dark",
-      "blocks": [
-        {
-          "type": "step",
-          "settings": {
-            "text": "Add your name — we'll reach out when ordering opens in mid-August"
-          }
-        },
-        {
-          "type": "step",
-          "settings": {
-            "text": "If you secure a spot, we'll confirm your delivery window and details"
-          }
-        },
-        {
-          "type": "step",
-          "settings": {
-            "text": "On your week, our designer arrives and installs your bespoke display in person"
-          }
-        }
-      ]
-    }
+    { "name": "CTA — Dark" }
   ]
 }
 {% endschema %}
