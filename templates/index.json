@@ -213,38 +213,6 @@
         "form_success_body": "We'll be in touch in mid-August when ordering opens. No payment until then."
       }
     },
-    "gallery": {
-      "type": "gallery",
-      "blocks": {
-        "slide-1": {
-          "type": "photo",
-          "settings": {
-            "image": "shopify://shop_images/example_3.png",
-            "location": "Franklin, TN"
-          }
-        },
-        "slide-2": {
-          "type": "photo",
-          "settings": {
-            "image": "shopify://shop_images/example_2.png",
-            "location": "Brentwood, TN"
-          }
-        },
-        "slide-3": {
-          "type": "photo",
-          "settings": {
-            "image": "shopify://shop_images/example_4.png",
-            "location": "Belle Meade, TN"
-          }
-        }
-      },
-      "block_order": [
-        "slide-1",
-        "slide-2",
-        "slide-3"
-      ],
-      "settings": {}
-    },
     "season-cards": {
       "type": "season-cards",
       "blocks": {
@@ -294,7 +262,6 @@
     "how-it-works",
     "packages-grid",
     "cta-dark",
-    "gallery",
     "season-cards",
     "footer"
   ]
