@@ -1,0 +1,116 @@
+<section class="mtw-section mtw-cart">
+  <div class="mtw-container mtw-cart__container">
+
+    <div class="mtw-section-header mtw-cart__header">
+      <span class="mtw-mono mtw-eyebrow mtw-eyebrow--primary">Your order</span>
+      <h1 class="mtw-h2">Review &amp; checkout</h1>
+    </div>
+
+    {%- if cart.item_count == 0 -%}
+      <div class="mtw-cart__empty">
+        <p class="mtw-body-sm mtw-text-muted">Your cart is empty.</p>
+        <a href="/pages/fall" class="mtw-btn mtw-btn--primary" style="margin-top:1.5rem;display:inline-flex">Browse packages →</a>
+      </div>
+
+    {%- else -%}
+      <div class="mtw-cart__layout">
+
+        <!-- Line items -->
+        <div class="mtw-cart__items">
+          {%- for item in cart.items -%}
+            <div class="mtw-cart__item">
+              {%- if item.image -%}
+                <img
+                  src="{{ item.image | image_url: width: 160 }}"
+                  alt="{{ item.title | escape }}"
+                  class="mtw-cart__item-img"
+                  loading="lazy"
+                >
+              {%- endif -%}
+
+              <div class="mtw-cart__item-body">
+                <p class="mtw-cart__item-title">{{ item.product_title }}</p>
+                {%- unless item.variant_title == 'Default Title' or item.variant_title == blank -%}
+                  <p class="mtw-cart__item-variant">{{ item.variant_title }}</p>
+                {%- endunless -%}
+
+                {%- if item.properties.size > 0 -%}
+                  <ul class="mtw-cart__item-props">
+                    {%- for p in item.properties -%}
+                      {%- unless p.last == blank -%}
+                        <li><span class="mtw-cart__prop-key">{{ p.first | remove: 'Add-on: ' }}:</span> {{ p.last }}</li>
+                      {%- endunless -%}
+                    {%- endfor -%}
+                  </ul>
+                {%- endif -%}
+
+                <button
+                  class="mtw-cart__remove"
+                  data-key="{{ item.key }}"
+                  aria-label="Remove {{ item.product_title | escape }}"
+                >
+                  Remove
+                </button>
+              </div>
+
+              <p class="mtw-cart__item-price">{{ item.final_line_price | money }}</p>
+            </div>
+          {%- endfor -%}
+        </div>
+
+        <!-- Summary -->
+        <aside class="mtw-cart__summary">
+          <div class="mtw-cart__summary-inner">
+            <p class="mtw-mono mtw-eyebrow mtw-eyebrow--primary" style="margin-bottom:1.25rem">Order summary</p>
+
+            <div class="mtw-cart__totals">
+              {%- for item in cart.items -%}
+                <div class="mtw-cart__total-row">
+                  <span>{{ item.product_title }}</span>
+                  <span>{{ item.final_line_price | money }}</span>
+                </div>
+              {%- endfor -%}
+              <div class="mtw-divider-dashed" style="margin-block:1rem"></div>
+              <div class="mtw-cart__total-row mtw-cart__total-row--grand">
+                <span>Total</span>
+                <span>{{ cart.total_price | money }}</span>
+              </div>
+            </div>
+
+            <a href="/checkout" class="mtw-btn mtw-btn--primary mtw-btn--full" style="margin-top:1.75rem">
+              Proceed to checkout →
+            </a>
+            <p class="mtw-text-muted" style="font-size:0.78rem;text-align:center;margin-top:0.75rem;font-style:italic">
+              Secure checkout powered by Shopify
+            </p>
+          </div>
+        </aside>
+
+      </div>
+    {%- endif -%}
+
+  </div>
+</section>
+
+<script>
+  document.querySelectorAll('.mtw-cart__remove').forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      var key = btn.dataset.key;
+      fetch('/cart/change.js', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ id: key, quantity: 0 })
+      }).then(function() {
+        window.location.reload();
+      });
+    });
+  });
+</script>
+
+{% schema %}
+{
+  "name": "Cart",
+  "settings": [],
+  "presets": [{ "name": "Cart" }]
+}
+{% endschema %}

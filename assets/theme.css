@@ -1189,6 +1189,135 @@ button { cursor: pointer; background: none; border: none; }
   margin-top: 0.25rem;
 }
 
+/* ── Cart icon ────────────────────────────────────────── */
+.mtw-header__cart {
+  position: relative;
+  display: flex;
+  align-items: center;
+  color: var(--mtw-text);
+  margin-left: 0.75rem;
+  flex-shrink: 0;
+}
+.mtw-header__cart:hover { color: var(--mtw-accent); }
+.mtw-header__cart-badge {
+  position: absolute;
+  top: -6px;
+  right: -8px;
+  background: var(--mtw-accent);
+  color: #fff;
+  font-size: 0.6rem;
+  font-family: var(--mtw-font-mono);
+  font-weight: 700;
+  line-height: 1;
+  padding: 2px 5px;
+  border-radius: 99px;
+  min-width: 16px;
+  text-align: center;
+}
+
+/* ── Cart page ────────────────────────────────────────── */
+.mtw-cart__container { max-width: 960px; }
+.mtw-cart__header { margin-bottom: 3rem; }
+.mtw-cart__empty { text-align: center; padding-block: 4rem; }
+
+.mtw-cart__layout {
+  display: grid;
+  grid-template-columns: 1fr 340px;
+  gap: 3rem;
+  align-items: start;
+}
+@media (max-width: 720px) {
+  .mtw-cart__layout { grid-template-columns: 1fr; }
+}
+
+.mtw-cart__items { display: flex; flex-direction: column; gap: 1.5rem; }
+
+.mtw-cart__item {
+  display: grid;
+  grid-template-columns: 80px 1fr auto;
+  gap: 1.25rem;
+  align-items: start;
+  padding-bottom: 1.5rem;
+  border-bottom: 1px solid var(--mtw-border);
+}
+.mtw-cart__item-img {
+  width: 80px;
+  height: 80px;
+  object-fit: cover;
+  border-radius: 6px;
+  background: var(--mtw-card-bg);
+}
+.mtw-cart__item-title {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--mtw-text);
+  margin-bottom: 0.2rem;
+}
+.mtw-cart__item-variant {
+  font-size: 0.82rem;
+  color: var(--mtw-text-muted);
+  margin-bottom: 0.5rem;
+}
+.mtw-cart__item-props {
+  list-style: none;
+  margin: 0.4rem 0 0.75rem;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+.mtw-cart__item-props li {
+  font-size: 0.8rem;
+  color: var(--mtw-text-muted);
+}
+.mtw-cart__prop-key {
+  font-family: var(--mtw-font-mono);
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--mtw-text);
+}
+.mtw-cart__remove {
+  background: none;
+  border: none;
+  font-size: 0.78rem;
+  color: var(--mtw-text-muted);
+  cursor: pointer;
+  padding: 0;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+.mtw-cart__remove:hover { color: var(--mtw-text); }
+.mtw-cart__item-price {
+  font-family: var(--mtw-font-mono);
+  font-size: 0.9rem;
+  color: var(--mtw-text);
+  white-space: nowrap;
+}
+
+.mtw-cart__summary {
+  position: sticky;
+  top: 6rem;
+}
+.mtw-cart__summary-inner {
+  background: var(--mtw-card-bg, #faf9f7);
+  border: 1.5px solid var(--mtw-border);
+  border-radius: 10px;
+  padding: 1.75rem;
+}
+.mtw-cart__totals { display: flex; flex-direction: column; gap: 0.6rem; }
+.mtw-cart__total-row {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.88rem;
+  color: var(--mtw-text-muted);
+}
+.mtw-cart__total-row--grand {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--mtw-text);
+}
+
 /* ── Removal week picker ──────────────────────────────── */
 .mtw-removal-week {
   margin-top: 0.75rem;
