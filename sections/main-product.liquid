@@ -133,7 +133,7 @@
                       type="checkbox"
                       name="properties[Add-on: {{ block.settings.name }}]"
                       value="{{ block.settings.price }}"
-                      class="mtw-addon__check{% if block.settings.is_removal %} mtw-addon__check--removal{% endif %}"
+                      class="mtw-addon__check{% if block.settings.is_removal or block.settings.name contains 'Removal' or block.settings.name contains 'removal' %} mtw-addon__check--removal{% endif %}"
                     >
                     <span class="mtw-addon__box"></span>
                     <span class="mtw-addon__text">
@@ -146,7 +146,7 @@
                       {%- endif -%}
                     </span>
                   </label>
-                  {%- if block.settings.is_removal -%}
+                  {%- if block.settings.is_removal or block.settings.name contains 'Removal' or block.settings.name contains 'removal' -%}
                     <div class="mtw-removal-week" style="display:none">
                       <p class="mtw-removal-week__label">Choose your removal week</p>
                       <select name="properties[Removal week]" class="mtw-product__select" disabled>
