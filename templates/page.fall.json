@@ -230,7 +230,7 @@
     "cta_dark_mHgAa3": {
       "type": "cta-dark",
       "blocks": {
-        "forms_inline_Ch8L4h": {
+        "forms_inline_nVTq6J": {
           "type": "shopify://apps/forms/blocks/inline/8744a304-fcb1-4347-b211-bb6b4759a76a",
           "settings": {
             "form_id": "1103400",
@@ -267,7 +267,7 @@
         }
       },
       "block_order": [
-        "forms_inline_Ch8L4h",
+        "forms_inline_nVTq6J",
         "step_mRpGMU",
         "step_fgyAdB",
         "step_rckCz8"
@@ -276,6 +276,9 @@
       "settings": {
         "eyebrow": "Hello Harvest · Tennessee",
         "headline": "Not Sure what fits best?",
+        "cta_body": "Not sure which package fits your space? Send our design team a photo of your entryway and we'll point you to the best fit.",
+        "cta_button_text": "Send us a photo",
+        "cta_button_url": "",
         "form_title": "Add Your Name",
         "form_desc": "We'll reach out in mid-August when ordering opens. No payment now.",
         "form_success_title": "You're on the list.",
