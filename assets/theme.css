@@ -1189,6 +1189,37 @@ button { cursor: pointer; background: none; border: none; }
   margin-top: 0.25rem;
 }
 
+/* ── Removal week picker ──────────────────────────────── */
+.mtw-removal-week {
+  margin-top: 0.75rem;
+  padding: 0.75rem 1rem;
+  background: var(--mtw-card-bg, #faf9f7);
+  border: 1.5px solid var(--mtw-border);
+  border-radius: 6px;
+}
+.mtw-removal-week__label {
+  font-size: 0.8rem;
+  font-family: var(--mtw-font-mono);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--mtw-text-muted);
+  margin-bottom: 0.5rem;
+}
+.mtw-product__select {
+  width: 100%;
+  border: 1.5px solid var(--mtw-border);
+  border-radius: 6px;
+  padding: 0.65rem 2.5rem 0.65rem 1rem;
+  font-size: 0.9rem;
+  color: var(--mtw-text);
+  font-family: inherit;
+  background: var(--mtw-bg) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23888' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E") no-repeat right 1rem center;
+  appearance: none;
+  cursor: pointer;
+  transition: border-color 0.15s;
+}
+.mtw-product__select:focus { outline: none; border-color: var(--mtw-accent); }
+
 /* ── Install Week ─────────────────────────────────────── */
 .mtw-install-week { padding-block: 5rem; background: var(--mtw-card-bg, #faf9f7); }
 

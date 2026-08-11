@@ -127,24 +127,38 @@
             <p class="mtw-product__label">Customize your order <span class="mtw-product__optional">(optional)</span></p>
             <div class="mtw-product__addons">
               {%- for block in addon_blocks -%}
-                <label class="mtw-addon" {{ block.shopify_attributes }}>
-                  <input
-                    type="checkbox"
-                    name="properties[Add-on: {{ block.settings.name }}]"
-                    value="{{ block.settings.price }}"
-                    class="mtw-addon__check"
-                  >
-                  <span class="mtw-addon__box"></span>
-                  <span class="mtw-addon__text">
-                    {{ block.settings.name }}
-                    {%- if block.settings.price != blank -%}
-                      <span class="mtw-addon__price">+ {{ block.settings.price }}</span>
-                    {%- endif -%}
-                    {%- if block.settings.note != blank -%}
-                      <span class="mtw-addon__note">{{ block.settings.note }}</span>
-                    {%- endif -%}
-                  </span>
-                </label>
+                <div class="mtw-addon-wrap" {{ block.shopify_attributes }}>
+                  <label class="mtw-addon">
+                    <input
+                      type="checkbox"
+                      name="properties[Add-on: {{ block.settings.name }}]"
+                      value="{{ block.settings.price }}"
+                      class="mtw-addon__check{% if block.settings.is_removal %} mtw-addon__check--removal{% endif %}"
+                    >
+                    <span class="mtw-addon__box"></span>
+                    <span class="mtw-addon__text">
+                      {{ block.settings.name }}
+                      {%- if block.settings.price != blank -%}
+                        <span class="mtw-addon__price">+ {{ block.settings.price }}</span>
+                      {%- endif -%}
+                      {%- if block.settings.note != blank -%}
+                        <span class="mtw-addon__note">{{ block.settings.note }}</span>
+                      {%- endif -%}
+                    </span>
+                  </label>
+                  {%- if block.settings.is_removal -%}
+                    <div class="mtw-removal-week" style="display:none">
+                      <p class="mtw-removal-week__label">Choose your removal week</p>
+                      <select name="properties[Removal week]" class="mtw-product__select" disabled>
+                        <option value="">Select a week…</option>
+                        <option value="Week of Nov 9">Week of Nov 9</option>
+                        <option value="Week of Nov 16">Week of Nov 16</option>
+                        <option value="Week of Nov 23">Week of Nov 23</option>
+                        <option value="Week of Nov 30">Week of Nov 30</option>
+                      </select>
+                    </div>
+                  {%- endif -%}
+                </div>
               {%- endfor -%}
             </div>
           </div>
@@ -250,6 +264,21 @@
       }
     });
   })();
+
+  // Removal week picker
+  (function() {
+    document.querySelectorAll('.mtw-addon__check--removal').forEach(function(cb) {
+      var wrap   = cb.closest('.mtw-addon-wrap');
+      var picker = wrap && wrap.querySelector('.mtw-removal-week');
+      var sel    = picker && picker.querySelector('select');
+      if (!picker || !sel) return;
+      cb.addEventListener('change', function() {
+        picker.style.display = cb.checked ? 'block' : 'none';
+        sel.disabled = !cb.checked;
+        if (!cb.checked) sel.value = '';
+      });
+    });
+  })();
 </script>
 
 {% schema %}
@@ -315,6 +344,12 @@
           "type": "text",
           "id": "note",
           "label": "Short note (optional)"
+        },
+        {
+          "type": "checkbox",
+          "id": "is_removal",
+          "label": "Show removal week picker when selected",
+          "default": false
         }
       ]
     }
