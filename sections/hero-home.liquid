@@ -57,25 +57,55 @@
         <p class="mtw-body-sm mtw-text-muted" style="margin-bottom:1.75rem;line-height:1.65">
           {{ section.settings.hero_body }}
         </p>
-        <a href="#hero-form" class="mtw-btn mtw-btn--primary mtw-btn--full" id="hero-show-form-btn">
-          {{ section.settings.hero_cta_text }}
-          <svg width="14" height="14" viewBox="0 0 14 14" fill="none" style="margin-left:0.5rem;flex-shrink:0">
-            <path d="M1 7h12M8 2l5 5-5 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-          </svg>
-        </a>
+
+        {%- if section.settings.hero_cta_url != blank -%}
+          {%- comment -%} Ordering mode: CTA links directly to a page section {%- endcomment -%}
+          <a href="{{ section.settings.hero_cta_url }}" class="mtw-btn mtw-btn--primary mtw-btn--full">
+            {{ section.settings.hero_cta_text }}
+            <svg width="14" height="14" viewBox="0 0 14 14" fill="none" style="margin-left:0.5rem;flex-shrink:0">
+              <path d="M1 7h12M8 2l5 5-5 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </a>
+        {%- else -%}
+          {%- comment -%} Waitlist mode: CTA reveals the inline form {%- endcomment -%}
+          <a href="#hero-form" class="mtw-btn mtw-btn--primary mtw-btn--full" id="hero-show-form-btn">
+            {{ section.settings.hero_cta_text }}
+            <svg width="14" height="14" viewBox="0 0 14 14" fill="none" style="margin-left:0.5rem;flex-shrink:0">
+              <path d="M1 7h12M8 2l5 5-5 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </a>
+        {%- endif -%}
+
         <p class="mtw-text-muted" style="font-family:var(--mtw-font-sans);font-style:italic;font-size:0.8rem;text-align:center;margin-top:0.75rem">
           {{ section.settings.hero_cta_note }}
         </p>
       </div>
 
-      <!-- Inline form (hidden by default) — Shopify Forms app block renders here -->
+      {%- comment -%} Inline form — rendered when CTA URL is blank {%- endcomment -%}
+      {%- assign has_form_id = false -%}
+      {%- if section.settings.form_id != blank -%}{%- assign has_form_id = true -%}{%- endif -%}
+      {%- assign has_app_block = false -%}
+      {%- for block in section.blocks -%}
+        {%- if block.type == '@app' -%}{%- assign has_app_block = true -%}{%- endif -%}
+      {%- endfor -%}
+      {%- if has_form_id or has_app_block -%}
       <div id="hero-form" class="mtw-hero__card-form" style="display:none">
-        {%- for block in section.blocks -%}
-          {%- if block.type == '@app' -%}
-            {% render block %}
-          {%- endif -%}
-        {%- endfor -%}
+        {%- if has_form_id -%}
+          <div
+            id="hero-forms-embed-{{ section.id }}"
+            data-shopify-feature="forms"
+            data-form-id="{{ section.settings.form_id }}"
+          ></div>
+          <script src="https://cdn.shopify.com/shopifycloud/forms/assets/embed.js" defer></script>
+        {%- else -%}
+          {%- for block in section.blocks -%}
+            {%- if block.type == '@app' -%}
+              {% render block %}
+            {%- endif -%}
+          {%- endfor -%}
+        {%- endif -%}
       </div>
+      {%- endif -%}
     </div>
   </div>
 </section>
@@ -177,13 +207,24 @@
     },
     {
       "type": "text",
+      "id": "hero_cta_url",
+      "label": "CTA link URL (leave blank to show waitlist form)"
+    },
+    {
+      "type": "text",
       "id": "hero_cta_note",
       "label": "Below-button note",
       "default": "We'll be in touch in mid-August when ordering opens."
     },
     {
       "type": "header",
-      "content": "Waitlist form"
+      "content": "Inline form"
+    },
+    {
+      "type": "text",
+      "id": "form_id",
+      "label": "Shopify Forms — Form ID",
+      "info": "Paste the form ID from your Shopify Forms app. The form will appear when a visitor clicks the CTA button. Leave blank to use an app block instead."
     },
     {
       "type": "text",
