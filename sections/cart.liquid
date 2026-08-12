@@ -34,14 +34,53 @@
                   <p class="mtw-cart__item-variant">{{ item.variant_title }}</p>
                 {%- endunless -%}
 
-                {%- if item.properties.size > 0 -%}
-                  <ul class="mtw-cart__item-props">
-                    {%- for p in item.properties -%}
-                      {%- unless p.last == blank -%}
-                        <li><span class="mtw-cart__prop-key">{{ p.first | remove: 'Add-on: ' }}:</span> {{ p.last }}</li>
-                      {%- endunless -%}
-                    {%- endfor -%}
-                  </ul>
+                {%- comment -%} Order details: install week, zip, notes {%- endcomment -%}
+                {%- assign detail_keys = 'Install week,Zip code,Notes' | split: ',' -%}
+                <ul class="mtw-cart__item-props">
+                  {%- for p in item.properties -%}
+                    {%- unless p.last == blank -%}
+                      {%- if detail_keys contains p.first -%}
+                        <li>
+                          <span class="mtw-cart__prop-key">{{ p.first }}:</span> {{ p.last }}
+                        </li>
+                      {%- endif -%}
+                    {%- endunless -%}
+                  {%- endfor -%}
+                </ul>
+
+                {%- comment -%} Customizations: any Add-on or Removal week {%- endcomment -%}
+                {%- assign has_customizations = false -%}
+                {%- for p in item.properties -%}
+                  {%- unless p.last == blank -%}
+                    {%- if p.first contains 'Add-on' or p.first == 'Removal week' -%}
+                      {%- assign has_customizations = true -%}
+                    {%- endif -%}
+                  {%- endunless -%}
+                {%- endfor -%}
+
+                {%- if has_customizations -%}
+                  <div class="mtw-cart__customizations">
+                    <p class="mtw-cart__customizations-label">Customizations</p>
+                    <ul class="mtw-cart__item-props">
+                      {%- for p in item.properties -%}
+                        {%- unless p.last == blank -%}
+                          {%- if p.first contains 'Add-on' -%}
+                            <li>
+                              <span class="mtw-cart__prop-key">{{ p.first | remove: 'Add-on: ' }}</span>
+                              <span class="mtw-cart__addon-price">{{ p.last }}</span>
+                            </li>
+                          {%- elsif p.first == 'Removal week' -%}
+                            <li>
+                              <span class="mtw-cart__prop-key">Removal week:</span> {{ p.last }}
+                            </li>
+                          {%- endif -%}
+                        {%- endunless -%}
+                      {%- endfor -%}
+                    </ul>
+                    <p class="mtw-cart__delivery-note">
+                      We'll reach out to confirm a date and time that works best.
+                    </p>
+                  </div>
                 {%- endif -%}
 
                 <button

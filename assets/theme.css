@@ -1277,6 +1277,37 @@ button { cursor: pointer; background: none; border: none; }
   letter-spacing: 0.05em;
   color: var(--mtw-text);
 }
+.mtw-cart__customizations {
+  margin-top: 1rem;
+  padding: 0.85rem 1rem;
+  background: var(--mtw-card-bg, #faf9f7);
+  border: 1.5px solid var(--mtw-border);
+  border-radius: 6px;
+}
+.mtw-cart__customizations-label {
+  font-family: var(--mtw-font-mono);
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--mtw-text-muted);
+  margin-bottom: 0.6rem;
+}
+.mtw-cart__addon-price {
+  font-family: var(--mtw-font-mono);
+  font-size: 0.78rem;
+  color: var(--mtw-text-muted);
+  margin-left: 0.4rem;
+}
+.mtw-cart__delivery-note {
+  font-size: 0.78rem;
+  font-style: italic;
+  color: var(--mtw-text-muted);
+  margin-top: 0.65rem;
+  padding-top: 0.65rem;
+  border-top: 1px solid var(--mtw-border);
+  line-height: 1.5;
+}
+
 .mtw-cart__remove {
   background: none;
   border: none;
