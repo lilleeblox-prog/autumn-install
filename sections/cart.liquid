@@ -87,7 +87,6 @@
                             {%- assign addon_name = p.first | remove: 'Add-on: ' -%}
                             <div class="mtw-cart__addon-row">
                               <span class="mtw-cart__addon-name">{{ addon_name }}</span>
-                              <span class="mtw-cart__addon-price">+ {{ p.last }}</span>
                             </div>
                             {%- if addon_name == 'Removal' and removal_week != blank -%}
                               <div class="mtw-cart__addon-sub">
@@ -205,8 +204,6 @@
               <span>{{ cart.total_price | money }}</span>
             </div>
 
-            <p class="mtw-cart__summary-note">Add-on pricing confirmed at scheduling.</p>
-
             <button type="submit" form="mtw-addr-form" class="mtw-btn mtw-btn--primary mtw-btn--full" style="margin-top:1.5rem">
               Proceed to checkout →
             </button>
@@ -215,14 +212,6 @@
               <div class="mtw-cart__trust-item">
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
                 <span>Secure Shopify checkout</span>
-              </div>
-              <div class="mtw-cart__trust-item">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.81 19.79 19.79 0 01.08 1.22 2 2 0 012.05 0h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.09 7.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 14.92z"/></svg>
-                <span>We'll call to confirm within 24 hrs</span>
-              </div>
-              <div class="mtw-cart__trust-item">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg>
-                <span>No surprise fees — all-inclusive</span>
               </div>
             </div>
 
