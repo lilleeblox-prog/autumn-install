@@ -204,7 +204,7 @@
                 <span>{{ cart.total_price | money }}</span>
               </div>
 
-              <button type="submit" form="mtw-addr-form" class="mtw-btn mtw-btn--primary mtw-btn--full" style="margin-top:1.5rem">
+              <button type="button" id="mtw-checkout-btn" class="mtw-btn mtw-btn--primary mtw-btn--full" style="margin-top:1.5rem">
                 Proceed to checkout →
               </button>
 
@@ -241,19 +241,20 @@
     });
   });
 
-  /* ── Address validation before checkout ── */
-  var addrForm = document.getElementById('mtw-addr-form');
-  if (addrForm) {
-    addrForm.addEventListener('submit', function(e) {
+  /* ── Checkout button — validate, save attributes, then redirect ── */
+  var checkoutBtn = document.getElementById('mtw-checkout-btn');
+  if (checkoutBtn) {
+    checkoutBtn.addEventListener('click', function() {
       var street   = document.getElementById('addr-street');
       var city     = document.getElementById('addr-city');
       var state    = document.getElementById('addr-state');
       var zip      = document.getElementById('addr-zip');
+      var apt      = document.getElementById('addr-apt');
       var err      = document.getElementById('mtw-addr-error');
       var required = [street, city, state, zip];
       var missing  = required.some(function(f) { return !f || f.value.trim() === ''; });
+
       if (missing) {
-        e.preventDefault();
         err.style.display = 'block';
         required.forEach(function(f) {
           if (f && f.value.trim() === '') {
@@ -266,7 +267,33 @@
           }
         });
         err.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        return;
       }
+
+      checkoutBtn.textContent = 'Redirecting…';
+      checkoutBtn.disabled = true;
+
+      /* Save address as cart attributes, then go to checkout */
+      fetch('/cart/update.js', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          attributes: {
+            'Install address - street': street.value.trim(),
+            'Install address - apt':    apt ? apt.value.trim() : '',
+            'Install address - city':   city.value.trim(),
+            'Install address - state':  state.value.trim().toUpperCase(),
+            'Install address - zip':    zip.value.trim()
+          }
+        })
+      })
+      .then(function() {
+        window.location.href = '/checkout';
+      })
+      .catch(function() {
+        /* On error, go to checkout anyway — attributes are a courtesy */
+        window.location.href = '/checkout';
+      });
     });
   }
 </script>
