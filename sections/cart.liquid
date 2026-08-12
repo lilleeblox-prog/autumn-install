@@ -131,45 +131,142 @@
 
           {%- endfor -%}
 
-          <!-- Service address card -->
-          <form id="mtw-addr-form" action="/cart" method="post">
-          <input type="hidden" name="return_to" value="/checkout">
-          <div class="mtw-cart__address-card">
-            <p class="mtw-mono mtw-eyebrow mtw-eyebrow--primary" style="margin-bottom:1.25rem">Install address</p>
-            <p class="mtw-body-sm mtw-text-muted" style="margin-bottom:1.25rem">Where should we install? This is saved to your order so our team has it on file.</p>
+          <!-- Address + gift cards row -->
+          <div class="mtw-cart__cards-row">
 
-            <div class="mtw-address__row">
-              <div class="mtw-address__field mtw-address__field--full">
-                <label class="mtw-address__label" for="addr-street">Street address</label>
-                <input class="mtw-address__input" id="addr-street" type="text" name="attributes[Install address - street]" placeholder="123 Maple Lane" autocomplete="address-line1" value="{{ cart.attributes['Install address - street'] }}">
+            <!-- Install address card (inside the checkout form) -->
+            <form id="mtw-addr-form" action="/cart" method="post" novalidate>
+              <input type="hidden" name="return_to" value="/checkout">
+              <div class="mtw-cart__address-card">
+                <p class="mtw-mono mtw-eyebrow mtw-eyebrow--primary" style="margin-bottom:1.25rem">Install address</p>
+                <p class="mtw-body-sm mtw-text-muted" style="margin-bottom:1.25rem">Where should we install? Required before checkout.</p>
+
+                <div id="mtw-addr-error" class="mtw-addr__error" style="display:none">Please fill in your street address, city, state, and ZIP before continuing.</div>
+
+                <div class="mtw-address__row">
+                  <div class="mtw-address__field mtw-address__field--full">
+                    <label class="mtw-address__label" for="addr-street">Street address</label>
+                    <input class="mtw-address__input" id="addr-street" type="text" name="attributes[Install address - street]" placeholder="123 Maple Lane" autocomplete="address-line1" value="{{ cart.attributes['Install address - street'] }}">
+                  </div>
+                </div>
+
+                <div class="mtw-address__row">
+                  <div class="mtw-address__field mtw-address__field--full">
+                    <label class="mtw-address__label" for="addr-apt">Apt / Suite <span class="mtw-text-muted">(optional)</span></label>
+                    <input class="mtw-address__input" id="addr-apt" type="text" name="attributes[Install address - apt]" placeholder="Unit 4B" autocomplete="address-line2" value="{{ cart.attributes['Install address - apt'] }}">
+                  </div>
+                </div>
+
+                <div class="mtw-address__row mtw-address__row--cols">
+                  <div class="mtw-address__field">
+                    <label class="mtw-address__label" for="addr-city">City</label>
+                    <input class="mtw-address__input" id="addr-city" type="text" name="attributes[Install address - city]" placeholder="Chicago" autocomplete="address-level2" value="{{ cart.attributes['Install address - city'] }}">
+                  </div>
+                  <div class="mtw-address__field mtw-address__field--sm">
+                    <label class="mtw-address__label" for="addr-state">State</label>
+                    <input class="mtw-address__input" id="addr-state" type="text" name="attributes[Install address - state]" placeholder="IL" maxlength="2" autocomplete="address-level1" value="{{ cart.attributes['Install address - state'] }}">
+                  </div>
+                  <div class="mtw-address__field mtw-address__field--sm">
+                    <label class="mtw-address__label" for="addr-zip">ZIP</label>
+                    <input class="mtw-address__input" id="addr-zip" type="text" name="attributes[Install address - zip]" placeholder="60614" maxlength="10" autocomplete="postal-code" value="{{ cart.attributes['Install address - zip'] }}">
+                  </div>
+                </div>
+              </div>
+            </form>
+
+            <!-- Gift card -->
+            {%- assign gift_product = section.settings.gift_product -%}
+            <div class="mtw-cart__gift-card">
+              <div class="mtw-cart__gift-header">
+                <svg class="mtw-cart__gift-icon" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 12 20 22 4 22 4 12"/><rect x="2" y="7" width="20" height="5"/><line x1="12" y1="22" x2="12" y2="7"/><path d="M12 7H7.5a2.5 2.5 0 010-5C11 2 12 7 12 7z"/><path d="M12 7h4.5a2.5 2.5 0 000-5C13 2 12 7 12 7z"/></svg>
+                <div>
+                  <p class="mtw-cart__gift-title">Want to gift this to a loved one?</p>
+                  <p class="mtw-cart__gift-sub">10% off + we'll cover the cleanup free.</p>
+                </div>
+              </div>
+
+              {%- if gift_product != blank -%}
+                {%- assign gift_variant = gift_product.selected_or_first_available_variant -%}
+                {%- assign gift_original = gift_variant.price -%}
+                {%- assign gift_discounted = gift_original | times: 9 | divided_by: 10 -%}
+                <div class="mtw-cart__gift-pricing">
+                  <span class="mtw-cart__gift-price-original">{{ gift_original | money }}</span>
+                  <span class="mtw-cart__gift-price-sale">{{ gift_discounted | money }}</span>
+                  <span class="mtw-cart__gift-badge">10% off + removal included</span>
+                </div>
+              {%- endif -%}
+
+              <button type="button" class="mtw-btn mtw-btn--outline mtw-cart__gift-toggle" id="mtw-gift-toggle" aria-expanded="false">
+                <span class="mtw-gift-toggle__label">Add a gift package</span>
+                <svg class="mtw-gift-toggle__chevron" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+              </button>
+
+              <div id="mtw-gift-panel" class="mtw-cart__gift-panel" hidden>
+
+                <div class="mtw-gift__section-label">Recipient's install address</div>
+
+                <div class="mtw-address__row">
+                  <div class="mtw-address__field mtw-address__field--full">
+                    <label class="mtw-address__label" for="gift-street">Street address</label>
+                    <input class="mtw-address__input" id="gift-street" type="text" placeholder="456 Oak Avenue" autocomplete="off">
+                  </div>
+                </div>
+
+                <div class="mtw-address__row">
+                  <div class="mtw-address__field mtw-address__field--full">
+                    <label class="mtw-address__label" for="gift-apt">Apt / Suite <span class="mtw-text-muted">(optional)</span></label>
+                    <input class="mtw-address__input" id="gift-apt" type="text" placeholder="Unit 2A" autocomplete="off">
+                  </div>
+                </div>
+
+                <div class="mtw-address__row mtw-address__row--cols">
+                  <div class="mtw-address__field">
+                    <label class="mtw-address__label" for="gift-city">City</label>
+                    <input class="mtw-address__input" id="gift-city" type="text" placeholder="Chicago" autocomplete="off">
+                  </div>
+                  <div class="mtw-address__field mtw-address__field--sm">
+                    <label class="mtw-address__label" for="gift-state">State</label>
+                    <input class="mtw-address__input" id="gift-state" type="text" placeholder="IL" maxlength="2" autocomplete="off">
+                  </div>
+                  <div class="mtw-address__field mtw-address__field--sm">
+                    <label class="mtw-address__label" for="gift-zip">ZIP</label>
+                    <input class="mtw-address__input" id="gift-zip" type="text" placeholder="60614" maxlength="10" autocomplete="off">
+                  </div>
+                </div>
+
+                <div class="mtw-gift__section-label" style="margin-top:1.25rem">Handwritten note</div>
+                <div class="mtw-address__row">
+                  <div class="mtw-address__field mtw-address__field--full">
+                    <label class="mtw-address__label" for="gift-note">What would you like the note to say?</label>
+                    <textarea class="mtw-address__input mtw-gift__note-textarea" id="gift-note" placeholder="Wishing you a warm and wonderful fall season…" rows="3"></textarea>
+                  </div>
+                </div>
+
+                <div id="mtw-gift-error" class="mtw-addr__error" style="display:none">Please enter the recipient's street address, city, state, and ZIP.</div>
+
+                {%- if gift_product != blank -%}
+                  <button
+                    type="button"
+                    class="mtw-btn mtw-btn--primary mtw-btn--full mtw-cart__gift-add"
+                    data-variant-id="{{ gift_variant.id }}"
+                    data-discounted-price="{{ gift_discounted }}"
+                    style="margin-top:1.25rem"
+                  >
+                    Add gift package — {{ gift_discounted | money }}
+                  </button>
+                {%- else -%}
+                  <p class="mtw-body-sm mtw-text-muted" style="margin-top:1rem;font-style:italic">Gift product not yet configured in the theme editor.</p>
+                {%- endif -%}
+
               </div>
             </div>
+            <!-- /gift card -->
 
-            <div class="mtw-address__row">
-              <div class="mtw-address__field mtw-address__field--full">
-                <label class="mtw-address__label" for="addr-apt">Apt / Suite <span class="mtw-text-muted">(optional)</span></label>
-                <input class="mtw-address__input" id="addr-apt" type="text" name="attributes[Install address - apt]" placeholder="Unit 4B" autocomplete="address-line2" value="{{ cart.attributes['Install address - apt'] }}">
-              </div>
-            </div>
-
-            <div class="mtw-address__row mtw-address__row--cols">
-              <div class="mtw-address__field">
-                <label class="mtw-address__label" for="addr-city">City</label>
-                <input class="mtw-address__input" id="addr-city" type="text" name="attributes[Install address - city]" placeholder="Chicago" autocomplete="address-level2" value="{{ cart.attributes['Install address - city'] }}">
-              </div>
-              <div class="mtw-address__field mtw-address__field--sm">
-                <label class="mtw-address__label" for="addr-state">State</label>
-                <input class="mtw-address__input" id="addr-state" type="text" name="attributes[Install address - state]" placeholder="IL" maxlength="2" autocomplete="address-level1" value="{{ cart.attributes['Install address - state'] }}">
-              </div>
-              <div class="mtw-address__field mtw-address__field--sm">
-                <label class="mtw-address__label" for="addr-zip">ZIP</label>
-                <input class="mtw-address__input" id="addr-zip" type="text" name="attributes[Install address - zip]" placeholder="60614" maxlength="10" autocomplete="postal-code" value="{{ cart.attributes['Install address - zip'] }}">
-              </div>
-            </div>
           </div>
-          </form>
+          <!-- /cards-row -->
 
         </div>
+        <!-- /items -->
 
         <!-- Summary sidebar -->
         <aside class="mtw-cart__summary">
@@ -225,6 +322,7 @@
 </section>
 
 <script>
+  /* ── Remove item ── */
   document.querySelectorAll('.mtw-cart__remove').forEach(function(btn) {
     btn.addEventListener('click', function() {
       btn.textContent = 'Removing…';
@@ -236,12 +334,123 @@
       }).then(function() { window.location.reload(); });
     });
   });
+
+  /* ── Address validation before checkout ── */
+  var addrForm = document.getElementById('mtw-addr-form');
+  if (addrForm) {
+    addrForm.addEventListener('submit', function(e) {
+      var street = document.getElementById('addr-street');
+      var city   = document.getElementById('addr-city');
+      var state  = document.getElementById('addr-state');
+      var zip    = document.getElementById('addr-zip');
+      var err    = document.getElementById('mtw-addr-error');
+      var required = [street, city, state, zip];
+      var missing  = required.some(function(f) { return !f || f.value.trim() === ''; });
+      if (missing) {
+        e.preventDefault();
+        err.style.display = 'block';
+        // Highlight empty fields
+        required.forEach(function(f) {
+          if (f && f.value.trim() === '') {
+            f.classList.add('mtw-address__input--error');
+            f.addEventListener('input', function() {
+              f.classList.remove('mtw-address__input--error');
+              var stillMissing = required.some(function(g) { return !g || g.value.trim() === ''; });
+              if (!stillMissing) err.style.display = 'none';
+            }, { once: true });
+          }
+        });
+        err.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }
+    });
+  }
+
+  /* ── Gift panel toggle ── */
+  var giftToggle = document.getElementById('mtw-gift-toggle');
+  var giftPanel  = document.getElementById('mtw-gift-panel');
+  if (giftToggle && giftPanel) {
+    giftToggle.addEventListener('click', function() {
+      var open = giftPanel.hasAttribute('hidden');
+      if (open) {
+        giftPanel.removeAttribute('hidden');
+        giftToggle.setAttribute('aria-expanded', 'true');
+        giftToggle.querySelector('.mtw-gift-toggle__label').textContent = 'Never mind';
+        giftToggle.querySelector('.mtw-gift-toggle__chevron').style.transform = 'rotate(180deg)';
+      } else {
+        giftPanel.setAttribute('hidden', '');
+        giftToggle.setAttribute('aria-expanded', 'false');
+        giftToggle.querySelector('.mtw-gift-toggle__label').textContent = 'Add a gift package';
+        giftToggle.querySelector('.mtw-gift-toggle__chevron').style.transform = '';
+      }
+    });
+  }
+
+  /* ── Gift add to cart ── */
+  var giftAddBtn = document.querySelector('.mtw-cart__gift-add');
+  if (giftAddBtn) {
+    giftAddBtn.addEventListener('click', function() {
+      var street = document.getElementById('gift-street');
+      var city   = document.getElementById('gift-city');
+      var state  = document.getElementById('gift-state');
+      var zip    = document.getElementById('gift-zip');
+      var apt    = document.getElementById('gift-apt');
+      var note   = document.getElementById('gift-note');
+      var err    = document.getElementById('mtw-gift-error');
+      var required = [street, city, state, zip];
+      var missing  = required.some(function(f) { return !f || f.value.trim() === ''; });
+      if (missing) {
+        err.style.display = 'block';
+        required.forEach(function(f) {
+          if (f && f.value.trim() === '') f.classList.add('mtw-address__input--error');
+        });
+        err.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        return;
+      }
+      err.style.display = 'none';
+      giftAddBtn.textContent = 'Adding…';
+      giftAddBtn.disabled = true;
+
+      var addrLine = [
+        street.value.trim(),
+        apt && apt.value.trim() ? apt.value.trim() : null,
+        city.value.trim() + ', ' + state.value.trim().toUpperCase() + ' ' + zip.value.trim()
+      ].filter(Boolean).join(', ');
+
+      fetch('/cart/add.js', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          id: parseInt(giftAddBtn.dataset.variantId),
+          quantity: 1,
+          properties: {
+            'Gift address': addrLine,
+            'Gift note': note && note.value.trim() ? note.value.trim() : '',
+            'Discount': '10% gift discount',
+            'Removal': 'Waived (gift)'
+          }
+        })
+      })
+      .then(function(r) { return r.json(); })
+      .then(function() { window.location.reload(); })
+      .catch(function() {
+        giftAddBtn.textContent = 'Something went wrong — try again';
+        giftAddBtn.disabled = false;
+      });
+    });
+  }
 </script>
 
 {% schema %}
 {
   "name": "Cart",
-  "settings": [],
+  "settings": [
+    {
+      "type": "product",
+      "id": "gift_product",
+      "label": "Gift package product",
+      "info": "The product added when a customer buys a gift. Set to the Fall Favorite (or equivalent) in the theme editor."
+    }
+  ],
   "presets": [{ "name": "Cart" }]
 }
 {% endschema %}
