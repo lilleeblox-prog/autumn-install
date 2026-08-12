@@ -181,6 +181,8 @@
           </div>
         {%- endif -%}
 
+        <p id="cart-add-error-{{ product.id }}" class="mtw-product__zip-error" style="display:none"></p>
+
         <button type="submit" class="mtw-btn mtw-btn--primary mtw-btn--full mtw-product__submit">
           {{ section.settings.cta_text | default: 'Book this package' }}
         </button>
@@ -259,10 +261,37 @@
     });
 
     form.addEventListener('submit', function(e) {
+      e.preventDefault();
       if (!validate()) {
-        e.preventDefault();
         input.focus();
+        return;
       }
+
+      var btn = form.querySelector('[type="submit"]');
+      var originalText = btn.textContent;
+      btn.textContent = 'Adding…';
+      btn.disabled = true;
+
+      fetch('/cart/add.js', {
+        method: 'POST',
+        body: new FormData(form)
+      })
+      .then(function(res) {
+        return res.json().then(function(data) {
+          if (!res.ok) throw data;
+          return data;
+        });
+      })
+      .then(function() {
+        window.location.href = '/cart';
+      })
+      .catch(function(err) {
+        btn.textContent = originalText;
+        btn.disabled = false;
+        var msg = err.description || err.message || 'Something went wrong. Please try again.';
+        var errEl = document.getElementById('cart-add-error-{{ product.id }}');
+        if (errEl) { errEl.textContent = msg; errEl.style.display = 'block'; }
+      });
     });
   })();
 
