@@ -150,7 +150,7 @@
                   {%- if block.settings.is_removal or block.settings.name contains 'Removal' or block.settings.name contains 'removal' -%}
                     <div class="mtw-removal-week" style="display:none">
                       <p class="mtw-removal-week__label">Choose your removal week</p>
-                      <select name="properties[Removal week]" class="mtw-product__select" disabled>
+                      <select name="properties[Removal week]" class="mtw-product__select" disabled required>
                         <option value="">Select a week…</option>
                         <option value="Week of Nov 9">Week of Nov 9</option>
                         <option value="Week of Nov 16">Week of Nov 16</option>

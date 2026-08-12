@@ -241,59 +241,63 @@
     });
   });
 
-  /* ── Checkout button — validate, save attributes, then redirect ── */
+  /* ── Checkout — validate address, save as cart attributes, redirect ── */
+  /* Handles both button click AND Enter key inside the address form     */
   var checkoutBtn = document.getElementById('mtw-checkout-btn');
-  if (checkoutBtn) {
-    checkoutBtn.addEventListener('click', function() {
-      var street   = document.getElementById('addr-street');
-      var city     = document.getElementById('addr-city');
-      var state    = document.getElementById('addr-state');
-      var zip      = document.getElementById('addr-zip');
-      var apt      = document.getElementById('addr-apt');
-      var err      = document.getElementById('mtw-addr-error');
-      var required = [street, city, state, zip];
-      var missing  = required.some(function(f) { return !f || f.value.trim() === ''; });
+  var addrForm    = document.getElementById('mtw-addr-form');
 
-      if (missing) {
-        err.style.display = 'block';
-        required.forEach(function(f) {
-          if (f && f.value.trim() === '') {
-            f.classList.add('mtw-address__input--error');
-            f.addEventListener('input', function() {
-              f.classList.remove('mtw-address__input--error');
-              var stillMissing = required.some(function(g) { return !g || g.value.trim() === ''; });
-              if (!stillMissing) err.style.display = 'none';
-            }, { once: true });
-          }
-        });
-        err.scrollIntoView({ behavior: 'smooth', block: 'center' });
-        return;
-      }
+  function runCheckout() {
+    var street   = document.getElementById('addr-street');
+    var city     = document.getElementById('addr-city');
+    var state    = document.getElementById('addr-state');
+    var zip      = document.getElementById('addr-zip');
+    var apt      = document.getElementById('addr-apt');
+    var err      = document.getElementById('mtw-addr-error');
+    var required = [street, city, state, zip];
+    var missing  = required.some(function(f) { return !f || f.value.trim() === ''; });
 
-      checkoutBtn.textContent = 'Redirecting…';
-      checkoutBtn.disabled = true;
-
-      /* Save address as cart attributes, then go to checkout */
-      fetch('/cart/update.js', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          attributes: {
-            'Install address - street': street.value.trim(),
-            'Install address - apt':    apt ? apt.value.trim() : '',
-            'Install address - city':   city.value.trim(),
-            'Install address - state':  state.value.trim().toUpperCase(),
-            'Install address - zip':    zip.value.trim()
-          }
-        })
-      })
-      .then(function() {
-        window.location.href = '/checkout';
-      })
-      .catch(function() {
-        /* On error, go to checkout anyway — attributes are a courtesy */
-        window.location.href = '/checkout';
+    if (missing) {
+      err.style.display = 'block';
+      required.forEach(function(f) {
+        if (f && f.value.trim() === '') {
+          f.classList.add('mtw-address__input--error');
+          f.addEventListener('input', function() {
+            f.classList.remove('mtw-address__input--error');
+            var stillMissing = required.some(function(g) { return !g || g.value.trim() === ''; });
+            if (!stillMissing) err.style.display = 'none';
+          }, { once: true });
+        }
       });
+      err.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      return;
+    }
+
+    if (checkoutBtn) { checkoutBtn.textContent = 'Redirecting…'; checkoutBtn.disabled = true; }
+
+    fetch('/cart/update.js', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        attributes: {
+          'Install address - street': street.value.trim(),
+          'Install address - apt':    apt ? apt.value.trim() : '',
+          'Install address - city':   city.value.trim(),
+          'Install address - state':  state.value.trim().toUpperCase(),
+          'Install address - zip':    zip.value.trim()
+        }
+      })
+    })
+    .then(function() { window.location.href = '/checkout'; })
+    .catch(function() { window.location.href = '/checkout'; });
+  }
+
+  if (checkoutBtn) checkoutBtn.addEventListener('click', runCheckout);
+
+  /* Intercept Enter key in address fields so they don't POST the form */
+  if (addrForm) {
+    addrForm.addEventListener('submit', function(e) {
+      e.preventDefault();
+      runCheckout();
     });
   }
 </script>
