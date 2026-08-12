@@ -13,130 +13,175 @@
       </div>
 
     {%- else -%}
-      <div class="mtw-cart__layout">
 
-        <!-- Line items -->
-        <div class="mtw-cart__items">
-          {%- for item in cart.items -%}
+      {%- comment -%} Detect if gift (Fall Favorites) is already in cart {%- endcomment -%}
+      {%- assign gift_in_cart   = false -%}
+      {%- assign gift_item_key  = '' -%}
+      {%- assign gift_product   = all_products['fall-favorites'] -%}
+      {%- if section.settings.gift_product != blank -%}
+        {%- assign gift_product = section.settings.gift_product -%}
+      {%- endif -%}
+      {%- assign gift_variant    = gift_product.selected_or_first_available_variant -%}
+      {%- assign gift_original   = gift_variant.price -%}
+      {%- assign gift_discounted = gift_original | times: 9 | divided_by: 10 -%}
+      {%- for item in cart.items -%}
+        {%- if item.product.handle == 'fall-favorites' or item.product.handle == gift_product.handle -%}
+          {%- assign gift_in_cart  = true -%}
+          {%- assign gift_item_key = item.key -%}
+        {%- endif -%}
+      {%- endfor -%}
 
-            {%- comment -%} Separate properties into groups {%- endcomment -%}
-            {%- assign install_week  = item.properties['Install week'] -%}
-            {%- assign zip_code      = item.properties['Zip code'] -%}
-            {%- assign notes         = item.properties['Notes'] -%}
-            {%- assign removal_week  = item.properties['Removal week'] -%}
+      {%- comment -%} Wrap both card columns in one form so gift address + install address submit together {%- endcomment -%}
+      <form id="mtw-addr-form" action="/cart" method="post" novalidate>
+        <input type="hidden" name="return_to" value="/checkout">
 
-            <div class="mtw-cart__item">
+        <div class="mtw-cart__layout">
 
-              {%- if item.image -%}
-                <img
-                  src="{{ item.image | image_url: width: 200 }}"
-                  alt="{{ item.product_title | escape }}"
-                  class="mtw-cart__item-img"
-                  loading="lazy"
-                >
+          <!-- Line items -->
+          <div class="mtw-cart__items">
+            {%- for item in cart.items -%}
+
+              {%- comment -%} Separate properties into groups {%- endcomment -%}
+              {%- assign install_week = item.properties['Install week'] -%}
+              {%- assign zip_code     = item.properties['Zip code'] -%}
+              {%- assign notes        = item.properties['Notes'] -%}
+              {%- assign removal_week = item.properties['Removal week'] -%}
+              {%- assign is_gift      = false -%}
+              {%- if item.properties['Discount'] contains 'gift' -%}
+                {%- assign is_gift = true -%}
               {%- endif -%}
 
-              <div class="mtw-cart__item-body">
+              <div class="mtw-cart__item">
 
-                <!-- Title + price -->
-                <div class="mtw-cart__item-top">
-                  <div>
-                    <p class="mtw-cart__item-title">{{ item.product_title }}</p>
-                    {%- unless item.variant_title == 'Default Title' or item.variant_title == blank -%}
-                      <p class="mtw-cart__item-variant">{{ item.variant_title }}</p>
-                    {%- endunless -%}
+                {%- if item.image -%}
+                  <img
+                    src="{{ item.image | image_url: width: 200 }}"
+                    alt="{{ item.product_title | escape }}"
+                    class="mtw-cart__item-img"
+                    loading="lazy"
+                  >
+                {%- endif -%}
+
+                <div class="mtw-cart__item-body">
+
+                  <!-- Title + price -->
+                  <div class="mtw-cart__item-top">
+                    <div>
+                      <p class="mtw-cart__item-title">{{ item.product_title }}</p>
+                      {%- if is_gift -%}
+                        <span class="mtw-cart__gift-tag">🎁 Gift — 10% off + removal included</span>
+                      {%- endif -%}
+                      {%- unless item.variant_title == 'Default Title' or item.variant_title == blank -%}
+                        <p class="mtw-cart__item-variant">{{ item.variant_title }}</p>
+                      {%- endunless -%}
+                    </div>
+                    <div class="mtw-cart__item-price-col">
+                      {%- if is_gift -%}
+                        <p class="mtw-cart__item-price mtw-cart__item-price--original">{{ item.final_line_price | money }}</p>
+                        <p class="mtw-cart__item-price mtw-cart__item-price--sale">{{ item.final_line_price | times: 9 | divided_by: 10 | money }}</p>
+                      {%- else -%}
+                        <p class="mtw-cart__item-price">{{ item.final_line_price | money }}</p>
+                      {%- endif -%}
+                    </div>
                   </div>
-                  <p class="mtw-cart__item-price">{{ item.final_line_price | money }}</p>
-                </div>
 
-                <div class="mtw-divider-dashed" style="margin-block: 1rem"></div>
+                  <div class="mtw-divider-dashed" style="margin-block: 1rem"></div>
 
-                <!-- Order details -->
-                <div class="mtw-cart__details">
-                  {%- if install_week != blank -%}
-                    <div class="mtw-cart__detail-row">
-                      <span class="mtw-cart__detail-key">Install week</span>
-                      <span class="mtw-cart__detail-val">{{ install_week }}</span>
-                    </div>
-                  {%- endif -%}
-                  {%- if zip_code != blank -%}
-                    <div class="mtw-cart__detail-row">
-                      <span class="mtw-cart__detail-key">Delivery zip</span>
-                      <span class="mtw-cart__detail-val">{{ zip_code }}</span>
-                    </div>
-                  {%- endif -%}
-                </div>
-
-                {%- comment -%} Customizations block {%- endcomment -%}
-                {%- assign has_addons = false -%}
-                {%- for p in item.properties -%}
-                  {%- unless p.last == blank -%}
-                    {%- if p.first contains 'Add-on' -%}{%- assign has_addons = true -%}{%- endif -%}
-                  {%- endunless -%}
-                {%- endfor -%}
-
-                {%- if has_addons -%}
-                  <div class="mtw-cart__customizations">
-
-                    <p class="mtw-cart__customizations-label">Customizations</p>
-
-                    <div class="mtw-cart__addons">
-                      {%- for p in item.properties -%}
-                        {%- unless p.last == blank -%}
-                          {%- if p.first contains 'Add-on' -%}
-                            {%- assign addon_name = p.first | remove: 'Add-on: ' -%}
-                            <div class="mtw-cart__addon-row">
-                              <span class="mtw-cart__addon-name">{{ addon_name }}</span>
-                            </div>
-                            {%- if addon_name == 'Removal' and removal_week != blank -%}
-                              <div class="mtw-cart__addon-sub">
-                                <span class="mtw-cart__detail-key">Removal week</span>
-                                <span class="mtw-cart__detail-val">{{ removal_week }}</span>
-                              </div>
-                            {%- endif -%}
-                          {%- endif -%}
-                        {%- endunless -%}
-                      {%- endfor -%}
-                    </div>
-
-                    <div class="mtw-cart__delivery-note">
-                      <svg class="mtw-cart__note-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>
-                      <div>
-                        <p class="mtw-cart__note-headline">Scheduling &amp; install details</p>
-                        <p class="mtw-cart__note-body">To confirm your install date and removal (if elected), we will reach out a week prior to confirm dates. It is not required that you be at home during your install.</p>
+                  <!-- Order details -->
+                  <div class="mtw-cart__details">
+                    {%- if install_week != blank -%}
+                      <div class="mtw-cart__detail-row">
+                        <span class="mtw-cart__detail-key">Install week</span>
+                        <span class="mtw-cart__detail-val">{{ install_week }}</span>
                       </div>
+                    {%- endif -%}
+                    {%- if zip_code != blank -%}
+                      <div class="mtw-cart__detail-row">
+                        <span class="mtw-cart__detail-key">Delivery zip</span>
+                        <span class="mtw-cart__detail-val">{{ zip_code }}</span>
+                      </div>
+                    {%- endif -%}
+                  </div>
+
+                  {%- comment -%} Customizations block {%- endcomment -%}
+                  {%- assign has_addons = false -%}
+                  {%- for p in item.properties -%}
+                    {%- unless p.last == blank -%}
+                      {%- if p.first contains 'Add-on' -%}{%- assign has_addons = true -%}{%- endif -%}
+                    {%- endunless -%}
+                  {%- endfor -%}
+
+                  {%- if has_addons or is_gift -%}
+                    <div class="mtw-cart__customizations">
+
+                      <p class="mtw-cart__customizations-label">Customizations</p>
+
+                      <div class="mtw-cart__addons">
+                        {%- if is_gift -%}
+                          <div class="mtw-cart__addon-row">
+                            <span class="mtw-cart__addon-name">Removal</span>
+                            <span class="mtw-cart__addon-included">Included — no charge</span>
+                          </div>
+                        {%- endif -%}
+                        {%- for p in item.properties -%}
+                          {%- unless p.last == blank -%}
+                            {%- if p.first contains 'Add-on' -%}
+                              {%- assign addon_name = p.first | remove: 'Add-on: ' -%}
+                              <div class="mtw-cart__addon-row">
+                                <span class="mtw-cart__addon-name">{{ addon_name }}</span>
+                                {%- if p.last contains 'no charge' or p.last contains 'Included' -%}
+                                  <span class="mtw-cart__addon-included">Included — no charge</span>
+                                {%- endif -%}
+                              </div>
+                              {%- if addon_name == 'Removal' and removal_week != blank -%}
+                                <div class="mtw-cart__addon-sub">
+                                  <span class="mtw-cart__detail-key">Removal week</span>
+                                  <span class="mtw-cart__detail-val">{{ removal_week }}</span>
+                                </div>
+                              {%- endif -%}
+                            {%- endif -%}
+                          {%- endunless -%}
+                        {%- endfor -%}
+                      </div>
+
+                      {%- unless is_gift -%}
+                        <div class="mtw-cart__delivery-note">
+                          <svg class="mtw-cart__note-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>
+                          <div>
+                            <p class="mtw-cart__note-headline">Scheduling &amp; install details</p>
+                            <p class="mtw-cart__note-body">To confirm your install date and removal (if elected), we will reach out a week prior to confirm dates. It is not required that you be at home during your install.</p>
+                          </div>
+                        </div>
+                      {%- endunless -%}
+
                     </div>
+                  {%- endif -%}
 
-                  </div>
-                {%- endif -%}
+                  {%- if notes != blank -%}
+                    <div class="mtw-cart__notes">
+                      <span class="mtw-cart__detail-key">Notes</span>
+                      <p class="mtw-cart__notes-text">{{ notes }}</p>
+                    </div>
+                  {%- endif -%}
 
-                {%- if notes != blank -%}
-                  <div class="mtw-cart__notes">
-                    <span class="mtw-cart__detail-key">Notes</span>
-                    <p class="mtw-cart__notes-text">{{ notes }}</p>
-                  </div>
-                {%- endif -%}
+                  <button
+                    type="button"
+                    class="mtw-cart__remove"
+                    data-key="{{ item.key }}"
+                    aria-label="Remove {{ item.product_title | escape }}"
+                  >
+                    Remove item
+                  </button>
 
-                <button
-                  type="button"
-                  class="mtw-cart__remove"
-                  data-key="{{ item.key }}"
-                  aria-label="Remove {{ item.product_title | escape }}"
-                >
-                  Remove item
-                </button>
-
+                </div>
               </div>
-            </div>
 
-          {%- endfor -%}
+            {%- endfor -%}
 
-          <!-- Address + gift cards row -->
-          <div class="mtw-cart__cards-row">
+            <!-- Address + gift cards row -->
+            <div class="mtw-cart__cards-row">
 
-            <!-- Install address card (inside the checkout form) -->
-            <form id="mtw-addr-form" action="/cart" method="post" novalidate>
-              <input type="hidden" name="return_to" value="/checkout">
+              <!-- Install address card -->
               <div class="mtw-cart__address-card">
                 <p class="mtw-mono mtw-eyebrow mtw-eyebrow--primary" style="margin-bottom:1.25rem">Install address</p>
                 <p class="mtw-body-sm mtw-text-muted" style="margin-bottom:1.25rem">Where should we install? Required before checkout.</p>
@@ -172,148 +217,160 @@
                   </div>
                 </div>
               </div>
-            </form>
+              <!-- /address card -->
 
-            <!-- Gift card -->
-            {%- assign gift_product = all_products['fall-favorites'] -%}
-            {%- if section.settings.gift_product != blank -%}
-              {%- assign gift_product = section.settings.gift_product -%}
-            {%- endif -%}
-            <div class="mtw-cart__gift-card">
-              <div class="mtw-cart__gift-header">
-                <svg class="mtw-cart__gift-icon" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 12 20 22 4 22 4 12"/><rect x="2" y="7" width="20" height="5"/><line x1="12" y1="22" x2="12" y2="7"/><path d="M12 7H7.5a2.5 2.5 0 010-5C11 2 12 7 12 7z"/><path d="M12 7h4.5a2.5 2.5 0 000-5C13 2 12 7 12 7z"/></svg>
-                <div>
-                  <p class="mtw-cart__gift-title">Want to gift this to a loved one?</p>
-                  <p class="mtw-cart__gift-sub">10% off + we'll cover the cleanup free.</p>
+              <!-- Gift card -->
+              <div
+                class="mtw-cart__gift-card"
+                id="mtw-gift-card"
+                data-gift-in-cart="{{ gift_in_cart }}"
+                data-gift-item-key="{{ gift_item_key }}"
+                data-gift-variant-id="{{ gift_variant.id }}"
+              >
+                <div class="mtw-cart__gift-header">
+                  <svg class="mtw-cart__gift-icon" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 12 20 22 4 22 4 12"/><rect x="2" y="7" width="20" height="5"/><line x1="12" y1="22" x2="12" y2="7"/><path d="M12 7H7.5a2.5 2.5 0 010-5C11 2 12 7 12 7z"/><path d="M12 7h4.5a2.5 2.5 0 000-5C13 2 12 7 12 7z"/></svg>
+                  <div>
+                    <p class="mtw-cart__gift-title">Want to gift this to a loved one?</p>
+                    <p class="mtw-cart__gift-sub">10% off + we'll cover the cleanup free.</p>
+                  </div>
                 </div>
-              </div>
 
-              {%- if gift_product != blank -%}
-                {%- assign gift_variant = gift_product.selected_or_first_available_variant -%}
-                {%- assign gift_original = gift_variant.price -%}
-                {%- assign gift_discounted = gift_original | times: 9 | divided_by: 10 -%}
                 <div class="mtw-cart__gift-pricing">
                   <span class="mtw-cart__gift-price-original">{{ gift_original | money }}</span>
                   <span class="mtw-cart__gift-price-sale">{{ gift_discounted | money }}</span>
                   <span class="mtw-cart__gift-badge">10% off + removal included</span>
                 </div>
-              {%- endif -%}
-
-              <button type="button" class="mtw-btn mtw-btn--outline mtw-cart__gift-toggle" id="mtw-gift-toggle" aria-expanded="false">
-                <span class="mtw-gift-toggle__label">Add a gift package</span>
-                <svg class="mtw-gift-toggle__chevron" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
-              </button>
-
-              <div id="mtw-gift-panel" class="mtw-cart__gift-panel" hidden>
-
-                <div class="mtw-gift__section-label">Recipient's install address</div>
-
-                <div class="mtw-address__row">
-                  <div class="mtw-address__field mtw-address__field--full">
-                    <label class="mtw-address__label" for="gift-street">Street address</label>
-                    <input class="mtw-address__input" id="gift-street" type="text" placeholder="456 Oak Avenue" autocomplete="off">
-                  </div>
-                </div>
-
-                <div class="mtw-address__row">
-                  <div class="mtw-address__field mtw-address__field--full">
-                    <label class="mtw-address__label" for="gift-apt">Apt / Suite <span class="mtw-text-muted">(optional)</span></label>
-                    <input class="mtw-address__input" id="gift-apt" type="text" placeholder="Unit 2A" autocomplete="off">
-                  </div>
-                </div>
-
-                <div class="mtw-address__row mtw-address__row--cols">
-                  <div class="mtw-address__field">
-                    <label class="mtw-address__label" for="gift-city">City</label>
-                    <input class="mtw-address__input" id="gift-city" type="text" placeholder="Chicago" autocomplete="off">
-                  </div>
-                  <div class="mtw-address__field mtw-address__field--sm">
-                    <label class="mtw-address__label" for="gift-state">State</label>
-                    <input class="mtw-address__input" id="gift-state" type="text" placeholder="IL" maxlength="2" autocomplete="off">
-                  </div>
-                  <div class="mtw-address__field mtw-address__field--sm">
-                    <label class="mtw-address__label" for="gift-zip">ZIP</label>
-                    <input class="mtw-address__input" id="gift-zip" type="text" placeholder="60614" maxlength="10" autocomplete="off">
-                  </div>
-                </div>
-
-                <div class="mtw-gift__section-label" style="margin-top:1.25rem">Handwritten note</div>
-                <div class="mtw-address__row">
-                  <div class="mtw-address__field mtw-address__field--full">
-                    <label class="mtw-address__label" for="gift-note">What would you like the note to say?</label>
-                    <textarea class="mtw-address__input mtw-gift__note-textarea" id="gift-note" placeholder="Wishing you a warm and wonderful fall season…" rows="3"></textarea>
-                  </div>
-                </div>
-
-                <div id="mtw-gift-error" class="mtw-addr__error" style="display:none">Please enter the recipient's street address, city, state, and ZIP.</div>
 
                 <button
                   type="button"
-                  class="mtw-btn mtw-btn--primary mtw-btn--full mtw-cart__gift-add"
-                  data-variant-id="{{ gift_variant.id }}"
-                  style="margin-top:1.25rem"
+                  class="mtw-btn mtw-btn--outline mtw-cart__gift-toggle"
+                  id="mtw-gift-toggle"
+                  aria-expanded="{{ gift_in_cart }}"
                 >
-                  Add Fall Favorite gift — {{ gift_discounted | money }}
+                  <span class="mtw-gift-toggle__label">
+                    {%- if gift_in_cart -%}Never mind{%- else -%}Add a gift package{%- endif -%}
+                  </span>
+                  <svg class="mtw-gift-toggle__chevron" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
                 </button>
 
+                <div
+                  id="mtw-gift-panel"
+                  class="mtw-cart__gift-panel"
+                  {%- unless gift_in_cart -%} hidden{%- endunless -%}
+                >
+                  <div class="mtw-gift__section-label">Recipient's install address</div>
+
+                  <div class="mtw-address__row">
+                    <div class="mtw-address__field mtw-address__field--full">
+                      <label class="mtw-address__label" for="gift-street">Street address</label>
+                      <input class="mtw-address__input" id="gift-street" type="text" name="attributes[Gift address - street]" placeholder="456 Oak Avenue" autocomplete="off" value="{{ cart.attributes['Gift address - street'] }}">
+                    </div>
+                  </div>
+
+                  <div class="mtw-address__row">
+                    <div class="mtw-address__field mtw-address__field--full">
+                      <label class="mtw-address__label" for="gift-apt">Apt / Suite <span class="mtw-text-muted">(optional)</span></label>
+                      <input class="mtw-address__input" id="gift-apt" type="text" name="attributes[Gift address - apt]" placeholder="Unit 2A" autocomplete="off" value="{{ cart.attributes['Gift address - apt'] }}">
+                    </div>
+                  </div>
+
+                  <div class="mtw-address__row mtw-address__row--cols">
+                    <div class="mtw-address__field">
+                      <label class="mtw-address__label" for="gift-city">City</label>
+                      <input class="mtw-address__input" id="gift-city" type="text" name="attributes[Gift address - city]" placeholder="Chicago" autocomplete="off" value="{{ cart.attributes['Gift address - city'] }}">
+                    </div>
+                    <div class="mtw-address__field mtw-address__field--sm">
+                      <label class="mtw-address__label" for="gift-state">State</label>
+                      <input class="mtw-address__input" id="gift-state" type="text" name="attributes[Gift address - state]" placeholder="IL" maxlength="2" autocomplete="off" value="{{ cart.attributes['Gift address - state'] }}">
+                    </div>
+                    <div class="mtw-address__field mtw-address__field--sm">
+                      <label class="mtw-address__label" for="gift-zip">ZIP</label>
+                      <input class="mtw-address__input" id="gift-zip" type="text" name="attributes[Gift address - zip]" placeholder="60614" maxlength="10" autocomplete="off" value="{{ cart.attributes['Gift address - zip'] }}">
+                    </div>
+                  </div>
+
+                  <div class="mtw-gift__section-label" style="margin-top:1.25rem">Handwritten note</div>
+                  <div class="mtw-address__row">
+                    <div class="mtw-address__field mtw-address__field--full">
+                      <label class="mtw-address__label" for="gift-note">What would you like the note to say?</label>
+                      <textarea class="mtw-address__input mtw-gift__note-textarea" id="gift-note" name="attributes[Gift note]" placeholder="Wishing you a warm and wonderful fall season…" rows="3">{{ cart.attributes['Gift note'] }}</textarea>
+                    </div>
+                  </div>
+                </div>
+                <!-- /gift panel -->
+
               </div>
+              <!-- /gift card -->
+
             </div>
-            <!-- /gift card -->
+            <!-- /cards-row -->
 
           </div>
-          <!-- /cards-row -->
+          <!-- /items -->
+
+          <!-- Summary sidebar -->
+          <aside class="mtw-cart__summary">
+            <div class="mtw-cart__summary-inner">
+
+              <p class="mtw-mono mtw-eyebrow mtw-eyebrow--primary" style="margin-bottom:1.5rem">Order summary</p>
+
+              <div class="mtw-cart__totals">
+                {%- for item in cart.items -%}
+                  {%- assign item_is_gift = false -%}
+                  {%- if item.properties['Discount'] contains 'gift' -%}
+                    {%- assign item_is_gift = true -%}
+                  {%- endif -%}
+                  <div class="mtw-cart__total-row">
+                    <span>{{ item.product_title }}{%- if item_is_gift -%} <span style="font-size:0.75em;opacity:0.7">(gift)</span>{%- endif -%}</span>
+                    {%- if item_is_gift -%}
+                      <span>{{ item.final_line_price | times: 9 | divided_by: 10 | money }}</span>
+                    {%- else -%}
+                      <span>{{ item.final_line_price | money }}</span>
+                    {%- endif -%}
+                  </div>
+                  {%- if item_is_gift -%}
+                    <div class="mtw-cart__total-row mtw-cart__total-row--addon">
+                      <span>+ Removal</span>
+                      <span style="color:var(--mtw-accent)">Included</span>
+                    </div>
+                  {%- else -%}
+                    {%- for p in item.properties -%}
+                      {%- unless p.last == blank -%}
+                        {%- if p.first contains 'Add-on' -%}
+                          <div class="mtw-cart__total-row mtw-cart__total-row--addon">
+                            <span>+ {{ p.first | remove: 'Add-on: ' }}</span>
+                            <span>{{ p.last }}</span>
+                          </div>
+                        {%- endif -%}
+                      {%- endunless -%}
+                    {%- endfor -%}
+                  {%- endif -%}
+                {%- endfor -%}
+              </div>
+
+              <div class="mtw-divider-dashed" style="margin-block:1.25rem"></div>
+
+              <div class="mtw-cart__total-row mtw-cart__total-row--grand">
+                <span>Package total</span>
+                <span>{{ cart.total_price | money }}</span>
+              </div>
+
+              <button type="submit" form="mtw-addr-form" class="mtw-btn mtw-btn--primary mtw-btn--full" style="margin-top:1.5rem">
+                Proceed to checkout →
+              </button>
+
+              <div class="mtw-cart__trust">
+                <div class="mtw-cart__trust-item">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+                  <span>Secure Shopify checkout</span>
+                </div>
+              </div>
+
+            </div>
+          </aside>
 
         </div>
-        <!-- /items -->
-
-        <!-- Summary sidebar -->
-        <aside class="mtw-cart__summary">
-          <div class="mtw-cart__summary-inner">
-
-            <p class="mtw-mono mtw-eyebrow mtw-eyebrow--primary" style="margin-bottom:1.5rem">Order summary</p>
-
-            <div class="mtw-cart__totals">
-              {%- for item in cart.items -%}
-                <div class="mtw-cart__total-row">
-                  <span>{{ item.product_title }}</span>
-                  <span>{{ item.final_line_price | money }}</span>
-                </div>
-                {%- comment -%} List add-ons in summary too {%- endcomment -%}
-                {%- for p in item.properties -%}
-                  {%- unless p.last == blank -%}
-                    {%- if p.first contains 'Add-on' -%}
-                      <div class="mtw-cart__total-row mtw-cart__total-row--addon">
-                        <span>+ {{ p.first | remove: 'Add-on: ' }}</span>
-                        <span>{{ p.last }}</span>
-                      </div>
-                    {%- endif -%}
-                  {%- endunless -%}
-                {%- endfor -%}
-              {%- endfor -%}
-            </div>
-
-            <div class="mtw-divider-dashed" style="margin-block:1.25rem"></div>
-
-            <div class="mtw-cart__total-row mtw-cart__total-row--grand">
-              <span>Package total</span>
-              <span>{{ cart.total_price | money }}</span>
-            </div>
-
-            <button type="submit" form="mtw-addr-form" class="mtw-btn mtw-btn--primary mtw-btn--full" style="margin-top:1.5rem">
-              Proceed to checkout →
-            </button>
-
-            <div class="mtw-cart__trust">
-              <div class="mtw-cart__trust-item">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-                <span>Secure Shopify checkout</span>
-              </div>
-            </div>
-
-          </div>
-        </aside>
-
-      </div>
+      </form>
     {%- endif -%}
 
   </div>
@@ -337,17 +394,16 @@
   var addrForm = document.getElementById('mtw-addr-form');
   if (addrForm) {
     addrForm.addEventListener('submit', function(e) {
-      var street = document.getElementById('addr-street');
-      var city   = document.getElementById('addr-city');
-      var state  = document.getElementById('addr-state');
-      var zip    = document.getElementById('addr-zip');
-      var err    = document.getElementById('mtw-addr-error');
+      var street   = document.getElementById('addr-street');
+      var city     = document.getElementById('addr-city');
+      var state    = document.getElementById('addr-state');
+      var zip      = document.getElementById('addr-zip');
+      var err      = document.getElementById('mtw-addr-error');
       var required = [street, city, state, zip];
       var missing  = required.some(function(f) { return !f || f.value.trim() === ''; });
       if (missing) {
         e.preventDefault();
         err.style.display = 'block';
-        // Highlight empty fields
         required.forEach(function(f) {
           if (f && f.value.trim() === '') {
             f.classList.add('mtw-address__input--error');
@@ -363,78 +419,71 @@
     });
   }
 
-  /* ── Gift panel toggle ── */
+  /* ── Gift card — add / remove ── */
+  var giftCard   = document.getElementById('mtw-gift-card');
   var giftToggle = document.getElementById('mtw-gift-toggle');
   var giftPanel  = document.getElementById('mtw-gift-panel');
-  if (giftToggle && giftPanel) {
+
+  if (giftCard && giftToggle && giftPanel) {
+    var giftInCart  = giftCard.dataset.giftInCart === 'true';
+    var giftKey     = giftCard.dataset.giftItemKey;
+    var giftVariant = parseInt(giftCard.dataset.giftVariantId);
+
+    /* Sync chevron on load */
+    if (giftInCart) {
+      giftToggle.querySelector('.mtw-gift-toggle__chevron').style.transform = 'rotate(180deg)';
+    }
+
     giftToggle.addEventListener('click', function() {
-      var open = giftPanel.hasAttribute('hidden');
-      if (open) {
-        giftPanel.removeAttribute('hidden');
-        giftToggle.setAttribute('aria-expanded', 'true');
-        giftToggle.querySelector('.mtw-gift-toggle__label').textContent = 'Never mind';
-        giftToggle.querySelector('.mtw-gift-toggle__chevron').style.transform = 'rotate(180deg)';
-      } else {
-        giftPanel.setAttribute('hidden', '');
-        giftToggle.setAttribute('aria-expanded', 'false');
-        giftToggle.querySelector('.mtw-gift-toggle__label').textContent = 'Add a gift package';
-        giftToggle.querySelector('.mtw-gift-toggle__chevron').style.transform = '';
-      }
-    });
-  }
+      if (!giftInCart) {
+        /* ── Add Fall Favorites to cart ── */
+        giftToggle.querySelector('.mtw-gift-toggle__label').textContent = 'Adding…';
+        giftToggle.disabled = true;
 
-  /* ── Gift add to cart ── */
-  var giftAddBtn = document.querySelector('.mtw-cart__gift-add');
-  if (giftAddBtn) {
-    giftAddBtn.addEventListener('click', function() {
-      var street = document.getElementById('gift-street');
-      var city   = document.getElementById('gift-city');
-      var state  = document.getElementById('gift-state');
-      var zip    = document.getElementById('gift-zip');
-      var apt    = document.getElementById('gift-apt');
-      var note   = document.getElementById('gift-note');
-      var err    = document.getElementById('mtw-gift-error');
-      var required = [street, city, state, zip];
-      var missing  = required.some(function(f) { return !f || f.value.trim() === ''; });
-      if (missing) {
-        err.style.display = 'block';
-        required.forEach(function(f) {
-          if (f && f.value.trim() === '') f.classList.add('mtw-address__input--error');
-        });
-        err.scrollIntoView({ behavior: 'smooth', block: 'center' });
-        return;
-      }
-      err.style.display = 'none';
-      giftAddBtn.textContent = 'Adding…';
-      giftAddBtn.disabled = true;
-
-      var addrLine = [
-        street.value.trim(),
-        apt && apt.value.trim() ? apt.value.trim() : null,
-        city.value.trim() + ', ' + state.value.trim().toUpperCase() + ' ' + zip.value.trim()
-      ].filter(Boolean).join(', ');
-
-      fetch('/cart/add.js', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          id: parseInt(giftAddBtn.dataset.variantId),
-          quantity: 1,
-          properties: {
-            'Gift address': addrLine,
-            'Gift note': note && note.value.trim() ? note.value.trim() : '',
-            'Add-on: Removal': 'Included — no charge (gift)',
-            'Discount': '10% gift discount applied'
-          }
+        fetch('/cart/add.js', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            id: giftVariant,
+            quantity: 1,
+            properties: {
+              'Add-on: Removal': 'Included — no charge (gift)',
+              'Discount': '10% gift discount'
+            }
+          })
         })
-      })
-      .then(function(r) { return r.json(); })
-      .then(function() { window.location.reload(); })
-      .catch(function() {
-        giftAddBtn.textContent = 'Something went wrong — try again';
-        giftAddBtn.disabled = false;
-      });
+        .then(function(r) { return r.json(); })
+        .then(function() {
+          sessionStorage.setItem('mtw_gift_panel_open', '1');
+          window.location.reload();
+        })
+        .catch(function() {
+          giftToggle.querySelector('.mtw-gift-toggle__label').textContent = 'Add a gift package';
+          giftToggle.disabled = false;
+        });
+
+      } else {
+        /* ── Remove gift from cart ── */
+        giftToggle.querySelector('.mtw-gift-toggle__label').textContent = 'Removing…';
+        giftToggle.disabled = true;
+
+        fetch('/cart/change.js', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ id: giftKey, quantity: 0 })
+        })
+        .then(function() {
+          sessionStorage.removeItem('mtw_gift_panel_open');
+          window.location.reload();
+        });
+      }
     });
+
+    /* Restore panel open state after reload (when gift was just added) */
+    if (!giftInCart && sessionStorage.getItem('mtw_gift_panel_open') === '1') {
+      /* The gift added but page liquid hasn't reflected it yet — reload once more */
+      sessionStorage.removeItem('mtw_gift_panel_open');
+    }
   }
 </script>
 
@@ -445,8 +494,8 @@
     {
       "type": "product",
       "id": "gift_product",
-      "label": "Gift package product",
-      "info": "The product added when a customer buys a gift. Set to the Fall Favorite (or equivalent) in the theme editor."
+      "label": "Gift package product (override)",
+      "info": "Defaults to Fall Favorites automatically. Set this only to override with a different product."
     }
   ],
   "presets": [{ "name": "Cart" }]
