@@ -103,8 +103,8 @@
                     <div class="mtw-cart__delivery-note">
                       <svg class="mtw-cart__note-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>
                       <div>
-                        <p class="mtw-cart__note-headline">We'll be in touch within 24 hours</p>
-                        <p class="mtw-cart__note-body">After checkout, our team personally reviews your order and reaches out to confirm your install week and all add-on details — including exact dates and any scheduling questions. We work around your schedule, and nothing is finalized until you've confirmed. If anything changes before your install date, just reply to our email and we'll take care of it.</p>
+                        <p class="mtw-cart__note-headline">Scheduling &amp; install details</p>
+                        <p class="mtw-cart__note-body">To confirm your install date and removal (if elected), we will reach out a week prior to confirm dates. It is not required that you be at home during your install.</p>
                       </div>
                     </div>
 
@@ -119,6 +119,7 @@
                 {%- endif -%}
 
                 <button
+                  type="button"
                   class="mtw-cart__remove"
                   data-key="{{ item.key }}"
                   aria-label="Remove {{ item.product_title | escape }}"
@@ -130,6 +131,45 @@
             </div>
 
           {%- endfor -%}
+
+          <!-- Service address card -->
+          <form id="mtw-addr-form" action="/cart" method="post">
+          <input type="hidden" name="return_to" value="/checkout">
+          <div class="mtw-cart__address-card">
+            <p class="mtw-mono mtw-eyebrow mtw-eyebrow--primary" style="margin-bottom:1.25rem">Install address</p>
+            <p class="mtw-body-sm mtw-text-muted" style="margin-bottom:1.25rem">Where should we install? This is saved to your order so our team has it on file.</p>
+
+            <div class="mtw-address__row">
+              <div class="mtw-address__field mtw-address__field--full">
+                <label class="mtw-address__label" for="addr-street">Street address</label>
+                <input class="mtw-address__input" id="addr-street" type="text" name="attributes[Install address - street]" placeholder="123 Maple Lane" autocomplete="address-line1" value="{{ cart.attributes['Install address - street'] }}">
+              </div>
+            </div>
+
+            <div class="mtw-address__row">
+              <div class="mtw-address__field mtw-address__field--full">
+                <label class="mtw-address__label" for="addr-apt">Apt / Suite <span class="mtw-text-muted">(optional)</span></label>
+                <input class="mtw-address__input" id="addr-apt" type="text" name="attributes[Install address - apt]" placeholder="Unit 4B" autocomplete="address-line2" value="{{ cart.attributes['Install address - apt'] }}">
+              </div>
+            </div>
+
+            <div class="mtw-address__row mtw-address__row--cols">
+              <div class="mtw-address__field">
+                <label class="mtw-address__label" for="addr-city">City</label>
+                <input class="mtw-address__input" id="addr-city" type="text" name="attributes[Install address - city]" placeholder="Chicago" autocomplete="address-level2" value="{{ cart.attributes['Install address - city'] }}">
+              </div>
+              <div class="mtw-address__field mtw-address__field--sm">
+                <label class="mtw-address__label" for="addr-state">State</label>
+                <input class="mtw-address__input" id="addr-state" type="text" name="attributes[Install address - state]" placeholder="IL" maxlength="2" autocomplete="address-level1" value="{{ cart.attributes['Install address - state'] }}">
+              </div>
+              <div class="mtw-address__field mtw-address__field--sm">
+                <label class="mtw-address__label" for="addr-zip">ZIP</label>
+                <input class="mtw-address__input" id="addr-zip" type="text" name="attributes[Install address - zip]" placeholder="60614" maxlength="10" autocomplete="postal-code" value="{{ cart.attributes['Install address - zip'] }}">
+              </div>
+            </div>
+          </div>
+          </form>
+
         </div>
 
         <!-- Summary sidebar -->
@@ -167,9 +207,9 @@
 
             <p class="mtw-cart__summary-note">Add-on pricing confirmed at scheduling.</p>
 
-            <a href="/checkout" class="mtw-btn mtw-btn--primary mtw-btn--full" style="margin-top:1.5rem">
+            <button type="submit" form="mtw-addr-form" class="mtw-btn mtw-btn--primary mtw-btn--full" style="margin-top:1.5rem">
               Proceed to checkout →
-            </a>
+            </button>
 
             <div class="mtw-cart__trust">
               <div class="mtw-cart__trust-item">
