@@ -175,7 +175,10 @@
             </form>
 
             <!-- Gift card -->
-            {%- assign gift_product = section.settings.gift_product -%}
+            {%- assign gift_product = all_products['fall-favorites'] -%}
+            {%- if section.settings.gift_product != blank -%}
+              {%- assign gift_product = section.settings.gift_product -%}
+            {%- endif -%}
             <div class="mtw-cart__gift-card">
               <div class="mtw-cart__gift-header">
                 <svg class="mtw-cart__gift-icon" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 12 20 22 4 22 4 12"/><rect x="2" y="7" width="20" height="5"/><line x1="12" y1="22" x2="12" y2="7"/><path d="M12 7H7.5a2.5 2.5 0 010-5C11 2 12 7 12 7z"/><path d="M12 7h4.5a2.5 2.5 0 000-5C13 2 12 7 12 7z"/></svg>
@@ -244,19 +247,14 @@
 
                 <div id="mtw-gift-error" class="mtw-addr__error" style="display:none">Please enter the recipient's street address, city, state, and ZIP.</div>
 
-                {%- if gift_product != blank -%}
-                  <button
-                    type="button"
-                    class="mtw-btn mtw-btn--primary mtw-btn--full mtw-cart__gift-add"
-                    data-variant-id="{{ gift_variant.id }}"
-                    data-discounted-price="{{ gift_discounted }}"
-                    style="margin-top:1.25rem"
-                  >
-                    Add gift package — {{ gift_discounted | money }}
-                  </button>
-                {%- else -%}
-                  <p class="mtw-body-sm mtw-text-muted" style="margin-top:1rem;font-style:italic">Gift product not yet configured in the theme editor.</p>
-                {%- endif -%}
+                <button
+                  type="button"
+                  class="mtw-btn mtw-btn--primary mtw-btn--full mtw-cart__gift-add"
+                  data-variant-id="{{ gift_variant.id }}"
+                  style="margin-top:1.25rem"
+                >
+                  Add Fall Favorite gift — {{ gift_discounted | money }}
+                </button>
 
               </div>
             </div>
@@ -425,8 +423,8 @@
           properties: {
             'Gift address': addrLine,
             'Gift note': note && note.value.trim() ? note.value.trim() : '',
-            'Discount': '10% gift discount',
-            'Removal': 'Waived (gift)'
+            'Add-on: Removal': 'Included — no charge (gift)',
+            'Discount': '10% gift discount applied'
           }
         })
       })
