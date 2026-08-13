@@ -174,10 +174,16 @@ button { cursor: pointer; background: none; border: none; }
 @media (min-width: 64rem) { .mtw-header__inner { padding-inline: 3rem; } }
 
 .mtw-header__logo {
-  font-family: var(--mtw-font-serif);
-  font-size: 1.15rem;
-  font-weight: 500;
-  color: var(--mtw-fg);
+  display: flex;
+  align-items: center;
+}
+.mtw-header__logo-img {
+  height: 36px;
+  width: auto;
+  display: block;
+}
+@media (min-width: 64rem) {
+  .mtw-header__logo-img { height: 42px; }
 }
 .mtw-header__nav {
   display: none;

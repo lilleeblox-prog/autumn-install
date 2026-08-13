@@ -1,6 +1,8 @@
 <header class="mtw-header">
   <div class="mtw-header__inner">
-    <a href="{{ routes.root_url }}" class="mtw-header__logo">Made to Welcome</a>
+    <a href="{{ routes.root_url }}" class="mtw-header__logo" aria-label="Made to Welcome">
+      <img src="{{ 'logo-mtw.png' | asset_url }}" alt="Made to Welcome" class="mtw-header__logo-img">
+    </a>
 
     <nav class="mtw-header__nav" aria-label="Main navigation">
       <a href="/pages/fall" class="mtw-nav-link">Fall</a>
