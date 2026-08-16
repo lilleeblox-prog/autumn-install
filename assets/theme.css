@@ -181,12 +181,12 @@ button { cursor: pointer; background: none; border: none; }
   margin-right: auto;           /* push nav + cart to the right */
 }
 .mtw-header__logo-img {
-  height: 120px;
+  height: 60px;
   width: auto;
   display: block;
 }
 @media (min-width: 64rem) {
-  .mtw-header__logo-img { height: 160px; }
+  .mtw-header__logo-img { height: 80px; }
 }
 .mtw-header__nav {
   display: none;
