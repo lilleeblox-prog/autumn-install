@@ -35,7 +35,11 @@
       {%- assign pkg_image    = block.settings.image -%}
       {%- assign pkg_featured = block.settings.featured -%}
       {%- assign pkg_product  = all_products[pkg_handle] -%}
-      {%- assign vid          = pkg_product.variants.first.id -%}
+      {%- if block.settings.variant_id != blank -%}
+        {%- assign vid = block.settings.variant_id -%}
+      {%- else -%}
+        {%- assign vid = pkg_product.variants.first.id -%}
+      {%- endif -%}
       {%- assign addon_lines  = block.settings.addons | newline_to_br | split: '<br />' -%}
 
       <div class="mtw-fp__pkg" id="pkg-{{ block.id }}" {{ block.shopify_attributes }}>
@@ -468,6 +472,7 @@
       "type": "package",
       "name": "Package",
       "settings": [
+        { "type": "text",        "id": "variant_id",  "label": "Variant ID (paste from Shopify Admin → Products → variant URL)", "info": "Overrides the product handle lookup. Find it in Admin: Products → [product] → click a variant → copy the number from the URL." },
         { "type": "text",        "id": "handle",     "label": "Product handle (e.g. petite-patch)" },
         { "type": "text",        "id": "label",      "label": "Eyebrow label (e.g. Perfect for a stoop)" },
         { "type": "text",        "id": "name",       "label": "Package name" },

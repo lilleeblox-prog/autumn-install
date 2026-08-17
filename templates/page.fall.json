@@ -11,16 +11,6 @@
   "sections": {
     "campaign-fall": {
       "type": "campaign-fall",
-      "settings": {
-        "eyebrow": "Hello Harvest · Fall 2026 · Tennessee",
-        "headline": "Fall packages.",
-        "intro": "Every display is delivered and installed by hand. Choose your size, select your week, and we handle the rest.",
-        "install_weeks": "Week of September 15\nWeek of September 22\nWeek of September 29\nWeek of October 6\nWeek of October 13\nWeek of October 20\nWeek of October 27",
-        "final_eyebrow": "Fall 2026 · Limited install weeks",
-        "final_headline": "Don't miss your window.",
-        "final_body": "Install weeks fill up fast. Secure your display now — we handle everything.",
-        "final_cta": "Book your display"
-      },
       "blocks": {
         "pkg-petite": {
           "type": "package",
@@ -76,7 +66,17 @@
         "pkg-cozy",
         "pkg-favorites",
         "pkg-grande"
-      ]
+      ],
+      "settings": {
+        "eyebrow": "Hello Harvest · Fall 2026 · Tennessee",
+        "headline": "Fall packages.",
+        "intro": "Every display is delivered and installed by hand. Choose your size, select your week, and we handle the rest.",
+        "install_weeks": "Week of September 15\nWeek of September 22\nWeek of September 29\nWeek of October 6\nWeek of October 13\nWeek of October 20\nWeek of October 27",
+        "final_eyebrow": "Fall 2026 · Limited install weeks",
+        "final_headline": "Don't miss your window.",
+        "final_body": "Install weeks fill up fast. Secure your display now — we handle everything.",
+        "final_cta": "Book your display"
+      }
     },
     "footer": {
       "type": "footer",
