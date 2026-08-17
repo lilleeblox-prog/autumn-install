@@ -791,9 +791,11 @@ button { cursor: pointer; background: none; border: none; }
 
 /* ── Footer ──────────────────────────────────────────── */
 .mtw-footer {
-  border-top: 1px solid var(--mtw-border);
+  border-top: 3px solid var(--mtw-primary);
   padding-block: 2.5rem;
   background: var(--mtw-bg);
+  position: relative;
+  z-index: 1;
 }
 .mtw-footer__inner {
   display: flex;
@@ -2257,18 +2259,20 @@ details[open] .mtw-campaign-faq__chevron { transform: rotate(90deg); }
 .mtw-fp__countdown-strip {
   border-top: 1px solid rgba(0,0,0,0.07);
   border-bottom: 1px solid rgba(0,0,0,0.07);
-  padding: 0.9rem 0;
+  padding: 1rem 0;
   background: transparent;
 }
 .mtw-fp__countdown-inner {
   display: flex;
   align-items: center;
-  gap: 1.5rem;
+  justify-content: center;
+  gap: 1.25rem;
   flex-wrap: wrap;
 }
 .mtw-fp__countdown-label {
-  font-size: 0.62rem;
-  letter-spacing: 0.12em;
+  font-family: var(--mtw-font-mono);
+  font-size: 0.6rem;
+  letter-spacing: 0.13em;
   text-transform: uppercase;
   color: var(--mtw-muted-fg);
   flex-shrink: 0;
@@ -2276,34 +2280,35 @@ details[open] .mtw-campaign-faq__chevron { transform: rotate(90deg); }
 .mtw-fp__countdown-digits {
   display: flex;
   align-items: center;
-  gap: 0.35rem;
+  gap: 0.3rem;
 }
 .mtw-fp__countdown-unit {
   display: flex;
   align-items: baseline;
-  gap: 0.15rem;
+  gap: 0.18rem;
 }
 .mtw-fp__countdown-num {
   font-family: var(--mtw-font-mono);
-  font-size: 0.95rem;
-  letter-spacing: 0.04em;
-  color: var(--mtw-dark);
-  min-width: 1.6ch;
+  font-size: 1.05rem;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+  color: var(--mtw-primary);
+  min-width: 1.8ch;
   text-align: right;
 }
 .mtw-fp__countdown-sub {
   font-family: var(--mtw-font-mono);
-  font-size: 0.55rem;
+  font-size: 0.52rem;
   letter-spacing: 0.08em;
   color: var(--mtw-muted-fg);
   text-transform: lowercase;
 }
 .mtw-fp__countdown-sep {
   font-family: var(--mtw-font-mono);
-  font-size: 0.75rem;
-  color: rgba(0,0,0,0.2);
+  font-size: 0.8rem;
+  color: var(--mtw-primary);
+  opacity: 0.35;
   line-height: 1;
-  margin-top: -0.1em;
 }
 
 /* Simplified final CTA (no clock) */
@@ -2391,12 +2396,36 @@ details[open] .mtw-campaign-faq__chevron { transform: rotate(90deg); }
 
 /* Photo nudge */
 .mtw-fp__photo-nudge {
-  text-align: center;
-  padding-block: 3rem 1rem;
-  font-size: 0.9rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 1rem;
+  padding: 1.5rem 2rem;
+  margin-top: 3rem;
+  background: var(--mtw-bg);
+  border: 1px solid var(--mtw-border);
+  border-radius: 10px;
+  font-size: 0.875rem;
   color: var(--mtw-muted-fg);
+  line-height: 1.55;
 }
-.mtw-fp__photo-nudge a { color: var(--mtw-primary); text-decoration: underline; }
+.mtw-fp__photo-nudge a {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  color: var(--mtw-primary);
+  font-family: var(--mtw-font-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  text-decoration: none;
+  white-space: nowrap;
+  border-bottom: 1px solid currentColor;
+  padding-bottom: 0.1em;
+  transition: opacity 0.15s;
+}
+.mtw-fp__photo-nudge a:hover { opacity: 0.7; }
 
 /* How it works */
 .mtw-fp__hiw { padding-block: 6rem; border-top: 1px solid var(--mtw-border); }
@@ -2405,34 +2434,33 @@ details[open] .mtw-campaign-faq__chevron { transform: rotate(90deg); }
 .mtw-fp__hiw-list {
   list-style: none;
   padding: 0; margin: 0;
-  display: flex;
-  flex-direction: column;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
   gap: 0;
-  max-width: 48rem;
+  border-top: 1px solid var(--mtw-border);
 }
 .mtw-fp__hiw-list li {
   display: flex;
-  gap: 2rem;
-  align-items: flex-start;
-  padding-block: 1.75rem;
-  border-bottom: 1px solid var(--mtw-border);
+  flex-direction: column;
+  gap: 0.75rem;
+  padding: 2rem 2rem 2rem 0;
+  border-right: 1px solid var(--mtw-border);
 }
-.mtw-fp__hiw-list li:first-child { border-top: 1px solid var(--mtw-border); }
+.mtw-fp__hiw-list li:last-child { border-right: none; }
 .mtw-fp__hiw-num {
-  font-size: 0.65rem;
+  font-size: 0.62rem;
   letter-spacing: 0.12em;
   color: var(--mtw-primary);
-  flex-shrink: 0;
-  padding-top: 0.2rem;
-  min-width: 2rem;
+  display: block;
 }
 .mtw-fp__hiw-list h4 {
   font-family: var(--mtw-font-serif);
-  font-size: 1.05rem;
+  font-size: 1rem;
   font-weight: 500;
-  margin-bottom: 0.35rem;
+  margin: 0;
+  line-height: 1.3;
 }
-.mtw-fp__hiw-list p { font-size: 0.875rem; color: var(--mtw-muted-fg); line-height: 1.65; margin: 0; }
+.mtw-fp__hiw-list p { font-size: 0.85rem; color: var(--mtw-muted-fg); line-height: 1.65; margin: 0; }
 
 /* FAQ */
 .mtw-fp__faq { padding-block: 6rem; background: var(--mtw-muted); }
@@ -2459,8 +2487,8 @@ details[open] .mtw-campaign-faq__chevron { transform: rotate(90deg); }
 details[open] .mtw-fp__faq-chevron { transform: rotate(90deg); }
 .mtw-fp__faq-a { font-size: 0.9rem; color: var(--mtw-muted-fg); line-height: 1.7; padding-bottom: 1.25rem; margin: 0; }
 
-/* Final CTA + countdown */
-.mtw-fp__final { padding-block: 7rem; background: var(--mtw-dark); color: var(--mtw-primary-fg); }
+/* Final CTA */
+.mtw-fp__final { padding-block: 5rem; background: var(--mtw-dark); color: var(--mtw-primary-fg); }
 .mtw-fp__final-inner {
   display: flex;
   flex-direction: column;
