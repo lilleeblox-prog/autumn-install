@@ -11,65 +11,85 @@
   "sections": {
     "campaign-fall": {
       "type": "campaign-fall",
+      "settings": {
+        "eyebrow": "Hello Harvest · Fall 2026 · Tennessee",
+        "headline": "Fall packages.",
+        "intro": "Every display is delivered and installed by hand. Choose your size, select your week, and we handle the rest.",
+        "status_text": "Ordering open",
+        "meta_weeks": "Install weeks: Sept – Oct 2026",
+        "meta_delivery": "Delivery & installation included",
+        "photo_nudge": "Not sure which package fits your entry?",
+        "photo_nudge_link": "Send us a photo →",
+        "contact_email": "hello@madetowelcome.com",
+        "hiw_eyebrow": "Simple process",
+        "hiw_headline": "How it works.",
+        "faq_eyebrow": "Questions",
+        "faq_headline": "Common questions.",
+        "final_eyebrow": "Fall 2026 · Limited install weeks",
+        "final_headline": "Don't miss your window.",
+        "final_body": "Install weeks fill up fast. Secure your display now — we handle everything.",
+        "final_cta": "See packages",
+        "final_cta_url": "#"
+      },
       "blocks": {
         "pkg-petite": {
           "type": "package",
           "settings": {
-            "label": "SIMPLE",
+            "handle": "petite-patch",
+            "label": "Perfect for a stoop",
             "name": "Petite Patch",
             "price": "$385",
             "desc": "A curated mix of pumpkins and gourds, hand-arranged on delivery day. Ideal for a single-door entry or welcoming front stoop.",
             "inclusions": "4 Large Jack O'Lantern Pumpkins\n4 Medium Jack O'Lantern Pumpkins\n4 White Ghost Pumpkins\n6 Specialty Pumpkins\nAssortment of Pie Pumpkins",
-            "addons": "Hay Bale|+40\nCustom Design|+75\nRemoval|+75",
             "featured": false,
+            "addons": "Hay Bale|+40\nCustom Design|+75\nRemoval|+75",
             "cta_label": "Customize this package",
-            "cta_url": "/products/petite-patch",
-            "handle": "petite-patch"
+            "cta_url": "/products/petite-patch"
           }
         },
         "pkg-cozy": {
           "type": "package",
           "settings": {
-            "label": "BALANCED",
+            "handle": "cozy-corner",
+            "label": "Great for porches",
             "name": "Cozy Corner",
             "price": "$585",
             "desc": "A fuller display for a porch or covered entry. More pumpkins, more gourds, same careful arrangement by hand.",
             "inclusions": "6 Large Jack O'Lantern Pumpkins\n6 Medium Jack O'Lantern Pumpkins\n6 White Ghost Pumpkins\n8 Specialty Pumpkins\nAssortment of Pie Pumpkins",
-            "addons": "Hay Bale|+40\nCustom Design|+100\nRemoval|+100",
             "featured": false,
+            "addons": "Hay Bale|+40\nCustom Design|+100\nRemoval|+100",
             "cta_label": "Customize this package",
-            "cta_url": "/products/cozy-corner",
-            "handle": "cozy-corner"
+            "cta_url": "/products/cozy-corner"
           }
         },
         "pkg-favorites": {
           "type": "package",
           "settings": {
-            "label": "ABUNDANT",
+            "handle": "fall-favorites",
+            "label": "Most popular",
             "name": "Fall Favorites",
             "price": "$885",
             "desc": "Our most-booked display. A generous mix of pumpkins, specialty gourds, and two hay bales — everything it takes to make a real impression at the door.",
             "inclusions": "8 Large Jack O'Lantern Pumpkins\n8 Medium Jack O'Lantern Pumpkins\n8 White Ghost Pumpkins\n14 Specialty Pumpkins\n2 Hay Bales (included)\nAssortment of Pie Pumpkins",
-            "addons": "Residential Gate Pumpkins & Design\nRemoval|+150",
             "featured": true,
+            "addons": "Residential Gate Pumpkins & Design\nRemoval|+150",
             "cta_label": "Customize this package",
-            "cta_url": "/products/fall-favorites",
-            "handle": "fall-favorites"
+            "cta_url": "/products/fall-favorites"
           }
         },
         "pkg-grande": {
           "type": "package",
           "settings": {
-            "label": "UNMATCHED",
+            "handle": "grande-harvest",
+            "label": "The full treatment",
             "name": "Grande Harvest",
             "price": "$1,285",
             "desc": "Hay bales, ornamental gourds, pie pumpkins, mini varieties — the kind of display that carries the whole season and stops everyone who passes.",
             "inclusions": "10 Large Jack O'Lantern Pumpkins\n8 Medium Jack O'Lantern Pumpkins\n8 White Ghost Pumpkins\n16 Specialty Pumpkins\n2 Hay Bales (included)\nMini White & Mini Orange Pumpkins\nOrnamental Gourds\nAssortment of Pie Pumpkins",
-            "addons": "Residential Gate Pumpkins & Design\nRemoval|+200",
             "featured": false,
+            "addons": "Residential Gate Pumpkins & Design\nRemoval|+200",
             "cta_label": "Customize this package",
-            "cta_url": "/products/grande-harvest",
-            "handle": "grande-harvest"
+            "cta_url": "/products/grande-harvest"
           }
         },
         "step-1": {
@@ -158,27 +178,7 @@
         "faq-4",
         "faq-5",
         "faq-6"
-      ],
-      "settings": {
-        "eyebrow": "Hello Harvest · Fall 2026 · Tennessee",
-        "headline": "Fall packages.",
-        "intro": "Every display is delivered and installed by hand. Choose your size, select your week, and we handle the rest.",
-        "status_text": "Ordering open",
-        "meta_weeks": "Install weeks: Sept – Oct 2026",
-        "meta_delivery": "Delivery & installation included",
-        "photo_nudge": "Not sure which package fits your entry?",
-        "photo_nudge_link": "Send us a photo →",
-        "contact_email": "hello@madetowelcome.com",
-        "hiw_eyebrow": "Simple process",
-        "hiw_headline": "How it works.",
-        "faq_eyebrow": "Questions",
-        "faq_headline": "Common questions.",
-        "final_eyebrow": "Fall 2026 · Limited install weeks",
-        "final_headline": "Don't miss your window.",
-        "final_body": "Install weeks fill up fast. Secure your display now — we handle everything.",
-        "final_cta": "See packages",
-        "final_cta_url": "#"
-      }
+      ]
     },
     "footer": {
       "type": "footer",

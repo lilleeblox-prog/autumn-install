@@ -19,6 +19,24 @@
   </div>
 </header>
 
+<!-- ── LIGHTWEIGHT COUNTDOWN ── -->
+<div class="mtw-fp__countdown-strip">
+  <div class="mtw-container">
+    <div class="mtw-fp__countdown-inner">
+      <span class="mtw-mono mtw-fp__countdown-label">{{ section.settings.countdown_label | default: 'Days until Halloween' }}</span>
+      <div class="mtw-fp__countdown-digits" id="mtw-fp-clock">
+        <span class="mtw-fp__countdown-unit"><span class="mtw-fp__countdown-num" id="fpc-d">--</span><span class="mtw-fp__countdown-sub">d</span></span>
+        <span class="mtw-fp__countdown-sep">:</span>
+        <span class="mtw-fp__countdown-unit"><span class="mtw-fp__countdown-num" id="fpc-h">--</span><span class="mtw-fp__countdown-sub">h</span></span>
+        <span class="mtw-fp__countdown-sep">:</span>
+        <span class="mtw-fp__countdown-unit"><span class="mtw-fp__countdown-num" id="fpc-m">--</span><span class="mtw-fp__countdown-sub">m</span></span>
+        <span class="mtw-fp__countdown-sep">:</span>
+        <span class="mtw-fp__countdown-unit"><span class="mtw-fp__countdown-num" id="fpc-s">--</span><span class="mtw-fp__countdown-sub">s</span></span>
+      </div>
+    </div>
+  </div>
+</div>
+
 <!-- ── PACKAGES ── -->
 {%- assign has_packages = false -%}
 {%- for block in section.blocks -%}{%- if block.type == 'package' -%}{%- assign has_packages = true -%}{%- break -%}{%- endif -%}{%- endfor -%}
@@ -127,8 +145,8 @@
 
   <div class="mtw-container">
     <p class="mtw-fp__photo-nudge">
-      {{ section.settings.photo_nudge | default: 'Not sure which package fits your entry?' }}
-      <a href="mailto:{{ section.settings.contact_email | default: 'hello@madetowelcome.com' }}?subject=Help%20me%20choose%20a%20package&body=Hi!%20I'd%20love%20a%20package%20recommendation.">{{ section.settings.photo_nudge_link | default: 'Send us a photo →' }}</a>
+      {{ section.settings.photo_nudge | default: 'Not sure which package fits your space? Send our design team a photo of your entryway and we will point you to the best fit.' }}
+      <a href="mailto:{{ section.settings.contact_email | default: 'hello@madetowelcome.com' }}?subject=Help%20me%20choose%20a%20package&body=Hi!%20I'd%20love%20a%20package%20recommendation%20for%20my%20entryway.">{{ section.settings.photo_nudge_link | default: 'Send us a photo →' }}</a>
     </p>
   </div>
 
@@ -192,31 +210,17 @@
 </section>
 {%- endif -%}
 
-<!-- ── COUNTDOWN + FINAL CTA ── -->
+<!-- ── FINAL CTA ── -->
 <section class="mtw-fp__final">
-  <div class="mtw-container mtw-fp__final-inner">
-    <div class="mtw-fp__final-copy">
-      <span class="mtw-mono mtw-eyebrow mtw-eyebrow--primary" style="display:block;margin-bottom:0.75rem">{{ section.settings.final_eyebrow | default: 'Fall 2026 · Limited install weeks' }}</span>
-      <h2 class="mtw-fp__final-h2">{{ section.settings.final_headline | default: "Don't miss your window." }}</h2>
-      <p class="mtw-fp__final-body">{{ section.settings.final_body | default: 'Install weeks fill up fast. Secure your display now — we handle everything.' }}</p>
-      {%- assign final_url = section.settings.final_cta_url | default: '#' -%}
-      <a href="{{ final_url }}" class="mtw-btn mtw-btn--primary mtw-btn--lg" style="margin-top:2rem">
-        {{ section.settings.final_cta | default: 'See packages' }}
-        <svg width="14" height="14" viewBox="0 0 14 14" fill="none" style="margin-left:0.5rem"><path d="M1 7h12M8 2l5 5-5 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-      </a>
-    </div>
-    <div class="mtw-fp__final-clock">
-      <p class="mtw-mono" style="font-size:0.65rem;letter-spacing:0.12em;opacity:0.4;margin-bottom:1.25rem;text-transform:uppercase">Until Halloween</p>
-      <div class="mtw-fp__clock-digits" id="mtw-fp-clock">
-        <div class="mtw-fp__clock-unit"><span class="mtw-fp__clock-num" id="fpc-d">--</span><span class="mtw-fp__clock-lbl">Days</span></div>
-        <span class="mtw-fp__clock-sep">:</span>
-        <div class="mtw-fp__clock-unit"><span class="mtw-fp__clock-num" id="fpc-h">--</span><span class="mtw-fp__clock-lbl">Hrs</span></div>
-        <span class="mtw-fp__clock-sep">:</span>
-        <div class="mtw-fp__clock-unit"><span class="mtw-fp__clock-num" id="fpc-m">--</span><span class="mtw-fp__clock-lbl">Min</span></div>
-        <span class="mtw-fp__clock-sep">:</span>
-        <div class="mtw-fp__clock-unit"><span class="mtw-fp__clock-num" id="fpc-s">--</span><span class="mtw-fp__clock-lbl">Sec</span></div>
-      </div>
-    </div>
+  <div class="mtw-container mtw-fp__final-inner mtw-fp__final-inner--simple">
+    <span class="mtw-mono mtw-eyebrow mtw-eyebrow--primary" style="display:block;margin-bottom:0.75rem">{{ section.settings.final_eyebrow | default: 'Fall 2026 · Limited install weeks' }}</span>
+    <h2 class="mtw-fp__final-h2">{{ section.settings.final_headline | default: "Don't miss your window." }}</h2>
+    <p class="mtw-fp__final-body">{{ section.settings.final_body | default: 'Install weeks fill up fast. Secure your display now — we handle everything.' }}</p>
+    {%- assign final_url = section.settings.final_cta_url | default: '#' -%}
+    <a href="{{ final_url }}" class="mtw-btn mtw-btn--primary mtw-btn--lg" style="margin-top:2rem">
+      {{ section.settings.final_cta | default: 'See packages' }}
+      <svg width="14" height="14" viewBox="0 0 14 14" fill="none" style="margin-left:0.5rem"><path d="M1 7h12M8 2l5 5-5 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </a>
   </div>
 </section>
 
@@ -253,6 +257,7 @@
     { "type": "text",     "id": "status_text",      "label": "Status pill text",    "default": "Ordering open" },
     { "type": "text",     "id": "meta_weeks",       "label": "Install weeks blurb", "default": "Install weeks: Sept – Oct 2026" },
     { "type": "text",     "id": "meta_delivery",    "label": "Delivery blurb",      "default": "Delivery & installation included" },
+    { "type": "text",     "id": "countdown_label",  "label": "Countdown label",     "default": "Days until Halloween" },
     { "type": "header", "content": "Package section footer" },
     { "type": "text",     "id": "photo_nudge",      "label": "Nudge text",          "default": "Not sure which package fits your entry?" },
     { "type": "text",     "id": "photo_nudge_link", "label": "Nudge link text",     "default": "Send us a photo →" },
