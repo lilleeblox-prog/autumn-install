@@ -173,34 +173,6 @@
     {%- endif -%}
   {%- endfor -%}
 
-  <div class="mtw-container">
-    <div class="mtw-fp__photo-nudge">
-      <div class="mtw-fp__nudge-copy">
-        <p class="mtw-fp__nudge-headline">{{ section.settings.photo_nudge | default: 'Not sure which package fits your entry?' }}</p>
-        <p class="mtw-fp__nudge-sub">{{ section.settings.photo_nudge_sub | default: 'Send our design team a note and we will point you to the best fit.' }}</p>
-      </div>
-      <div class="mtw-fp__nudge-form-wrap">
-        {%- if section.settings.form_sent == true or request.path contains 'contact' -%}
-        {%- endif -%}
-        {% form 'contact', class: 'mtw-fp__nudge-form' %}
-          {%- if form.posted_successfully? -%}
-            <p class="mtw-fp__nudge-success">✓ &nbsp;{{ section.settings.form_success | default: "Got it — we'll be in touch." }}</p>
-          {%- else -%}
-            <div class="mtw-fp__nudge-row">
-              <input type="text" name="contact[name]" placeholder="{{ section.settings.form_name_label | default: 'Your name' }}" class="mtw-fp__nudge-input" required>
-              <input type="email" name="contact[email]" placeholder="{{ section.settings.form_email_label | default: 'Email address' }}" class="mtw-fp__nudge-input" required>
-            </div>
-            <input type="hidden" name="contact[subject]" value="Package recommendation request">
-            <textarea name="contact[body]" placeholder="{{ section.settings.form_msg_label | default: 'Tell us about your entry — size, style, any questions' }}" class="mtw-fp__nudge-textarea" rows="2"></textarea>
-            <button type="submit" class="mtw-fp__nudge-submit">
-              {{ section.settings.photo_nudge_link | default: 'Send us a note' }}
-              <svg width="12" height="12" viewBox="0 0 14 14" fill="none" style="margin-left:0.4rem"><path d="M1 7h12M8 2l5 5-5 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-            </button>
-          {%- endif -%}
-        {% endform %}
-      </div>
-    </div>
-  </div>
 
 </section>
 {%- endif -%}
@@ -264,14 +236,6 @@
     { "type": "text",     "id": "status_text",      "label": "Status pill text",    "default": "Ordering open" },
     { "type": "text",     "id": "meta_weeks",       "label": "Install weeks blurb", "default": "Install weeks: Sept – Oct 2026" },
     { "type": "text",     "id": "countdown_label",  "label": "Countdown label",     "default": "Days until Halloween" },
-    { "type": "header", "content": "Package section footer" },
-    { "type": "text",     "id": "photo_nudge",        "label": "Nudge headline",        "default": "Not sure which package fits your entry?" },
-    { "type": "text",     "id": "photo_nudge_sub",    "label": "Nudge sub-copy",        "default": "Send our design team a note and we will point you to the best fit." },
-    { "type": "text",     "id": "photo_nudge_link",   "label": "Submit button label",   "default": "Send us a note" },
-    { "type": "text",     "id": "form_name_label",    "label": "Name placeholder",      "default": "Your name" },
-    { "type": "text",     "id": "form_email_label",   "label": "Email placeholder",     "default": "Email address" },
-    { "type": "text",     "id": "form_msg_label",     "label": "Message placeholder",   "default": "Tell us about your entry — size, style, any questions" },
-    { "type": "text",     "id": "form_success",       "label": "Success message",       "default": "Got it — we'll be in touch." },
     { "type": "header", "content": "How it works section" },
     { "type": "text",     "id": "hiw_eyebrow",      "label": "Eyebrow",             "default": "Simple process" },
     { "type": "text",     "id": "hiw_headline",     "label": "Headline",            "default": "How it works." },
