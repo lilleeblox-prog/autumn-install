@@ -9,280 +9,38 @@
  */
 {
   "sections": {
-    "fall-hero": {
-      "type": "fall-hero",
-      "disabled": true,
+    "campaign-fall": {
+      "type": "campaign-fall",
       "settings": {
-        "eyebrow": "Fall 2026 · Tennessee · Waitlist open",
-        "headline": "The season starts at your door.",
-        "subtext": "Organic pumpkins, heirloom gourds, and hay bales, arranged at your front door so your home feels ready the moment autumn arrives. A small number of homes per neighborhood, each one done by hand.",
-        "cta_text": "Add your name",
-        "no_payment_note": "No payment now",
-        "status_text": "Ordering opens mid-August"
-      }
-    },
-    "packages_grid_XAxhhG": {
-      "type": "packages-grid",
-      "blocks": {
-        "package_PYqUCD": {
-          "type": "package",
-          "settings": {
-            "label": "P1",
-            "name": "Petite Patch",
-            "product": "product-petite-patch",
-            "price_placeholder": "Pricing coming soon",
-            "description": "Perfect for a single door with a small stoop or landing.",
-            "included": "4 Large Jack O Lantern\n4 Medium Jack O Lantern\n4 White Ghost\n6 Specialty Pumpkins\nAssortment of Pie Pumpkins",
-            "addons": "Hay Bale — $40\nDesign — $75\nRemoval — $75",
-            "cta_text": "View package details",
-            "cta_url": "shopify://products/product-petite-patch"
-          }
-        },
-        "package_g6GUn7": {
-          "type": "package",
-          "settings": {
-            "label": "P2",
-            "name": "Cozy Corner",
-            "product": "product-cozy-corner",
-            "price_placeholder": "Pricing coming soon",
-            "description": "Ideal for a standard single-door home with a modest porch.",
-            "included": "4 Large Jack O Lantern\n4 Medium Jack O Lantern\n4 White Ghost\n6 Specialty Pumpkins\nAssortment of Pie Pumpkins",
-            "addons": "Hay Bale — $40\nDesign — $75\nRemoval — $75",
-            "cta_text": "View package details",
-            "cta_url": "shopify://products/product-cozy-corner"
-          }
-        },
-        "package_xiFHVq": {
-          "type": "package",
-          "settings": {
-            "label": "P3",
-            "name": "Fall Favorites",
-            "product": "fall-favorite",
-            "price_placeholder": "Pricing coming soon",
-            "description": "Made for wider porches and double-door entries.",
-            "included": "4 Large Jack O Lantern\n4 Medium Jack O Lantern\n4 White Ghost\n6 Specialty Pumpkins\nAssortment of Pie Pumpkins",
-            "addons": "Hay Bale — $40\nDesign — $75\nRemoval — $75",
-            "cta_text": "View package details",
-            "cta_url": "shopify://products/fall-favorite"
-          }
-        },
-        "package_yHVtWR": {
-          "type": "package",
-          "settings": {
-            "label": "P4",
-            "name": "Grande Harvest",
-            "product": "product-grande-harvest",
-            "price_placeholder": "Pricing coming soon",
-            "description": "Built for grand entrances, large double doors, and expansive front porches.",
-            "included": "4 Large Jack O Lantern\n4 Medium Jack O Lantern\n4 White Ghost\n6 Specialty Pumpkins\nAssortment of Pie Pumpkins",
-            "addons": "Hay Bale — $40\nDesign — $75\nRemoval — $75",
-            "cta_text": "View package details",
-            "cta_url": "shopify://products/product-grande-harvest"
-          }
-        }
-      },
-      "block_order": [
-        "package_PYqUCD",
-        "package_g6GUn7",
-        "package_xiFHVq",
-        "package_yHVtWR"
-      ],
-      "name": "Packages Grid",
-      "settings": {
-        "eyebrow": "Hello Harvest - Fall 2026",
-        "headline": "Choose your package.",
-        "subheading": "Every package includes delivery by our team.",
-        "photo_email": "",
-        "photo_cta_text": "Not sure which fits? Send us a photo of your entryway →"
-      }
-    },
-    "fall-content": {
-      "type": "fall-content",
-      "blocks": {
-        "check-1": {
-          "type": "checklist_item",
-          "settings": {
-            "text": "Organic pumpkins and heirloom gourds, arranged for your specific entry"
-          }
-        },
-        "check-2": {
-          "type": "checklist_item",
-          "settings": {
-            "text": "Hay bales for height, structure, and that unmistakable fall feel"
-          }
-        },
-        "check-3": {
-          "type": "checklist_item",
-          "settings": {
-            "text": "Planter styling with fall foliage and seasonal fillers"
-          }
-        },
-        "check-4": {
-          "type": "checklist_item",
-          "settings": {
-            "text": "Full delivery and installation. We bring everything."
-          }
-        },
-        "check-5": {
-          "type": "checklist_item",
-          "settings": {
-            "text": "Optional removal mid-to-end of November so your entry is clear for December 1st"
-          }
-        },
-        "proc-2": {
-          "type": "process_item",
-          "settings": {
-            "period": "Mid-August 2026",
-            "body": "Ordering opens. We reach out to walk you through your package options and schedule your install."
-          }
-        },
-        "proc-3": {
-          "type": "process_item",
-          "settings": {
-            "period": "Late September – October",
-            "body": "Our team arrives with your pumpkins, gourds, and all the fall pieces. We arrange everything at your door by hand."
-          }
-        },
-        "proc-4": {
-          "type": "process_item",
-          "settings": {
-            "period": "Mid–End of November (optional)",
-            "body": "We come back to collect your pumpkins, gourds, and hay bales so your entry is clear and ready for December 1st. Nothing to bag up, nothing to store."
-          }
-        }
-      },
-      "block_order": [
-        "check-1",
-        "check-2",
-        "check-3",
-        "check-4",
-        "check-5",
-        "proc-2",
-        "proc-3",
-        "proc-4"
-      ],
-      "disabled": true,
-      "settings": {
-        "service_eyebrow": "The service",
-        "service_headline": "Pumpkins, gourds, hay bales. All of it handled.",
-        "service_body_1": "We select the pumpkins, source the gourds and hay bales, and arrange everything at your front door. You never touch a thing. When autumn ends, we come back and collect it all if you want us to.",
-        "service_body_2": "Every pumpkin and gourd is sourced fresh for the season. We do not offer storage. Add the removal service and we collect everything mid-to-end of November so your entry is clear and ready for December 1st.",
-        "process_eyebrow": "The process",
-        "process_headline": "How it unfolds."
-      }
-    },
-    "fall-form": {
-      "type": "fall-form",
-      "blocks": {
-        "forms_inline_WqGtmh": {
-          "type": "shopify://apps/forms/blocks/inline/8744a304-fcb1-4347-b211-bb6b4759a76a",
-          "settings": {
-            "form_id": "1100922",
-            "text_color": "#202020",
-            "button_background_color": "#202020",
-            "button_label_color": "#ffffff",
-            "links_color": "#1878b9",
-            "errors_color": "#e02229",
-            "text_alignment": "center",
-            "form_alignment": "center",
-            "padding_top": 0,
-            "padding_bottom": 24,
-            "padding_right": 0,
-            "padding_left": 0
-          }
-        },
-        "fcheck-1": {
-          "type": "checklist_item",
-          "settings": {
-            "text": "You're on the list — no payment now"
-          }
-        },
-        "fcheck-2": {
-          "type": "checklist_item",
-          "settings": {
-            "text": "Fall packages open in mid-August"
-          }
-        },
-        "fcheck-3": {
-          "type": "checklist_item",
-          "settings": {
-            "text": "We reach out directly with your fall package options"
-          }
-        }
-      },
-      "block_order": [
-        "forms_inline_WqGtmh",
-        "fcheck-1",
-        "fcheck-2",
-        "fcheck-3"
-      ],
-      "disabled": true,
-      "settings": {
-        "eyebrow": "Fall 2026 · Waitlist",
-        "headline": "Your pumpkins, your gourds, your fall — reserved.",
-        "body": "We install a small number of homes per neighborhood each fall so every display gets the attention it deserves. Add your name and we'll reach out in mid-August when ordering opens with your package options.",
-        "form_title": "Add Your Name",
-        "form_desc": "We'll reach out in mid-August when ordering opens. No payment now.",
-        "form_success_title": "You're on the list.",
-        "form_success_body": "We'll be in touch in mid-August when ordering opens. No payment until then."
-      }
-    },
-    "cta_dark_mHgAa3": {
-      "type": "cta-dark",
-      "blocks": {
-        "forms_inline_nVTq6J": {
-          "type": "shopify://apps/forms/blocks/inline/8744a304-fcb1-4347-b211-bb6b4759a76a",
-          "settings": {
-            "form_id": "1103400",
-            "text_color": "#202020",
-            "button_background_color": "#202020",
-            "button_label_color": "#FFFFFF",
-            "links_color": "#1878B9",
-            "errors_color": "#E02229",
-            "text_alignment": "center",
-            "form_alignment": "center",
-            "padding_top": 0,
-            "padding_bottom": 24,
-            "padding_right": 0,
-            "padding_left": 0
-          }
-        },
-        "step_mRpGMU": {
-          "type": "step",
-          "settings": {
-            "text": "Fill out the form and attach a photo of your front entry — porch, stoop, or driveway gate"
-          }
-        },
-        "step_fgyAdB": {
-          "type": "step",
-          "settings": {
-            "text": "Our design team reviews your space and replies with a package recommendation, usually within one business day"
-          }
-        },
-        "step_rckCz8": {
-          "type": "step",
-          "settings": {
-            "text": "Book the package that fits — we handle delivery, installation, and styling from there"
-          }
-        }
-      },
-      "block_order": [
-        "forms_inline_nVTq6J",
-        "step_mRpGMU",
-        "step_fgyAdB",
-        "step_rckCz8"
-      ],
-      "name": "CTA — Dark",
-      "settings": {
-        "eyebrow": "Hello Harvest · Tennessee",
-        "headline": "Not Sure what fits best?",
-        "cta_body": "Not sure which package fits your space? Send our design team a photo of your entryway and we'll point you to the best fit.",
-        "cta_button_text": "Send us a photo",
-        "cta_button_url": "",
-        "form_title": "Add Your Name",
-        "form_desc": "We'll reach out in mid-August when ordering opens. No payment now.",
-        "form_success_title": "You're on the list.",
-        "form_success_body": "We'll be in touch in mid-August when ordering opens. No payment until then."
+        "bar_text": "Fall 2026 · Nashville, TN · Install weeks filling fast — order now to secure your spot",
+        "hero_eyebrow": "Hello Harvest · Fall 2026",
+        "hero_headline": "Your most welcoming fall yet.",
+        "hero_sub": "We deliver, install, and style your seasonal display — fully by hand. You do nothing.",
+        "hero_cta": "See packages & pricing",
+        "hero_note": "Delivery & installation included in every package",
+        "pkg_eyebrow": "Fall 2026 Packages",
+        "pkg_headline": "Choose your display.",
+        "pkg_sub": "Every package includes delivery and hand-installation. Add hay bales, gate design, or end-of-season removal at checkout.",
+        "pkg1_label": "Most popular for stoops",
+        "pkg1_name": "Petite Patch",
+        "pkg1_price": "$385",
+        "pkg1_url": "/products/petite-patch",
+        "pkg2_label": "Great for porches",
+        "pkg2_name": "Cozy Corner",
+        "pkg2_price": "$585",
+        "pkg2_url": "/products/cozy-corner",
+        "pkg3_label": "Best impression",
+        "pkg3_name": "Fall Favorites",
+        "pkg3_price": "$885",
+        "pkg3_url": "/products/fall-favorites",
+        "pkg4_label": "The full treatment",
+        "pkg4_name": "Grande Harvest",
+        "pkg4_price": "$1,285",
+        "pkg4_url": "/products/grande-harvest",
+        "final_eyebrow": "Fall 2026 · Limited install weeks",
+        "final_headline": "Don't miss your window.",
+        "final_body": "Install weeks fill up fast. Secure your spot now — we handle everything from delivery to styling.",
+        "final_cta": "Book your display"
       }
     },
     "footer": {
@@ -294,11 +52,7 @@
     }
   },
   "order": [
-    "fall-hero",
-    "packages_grid_XAxhhG",
-    "fall-content",
-    "fall-form",
-    "cta_dark_mHgAa3",
+    "campaign-fall",
     "footer"
   ]
 }
