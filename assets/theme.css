@@ -2443,10 +2443,11 @@ details[open] .mtw-campaign-faq__chevron { transform: rotate(90deg); }
   display: flex;
   flex-direction: column;
   gap: 0.75rem;
-  padding: 2rem 2rem 2rem 0;
+  padding: 2rem;
   border-right: 1px solid var(--mtw-border);
 }
-.mtw-fp__hiw-list li:last-child { border-right: none; }
+.mtw-fp__hiw-list li:first-child { padding-left: 0; }
+.mtw-fp__hiw-list li:last-child { border-right: none; padding-right: 0; }
 .mtw-fp__hiw-num {
   font-size: 0.62rem;
   letter-spacing: 0.12em;
