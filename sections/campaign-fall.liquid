@@ -230,19 +230,6 @@
 </section>
 {%- endif -%}
 
-<!-- ── FINAL CTA ── -->
-<section class="mtw-fp__final">
-  <div class="mtw-container mtw-fp__final-inner mtw-fp__final-inner--simple">
-    <span class="mtw-mono mtw-eyebrow mtw-eyebrow--primary" style="display:block;margin-bottom:0.75rem">{{ section.settings.final_eyebrow | default: 'Fall 2026 · Limited install weeks' }}</span>
-    <h2 class="mtw-fp__final-h2">{{ section.settings.final_headline | default: "Don't miss your window." }}</h2>
-    <p class="mtw-fp__final-body">{{ section.settings.final_body | default: 'Install weeks fill up fast. Secure your display now — we handle everything.' }}</p>
-    {%- assign final_url = section.settings.final_cta_url | default: '#' -%}
-    <a href="{{ final_url }}" class="mtw-btn mtw-btn--primary mtw-btn--lg" style="margin-top:2rem">
-      {{ section.settings.final_cta | default: 'See packages' }}
-      <svg width="14" height="14" viewBox="0 0 14 14" fill="none" style="margin-left:0.5rem"><path d="M1 7h12M8 2l5 5-5 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-    </a>
-  </div>
-</section>
 
 <script>
 (function(){
@@ -291,12 +278,6 @@
     { "type": "header", "content": "FAQ section" },
     { "type": "text",     "id": "faq_eyebrow",      "label": "Eyebrow",             "default": "Questions" },
     { "type": "text",     "id": "faq_headline",     "label": "Headline",            "default": "Common questions." },
-    { "type": "header", "content": "Final CTA section" },
-    { "type": "text",     "id": "final_eyebrow",    "label": "Eyebrow",             "default": "Fall 2026 · Limited install weeks" },
-    { "type": "text",     "id": "final_headline",   "label": "Headline",            "default": "Don't miss your window." },
-    { "type": "textarea", "id": "final_body",       "label": "Body",                "default": "Install weeks fill up fast. Secure your display now — we handle everything." },
-    { "type": "text",     "id": "final_cta",        "label": "Button label",        "default": "See packages" },
-    { "type": "text",     "id": "final_cta_url",    "label": "Button URL",          "default": "#" }
   ],
   "blocks": [
     {
