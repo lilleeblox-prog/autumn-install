@@ -35,6 +35,38 @@
   </div>
 </div>
 
+<!-- ── HOW IT WORKS ── -->
+{%- assign has_steps = false -%}
+{%- for block in section.blocks -%}{%- if block.type == 'step' -%}{%- assign has_steps = true -%}{%- break -%}{%- endif -%}{%- endfor -%}
+
+{%- if has_steps -%}
+<section class="mtw-fp__hiw">
+  <div class="mtw-container">
+    <div class="mtw-fp__hiw-hd">
+      <span class="mtw-mono mtw-eyebrow mtw-eyebrow--muted">{{ section.settings.hiw_eyebrow | default: 'Simple process' }}</span>
+      <h2 class="mtw-h2">{{ section.settings.hiw_headline | default: 'How it works.' }}</h2>
+    </div>
+    <ol class="mtw-fp__hiw-list">
+      {%- assign step_num = 0 -%}
+      {%- for block in section.blocks -%}
+        {%- if block.type == 'step' -%}
+          {%- assign step_num = step_num | plus: 1 -%}
+          <li {{ block.shopify_attributes }}>
+            <span class="mtw-mono mtw-fp__hiw-num">{{ step_num | prepend: '0' | slice: -2, 2 }}</span>
+            <div>
+              <h4>{{ block.settings.title }}</h4>
+              {%- if block.settings.desc != blank -%}
+                <p>{{ block.settings.desc }}</p>
+              {%- endif -%}
+            </div>
+          </li>
+        {%- endif -%}
+      {%- endfor -%}
+    </ol>
+  </div>
+</section>
+{%- endif -%}
+
 <!-- ── PACKAGES ── -->
 {%- assign has_packages = false -%}
 {%- for block in section.blocks -%}{%- if block.type == 'package' -%}{%- assign has_packages = true -%}{%- break -%}{%- endif -%}{%- endfor -%}
@@ -142,44 +174,34 @@
   {%- endfor -%}
 
   <div class="mtw-container">
-    <p class="mtw-fp__photo-nudge">
-      {{ section.settings.photo_nudge | default: 'Not sure which package fits your space? Send our design team a photo of your entryway and we will point you to the best fit.' }}
-      <a href="{{ section.settings.contact_page_url | default: '/pages/contact' }}">{{ section.settings.photo_nudge_link | default: 'Send us a photo →' }}</a>
-    </p>
-  </div>
-
-</section>
-{%- endif -%}
-
-<!-- ── HOW IT WORKS ── -->
-{%- assign has_steps = false -%}
-{%- for block in section.blocks -%}{%- if block.type == 'step' -%}{%- assign has_steps = true -%}{%- break -%}{%- endif -%}{%- endfor -%}
-
-{%- if has_steps -%}
-<section class="mtw-fp__hiw">
-  <div class="mtw-container">
-    <div class="mtw-fp__hiw-hd">
-      <span class="mtw-mono mtw-eyebrow mtw-eyebrow--muted">{{ section.settings.hiw_eyebrow | default: 'Simple process' }}</span>
-      <h2 class="mtw-h2">{{ section.settings.hiw_headline | default: 'How it works.' }}</h2>
-    </div>
-    <ol class="mtw-fp__hiw-list">
-      {%- assign step_num = 0 -%}
-      {%- for block in section.blocks -%}
-        {%- if block.type == 'step' -%}
-          {%- assign step_num = step_num | plus: 1 -%}
-          <li {{ block.shopify_attributes }}>
-            <span class="mtw-mono mtw-fp__hiw-num">{{ step_num | prepend: '0' | slice: -2, 2 }}</span>
-            <div>
-              <h4>{{ block.settings.title }}</h4>
-              {%- if block.settings.desc != blank -%}
-                <p>{{ block.settings.desc }}</p>
-              {%- endif -%}
-            </div>
-          </li>
+    <div class="mtw-fp__photo-nudge">
+      <div class="mtw-fp__nudge-copy">
+        <p class="mtw-fp__nudge-headline">{{ section.settings.photo_nudge | default: 'Not sure which package fits your entry?' }}</p>
+        <p class="mtw-fp__nudge-sub">{{ section.settings.photo_nudge_sub | default: 'Send our design team a note and we will point you to the best fit.' }}</p>
+      </div>
+      <div class="mtw-fp__nudge-form-wrap">
+        {%- if section.settings.form_sent == true or request.path contains 'contact' -%}
         {%- endif -%}
-      {%- endfor -%}
-    </ol>
+        {% form 'contact', class: 'mtw-fp__nudge-form' %}
+          {%- if form.posted_successfully? -%}
+            <p class="mtw-fp__nudge-success">✓ &nbsp;{{ section.settings.form_success | default: "Got it — we'll be in touch." }}</p>
+          {%- else -%}
+            <div class="mtw-fp__nudge-row">
+              <input type="text" name="contact[name]" placeholder="{{ section.settings.form_name_label | default: 'Your name' }}" class="mtw-fp__nudge-input" required>
+              <input type="email" name="contact[email]" placeholder="{{ section.settings.form_email_label | default: 'Email address' }}" class="mtw-fp__nudge-input" required>
+            </div>
+            <input type="hidden" name="contact[subject]" value="Package recommendation request">
+            <textarea name="contact[body]" placeholder="{{ section.settings.form_msg_label | default: 'Tell us about your entry — size, style, any questions' }}" class="mtw-fp__nudge-textarea" rows="2"></textarea>
+            <button type="submit" class="mtw-fp__nudge-submit">
+              {{ section.settings.photo_nudge_link | default: 'Send us a note' }}
+              <svg width="12" height="12" viewBox="0 0 14 14" fill="none" style="margin-left:0.4rem"><path d="M1 7h12M8 2l5 5-5 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </button>
+          {%- endif -%}
+        {% endform %}
+      </div>
+    </div>
   </div>
+
 </section>
 {%- endif -%}
 
@@ -256,9 +278,13 @@
     { "type": "text",     "id": "meta_weeks",       "label": "Install weeks blurb", "default": "Install weeks: Sept – Oct 2026" },
     { "type": "text",     "id": "countdown_label",  "label": "Countdown label",     "default": "Days until Halloween" },
     { "type": "header", "content": "Package section footer" },
-    { "type": "text",     "id": "photo_nudge",      "label": "Nudge text",          "default": "Not sure which package fits your entry?" },
-    { "type": "text",     "id": "photo_nudge_link", "label": "Nudge link text",     "default": "Send us a photo →" },
-    { "type": "url",      "id": "contact_page_url", "label": "Contact page URL",    "info": "Defaults to /pages/contact" },
+    { "type": "text",     "id": "photo_nudge",        "label": "Nudge headline",        "default": "Not sure which package fits your entry?" },
+    { "type": "text",     "id": "photo_nudge_sub",    "label": "Nudge sub-copy",        "default": "Send our design team a note and we will point you to the best fit." },
+    { "type": "text",     "id": "photo_nudge_link",   "label": "Submit button label",   "default": "Send us a note" },
+    { "type": "text",     "id": "form_name_label",    "label": "Name placeholder",      "default": "Your name" },
+    { "type": "text",     "id": "form_email_label",   "label": "Email placeholder",     "default": "Email address" },
+    { "type": "text",     "id": "form_msg_label",     "label": "Message placeholder",   "default": "Tell us about your entry — size, style, any questions" },
+    { "type": "text",     "id": "form_success",       "label": "Success message",       "default": "Got it — we'll be in touch." },
     { "type": "header", "content": "How it works section" },
     { "type": "text",     "id": "hiw_eyebrow",      "label": "Eyebrow",             "default": "Simple process" },
     { "type": "text",     "id": "hiw_headline",     "label": "Headline",            "default": "How it works." },
