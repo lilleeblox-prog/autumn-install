@@ -169,7 +169,7 @@
 
 <!-- ── FAQ ── -->
 {%- assign has_faqs = false -%}
-{%- for block in section.blocks -%}{%- if block.type == 'faq_item' -%}{%- assign has_faqs = true -%}{%- break -%}{%- endif -%}{%- endfor -%}
+{%- for block in section.blocks -%}{%- if block.type == 'faq-item' -%}{%- assign has_faqs = true -%}{%- break -%}{%- endif -%}{%- endfor -%}
 
 {%- if has_faqs -%}
 <section class="mtw-fp__faq">
@@ -180,7 +180,7 @@
     </div>
     <div class="mtw-fp__faq-list">
       {%- for block in section.blocks -%}
-        {%- if block.type == 'faq_item' -%}
+        {%- if block.type == 'faq-item' -%}
           <details class="mtw-fp__faq-item" {{ block.shopify_attributes }}>
             <summary class="mtw-fp__faq-q">{{ block.settings.question }}<span class="mtw-fp__faq-chevron">&#x276F;</span></summary>
             <p class="mtw-fp__faq-a">{{ block.settings.answer }}</p>
@@ -297,7 +297,7 @@
       ]
     },
     {
-      "type": "faq_item",
+      "type": "faq-item",
       "name": "FAQ item",
       "settings": [
         { "type": "text",     "id": "question", "label": "Question", "default": "Question goes here" },
@@ -317,9 +317,9 @@
         { "type": "step" },
         { "type": "step" },
         { "type": "step" },
-        { "type": "faq_item" },
-        { "type": "faq_item" },
-        { "type": "faq_item" }
+        { "type": "faq-item" },
+        { "type": "faq-item" },
+        { "type": "faq-item" }
       ]
     }
   ]
