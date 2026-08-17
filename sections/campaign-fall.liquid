@@ -1,0 +1,364 @@
+{% comment %} Fall 2026 Ad Campaign Landing Page — long-scroll, conversion-optimized {% endcomment %}
+
+{%- assign pkg1_url = section.settings.pkg1_url | default: '/products/petite-patch' -%}
+{%- assign pkg2_url = section.settings.pkg2_url | default: '/products/cozy-corner' -%}
+{%- assign pkg3_url = section.settings.pkg3_url | default: '/products/fall-favorites' -%}
+{%- assign pkg4_url = section.settings.pkg4_url | default: '/products/grande-harvest' -%}
+
+<!-- ── URGENCY BAR ── -->
+<div class="mtw-campaign-bar">
+  <span class="mtw-mono">🍂 {{ section.settings.bar_text | default: 'Fall 2026 · Nashville, TN · Install weeks filling fast — order now to secure your spot' }}</span>
+</div>
+
+<!-- ── HERO ── -->
+<section class="mtw-campaign-hero" {% if section.settings.hero_image != blank %}style="background-image:url({{ section.settings.hero_image | img_url: '2000x' }})"{% endif %}>
+  <div class="mtw-campaign-hero__overlay"></div>
+  <div class="mtw-container mtw-campaign-hero__content">
+    <span class="mtw-mono mtw-eyebrow mtw-eyebrow--primary">{{ section.settings.hero_eyebrow | default: 'Hello Harvest · Fall 2026' }}</span>
+    <h1 class="mtw-campaign-hero__h1">{{ section.settings.hero_headline | default: 'Your most welcoming fall yet.' }}</h1>
+    <p class="mtw-campaign-hero__sub">{{ section.settings.hero_sub | default: 'We deliver, install, and style your seasonal display — fully by hand. You do nothing.' }}</p>
+    <div class="mtw-campaign-hero__actions">
+      <a href="#packages" class="mtw-btn mtw-btn--primary mtw-btn--lg">
+        {{ section.settings.hero_cta | default: 'See packages & pricing' }}
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none" style="margin-left:0.5rem"><path d="M1 7h12M8 2l5 5-5 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </a>
+      <span class="mtw-campaign-hero__note">{{ section.settings.hero_note | default: 'Delivery & installation included in every package' }}</span>
+    </div>
+  </div>
+</section>
+
+<!-- ── VALUE PILLS ── -->
+<section class="mtw-campaign-pills">
+  <div class="mtw-container mtw-campaign-pills__row">
+    <div class="mtw-campaign-pill">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M5 12l5 5L20 7"/></svg>
+      <span>Hand-delivered to your door</span>
+    </div>
+    <div class="mtw-campaign-pill">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M5 12l5 5L20 7"/></svg>
+      <span>Installed & styled by our team</span>
+    </div>
+    <div class="mtw-campaign-pill">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M5 12l5 5L20 7"/></svg>
+      <span>Optional end-of-season removal</span>
+    </div>
+    <div class="mtw-campaign-pill">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M5 12l5 5L20 7"/></svg>
+      <span>No heavy lifting. Ever.</span>
+    </div>
+  </div>
+</section>
+
+<!-- ── PACKAGES ── -->
+<section class="mtw-campaign-packages" id="packages">
+  <div class="mtw-container">
+    <div class="mtw-campaign-section-hd">
+      <span class="mtw-mono mtw-eyebrow mtw-eyebrow--primary">{{ section.settings.pkg_eyebrow | default: 'Fall 2026 Packages' }}</span>
+      <h2 class="mtw-h2">{{ section.settings.pkg_headline | default: 'Choose your display.' }}</h2>
+      <p class="mtw-body mtw-text-muted" style="max-width:42rem;margin-inline:auto">{{ section.settings.pkg_sub | default: 'Every package includes delivery and hand-installation. Add hay bales, gate design, or end-of-season removal at checkout.' }}</p>
+    </div>
+
+    <div class="mtw-campaign-pkg-grid">
+
+      <!-- P1 Petite Patch -->
+      <div class="mtw-campaign-pkg">
+        <div class="mtw-campaign-pkg__head">
+          <div>
+            <span class="mtw-mono mtw-campaign-pkg__label">{{ section.settings.pkg1_label | default: 'Most popular for stoops' }}</span>
+            <h3 class="mtw-campaign-pkg__name">{{ section.settings.pkg1_name | default: 'Petite Patch' }}</h3>
+          </div>
+          <div class="mtw-campaign-pkg__price">{{ section.settings.pkg1_price | default: '$385' }}</div>
+        </div>
+        <p class="mtw-campaign-pkg__desc">{{ section.settings.pkg1_desc | default: 'Perfect for a welcoming front stoop. A curated mix of pumpkins and gourds, hand-arranged on delivery day.' }}</p>
+        <ul class="mtw-campaign-pkg__list">
+          <li>4 Large Jack O Lantern pumpkins</li>
+          <li>4 Medium Jack O Lantern pumpkins</li>
+          <li>4 White Ghost pumpkins</li>
+          <li>6 Specialty pumpkins</li>
+          <li>Assortment of Pie pumpkins</li>
+        </ul>
+        <div class="mtw-campaign-pkg__addons">
+          <span class="mtw-mono" style="font-size:0.7rem;opacity:0.6;letter-spacing:0.08em">ADD-ONS AVAILABLE</span>
+          <p>Hay Bale — $40 &nbsp;·&nbsp; Custom Design — $75 &nbsp;·&nbsp; Removal — $75</p>
+        </div>
+        <a href="{{ pkg1_url }}" class="mtw-btn mtw-btn--primary mtw-btn--full">
+          Book Petite Patch — $385
+        </a>
+      </div>
+
+      <!-- P2 Cozy Corner -->
+      <div class="mtw-campaign-pkg">
+        <div class="mtw-campaign-pkg__head">
+          <div>
+            <span class="mtw-mono mtw-campaign-pkg__label">{{ section.settings.pkg2_label | default: 'Great for porches' }}</span>
+            <h3 class="mtw-campaign-pkg__name">{{ section.settings.pkg2_name | default: 'Cozy Corner' }}</h3>
+          </div>
+          <div class="mtw-campaign-pkg__price">{{ section.settings.pkg2_price | default: '$585' }}</div>
+        </div>
+        <p class="mtw-campaign-pkg__desc">{{ section.settings.pkg2_desc | default: 'A fuller display for a porch or entry that deserves more. More pumpkins, same careful arrangement.' }}</p>
+        <ul class="mtw-campaign-pkg__list">
+          <li>6 Large Jack O Lantern pumpkins</li>
+          <li>6 Medium Jack O Lantern pumpkins</li>
+          <li>6 White Ghost pumpkins</li>
+          <li>8 Specialty pumpkins</li>
+          <li>Assortment of Pie pumpkins</li>
+        </ul>
+        <div class="mtw-campaign-pkg__addons">
+          <span class="mtw-mono" style="font-size:0.7rem;opacity:0.6;letter-spacing:0.08em">ADD-ONS AVAILABLE</span>
+          <p>Hay Bale — $40 &nbsp;·&nbsp; Custom Design — $100 &nbsp;·&nbsp; Removal — $100</p>
+        </div>
+        <a href="{{ pkg2_url }}" class="mtw-btn mtw-btn--primary mtw-btn--full">
+          Book Cozy Corner — $585
+        </a>
+      </div>
+
+      <!-- P3 Fall Favorites -->
+      <div class="mtw-campaign-pkg mtw-campaign-pkg--featured">
+        <div class="mtw-campaign-pkg__badge">Most Popular</div>
+        <div class="mtw-campaign-pkg__head">
+          <div>
+            <span class="mtw-mono mtw-campaign-pkg__label">{{ section.settings.pkg3_label | default: 'Best impression' }}</span>
+            <h3 class="mtw-campaign-pkg__name">{{ section.settings.pkg3_name | default: 'Fall Favorites' }}</h3>
+          </div>
+          <div class="mtw-campaign-pkg__price">{{ section.settings.pkg3_price | default: '$885' }}</div>
+        </div>
+        <p class="mtw-campaign-pkg__desc">{{ section.settings.pkg3_desc | default: 'Our most popular display. Hay bales, a generous mix of pumpkins and specialty gourds — everything it takes to make a real impression.' }}</p>
+        <ul class="mtw-campaign-pkg__list">
+          <li>8 Large Jack O Lantern pumpkins</li>
+          <li>8 Medium Jack O Lantern pumpkins</li>
+          <li>8 White Ghost pumpkins</li>
+          <li>14 Specialty pumpkins</li>
+          <li>2 Hay Bales included</li>
+          <li>Assortment of Pie pumpkins</li>
+        </ul>
+        <div class="mtw-campaign-pkg__addons">
+          <span class="mtw-mono" style="font-size:0.7rem;opacity:0.6;letter-spacing:0.08em">ADD-ONS AVAILABLE</span>
+          <p>Residential Gate Pumpkins &amp; Design &nbsp;·&nbsp; Removal — $150</p>
+        </div>
+        <a href="{{ pkg3_url }}" class="mtw-btn mtw-btn--primary mtw-btn--full">
+          Book Fall Favorites — $885
+        </a>
+      </div>
+
+      <!-- P4 Grande Harvest -->
+      <div class="mtw-campaign-pkg">
+        <div class="mtw-campaign-pkg__head">
+          <div>
+            <span class="mtw-mono mtw-campaign-pkg__label">{{ section.settings.pkg4_label | default: 'The full treatment' }}</span>
+            <h3 class="mtw-campaign-pkg__name">{{ section.settings.pkg4_name | default: 'Grande Harvest' }}</h3>
+          </div>
+          <div class="mtw-campaign-pkg__price">{{ section.settings.pkg4_price | default: '$1,285' }}</div>
+        </div>
+        <p class="mtw-campaign-pkg__desc">{{ section.settings.pkg4_desc | default: 'Hay bales, ornamental gourds, pie pumpkins, mini varieties — a display that carries the whole season.' }}</p>
+        <ul class="mtw-campaign-pkg__list">
+          <li>10 Large Jack O Lantern pumpkins</li>
+          <li>8 Medium Jack O Lantern pumpkins</li>
+          <li>8 White Ghost pumpkins</li>
+          <li>16 Specialty pumpkins</li>
+          <li>2 Hay Bales included</li>
+          <li>Mini White &amp; Mini Orange pumpkins</li>
+          <li>Ornamental Gourds</li>
+          <li>Assortment of Pie pumpkins</li>
+        </ul>
+        <div class="mtw-campaign-pkg__addons">
+          <span class="mtw-mono" style="font-size:0.7rem;opacity:0.6;letter-spacing:0.08em">ADD-ONS AVAILABLE</span>
+          <p>Residential Gate Pumpkins &amp; Design &nbsp;·&nbsp; Removal — $200</p>
+        </div>
+        <a href="{{ pkg4_url }}" class="mtw-btn mtw-btn--primary mtw-btn--full">
+          Book Grande Harvest — $1,285
+        </a>
+      </div>
+
+    </div>
+
+    <p class="mtw-campaign-photo-cta">
+      Not sure which package fits your space?
+      <a href="mailto:hello@madetowelcome.com?subject=Help%20me%20choose%20the%20right%20package&body=Hi!%20I%27m%20not%20sure%20which%20package%20fits%20my%20home.%20I%27d%20love%20a%20recommendation%20from%20your%20team%20%E2%80%94%20I%27ll%20attach%20a%20photo%20of%20my%20entryway.">Send us a photo of your entryway →</a>
+    </p>
+  </div>
+</section>
+
+<!-- ── HOW IT WORKS ── -->
+<section class="mtw-campaign-hiw">
+  <div class="mtw-container">
+    <div class="mtw-campaign-section-hd">
+      <span class="mtw-mono mtw-eyebrow mtw-eyebrow--muted">Simple process</span>
+      <h2 class="mtw-h2">How it works.</h2>
+    </div>
+    <div class="mtw-campaign-hiw__grid">
+      <div class="mtw-campaign-hiw__step">
+        <span class="mtw-campaign-hiw__num">01</span>
+        <h3 class="mtw-campaign-hiw__title">Choose your package</h3>
+        <p>Pick from four sizes — Petite Patch through Grande Harvest. Add hay bales, custom design, or end-of-season removal at checkout.</p>
+      </div>
+      <div class="mtw-campaign-hiw__step">
+        <span class="mtw-campaign-hiw__num">02</span>
+        <h3 class="mtw-campaign-hiw__title">Select your install week</h3>
+        <p>Choose the week that works for you — September through late October. We confirm your exact day and arrival window after your order.</p>
+      </div>
+      <div class="mtw-campaign-hiw__step">
+        <span class="mtw-campaign-hiw__num">03</span>
+        <h3 class="mtw-campaign-hiw__title">We arrive and style</h3>
+        <p>Our team brings everything and arranges your display by hand. No heavy lifting, no coordination — just open your door to a finished entry.</p>
+      </div>
+      <div class="mtw-campaign-hiw__step">
+        <span class="mtw-campaign-hiw__num">04</span>
+        <h3 class="mtw-campaign-hiw__title">Optional removal</h3>
+        <p>Add removal at checkout and we'll come back after Halloween to clear everything away. Nothing left on your to-do list.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── WHY MTW ── -->
+<section class="mtw-campaign-why">
+  <div class="mtw-container">
+    <div class="mtw-campaign-section-hd">
+      <span class="mtw-mono mtw-eyebrow mtw-eyebrow--primary">Why Made to Welcome</span>
+      <h2 class="mtw-h2">The difference is in the details.</h2>
+    </div>
+    <div class="mtw-campaign-why__grid">
+      <div class="mtw-campaign-why__card">
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"/><circle cx="12" cy="9" r="2.5"/></svg>
+        <h4>Local Nashville team</h4>
+        <p>We're based here. We know the neighborhoods, the streets, the styles that work. This isn't a franchise — it's your community.</p>
+      </div>
+      <div class="mtw-campaign-why__card">
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+        <h4>Hand-curated displays</h4>
+        <p>Every arrangement is placed by hand, not dropped at the door. Our team styles each display for your specific entry.</p>
+      </div>
+      <div class="mtw-campaign-why__card">
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+        <h4>Install weeks, not days</h4>
+        <p>You choose your week and we coordinate the rest. No waiting around for a 4-hour arrival window.</p>
+      </div>
+      <div class="mtw-campaign-why__card">
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+        <h4>Nothing left for you to do</h4>
+        <p>We bring everything. We arrange everything. Add removal and we clear everything too. Your only job is to enjoy it.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── FAQ ── -->
+<section class="mtw-campaign-faq">
+  <div class="mtw-container mtw-campaign-faq__inner">
+    <div class="mtw-campaign-section-hd" style="text-align:left;margin-bottom:2.5rem">
+      <span class="mtw-mono mtw-eyebrow mtw-eyebrow--muted">Common questions</span>
+      <h2 class="mtw-h2">Everything you need to know.</h2>
+    </div>
+
+    <div class="mtw-campaign-faq__list">
+      {%- assign faqs = "What area do you serve?|We currently serve Nashville, TN and surrounding areas. Exact service boundaries are checked at checkout — enter your zip and we'll confirm availability.;When do installs happen?|We install September through late October. At checkout you'll pick your install week. We'll follow up to confirm your exact date and a morning or afternoon arrival window.;What if I'm not home?|No problem — just let us know your preferred placement and any gate codes in your order notes. We'll style the display and send you a photo when we're done.;Do I need to provide anything?|Nothing. We bring all pumpkins, gourds, hay bales, and any other items in your package. Just tell us where you'd like the display.;Can I add removal later?|Removal is easiest to add at checkout, but reach out to hello@madetowelcome.com before October 15th and we'll add it for you.;What if something breaks or looks wrong?|We stand behind our work. If something isn't right, email us a photo and we'll make it right — simple as that." | split: ";" -%}
+
+      {%- for faq in faqs -%}
+        {%- assign parts = faq | split: "|" -%}
+        <details class="mtw-campaign-faq__item">
+          <summary class="mtw-campaign-faq__q">{{ parts[0] }}<span class="mtw-campaign-faq__chevron">&#x276F;</span></summary>
+          <p class="mtw-campaign-faq__a">{{ parts[1] }}</p>
+        </details>
+      {%- endfor -%}
+    </div>
+  </div>
+</section>
+
+<!-- ── FINAL CTA + COUNTDOWN ── -->
+<section class="mtw-campaign-final">
+  <div class="mtw-container mtw-campaign-final__inner">
+    <div class="mtw-campaign-final__copy">
+      <span class="mtw-mono mtw-eyebrow mtw-eyebrow--primary">{{ section.settings.final_eyebrow | default: 'Fall 2026 · Limited install weeks' }}</span>
+      <h2 class="mtw-campaign-final__h2">{{ section.settings.final_headline | default: "Don't miss your window." }}</h2>
+      <p>{{ section.settings.final_body | default: 'Install weeks fill up fast. Secure your spot now — we handle everything from delivery to styling.' }}</p>
+      <a href="#packages" class="mtw-btn mtw-btn--primary mtw-btn--lg" style="margin-top:2rem">
+        {{ section.settings.final_cta | default: 'Book your display' }}
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none" style="margin-left:0.5rem"><path d="M1 7h12M8 2l5 5-5 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </a>
+    </div>
+    <div class="mtw-campaign-final__clock">
+      <p class="mtw-mono" style="font-size:0.7rem;letter-spacing:0.1em;opacity:0.5;margin-bottom:1.5rem">UNTIL HALLOWEEN</p>
+      <div class="mtw-campaign-final__digits" id="mtw-campaign-clock">
+        <div class="mtw-campaign-final__unit"><span class="mtw-campaign-final__num" id="cfc-d">--</span><span class="mtw-campaign-final__lbl">Days</span></div>
+        <div class="mtw-campaign-final__sep">:</div>
+        <div class="mtw-campaign-final__unit"><span class="mtw-campaign-final__num" id="cfc-h">--</span><span class="mtw-campaign-final__lbl">Hrs</span></div>
+        <div class="mtw-campaign-final__sep">:</div>
+        <div class="mtw-campaign-final__unit"><span class="mtw-campaign-final__num" id="cfc-m">--</span><span class="mtw-campaign-final__lbl">Min</span></div>
+        <div class="mtw-campaign-final__sep">:</div>
+        <div class="mtw-campaign-final__unit"><span class="mtw-campaign-final__num" id="cfc-s">--</span><span class="mtw-campaign-final__lbl">Sec</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+(function(){
+  var t = new Date('October 31, 2026 23:59:59').getTime();
+  function pad(n){ return String(n).padStart(2,'0'); }
+  function tick(){
+    var diff = t - Date.now();
+    if(diff <= 0){ var el=document.getElementById('mtw-campaign-clock'); if(el) el.innerHTML='<p style="color:var(--mtw-primary);font-family:var(--mtw-font-mono)">Season complete.</p>'; return; }
+    var d=document.getElementById('cfc-d'), h=document.getElementById('cfc-h'), m=document.getElementById('cfc-m'), s=document.getElementById('cfc-s');
+    if(d) d.textContent=pad(Math.floor(diff/86400000));
+    if(h) h.textContent=pad(Math.floor((diff%86400000)/3600000));
+    if(m) m.textContent=pad(Math.floor((diff%3600000)/60000));
+    if(s) s.textContent=pad(Math.floor((diff%60000)/1000));
+  }
+  tick(); setInterval(tick,1000);
+  /* FAQ chevron rotation */
+  document.querySelectorAll('.mtw-campaign-faq__item').forEach(function(el){
+    el.addEventListener('toggle',function(){ });
+  });
+})();
+</script>
+
+{% schema %}
+{
+  "name": "Campaign — Fall",
+  "settings": [
+    { "type": "header", "content": "Urgency bar" },
+    { "type": "text", "id": "bar_text", "label": "Bar text", "default": "Fall 2026 · Nashville, TN · Install weeks filling fast — order now to secure your spot" },
+    { "type": "header", "content": "Hero" },
+    { "type": "image_picker", "id": "hero_image", "label": "Hero background image" },
+    { "type": "text", "id": "hero_eyebrow", "label": "Eyebrow", "default": "Hello Harvest · Fall 2026" },
+    { "type": "textarea", "id": "hero_headline", "label": "Headline", "default": "Your most welcoming fall yet." },
+    { "type": "textarea", "id": "hero_sub", "label": "Subheading", "default": "We deliver, install, and style your seasonal display — fully by hand. You do nothing." },
+    { "type": "text", "id": "hero_cta", "label": "CTA label", "default": "See packages & pricing" },
+    { "type": "text", "id": "hero_note", "label": "CTA note", "default": "Delivery & installation included in every package" },
+    { "type": "header", "content": "Packages section" },
+    { "type": "text", "id": "pkg_eyebrow", "label": "Eyebrow" },
+    { "type": "text", "id": "pkg_headline", "label": "Headline", "default": "Choose your display." },
+    { "type": "textarea", "id": "pkg_sub", "label": "Subheading" },
+    { "type": "header", "content": "Package 1 — Petite Patch" },
+    { "type": "text", "id": "pkg1_label", "label": "Label", "default": "Most popular for stoops" },
+    { "type": "text", "id": "pkg1_name", "label": "Name", "default": "Petite Patch" },
+    { "type": "text", "id": "pkg1_price", "label": "Price", "default": "$385" },
+    { "type": "textarea", "id": "pkg1_desc", "label": "Description" },
+    { "type": "text", "id": "pkg1_url", "label": "Product URL", "default": "/products/petite-patch" },
+    { "type": "header", "content": "Package 2 — Cozy Corner" },
+    { "type": "text", "id": "pkg2_label", "label": "Label", "default": "Great for porches" },
+    { "type": "text", "id": "pkg2_name", "label": "Name", "default": "Cozy Corner" },
+    { "type": "text", "id": "pkg2_price", "label": "Price", "default": "$585" },
+    { "type": "textarea", "id": "pkg2_desc", "label": "Description" },
+    { "type": "text", "id": "pkg2_url", "label": "Product URL", "default": "/products/cozy-corner" },
+    { "type": "header", "content": "Package 3 — Fall Favorites" },
+    { "type": "text", "id": "pkg3_label", "label": "Label", "default": "Best impression" },
+    { "type": "text", "id": "pkg3_name", "label": "Name", "default": "Fall Favorites" },
+    { "type": "text", "id": "pkg3_price", "label": "Price", "default": "$885" },
+    { "type": "textarea", "id": "pkg3_desc", "label": "Description" },
+    { "type": "text", "id": "pkg3_url", "label": "Product URL", "default": "/products/fall-favorites" },
+    { "type": "header", "content": "Package 4 — Grande Harvest" },
+    { "type": "text", "id": "pkg4_label", "label": "Label", "default": "The full treatment" },
+    { "type": "text", "id": "pkg4_name", "label": "Name", "default": "Grande Harvest" },
+    { "type": "text", "id": "pkg4_price", "label": "Price", "default": "$1,285" },
+    { "type": "textarea", "id": "pkg4_desc", "label": "Description" },
+    { "type": "text", "id": "pkg4_url", "label": "Product URL", "default": "/products/grande-harvest" },
+    { "type": "header", "content": "Final CTA" },
+    { "type": "text", "id": "final_eyebrow", "label": "Eyebrow", "default": "Fall 2026 · Limited install weeks" },
+    { "type": "text", "id": "final_headline", "label": "Headline", "default": "Don't miss your window." },
+    { "type": "textarea", "id": "final_body", "label": "Body" },
+    { "type": "text", "id": "final_cta", "label": "CTA label", "default": "Book your display" }
+  ],
+  "presets": [{ "name": "Campaign — Fall" }]
+}
+{% endschema %}

@@ -1,0 +1,48 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "campaign-fall": {
+      "type": "campaign-fall",
+      "settings": {
+        "bar_text": "Fall 2026 · Nashville, TN · Install weeks filling fast — order now to secure your spot",
+        "hero_eyebrow": "Hello Harvest · Fall 2026",
+        "hero_headline": "Your most welcoming fall yet.",
+        "hero_sub": "We deliver, install, and style your seasonal display — fully by hand. You do nothing.",
+        "hero_cta": "See packages & pricing",
+        "hero_note": "Delivery & installation included in every package",
+        "pkg_eyebrow": "Fall 2026 Packages",
+        "pkg_headline": "Choose your display.",
+        "pkg_sub": "Every package includes delivery and hand-installation. Add hay bales, gate design, or end-of-season removal at checkout.",
+        "pkg1_label": "Most popular for stoops",
+        "pkg1_name": "Petite Patch",
+        "pkg1_price": "$385",
+        "pkg1_url": "/products/petite-patch",
+        "pkg2_label": "Great for porches",
+        "pkg2_name": "Cozy Corner",
+        "pkg2_price": "$585",
+        "pkg2_url": "/products/cozy-corner",
+        "pkg3_label": "Best impression",
+        "pkg3_name": "Fall Favorites",
+        "pkg3_price": "$885",
+        "pkg3_url": "/products/fall-favorites",
+        "pkg4_label": "The full treatment",
+        "pkg4_name": "Grande Harvest",
+        "pkg4_price": "$1,285",
+        "pkg4_url": "/products/grande-harvest",
+        "final_eyebrow": "Fall 2026 · Limited install weeks",
+        "final_headline": "Don't miss your window.",
+        "final_body": "Install weeks fill up fast. Secure your spot now — we handle everything from delivery to styling.",
+        "final_cta": "Book your display"
+      }
+    }
+  },
+  "order": ["campaign-fall"]
+}

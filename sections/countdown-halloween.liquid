@@ -1,0 +1,86 @@
+<section class="mtw-countdown {{ section.settings.bg_style }}">
+  <div class="mtw-container mtw-countdown__inner">
+    <div class="mtw-countdown__copy">
+      <span class="mtw-mono mtw-eyebrow mtw-eyebrow--primary">{{ section.settings.eyebrow | default: 'Hello Harvest · Fall 2026' }}</span>
+      <h2 class="mtw-countdown__headline">{{ section.settings.headline | default: 'Halloween is coming.' }}</h2>
+      {%- if section.settings.subtext != blank -%}
+        <p class="mtw-countdown__sub">{{ section.settings.subtext }}</p>
+      {%- endif -%}
+      {%- if section.settings.cta_text != blank -%}
+        <a href="{{ section.settings.cta_url | default: '#packages' }}" class="mtw-btn mtw-btn--primary mtw-countdown__cta">
+          {{ section.settings.cta_text }}
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none" style="margin-left:0.5rem;flex-shrink:0"><path d="M1 7h12M8 2l5 5-5 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </a>
+      {%- endif -%}
+    </div>
+
+    <div class="mtw-countdown__clock" id="mtw-clock-{{ section.id }}" aria-live="polite" aria-atomic="true">
+      <div class="mtw-countdown__unit">
+        <span class="mtw-countdown__num" id="cd-days-{{ section.id }}">--</span>
+        <span class="mtw-countdown__label">Days</span>
+      </div>
+      <div class="mtw-countdown__divider">:</div>
+      <div class="mtw-countdown__unit">
+        <span class="mtw-countdown__num" id="cd-hrs-{{ section.id }}">--</span>
+        <span class="mtw-countdown__label">Hours</span>
+      </div>
+      <div class="mtw-countdown__divider">:</div>
+      <div class="mtw-countdown__unit">
+        <span class="mtw-countdown__num" id="cd-min-{{ section.id }}">--</span>
+        <span class="mtw-countdown__label">Minutes</span>
+      </div>
+      <div class="mtw-countdown__divider">:</div>
+      <div class="mtw-countdown__unit">
+        <span class="mtw-countdown__num" id="cd-sec-{{ section.id }}">--</span>
+        <span class="mtw-countdown__label">Seconds</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+(function(){
+  var target = new Date('{{ section.settings.target_date | default: "October 31, 2026 23:59:59" }}').getTime();
+  var sid    = '{{ section.id }}';
+  function pad(n){ return String(n).padStart(2,'0'); }
+  function tick(){
+    var diff = target - Date.now();
+    if(diff <= 0){
+      var clock = document.getElementById('mtw-clock-'+sid);
+      if(clock) clock.innerHTML = '<p class="mtw-countdown__done">{{ section.settings.done_text | default: "Season complete — see you next fall." }}</p>';
+      return;
+    }
+    var d = Math.floor(diff/86400000);
+    var h = Math.floor((diff%86400000)/3600000);
+    var m = Math.floor((diff%3600000)/60000);
+    var s = Math.floor((diff%60000)/1000);
+    var el;
+    el = document.getElementById('cd-days-'+sid); if(el) el.textContent = pad(d);
+    el = document.getElementById('cd-hrs-'+sid);  if(el) el.textContent = pad(h);
+    el = document.getElementById('cd-min-'+sid);  if(el) el.textContent = pad(m);
+    el = document.getElementById('cd-sec-'+sid);  if(el) el.textContent = pad(s);
+  }
+  tick();
+  setInterval(tick, 1000);
+})();
+</script>
+
+{% schema %}
+{
+  "name": "Countdown — Halloween",
+  "settings": [
+    { "type": "select", "id": "bg_style", "label": "Background", "options": [
+        { "value": "mtw-countdown--dark",  "label": "Dark (brown)" },
+        { "value": "mtw-countdown--cream", "label": "Cream" }
+      ], "default": "mtw-countdown--dark" },
+    { "type": "text",    "id": "eyebrow",     "label": "Eyebrow",      "default": "Hello Harvest · Fall 2026" },
+    { "type": "text",    "id": "headline",    "label": "Headline",     "default": "Order before Halloween." },
+    { "type": "textarea","id": "subtext",     "label": "Subtext",      "default": "Install weeks are filling fast. Secure your display now — we handle everything." },
+    { "type": "text",    "id": "cta_text",    "label": "Button label", "default": "Book your install" },
+    { "type": "text",    "id": "cta_url",     "label": "Button URL",   "default": "#packages" },
+    { "type": "text",    "id": "target_date", "label": "Target date",  "default": "October 31, 2026 23:59:59", "info": "Use format: Month DD, YYYY HH:MM:SS" },
+    { "type": "text",    "id": "done_text",   "label": "Expired message", "default": "Season complete — see you next fall." }
+  ],
+  "presets": [{ "name": "Countdown — Halloween" }]
+}
+{% endschema %}
