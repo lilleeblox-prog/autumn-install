@@ -1903,7 +1903,9 @@ details[open] .mtw-campaign-faq__chevron { transform: rotate(90deg); }
   padding-block: 5rem 3.5rem;
   border-bottom: 1px solid var(--mtw-border);
 }
-.mtw-fp__header-inner { max-width: 56rem; }
+.mtw-fp__header-inner { max-width: 56rem; text-align: center; margin-inline: auto; }
+.mtw-fp__header-inner .mtw-fp__intro { margin-inline: auto; }
+.mtw-fp__header-inner .mtw-fp__header-meta { justify-content: center; }
 .mtw-fp__title {
   font-family: var(--mtw-font-serif);
   font-size: clamp(2.75rem, 5vw, 4rem);
