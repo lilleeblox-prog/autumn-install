@@ -151,7 +151,7 @@
       "settings": {
         "eyebrow": "Hello Harvest · Fall 2026",
         "headline": "Choose your package.",
-        "subheading": "Every package includes delivery and hand-installation by our team. Not sure which size is right? Send us a photo of your entryway and we’ll recommend the best fit.",
+        "subheading": "Every package includes delivery by our team. Not sure which size is right? Send us a photo of your entryway and we’ll recommend the best fit.",
         "photo_email": "hello@madetowelcome.com",
         "photo_cta_text": "Not sure which fits? Send us a photo of your entryway →"
       }
@@ -172,6 +172,23 @@
     "cta-dark": {
       "type": "cta-dark",
       "blocks": {
+        "forms_inline_TmqQYX": {
+          "type": "shopify://apps/forms/blocks/inline/8744a304-fcb1-4347-b211-bb6b4759a76a",
+          "settings": {
+            "form_id": "1103400",
+            "text_color": "#202020",
+            "button_background_color": "#202020",
+            "button_label_color": "#FFFFFF",
+            "links_color": "#1878B9",
+            "errors_color": "#E02229",
+            "text_alignment": "center",
+            "form_alignment": "center",
+            "padding_top": 0,
+            "padding_bottom": 24,
+            "padding_right": 0,
+            "padding_left": 0
+          }
+        },
         "photo-step-1": {
           "type": "step",
           "settings": {
@@ -192,13 +209,14 @@
         }
       },
       "block_order": [
+        "forms_inline_TmqQYX",
         "photo-step-1",
         "photo-step-2",
         "photo-step-3"
       ],
       "settings": {
         "eyebrow": "Not sure which package fits?",
-        "headline": "Send us a photo.\nWe'll recommend the right one.",
+        "headline": "Send us a photo.We'll recommend the right one.",
         "cta_body": "Every home is different. If you're not sure which size is right for your space, send our design team a photo of your entryway and we'll point you to the best fit — no obligation.",
         "cta_button_text": "Send us a photo",
         "cta_button_url": "mailto:hello@madetowelcome.com?subject=Help%20me%20choose%20the%20right%20package&body=Hi!%20I%E2%80%99m%20not%20sure%20which%20package%20fits%20my%20home.%20I%E2%80%99d%20love%20a%20recommendation%20from%20your%20team%20%E2%80%94%20I%E2%80%99ll%20attach%20a%20photo%20of%20my%20entryway.",
