@@ -1,0 +1,70 @@
+<!-- Fall page header + countdown -->
+<header class="mtw-fp__header">
+  <div class="mtw-container mtw-fp__header-inner">
+    <span class="mtw-mono mtw-eyebrow mtw-eyebrow--primary">{{ section.settings.eyebrow | default: 'Hello Harvest · Fall 2026 · Tennessee' }}</span>
+    <h1 class="mtw-fp__title">{{ section.settings.headline | default: 'Fall packages.' }}</h1>
+    <p class="mtw-fp__intro">{{ section.settings.intro | default: 'Every display is delivered and installed by hand. Choose your size, select your week, and we handle the rest.' }}</p>
+    <div class="mtw-fp__header-meta">
+      <span class="mtw-fp__meta-pill">
+        <svg width="10" height="10" viewBox="0 0 10 10" fill="currentColor"><circle cx="5" cy="5" r="5"/></svg>
+        {{ section.settings.status_text | default: 'Ordering open' }}
+      </span>
+      <span class="mtw-fp__meta-divider">·</span>
+      <span>{{ section.settings.meta_weeks | default: 'Install weeks: Sept – Oct 2026' }}</span>
+    </div>
+  </div>
+</header>
+
+<div class="mtw-fp__countdown-strip">
+  <div class="mtw-container">
+    <div class="mtw-fp__countdown-inner">
+      <span class="mtw-mono mtw-fp__countdown-label">{{ section.settings.countdown_label | default: 'Days until Halloween' }}</span>
+      <div class="mtw-fp__countdown-digits" id="mtw-fp-clock">
+        <span class="mtw-fp__countdown-unit"><span class="mtw-fp__countdown-num" id="fpc-d">--</span><span class="mtw-fp__countdown-sub">d</span></span>
+        <span class="mtw-fp__countdown-sep">:</span>
+        <span class="mtw-fp__countdown-unit"><span class="mtw-fp__countdown-num" id="fpc-h">--</span><span class="mtw-fp__countdown-sub">h</span></span>
+        <span class="mtw-fp__countdown-sep">:</span>
+        <span class="mtw-fp__countdown-unit"><span class="mtw-fp__countdown-num" id="fpc-m">--</span><span class="mtw-fp__countdown-sub">m</span></span>
+        <span class="mtw-fp__countdown-sep">:</span>
+        <span class="mtw-fp__countdown-unit"><span class="mtw-fp__countdown-num" id="fpc-s">--</span><span class="mtw-fp__countdown-sub">s</span></span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+(function(){
+  var t = new Date('October 31, 2026 23:59:59').getTime();
+  function pad(n){ return String(n).padStart(2,'0'); }
+  function tick(){
+    var diff = t - Date.now();
+    if(diff <= 0){
+      var el = document.getElementById('mtw-fp-clock');
+      if(el) el.innerHTML = '<p style="font-family:var(--mtw-font-mono);font-size:0.85rem;color:var(--mtw-primary)">Season complete.</p>';
+      return;
+    }
+    var d=document.getElementById('fpc-d'), h=document.getElementById('fpc-h'),
+        m=document.getElementById('fpc-m'), s=document.getElementById('fpc-s');
+    if(d) d.textContent = pad(Math.floor(diff/86400000));
+    if(h) h.textContent = pad(Math.floor((diff%86400000)/3600000));
+    if(m) m.textContent = pad(Math.floor((diff%3600000)/60000));
+    if(s) s.textContent = pad(Math.floor((diff%60000)/1000));
+  }
+  tick(); setInterval(tick,1000);
+})();
+</script>
+
+{% schema %}
+{
+  "name": "Fall — Header",
+  "settings": [
+    { "type": "text",     "id": "eyebrow",        "label": "Eyebrow",             "default": "Hello Harvest · Fall 2026 · Tennessee" },
+    { "type": "text",     "id": "headline",        "label": "Headline",            "default": "Fall packages." },
+    { "type": "textarea", "id": "intro",           "label": "Intro text",          "default": "Every display is delivered and installed by hand. Choose your size, select your week, and we handle the rest." },
+    { "type": "text",     "id": "status_text",     "label": "Status pill text",    "default": "Ordering open" },
+    { "type": "text",     "id": "meta_weeks",      "label": "Install weeks blurb", "default": "Install weeks: Sept – Oct 2026" },
+    { "type": "text",     "id": "countdown_label", "label": "Countdown label",     "default": "Days until Halloween" }
+  ],
+  "presets": [{ "name": "Fall — Header" }]
+}
+{% endschema %}

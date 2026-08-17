@@ -1,0 +1,139 @@
+<!-- Fall — Packages -->
+{%- if section.blocks.size > 0 -%}
+<section class="mtw-fp__packages">
+
+  {%- for block in section.blocks -%}
+    {%- assign pkg_handle   = block.settings.handle -%}
+    {%- assign pkg_label    = block.settings.label -%}
+    {%- assign pkg_name     = block.settings.name -%}
+    {%- assign pkg_price    = block.settings.price -%}
+    {%- assign pkg_desc     = block.settings.desc -%}
+    {%- assign pkg_image    = block.settings.image -%}
+    {%- assign pkg_featured = block.settings.featured -%}
+    {%- assign pkg_cta      = block.settings.cta_label | default: 'Customize this package' -%}
+    {%- assign pkg_url      = block.settings.cta_url -%}
+    {%- if pkg_url == blank -%}
+      {%- assign pkg_url = '/products/' | append: pkg_handle -%}
+    {%- endif -%}
+    {%- assign addon_lines  = block.settings.addons | newline_to_br | split: '<br />' -%}
+
+    <div class="mtw-fp__pkg" id="pkg-{{ block.id }}" {{ block.shopify_attributes }}>
+      <div class="mtw-container mtw-fp__pkg-row">
+
+        <!-- Image -->
+        <div class="mtw-fp__pkg-img-wrap">
+          {%- if pkg_image != blank -%}
+            <img src="{{ pkg_image | img_url: '900x' }}" alt="{{ pkg_name }}" class="mtw-fp__pkg-img" loading="lazy">
+          {%- else -%}
+            <div class="mtw-fp__pkg-img-placeholder">
+              <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" opacity="0.3"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="m21 15-5-5L5 21"/></svg>
+            </div>
+          {%- endif -%}
+        </div>
+
+        <!-- Details -->
+        <div class="mtw-fp__pkg-details">
+          {%- if pkg_label != blank -%}
+            <p class="mtw-mono mtw-fp__pkg-eyebrow">{{ pkg_label }}</p>
+          {%- endif -%}
+
+          <h2 class="mtw-fp__pkg-name">
+            {{ pkg_name }}
+            {%- if pkg_featured -%}
+              <span class="mtw-fp__popular-badge">Most popular</span>
+            {%- endif -%}
+          </h2>
+
+          <p class="mtw-fp__pkg-price">{{ pkg_price }}</p>
+
+          {%- if pkg_desc != blank -%}
+            <p class="mtw-fp__pkg-desc">{{ pkg_desc }}</p>
+          {%- endif -%}
+
+          <!-- Inclusions -->
+          {%- assign incl_raw = block.settings.inclusions -%}
+          {%- if incl_raw != blank -%}
+            <div class="mtw-fp__pkg-incl">
+              <p class="mtw-mono mtw-fp__pkg-incl-label">What's included</p>
+              <ul class="mtw-fp__pkg-incl-list">
+                {%- assign incl_lines = incl_raw | newline_to_br | split: '<br />' -%}
+                {%- for line in incl_lines -%}
+                  {%- assign l = line | strip -%}
+                  {%- if l != blank -%}<li>{{ l }}</li>{%- endif -%}
+                {%- endfor -%}
+              </ul>
+            </div>
+          {%- endif -%}
+
+          <!-- Optional customizations -->
+          {%- assign addon_name_list = '' -%}
+          {%- for al in addon_lines -%}
+            {%- assign al_clean = al | strip -%}
+            {%- if al_clean != blank -%}
+              {%- assign al_parts = al_clean | split: '|' -%}
+              {%- assign al_name = al_parts[0] | strip -%}
+              {%- if addon_name_list == '' -%}
+                {%- assign addon_name_list = al_name -%}
+              {%- else -%}
+                {%- assign addon_name_list = addon_name_list | append: ', ' | append: al_name -%}
+              {%- endif -%}
+            {%- endif -%}
+          {%- endfor -%}
+          {%- if addon_name_list != blank -%}
+            <p class="mtw-fp__pkg-addon-note">
+              <span class="mtw-mono">Optional customizations: </span>{{ addon_name_list }}
+            </p>
+          {%- endif -%}
+
+          <!-- CTA -->
+          <a href="{{ pkg_url }}" class="mtw-fp__book-btn">
+            <span class="mtw-fp__book-btn-text">{{ pkg_cta }}</span>
+            <span class="mtw-fp__book-btn-arrow">
+              <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M1 7h12M8 2l5 5-5 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </span>
+          </a>
+        </div>
+
+      </div>
+    </div>
+  {%- endfor -%}
+
+</section>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "Fall — Packages",
+  "settings": [],
+  "blocks": [
+    {
+      "type": "package",
+      "name": "Package",
+      "settings": [
+        { "type": "image_picker", "id": "image",      "label": "Photo" },
+        { "type": "text",         "id": "label",      "label": "Eyebrow label",                              "default": "Perfect for a stoop" },
+        { "type": "text",         "id": "name",       "label": "Package name",                               "default": "Package Name" },
+        { "type": "text",         "id": "price",      "label": "Display price",                              "default": "$385" },
+        { "type": "textarea",     "id": "desc",       "label": "Description" },
+        { "type": "textarea",     "id": "inclusions", "label": "What's included (one item per line)" },
+        { "type": "textarea",     "id": "addons",     "label": "Optional customizations (one per line: Name|+price)", "info": "Example: Hay Bale|+40" },
+        { "type": "checkbox",     "id": "featured",   "label": "Show \"Most popular\" badge",                "default": false },
+        { "type": "text",         "id": "cta_label",  "label": "Button label",                               "default": "Customize this package" },
+        { "type": "text",         "id": "cta_url",    "label": "Button URL (leave blank to auto-link to product handle)" },
+        { "type": "text",         "id": "handle",     "label": "Product handle (for auto URL)",              "default": "petite-patch" }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Fall — Packages",
+      "blocks": [
+        { "type": "package" },
+        { "type": "package" },
+        { "type": "package" },
+        { "type": "package" }
+      ]
+    }
+  ]
+}
+{% endschema %}

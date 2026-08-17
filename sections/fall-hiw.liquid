@@ -1,0 +1,57 @@
+<!-- Fall — How it works -->
+{%- if section.blocks.size > 0 -%}
+<section class="mtw-fp__hiw">
+  <div class="mtw-container">
+    <div class="mtw-fp__hiw-hd">
+      <span class="mtw-mono mtw-eyebrow mtw-eyebrow--muted">{{ section.settings.eyebrow | default: 'Simple process' }}</span>
+      <h2 class="mtw-h2">{{ section.settings.headline | default: 'How it works.' }}</h2>
+    </div>
+    <ol class="mtw-fp__hiw-list">
+      {%- assign step_num = 0 -%}
+      {%- for block in section.blocks -%}
+        {%- assign step_num = step_num | plus: 1 -%}
+        <li {{ block.shopify_attributes }}>
+          <span class="mtw-mono mtw-fp__hiw-num">{{ step_num | prepend: '0' | slice: -2, 2 }}</span>
+          <div>
+            <h4>{{ block.settings.title }}</h4>
+            {%- if block.settings.desc != blank -%}
+              <p>{{ block.settings.desc }}</p>
+            {%- endif -%}
+          </div>
+        </li>
+      {%- endfor -%}
+    </ol>
+  </div>
+</section>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "Fall — How It Works",
+  "settings": [
+    { "type": "text", "id": "eyebrow",  "label": "Eyebrow",   "default": "Simple process" },
+    { "type": "text", "id": "headline", "label": "Headline",  "default": "How it works." }
+  ],
+  "blocks": [
+    {
+      "type": "step",
+      "name": "Step",
+      "settings": [
+        { "type": "text",     "id": "title", "label": "Step title",       "default": "Step title" },
+        { "type": "textarea", "id": "desc",  "label": "Step description", "default": "Step description" }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Fall — How It Works",
+      "blocks": [
+        { "type": "step" },
+        { "type": "step" },
+        { "type": "step" },
+        { "type": "step" }
+      ]
+    }
+  ]
+}
+{% endschema %}

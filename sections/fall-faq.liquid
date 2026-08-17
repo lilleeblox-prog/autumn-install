@@ -1,0 +1,49 @@
+<!-- Fall — FAQ -->
+{%- if section.blocks.size > 0 -%}
+<section class="mtw-fp__faq">
+  <div class="mtw-container mtw-fp__faq-inner">
+    <div class="mtw-fp__faq-hd">
+      <span class="mtw-mono mtw-eyebrow mtw-eyebrow--muted">{{ section.settings.eyebrow | default: 'Questions' }}</span>
+      <h2 class="mtw-h2">{{ section.settings.headline | default: 'Common questions.' }}</h2>
+    </div>
+    <div class="mtw-fp__faq-list">
+      {%- for block in section.blocks -%}
+        <details class="mtw-fp__faq-item" {{ block.shopify_attributes }}>
+          <summary class="mtw-fp__faq-q">{{ block.settings.question }}<span class="mtw-fp__faq-chevron">&#x276F;</span></summary>
+          <p class="mtw-fp__faq-a">{{ block.settings.answer }}</p>
+        </details>
+      {%- endfor -%}
+    </div>
+  </div>
+</section>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "Fall — FAQ",
+  "settings": [
+    { "type": "text", "id": "eyebrow",  "label": "Eyebrow",   "default": "Questions" },
+    { "type": "text", "id": "headline", "label": "Headline",  "default": "Common questions." }
+  ],
+  "blocks": [
+    {
+      "type": "faq-item",
+      "name": "FAQ item",
+      "settings": [
+        { "type": "text",     "id": "question", "label": "Question", "default": "Question goes here" },
+        { "type": "textarea", "id": "answer",   "label": "Answer",   "default": "Answer goes here" }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Fall — FAQ",
+      "blocks": [
+        { "type": "faq-item" },
+        { "type": "faq-item" },
+        { "type": "faq-item" }
+      ]
+    }
+  ]
+}
+{% endschema %}
