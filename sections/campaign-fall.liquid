@@ -13,8 +13,6 @@
       </span>
       <span class="mtw-fp__meta-divider">·</span>
       <span>{{ section.settings.meta_weeks | default: 'Install weeks: Sept – Oct 2026' }}</span>
-      <span class="mtw-fp__meta-divider">·</span>
-      <span>{{ section.settings.meta_delivery | default: 'Delivery & installation included' }}</span>
     </div>
   </div>
 </header>
@@ -146,7 +144,7 @@
   <div class="mtw-container">
     <p class="mtw-fp__photo-nudge">
       {{ section.settings.photo_nudge | default: 'Not sure which package fits your space? Send our design team a photo of your entryway and we will point you to the best fit.' }}
-      <a href="mailto:{{ section.settings.contact_email | default: 'hello@madetowelcome.com' }}?subject=Help%20me%20choose%20a%20package&body=Hi!%20I'd%20love%20a%20package%20recommendation%20for%20my%20entryway.">{{ section.settings.photo_nudge_link | default: 'Send us a photo →' }}</a>
+      <a href="{{ section.settings.contact_page_url | default: '/pages/contact' }}">{{ section.settings.photo_nudge_link | default: 'Send us a photo →' }}</a>
     </p>
   </div>
 
@@ -256,12 +254,11 @@
     { "type": "textarea", "id": "intro",            "label": "Intro text",          "default": "Every display is delivered and installed by hand. Choose your size, select your week, and we handle the rest." },
     { "type": "text",     "id": "status_text",      "label": "Status pill text",    "default": "Ordering open" },
     { "type": "text",     "id": "meta_weeks",       "label": "Install weeks blurb", "default": "Install weeks: Sept – Oct 2026" },
-    { "type": "text",     "id": "meta_delivery",    "label": "Delivery blurb",      "default": "Delivery & installation included" },
     { "type": "text",     "id": "countdown_label",  "label": "Countdown label",     "default": "Days until Halloween" },
     { "type": "header", "content": "Package section footer" },
     { "type": "text",     "id": "photo_nudge",      "label": "Nudge text",          "default": "Not sure which package fits your entry?" },
     { "type": "text",     "id": "photo_nudge_link", "label": "Nudge link text",     "default": "Send us a photo →" },
-    { "type": "text",     "id": "contact_email",    "label": "Contact email",       "default": "hello@madetowelcome.com" },
+    { "type": "url",      "id": "contact_page_url", "label": "Contact page URL",    "info": "Defaults to /pages/contact" },
     { "type": "header", "content": "How it works section" },
     { "type": "text",     "id": "hiw_eyebrow",      "label": "Eyebrow",             "default": "Simple process" },
     { "type": "text",     "id": "hiw_headline",     "label": "Headline",            "default": "How it works." },
