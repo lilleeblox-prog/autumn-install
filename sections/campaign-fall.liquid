@@ -152,7 +152,8 @@
             <div class="mtw-fp__form-inner">
 
               {%- if vid != blank and vid != 0 -%}
-                <form action="/cart/add" method="POST" class="mtw-fp__form" data-pkg="{{ block.id }}">
+                {%- assign _base_num = pkg_price | remove: '$' | remove: ',' | remove: ' ' -%}
+                <form action="/cart/add?return_to=/cart" method="POST" class="mtw-fp__form" data-pkg="{{ block.id }}" data-base-price="{{ _base_num }}" data-base-label="{{ pkg_price }}">
                   <input type="hidden" name="id" value="{{ vid }}">
                   <input type="hidden" name="quantity" value="1">
 
@@ -193,8 +194,9 @@
                             {%- assign al_name  = al_parts[0] | strip -%}
                             {%- assign al_price = al_parts[1] | strip -%}
                             {%- assign al_note  = al_parts[2] | strip -%}
+                            {%- assign _price_num = al_price | remove: '+' | remove: '$' | remove: ',' | remove: ' ' -%}
                             <label class="mtw-fp__addon-label">
-                              <input type="checkbox" name="properties[Add-on: {{ al_name }}]" value="Yes" class="mtw-fp__addon-check">
+                              <input type="checkbox" name="properties[Add-on: {{ al_name }}]" value="Yes" class="mtw-fp__addon-check" data-price="{{ _price_num }}">
                               <span class="mtw-fp__addon-content">
                                 <span class="mtw-fp__addon-row">
                                   <span class="mtw-fp__addon-name">{{ al_name }}</span>
@@ -219,9 +221,15 @@
                     <textarea name="properties[Notes]" id="notes-{{ block.id }}" class="mtw-fp__form-textarea" rows="3" placeholder="Gate code, parking notes, porch layout..."></textarea>
                   </div>
 
+                  <!-- Running total -->
+                  <div class="mtw-fp__total-bar" aria-live="polite">
+                    <span class="mtw-fp__total-label">Package total</span>
+                    <span class="mtw-fp__total-amount" data-total-display>{{ pkg_price }}</span>
+                  </div>
+
                   <div class="mtw-fp__form-actions">
                     <button type="submit" class="mtw-fp__form-submit-full">
-                      BOOK THIS PACKAGE
+                      ADD TO CART
                     </button>
                     <p class="mtw-fp__form-note">We will follow up to confirm your install week and details.</p>
                   </div>
@@ -382,8 +390,27 @@
     });
   });
 
-  /* Add-on checkboxes → consolidate into one property string */
+  /* Running total + add-on consolidation */
+  function fmtPrice(cents){
+    return '$' + cents.toLocaleString('en-US');
+  }
+  function recalcTotal(form){
+    var base = parseFloat(form.getAttribute('data-base-price')) || 0;
+    var extra = 0;
+    form.querySelectorAll('.mtw-fp__addon-check:checked').forEach(function(c){
+      extra += parseFloat(c.getAttribute('data-price')) || 0;
+    });
+    var display = form.querySelector('[data-total-display]');
+    if(display) display.textContent = fmtPrice(base + extra);
+  }
+
   document.querySelectorAll('.mtw-fp__form').forEach(function(form){
+    /* Live total on checkbox change */
+    form.querySelectorAll('.mtw-fp__addon-check').forEach(function(c){
+      c.addEventListener('change', function(){ recalcTotal(form); });
+    });
+
+    /* On submit: consolidate add-ons into one property */
     form.addEventListener('submit', function(){
       var names = [];
       form.querySelectorAll('.mtw-fp__addon-check:checked').forEach(function(c){

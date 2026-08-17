@@ -2253,8 +2253,34 @@ details[open] .mtw-campaign-faq__chevron { transform: rotate(90deg); }
   line-height: 1.45;
 }
 
+/* Running total bar */
+.mtw-fp__total-bar {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  margin-top: 1.75rem;
+  padding: 1rem 1.25rem;
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.12);
+  border-radius: 8px;
+}
+.mtw-fp__total-label {
+  font-family: var(--mtw-font-mono);
+  font-size: 0.65rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.45);
+}
+.mtw-fp__total-amount {
+  font-family: var(--mtw-font-serif);
+  font-size: 1.5rem;
+  color: var(--mtw-primary-fg);
+  letter-spacing: -0.01em;
+  transition: all 0.15s;
+}
+
 /* Form actions */
-.mtw-fp__form-actions { margin-top: 2rem; }
+.mtw-fp__form-actions { margin-top: 1.25rem; }
 .mtw-fp__form-submit { min-width: 14rem; }
 .mtw-fp__form-submit-full {
   display: block;
