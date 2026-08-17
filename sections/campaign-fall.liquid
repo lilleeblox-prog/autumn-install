@@ -3,15 +3,6 @@
 {%- assign weeks_raw = section.settings.install_weeks -%}
 {%- assign weeks = weeks_raw | newline_to_br | split: '<br />' -%}
 
-{%- assign _h1 = section.settings.pkg1_handle | default: 'petite-patch' -%}
-{%- assign _h2 = section.settings.pkg2_handle | default: 'cozy-corner' -%}
-{%- assign _h3 = section.settings.pkg3_handle | default: 'fall-favorites' -%}
-{%- assign _h4 = section.settings.pkg4_handle | default: 'grande-harvest' -%}
-{%- assign p1 = all_products[_h1] -%}
-{%- assign p2 = all_products[_h2] -%}
-{%- assign p3 = all_products[_h3] -%}
-{%- assign p4 = all_products[_h4] -%}
-
 <!-- ── PAGE HEADER ── -->
 <header class="mtw-fp__header">
   <div class="mtw-container mtw-fp__header-inner">
@@ -34,224 +25,225 @@
 <!-- ── PACKAGES ── -->
 <section class="mtw-fp__packages">
 
-  {%- assign packages = 'p1,p2,p3,p4' | split: ',' -%}
-  {%- for pkg_key in packages -%}
+  {%- for block in section.blocks -%}
+    {%- if block.type == 'package' -%}
+      {%- assign pkg_handle   = block.settings.handle -%}
+      {%- assign pkg_label    = block.settings.label -%}
+      {%- assign pkg_name     = block.settings.name -%}
+      {%- assign pkg_price    = block.settings.price -%}
+      {%- assign pkg_desc     = block.settings.desc -%}
+      {%- assign pkg_image    = block.settings.image -%}
+      {%- assign pkg_featured = block.settings.featured -%}
+      {%- assign pkg_product  = all_products[pkg_handle] -%}
+      {%- assign vid          = pkg_product.variants.first.id -%}
+      {%- assign addon_lines  = block.settings.addons | newline_to_br | split: '<br />' -%}
 
-    {%- if pkg_key == 'p1' -%}
-      {%- assign pkg_product  = p1 -%}
-      {%- assign pkg_handle   = section.settings.pkg1_handle  | default: 'petite-patch' -%}
-      {%- assign pkg_label    = section.settings.pkg1_label   | default: 'Perfect for a stoop' -%}
-      {%- assign pkg_name     = section.settings.pkg1_name    | default: 'Petite Patch' -%}
-      {%- assign pkg_price    = section.settings.pkg1_price   | default: '$385' -%}
-      {%- assign pkg_desc     = section.settings.pkg1_desc    | default: 'A curated mix of pumpkins and gourds, hand-arranged on delivery day. Ideal for a single-door entry or welcoming front stoop.' -%}
-      {%- assign pkg_included = 'petite-patch' -%}
-      {%- assign pkg_addons   = 'Hay Bale — $40|Custom Design — $75|Removal — $75' -%}
-      {%- assign pkg_image    = section.settings.pkg1_image -%}
-      {%- assign pkg_featured = false -%}
-    {%- elsif pkg_key == 'p2' -%}
-      {%- assign pkg_product  = p2 -%}
-      {%- assign pkg_handle   = section.settings.pkg2_handle  | default: 'cozy-corner' -%}
-      {%- assign pkg_label    = section.settings.pkg2_label   | default: 'Great for porches' -%}
-      {%- assign pkg_name     = section.settings.pkg2_name    | default: 'Cozy Corner' -%}
-      {%- assign pkg_price    = section.settings.pkg2_price   | default: '$585' -%}
-      {%- assign pkg_desc     = section.settings.pkg2_desc    | default: 'A fuller display for a porch or covered entry. More pumpkins, more gourds, same careful arrangement by hand.' -%}
-      {%- assign pkg_included = 'cozy-corner' -%}
-      {%- assign pkg_addons   = 'Hay Bale — $40|Custom Design — $100|Removal — $100' -%}
-      {%- assign pkg_image    = section.settings.pkg2_image -%}
-      {%- assign pkg_featured = false -%}
-    {%- elsif pkg_key == 'p3' -%}
-      {%- assign pkg_product  = p3 -%}
-      {%- assign pkg_handle   = section.settings.pkg3_handle  | default: 'fall-favorites' -%}
-      {%- assign pkg_label    = section.settings.pkg3_label   | default: 'Most popular' -%}
-      {%- assign pkg_name     = section.settings.pkg3_name    | default: 'Fall Favorites' -%}
-      {%- assign pkg_price    = section.settings.pkg3_price   | default: '$885' -%}
-      {%- assign pkg_desc     = section.settings.pkg3_desc    | default: 'Our most-booked display. A generous mix of pumpkins, specialty gourds, and two hay bales — everything it takes to make a real impression at the door.' -%}
-      {%- assign pkg_included = 'fall-favorites' -%}
-      {%- assign pkg_addons   = 'Residential Gate Pumpkins & Design|Removal — $150' -%}
-      {%- assign pkg_image    = section.settings.pkg3_image -%}
-      {%- assign pkg_featured = true -%}
-    {%- elsif pkg_key == 'p4' -%}
-      {%- assign pkg_product  = p4 -%}
-      {%- assign pkg_handle   = section.settings.pkg4_handle  | default: 'grande-harvest' -%}
-      {%- assign pkg_label    = section.settings.pkg4_label   | default: 'The full treatment' -%}
-      {%- assign pkg_name     = section.settings.pkg4_name    | default: 'Grande Harvest' -%}
-      {%- assign pkg_price    = section.settings.pkg4_price   | default: '$1,285' -%}
-      {%- assign pkg_desc     = section.settings.pkg4_desc    | default: 'Hay bales, ornamental gourds, pie pumpkins, mini varieties — the kind of display that carries the whole season and stops everyone who passes.' -%}
-      {%- assign pkg_included = 'grande-harvest' -%}
-      {%- assign pkg_addons   = 'Residential Gate Pumpkins & Design|Removal — $200' -%}
-      {%- assign pkg_image    = section.settings.pkg4_image -%}
-      {%- assign pkg_featured = false -%}
-    {%- endif -%}
+      <div class="mtw-fp__pkg" id="pkg-{{ block.id }}" {{ block.shopify_attributes }}>
 
-    {%- assign addon_list = pkg_addons | split: '|' -%}
-    {%- assign vid = pkg_product.variants.first.id -%}
+        <div class="mtw-container mtw-fp__pkg-row">
 
-    <div class="mtw-fp__pkg {% if pkg_featured %}mtw-fp__pkg--featured{% endif %}" id="pkg-{{ pkg_key }}">
-
-      {%- if pkg_featured -%}
-        <div class="mtw-fp__featured-banner">
-          <div class="mtw-container">
-            <span class="mtw-mono">Most Popular</span>
+          <!-- Image -->
+          <div class="mtw-fp__pkg-img-wrap">
+            {%- if pkg_image != blank -%}
+              <img src="{{ pkg_image | img_url: '900x' }}" alt="{{ pkg_name }}" class="mtw-fp__pkg-img" loading="lazy">
+            {%- else -%}
+              <div class="mtw-fp__pkg-img-placeholder">
+                <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" opacity="0.3"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="m21 15-5-5L5 21"/></svg>
+              </div>
+            {%- endif -%}
           </div>
-        </div>
-      {%- endif -%}
 
-      <div class="mtw-container mtw-fp__pkg-row">
-
-        <!-- Image -->
-        <div class="mtw-fp__pkg-img-wrap">
-          {%- if pkg_image != blank -%}
-            <img src="{{ pkg_image | img_url: '900x' }}" alt="{{ pkg_name }}" class="mtw-fp__pkg-img" loading="lazy">
-          {%- else -%}
-            <div class="mtw-fp__pkg-img-placeholder">
-              <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" opacity="0.3"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="m21 15-5-5L5 21"/></svg>
-            </div>
-          {%- endif -%}
-        </div>
-
-        <!-- Details -->
-        <div class="mtw-fp__pkg-details">
-          <p class="mtw-mono mtw-fp__pkg-eyebrow">Made to Welcome</p>
-          <h2 class="mtw-fp__pkg-name">{{ pkg_name }}</h2>
-          <p class="mtw-fp__pkg-price">{{ pkg_price }}</p>
-          <p class="mtw-fp__pkg-desc">{{ pkg_desc }}</p>
-
-          <!-- Inclusions -->
-          <div class="mtw-fp__pkg-incl">
-            <p class="mtw-mono mtw-fp__pkg-incl-label">What's included</p>
-            <ul class="mtw-fp__pkg-incl-list">
-              {%- if pkg_included == 'petite-patch' -%}
-                <li>4 Large Jack O'Lantern Pumpkins</li>
-                <li>4 Medium Jack O'Lantern Pumpkins</li>
-                <li>4 White Ghost Pumpkins</li>
-                <li>6 Specialty Pumpkins</li>
-                <li>Assortment of Pie Pumpkins</li>
-              {%- elsif pkg_included == 'cozy-corner' -%}
-                <li>6 Large Jack O'Lantern Pumpkins</li>
-                <li>6 Medium Jack O'Lantern Pumpkins</li>
-                <li>6 White Ghost Pumpkins</li>
-                <li>8 Specialty Pumpkins</li>
-                <li>Assortment of Pie Pumpkins</li>
-              {%- elsif pkg_included == 'fall-favorites' -%}
-                <li>8 Large Jack O'Lantern Pumpkins</li>
-                <li>8 Medium Jack O'Lantern Pumpkins</li>
-                <li>8 White Ghost Pumpkins</li>
-                <li>14 Specialty Pumpkins</li>
-                <li>2 Hay Bales <em>(included)</em></li>
-                <li>Assortment of Pie Pumpkins</li>
-              {%- elsif pkg_included == 'grande-harvest' -%}
-                <li>10 Large Jack O'Lantern Pumpkins</li>
-                <li>8 Medium Jack O'Lantern Pumpkins</li>
-                <li>8 White Ghost Pumpkins</li>
-                <li>16 Specialty Pumpkins</li>
-                <li>2 Hay Bales <em>(included)</em></li>
-                <li>Mini White &amp; Mini Orange Pumpkins</li>
-                <li>Ornamental Gourds</li>
-                <li>Assortment of Pie Pumpkins</li>
+          <!-- Details -->
+          <div class="mtw-fp__pkg-details">
+            {%- if pkg_label != blank -%}
+              <p class="mtw-mono mtw-fp__pkg-eyebrow">{{ pkg_label }}</p>
+            {%- endif -%}
+            <h2 class="mtw-fp__pkg-name">
+              {{ pkg_name }}
+              {%- if pkg_featured -%}
+                <span class="mtw-fp__popular-badge">Most popular</span>
               {%- endif -%}
-            </ul>
+            </h2>
+            <p class="mtw-fp__pkg-price">{{ pkg_price }}</p>
+            {%- if pkg_desc != blank -%}
+              <p class="mtw-fp__pkg-desc">{{ pkg_desc }}</p>
+            {%- endif -%}
+
+            <!-- Inclusions -->
+            <div class="mtw-fp__pkg-incl">
+              <p class="mtw-mono mtw-fp__pkg-incl-label">What's included</p>
+              <ul class="mtw-fp__pkg-incl-list">
+                {%- if pkg_handle == 'petite-patch' -%}
+                  <li>4 Large Jack O'Lantern Pumpkins</li>
+                  <li>4 Medium Jack O'Lantern Pumpkins</li>
+                  <li>4 White Ghost Pumpkins</li>
+                  <li>6 Specialty Pumpkins</li>
+                  <li>Assortment of Pie Pumpkins</li>
+                {%- elsif pkg_handle == 'cozy-corner' -%}
+                  <li>6 Large Jack O'Lantern Pumpkins</li>
+                  <li>6 Medium Jack O'Lantern Pumpkins</li>
+                  <li>6 White Ghost Pumpkins</li>
+                  <li>8 Specialty Pumpkins</li>
+                  <li>Assortment of Pie Pumpkins</li>
+                {%- elsif pkg_handle == 'fall-favorites' -%}
+                  <li>8 Large Jack O'Lantern Pumpkins</li>
+                  <li>8 Medium Jack O'Lantern Pumpkins</li>
+                  <li>8 White Ghost Pumpkins</li>
+                  <li>14 Specialty Pumpkins</li>
+                  <li>2 Hay Bales <em>(included)</em></li>
+                  <li>Assortment of Pie Pumpkins</li>
+                {%- elsif pkg_handle == 'grande-harvest' -%}
+                  <li>10 Large Jack O'Lantern Pumpkins</li>
+                  <li>8 Medium Jack O'Lantern Pumpkins</li>
+                  <li>8 White Ghost Pumpkins</li>
+                  <li>16 Specialty Pumpkins</li>
+                  <li>2 Hay Bales <em>(included)</em></li>
+                  <li>Mini White &amp; Mini Orange Pumpkins</li>
+                  <li>Ornamental Gourds</li>
+                  <li>Assortment of Pie Pumpkins</li>
+                {%- else -%}
+                  {%- assign incl_lines = block.settings.inclusions | newline_to_br | split: '<br />' -%}
+                  {%- for line in incl_lines -%}
+                    {%- assign l = line | strip -%}
+                    {%- if l != blank -%}<li>{{ l }}</li>{%- endif -%}
+                  {%- endfor -%}
+                {%- endif -%}
+              </ul>
+            </div>
+
+            <!-- Optional customizations note (names only, no prices) -->
+            {%- assign addon_name_list = '' -%}
+            {%- for al in addon_lines -%}
+              {%- assign al_clean = al | strip -%}
+              {%- if al_clean != blank -%}
+                {%- assign al_parts = al_clean | split: '|' -%}
+                {%- assign al_name = al_parts[0] | strip -%}
+                {%- if addon_name_list == '' -%}
+                  {%- assign addon_name_list = al_name -%}
+                {%- else -%}
+                  {%- assign addon_name_list = addon_name_list | append: ', ' | append: al_name -%}
+                {%- endif -%}
+              {%- endif -%}
+            {%- endfor -%}
+            {%- if addon_name_list != blank -%}
+              <p class="mtw-fp__pkg-addon-note">
+                <span class="mtw-mono">Optional customizations: </span>{{ addon_name_list }}
+              </p>
+            {%- endif -%}
+
+            <!-- Book button -->
+            <button
+              class="mtw-fp__book-btn"
+              data-target="mtw-form-{{ block.id }}"
+              aria-expanded="false"
+              aria-controls="mtw-form-{{ block.id }}"
+            >
+              <span class="mtw-fp__book-btn-text">Book {{ pkg_name }}</span>
+              <span class="mtw-fp__book-btn-arrow">
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 3v10M3 8l5 5 5-5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              </span>
+            </button>
           </div>
-
-          <!-- Add-ons note -->
-          <p class="mtw-fp__pkg-addon-note">
-            <span class="mtw-mono">Add-ons available: </span>
-            {{ addon_list | join: ' · ' }}
-          </p>
-
-          <!-- Book button -->
-          <button
-            class="mtw-fp__book-btn"
-            data-target="mtw-form-{{ pkg_key }}"
-            aria-expanded="false"
-            aria-controls="mtw-form-{{ pkg_key }}"
-          >
-            <span class="mtw-fp__book-btn-text">Book {{ pkg_name }}</span>
-            <span class="mtw-fp__book-btn-arrow">
-              <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M8 3v10M3 8l5 5 5-5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-            </span>
-          </button>
         </div>
-      </div>
 
-      <!-- ── Inline order form ── -->
-      <div class="mtw-fp__form-wrap" id="mtw-form-{{ pkg_key }}" hidden>
-        <div class="mtw-container">
-          <div class="mtw-fp__form-inner">
-            <h3 class="mtw-fp__form-title">Customize your order</h3>
+        <!-- ── Inline order form ── -->
+        <div class="mtw-fp__form-wrap" id="mtw-form-{{ block.id }}" hidden>
+          <div class="mtw-container">
+            <div class="mtw-fp__form-inner">
 
-            {%- if vid != blank and vid != 0 -%}
-              <form action="/cart/add" method="POST" class="mtw-fp__form" data-pkg="{{ pkg_key }}">
-                <input type="hidden" name="id" value="{{ vid }}">
-                <input type="hidden" name="quantity" value="1">
-
-                <div class="mtw-fp__form-grid">
+              {%- if vid != blank and vid != 0 -%}
+                <form action="/cart/add" method="POST" class="mtw-fp__form" data-pkg="{{ block.id }}">
+                  <input type="hidden" name="id" value="{{ vid }}">
+                  <input type="hidden" name="quantity" value="1">
 
                   <!-- Install week -->
-                  <div class="mtw-fp__form-field mtw-fp__form-field--full">
-                    <label class="mtw-fp__form-label" for="week-{{ pkg_key }}">Install week <span class="mtw-fp__required">*</span></label>
-                    <select name="properties[Install Week]" id="week-{{ pkg_key }}" class="mtw-fp__form-select" required>
-                      <option value="">Select a week —</option>
-                      {%- for week in weeks -%}
-                        {%- assign w = week | strip -%}
-                        {%- if w != blank -%}
-                          <option value="{{ w }}">{{ w }}</option>
-                        {%- endif -%}
-                      {%- endfor -%}
-                    </select>
+                  <div class="mtw-fp__form-field">
+                    <label class="mtw-fp__form-label" for="week-{{ block.id }}">WEEK</label>
+                    <div class="mtw-fp__select-wrap">
+                      <select name="properties[Install Week]" id="week-{{ block.id }}" class="mtw-fp__form-select" required>
+                        <option value="">Choose your week...</option>
+                        {%- for week in weeks -%}
+                          {%- assign w = week | strip -%}
+                          {%- if w != blank -%}
+                            <option value="{{ w }}">{{ w }}</option>
+                          {%- endif -%}
+                        {%- endfor -%}
+                      </select>
+                      <span class="mtw-fp__select-arrow">&#x21A7;</span>
+                    </div>
+                    <p class="mtw-fp__form-hint">We'll confirm your exact install date closer to the week.</p>
                   </div>
 
                   <!-- Zip code -->
                   <div class="mtw-fp__form-field">
-                    <label class="mtw-fp__form-label" for="zip-{{ pkg_key }}">Install zip code <span class="mtw-fp__required">*</span></label>
-                    <input type="text" name="properties[Install Zip]" id="zip-{{ pkg_key }}" class="mtw-fp__form-input" placeholder="e.g. 37215" inputmode="numeric" maxlength="5" required>
+                    <label class="mtw-fp__form-label" for="zip-{{ block.id }}">DELIVERY ZIP CODE</label>
+                    <input type="text" name="properties[Install Zip]" id="zip-{{ block.id }}" class="mtw-fp__form-input" placeholder="e.g. 37064" inputmode="numeric" maxlength="5" required>
+                    <p class="mtw-fp__form-hint">Enter the zip code where we'll be installing.</p>
                   </div>
 
                   <!-- Add-ons -->
-                  <div class="mtw-fp__form-field">
-                    <p class="mtw-fp__form-label">Add-ons <span class="mtw-fp__form-optional">(optional)</span></p>
-                    <div class="mtw-fp__addon-checks">
-                      {%- for addon in addon_list -%}
-                        <label class="mtw-fp__addon-label">
-                          <input type="checkbox" name="properties[Add-on: {{ addon }}]" value="Yes" class="mtw-fp__addon-check">
-                          <span>{{ addon }}</span>
-                        </label>
-                      {%- endfor -%}
+                  {%- if addon_name_list != blank -%}
+                    <div class="mtw-fp__form-field">
+                      <p class="mtw-fp__form-label">CUSTOMIZE YOUR ORDER <span class="mtw-fp__form-optional">(optional)</span></p>
+                      <div class="mtw-fp__addon-checks">
+                        {%- for al in addon_lines -%}
+                          {%- assign al_clean = al | strip -%}
+                          {%- if al_clean != blank -%}
+                            {%- assign al_parts = al_clean | split: '|' -%}
+                            {%- assign al_name  = al_parts[0] | strip -%}
+                            {%- assign al_price = al_parts[1] | strip -%}
+                            {%- assign al_note  = al_parts[2] | strip -%}
+                            <label class="mtw-fp__addon-label">
+                              <input type="checkbox" name="properties[Add-on: {{ al_name }}]" value="Yes" class="mtw-fp__addon-check">
+                              <span class="mtw-fp__addon-content">
+                                <span class="mtw-fp__addon-row">
+                                  <span class="mtw-fp__addon-name">{{ al_name }}</span>
+                                  {%- if al_price != blank -%}
+                                    <span class="mtw-fp__addon-price">{{ al_price }}</span>
+                                  {%- endif -%}
+                                </span>
+                                {%- if al_note != blank -%}
+                                  <span class="mtw-fp__addon-sub">{{ al_note }}</span>
+                                {%- endif -%}
+                              </span>
+                            </label>
+                          {%- endif -%}
+                        {%- endfor -%}
+                      </div>
                     </div>
-                  </div>
+                  {%- endif -%}
 
                   <!-- Notes -->
-                  <div class="mtw-fp__form-field mtw-fp__form-field--full">
-                    <label class="mtw-fp__form-label" for="notes-{{ pkg_key }}">Notes for our team <span class="mtw-fp__form-optional">(optional)</span></label>
-                    <textarea name="properties[Notes]" id="notes-{{ pkg_key }}" class="mtw-fp__form-textarea" rows="3" placeholder="Gate codes, placement preferences, anything else we should know…"></textarea>
+                  <div class="mtw-fp__form-field">
+                    <label class="mtw-fp__form-label" for="notes-{{ block.id }}">ANYTHING WE SHOULD KNOW? <span class="mtw-fp__form-optional">(optional)</span></label>
+                    <textarea name="properties[Notes]" id="notes-{{ block.id }}" class="mtw-fp__form-textarea" rows="3" placeholder="Gate code, parking notes, porch layout..."></textarea>
                   </div>
 
+                  <div class="mtw-fp__form-actions">
+                    <button type="submit" class="mtw-fp__form-submit-full">
+                      BOOK THIS PACKAGE
+                    </button>
+                    <p class="mtw-fp__form-note">We will follow up to confirm your install week and details.</p>
+                  </div>
+                </form>
+              {%- else -%}
+                <div style="text-align:center;padding:2rem 0">
+                  <a href="/products/{{ pkg_handle }}" class="mtw-btn mtw-btn--primary">
+                    Book {{ pkg_name }} on product page →
+                  </a>
                 </div>
+              {%- endif -%}
 
-                <div class="mtw-fp__form-actions">
-                  <button type="submit" class="mtw-btn mtw-btn--primary mtw-fp__form-submit">
-                    Add to cart — {{ pkg_price }}
-                    <svg width="14" height="14" viewBox="0 0 14 14" fill="none" style="margin-left:0.5rem"><path d="M1 7h12M8 2l5 5-5 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-                  </button>
-                  <p class="mtw-fp__form-note">Delivery &amp; installation included. We'll confirm your exact date after your order.</p>
-                </div>
-              </form>
-            {%- else -%}
-              <div style="text-align:center;padding:2rem 0">
-                <a href="/products/{{ pkg_handle }}" class="mtw-btn mtw-btn--primary">
-                  Book {{ pkg_name }} on product page →
-                </a>
-              </div>
-            {%- endif -%}
-
-            <button class="mtw-fp__form-close" data-target="mtw-form-{{ pkg_key }}">
-              <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M1 1l12 12M13 1L1 13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
-              Close
-            </button>
+              <button class="mtw-fp__form-close" data-target="mtw-form-{{ block.id }}">
+                <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M1 1l12 12M13 1L1 13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+                Close
+              </button>
+            </div>
           </div>
         </div>
-      </div>
 
-    </div>
+      </div>
+    {%- endif -%}
   {%- endfor -%}
 
   <div class="mtw-container">
@@ -330,7 +322,7 @@
       <span class="mtw-mono mtw-eyebrow mtw-eyebrow--primary" style="display:block;margin-bottom:0.75rem">{{ section.settings.final_eyebrow | default: 'Fall 2026 · Limited install weeks' }}</span>
       <h2 class="mtw-fp__final-h2">{{ section.settings.final_headline | default: "Don't miss your window." }}</h2>
       <p class="mtw-fp__final-body">{{ section.settings.final_body | default: 'Install weeks fill up fast. Secure your display now — we handle everything.' }}</p>
-      <a href="#pkg-p1" class="mtw-btn mtw-btn--primary mtw-btn--lg" style="margin-top:2rem">
+      <a href="#" class="mtw-btn mtw-btn--primary mtw-btn--lg" style="margin-top:2rem">
         {{ section.settings.final_cta | default: 'Book your display' }}
         <svg width="14" height="14" viewBox="0 0 14 14" fill="none" style="margin-left:0.5rem"><path d="M1 7h12M8 2l5 5-5 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
       </a>
@@ -352,17 +344,22 @@
 
 <script>
 (function(){
-  /* ── Book button toggles inline form ── */
+  /* ── Book button toggles inline form (no redirect, no scroll) ── */
   document.querySelectorAll('.mtw-fp__book-btn').forEach(function(btn){
     btn.addEventListener('click', function(){
-      var id  = btn.getAttribute('data-target');
+      var id   = btn.getAttribute('data-target');
       var wrap = document.getElementById(id);
       if(!wrap) return;
       var open = !wrap.hidden;
       wrap.hidden = open;
       btn.setAttribute('aria-expanded', String(!open));
+      /* Update arrow direction */
+      var arrow = btn.querySelector('.mtw-fp__book-btn-arrow svg');
+      if(arrow){
+        arrow.style.transform = open ? '' : 'rotate(180deg)';
+      }
       if(!open){
-        wrap.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        /* Focus first field, no scrolling */
         var sel = wrap.querySelector('select');
         if(sel) sel.focus();
       }
@@ -376,18 +373,22 @@
       var wrap = document.getElementById(id);
       if(wrap){ wrap.hidden = true; }
       var bookBtn = document.querySelector('[data-target="'+id+'"].mtw-fp__book-btn');
-      if(bookBtn){ bookBtn.setAttribute('aria-expanded','false'); bookBtn.focus(); }
+      if(bookBtn){
+        bookBtn.setAttribute('aria-expanded','false');
+        bookBtn.focus();
+        var arrow = bookBtn.querySelector('.mtw-fp__book-btn-arrow svg');
+        if(arrow) arrow.style.transform = '';
+      }
     });
   });
 
   /* Add-on checkboxes → consolidate into one property string */
   document.querySelectorAll('.mtw-fp__form').forEach(function(form){
-    form.addEventListener('submit', function(e){
-      var checks = form.querySelectorAll('.mtw-fp__addon-check:checked');
-      /* Remove individual checkbox inputs from POST, add a single combined property */
+    form.addEventListener('submit', function(){
       var names = [];
-      checks.forEach(function(c){ names.push(c.value ? c.closest('label').querySelector('span').textContent.trim() : ''); });
-      /* Strip individual properties and replace with one */
+      form.querySelectorAll('.mtw-fp__addon-check:checked').forEach(function(c){
+        names.push(c.closest('label').querySelector('.mtw-fp__addon-name').textContent.trim());
+      });
       form.querySelectorAll('.mtw-fp__addon-check').forEach(function(c){ c.disabled = true; });
       var hidden = document.createElement('input');
       hidden.type = 'hidden';
@@ -429,40 +430,39 @@
     { "type": "header", "content": "Install weeks" },
     { "type": "textarea", "id": "install_weeks", "label": "Install weeks (one per line)",
       "default": "Week of September 15\nWeek of September 22\nWeek of September 29\nWeek of October 6\nWeek of October 13\nWeek of October 20\nWeek of October 27" },
-    { "type": "header", "content": "Package 1 — Petite Patch" },
-    { "type": "text",       "id": "pkg1_handle", "label": "Product handle", "default": "petite-patch" },
-    { "type": "text",       "id": "pkg1_label",  "label": "Label",          "default": "Perfect for a stoop" },
-    { "type": "text",       "id": "pkg1_name",   "label": "Name",           "default": "Petite Patch" },
-    { "type": "text",       "id": "pkg1_price",  "label": "Price",          "default": "$385" },
-    { "type": "textarea",   "id": "pkg1_desc",   "label": "Description" },
-    { "type": "image_picker","id": "pkg1_image", "label": "Photo" },
-    { "type": "header", "content": "Package 2 — Cozy Corner" },
-    { "type": "text",       "id": "pkg2_handle", "label": "Product handle", "default": "cozy-corner" },
-    { "type": "text",       "id": "pkg2_label",  "label": "Label",          "default": "Great for porches" },
-    { "type": "text",       "id": "pkg2_name",   "label": "Name",           "default": "Cozy Corner" },
-    { "type": "text",       "id": "pkg2_price",  "label": "Price",          "default": "$585" },
-    { "type": "textarea",   "id": "pkg2_desc",   "label": "Description" },
-    { "type": "image_picker","id": "pkg2_image", "label": "Photo" },
-    { "type": "header", "content": "Package 3 — Fall Favorites" },
-    { "type": "text",       "id": "pkg3_handle", "label": "Product handle", "default": "fall-favorites" },
-    { "type": "text",       "id": "pkg3_label",  "label": "Label",          "default": "Most popular" },
-    { "type": "text",       "id": "pkg3_name",   "label": "Name",           "default": "Fall Favorites" },
-    { "type": "text",       "id": "pkg3_price",  "label": "Price",          "default": "$885" },
-    { "type": "textarea",   "id": "pkg3_desc",   "label": "Description" },
-    { "type": "image_picker","id": "pkg3_image", "label": "Photo" },
-    { "type": "header", "content": "Package 4 — Grande Harvest" },
-    { "type": "text",       "id": "pkg4_handle", "label": "Product handle", "default": "grande-harvest" },
-    { "type": "text",       "id": "pkg4_label",  "label": "Label",          "default": "The full treatment" },
-    { "type": "text",       "id": "pkg4_name",   "label": "Name",           "default": "Grande Harvest" },
-    { "type": "text",       "id": "pkg4_price",  "label": "Price",          "default": "$1,285" },
-    { "type": "textarea",   "id": "pkg4_desc",   "label": "Description" },
-    { "type": "image_picker","id": "pkg4_image", "label": "Photo" },
-    { "type": "header", "content": "Final CTA" },
+    { "type": "header", "content": "Final CTA section" },
     { "type": "text",     "id": "final_eyebrow",  "label": "Eyebrow",  "default": "Fall 2026 · Limited install weeks" },
     { "type": "text",     "id": "final_headline", "label": "Headline", "default": "Don't miss your window." },
-    { "type": "textarea", "id": "final_body",     "label": "Body" },
+    { "type": "textarea", "id": "final_body",     "label": "Body",     "default": "Install weeks fill up fast. Secure your display now — we handle everything." },
     { "type": "text",     "id": "final_cta",      "label": "CTA label","default": "Book your display" }
   ],
-  "presets": [{ "name": "Campaign — Fall" }]
+  "blocks": [
+    {
+      "type": "package",
+      "name": "Package",
+      "settings": [
+        { "type": "text",        "id": "handle",     "label": "Product handle (e.g. petite-patch)" },
+        { "type": "text",        "id": "label",      "label": "Eyebrow label (e.g. Perfect for a stoop)" },
+        { "type": "text",        "id": "name",       "label": "Package name" },
+        { "type": "text",        "id": "price",      "label": "Display price (e.g. $385)" },
+        { "type": "textarea",    "id": "desc",       "label": "Description" },
+        { "type": "image_picker","id": "image",      "label": "Photo" },
+        { "type": "checkbox",    "id": "featured",   "label": "Show \"Most popular\" badge", "default": false },
+        { "type": "textarea",    "id": "inclusions", "label": "Custom inclusions list (one per line — leave blank for built-in list)" },
+        { "type": "textarea",    "id": "addons",     "label": "Add-ons (one per line: Name|+price|optional note)", "info": "Example: Hay Bale|+40" }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Campaign — Fall",
+      "blocks": [
+        { "type": "package" },
+        { "type": "package" },
+        { "type": "package" },
+        { "type": "package" }
+      ]
+    }
+  ]
 }
 {% endschema %}

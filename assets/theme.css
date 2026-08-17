@@ -2155,30 +2155,130 @@ details[open] .mtw-campaign-faq__chevron { transform: rotate(90deg); }
 .mtw-fp__form-select option { background: var(--mtw-dark); color: var(--mtw-primary-fg); }
 .mtw-fp__form-textarea { resize: vertical; min-height: 90px; }
 
-/* Add-on checkboxes */
-.mtw-fp__addon-checks { display: flex; flex-direction: column; gap: 0.6rem; }
+/* Popular badge (inline, next to package name) */
+.mtw-fp__popular-badge {
+  display: inline-block;
+  vertical-align: middle;
+  margin-left: 0.6rem;
+  background: var(--mtw-primary);
+  color: #fff;
+  font-family: var(--mtw-font-mono);
+  font-size: 0.6rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  padding: 0.25em 0.65em;
+  border-radius: 3px;
+  line-height: 1.6;
+  white-space: nowrap;
+  position: relative;
+  top: -0.1em;
+}
+
+/* Select with custom arrow */
+.mtw-fp__select-wrap {
+  position: relative;
+}
+.mtw-fp__select-wrap .mtw-fp__form-select {
+  appearance: none;
+  -webkit-appearance: none;
+  padding-right: 2.5rem;
+}
+.mtw-fp__select-arrow {
+  position: absolute;
+  right: 1rem;
+  top: 50%;
+  transform: translateY(-50%);
+  pointer-events: none;
+  font-size: 1.1rem;
+  color: rgba(255,255,255,0.5);
+  line-height: 1;
+}
+
+/* Helper text below inputs */
+.mtw-fp__form-hint {
+  margin-top: 0.45rem;
+  font-size: 0.8rem;
+  color: rgba(255,255,255,0.4);
+  line-height: 1.5;
+}
+
+/* Add-on checkboxes — card style */
+.mtw-fp__addon-checks { display: flex; flex-direction: column; gap: 0.5rem; }
 .mtw-fp__addon-label {
   display: flex;
-  align-items: center;
-  gap: 0.6rem;
-  font-size: 0.875rem;
+  align-items: flex-start;
+  gap: 0.75rem;
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 8px;
+  padding: 0.85rem 1rem;
   cursor: pointer;
-  color: rgba(255,255,255,0.8);
+  transition: border-color 0.15s, background 0.15s;
+}
+.mtw-fp__addon-label:hover {
+  border-color: rgba(255,255,255,0.22);
+  background: rgba(255,255,255,0.08);
 }
 .mtw-fp__addon-check {
-  width: 16px; height: 16px;
+  width: 18px; height: 18px;
   accent-color: var(--mtw-primary);
   cursor: pointer;
   flex-shrink: 0;
+  margin-top: 0.1rem;
+}
+.mtw-fp__addon-content {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  flex: 1;
+}
+.mtw-fp__addon-row {
+  display: flex;
+  align-items: baseline;
+  gap: 0.5rem;
+}
+.mtw-fp__addon-name {
+  font-size: 0.9rem;
+  color: rgba(255,255,255,0.88);
+}
+.mtw-fp__addon-price {
+  font-family: var(--mtw-font-mono);
+  font-size: 0.8rem;
+  color: rgba(255,255,255,0.5);
+  letter-spacing: 0.02em;
+}
+.mtw-fp__addon-sub {
+  font-size: 0.78rem;
+  color: rgba(255,255,255,0.4);
+  line-height: 1.45;
 }
 
 /* Form actions */
 .mtw-fp__form-actions { margin-top: 2rem; }
 .mtw-fp__form-submit { min-width: 14rem; }
-.mtw-fp__form-note {
-  margin-top: 0.75rem;
+.mtw-fp__form-submit-full {
+  display: block;
+  width: 100%;
+  background: var(--mtw-primary);
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  padding: 1.1rem 2rem;
+  font-family: var(--mtw-font-mono);
   font-size: 0.78rem;
-  color: rgba(255,255,255,0.4);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: background 0.15s, transform 0.1s;
+  text-align: center;
+}
+.mtw-fp__form-submit-full:hover { background: #8a3d2a; }
+.mtw-fp__form-submit-full:active { transform: scale(0.99); }
+.mtw-fp__form-note {
+  margin-top: 0.85rem;
+  font-size: 0.78rem;
+  color: rgba(255,255,255,0.35);
+  text-align: center;
   font-style: italic;
 }
 
