@@ -177,6 +177,51 @@
 </section>
 {%- endif -%}
 
+<!-- ── PHOTO RECOMMENDATION ── -->
+<section class="mtw-fp__rec">
+  <div class="mtw-container mtw-fp__rec-grid">
+
+    <!-- Left: copy -->
+    <div class="mtw-fp__rec-copy">
+      <span class="mtw-mono mtw-eyebrow mtw-eyebrow--primary" style="margin-bottom:1.5rem;display:block">{{ section.settings.rec_eyebrow | default: 'Not sure which package fits?' }}</span>
+      <h2 class="mtw-fp__rec-headline">{{ section.settings.rec_headline | default: 'Send us a photo. We&rsquo;ll recommend the right one.' }}</h2>
+      <ol class="mtw-fp__rec-steps">
+        {%- assign rec_steps = section.settings.rec_steps | default: 'Fill out the short form and share a photo of your entry — porch, stoop, or driveway gate||Our design team reviews your space and replies with a package recommendation, usually within one business day||Book the package that fits — we handle delivery, installation, and styling from there' -%}
+        {%- assign rec_step_lines = rec_steps | split: '||' -%}
+        {%- for s in rec_step_lines -%}
+          {%- assign s_clean = s | strip -%}
+          {%- if s_clean != blank -%}
+            <li>
+              <span class="mtw-mono mtw-fp__rec-num">{{ forloop.index | prepend: '0' | slice: -2, 2 }}</span>
+              <span>{{ s_clean }}</span>
+            </li>
+          {%- endif -%}
+        {%- endfor -%}
+      </ol>
+    </div>
+
+    <!-- Right: form card -->
+    <div class="mtw-fp__rec-card">
+      <p class="mtw-fp__rec-card-title">{{ section.settings.rec_form_title | default: 'Get a Recommendation' }}</p>
+      <p class="mtw-fp__rec-card-sub">{{ section.settings.rec_form_sub | default: 'Get a recommendation from our design team.' }}</p>
+      {% form 'contact', class: 'mtw-fp__rec-form' %}
+        {%- if form.posted_successfully? -%}
+          <p class="mtw-fp__rec-success">✓ &nbsp;{{ section.settings.rec_success | default: "Sent! We'll be in touch within one business day." }}</p>
+        {%- else -%}
+          <input type="text"  name="contact[name]"  placeholder="{{ section.settings.rec_f_name  | default: 'First name' }}"     class="mtw-fp__rec-input" required>
+          <input type="tel"   name="contact[phone]" placeholder="{{ section.settings.rec_f_phone | default: 'Phone number' }}"    class="mtw-fp__rec-input">
+          <input type="email" name="contact[email]" placeholder="{{ section.settings.rec_f_email | default: 'Email' }}"           class="mtw-fp__rec-input" required>
+          <input type="hidden" name="contact[subject]" value="Design team photo recommendation">
+          <textarea name="contact[body]" placeholder="{{ section.settings.rec_f_photo | default: 'Share a link to a photo of your entry, or describe your space' }}" class="mtw-fp__rec-textarea" rows="3"></textarea>
+          <textarea name="contact[additional_notes]" placeholder="{{ section.settings.rec_f_notes | default: 'Additional notes (optional)' }}" class="mtw-fp__rec-textarea" rows="2"></textarea>
+          <button type="submit" class="mtw-fp__rec-submit">{{ section.settings.rec_f_submit | default: 'Send to Design Team' }}</button>
+        {%- endif -%}
+      {% endform %}
+    </div>
+
+  </div>
+</section>
+
 <!-- ── FAQ ── -->
 {%- assign has_faqs = false -%}
 {%- for block in section.blocks -%}{%- if block.type == 'faq-item' -%}{%- assign has_faqs = true -%}{%- break -%}{%- endif -%}{%- endfor -%}
@@ -236,7 +281,20 @@
     { "type": "text",     "id": "status_text",      "label": "Status pill text",    "default": "Ordering open" },
     { "type": "text",     "id": "meta_weeks",       "label": "Install weeks blurb", "default": "Install weeks: Sept – Oct 2026" },
     { "type": "text",     "id": "countdown_label",  "label": "Countdown label",     "default": "Days until Halloween" },
-    { "type": "header", "content": "How it works section" },
+    { "type": "header",   "content": "Photo recommendation section" },
+    { "type": "text",     "id": "rec_eyebrow",    "label": "Eyebrow",              "default": "Not sure which package fits?" },
+    { "type": "textarea", "id": "rec_headline",   "label": "Headline",             "default": "Send us a photo. We'll recommend the right one." },
+    { "type": "textarea", "id": "rec_steps",      "label": "Steps (separate with ||)", "default": "Fill out the short form and share a photo of your entry — porch, stoop, or driveway gate||Our design team reviews your space and replies with a package recommendation, usually within one business day||Book the package that fits — we handle delivery, installation, and styling from there" },
+    { "type": "text",     "id": "rec_form_title", "label": "Form card title",      "default": "Get a Recommendation" },
+    { "type": "text",     "id": "rec_form_sub",   "label": "Form card sub-copy",   "default": "Get a recommendation from our design team." },
+    { "type": "text",     "id": "rec_f_name",     "label": "Name placeholder",     "default": "First name" },
+    { "type": "text",     "id": "rec_f_phone",    "label": "Phone placeholder",    "default": "Phone number" },
+    { "type": "text",     "id": "rec_f_email",    "label": "Email placeholder",    "default": "Email" },
+    { "type": "text",     "id": "rec_f_photo",    "label": "Photo field placeholder", "default": "Share a link to a photo of your entry, or describe your space" },
+    { "type": "text",     "id": "rec_f_notes",    "label": "Notes placeholder",    "default": "Additional notes (optional)" },
+    { "type": "text",     "id": "rec_f_submit",   "label": "Submit button",        "default": "Send to Design Team" },
+    { "type": "text",     "id": "rec_success",    "label": "Success message",      "default": "Sent! We'll be in touch within one business day." },
+    { "type": "header",   "content": "How it works section" },
     { "type": "text",     "id": "hiw_eyebrow",      "label": "Eyebrow",             "default": "Simple process" },
     { "type": "text",     "id": "hiw_headline",     "label": "Headline",            "default": "How it works." },
     { "type": "header", "content": "FAQ section" },
