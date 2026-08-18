@@ -42,9 +42,7 @@
         </div>
       {%- endif -%}
 
-      <form action="/cart/add?return_to=/cart" method="post" class="mtw-product__form" id="product-form-{{ product.id }}">
-        <input type="hidden" name="form_type" value="product">
-        <input type="hidden" name="utf8" value="✓">
+      <form class="mtw-product__form" id="product-form-{{ product.id }}">
         <input type="hidden" name="quantity" value="1">
 
         <!-- Variant selector -->
@@ -263,6 +261,43 @@
         e.preventDefault();
         input.focus();
       }
+    });
+  })();
+
+  // AJAX add-to-cart — preserves ?preview_theme_id so cart page loads in the same theme
+  (function() {
+    var form = document.getElementById('product-form-{{ product.id }}');
+    if (!form) return;
+
+    form.addEventListener('submit', function(e) {
+      e.preventDefault();
+
+      var submitBtn = form.querySelector('[type="submit"]');
+      var originalText = submitBtn ? submitBtn.textContent : '';
+      if (submitBtn) { submitBtn.textContent = 'Adding…'; submitBtn.disabled = true; }
+
+      var data = new FormData(form);
+
+      fetch('/cart/add.js', {
+        method: 'POST',
+        headers: { 'X-Requested-With': 'XMLHttpRequest' },
+        body: data,
+        credentials: 'same-origin'
+      })
+      .then(function(res) {
+        if (!res.ok) return res.json().then(function(j) { throw new Error(j.description || 'Add to cart failed'); });
+        // Preserve preview_theme_id if present so the cart page uses the same theme
+        var params = new URLSearchParams(window.location.search);
+        var cartUrl = '/cart';
+        if (params.has('preview_theme_id')) {
+          cartUrl += '?preview_theme_id=' + params.get('preview_theme_id');
+        }
+        window.location.href = cartUrl;
+      })
+      .catch(function(err) {
+        if (submitBtn) { submitBtn.textContent = originalText; submitBtn.disabled = false; }
+        alert(err.message || 'Could not add to cart. Please try again.');
+      });
     });
   })();
 
