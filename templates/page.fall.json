@@ -11,111 +11,56 @@
   "sections": {
     "fall-header": {
       "type": "fall-header",
-      "disabled": true,
       "settings": {
         "eyebrow": "Hello Harvest · Fall 2026 · Tennessee",
         "headline": "Fall packages.",
         "intro": "Every display is delivered and installed by hand. Choose your size, select your week, and we handle the rest.",
         "status_text": "Ordering open",
         "meta_weeks": "Install weeks: Sept – Oct 2026",
-        "countdown_label": "Days until Halloween",
-        "cta_label": "Book your install",
-        "cta_url": ""
-      }
-    },
-    "countdown_halloween_iaFFDg": {
-      "type": "countdown-halloween",
-      "name": "Countdown — Halloween",
-      "settings": {
-        "bg_style": "mtw-countdown--dark",
-        "eyebrow": "Hello Harvest · Fall 2026",
-        "headline": "Order before Halloween.",
-        "subtext": "We're holding a small number of install weeks for Fall '26, Once they're gone, we're fully booked until next season.",
-        "cta_text": "Book your install",
-        "cta_url": "gid://shopify/Product/9788888383718",
-        "target_date": "October 31, 2026 23:59:59",
-        "done_text": "Season complete — see you next fall."
+        "countdown_label": "Days until Halloween"
       }
     },
     "fall-hiw": {
       "type": "fall-hiw",
-      "disabled": true,
-      "settings": {}
-    },
-    "fall_content_tYPq3t": {
-      "type": "fall-content",
       "blocks": {
-        "checklist_item_ATqQ37": {
-          "type": "checklist_item",
+        "step-1": {
+          "type": "step",
           "settings": {
-            "text": "Organic pumpkins and heirloom gourds, arranged for your specific entry"
+            "title": "Choose your package",
+            "desc": "Pick the size that fits your entry. Each package includes delivery and hand-installation."
           }
         },
-        "checklist_item_3Kxxen": {
-          "type": "checklist_item",
+        "step-2": {
+          "type": "step",
           "settings": {
-            "text": "Hay bales for height, structure, and that unmistakable fall feel"
+            "title": "Select your install week",
+            "desc": "September through late October. We'll follow up to confirm your exact day and arrival window."
           }
         },
-        "checklist_item_JNJ9pH": {
-          "type": "checklist_item",
+        "step-3": {
+          "type": "step",
           "settings": {
-            "text": "Planter styling with fall foliage and seasonal fillers"
+            "title": "We arrive and style",
+            "desc": "Our team brings everything and arranges your display by hand. No lifting, no coordination — just a finished entry."
           }
         },
-        "checklist_item_L6YVBw": {
-          "type": "checklist_item",
+        "step-4": {
+          "type": "step",
           "settings": {
-            "text": "Full delivery and installation. We bring everything."
-          }
-        },
-        "checklist_item_VqbzTp": {
-          "type": "checklist_item",
-          "settings": {
-            "text": "Optional removal mid-to-end of November so your entry is clear for December 1st"
-          }
-        },
-        "process_item_RPNVbp": {
-          "type": "process_item",
-          "settings": {
-            "period": "Mid-August 2026",
-            "body": "Ordering opens. We reach out to walk you through your package options and schedule your install."
-          }
-        },
-        "process_item_UmCT3X": {
-          "type": "process_item",
-          "settings": {
-            "period": "Late September – October",
-            "body": "Our team arrives with your pumpkins, gourds, and all the fall pieces. We arrange everything at your door by hand."
-          }
-        },
-        "process_item_PzWFr4": {
-          "type": "process_item",
-          "settings": {
-            "period": "Mid–End of November (optional)",
-            "body": "We come back to collect your pumpkins, gourds, and hay bales so your entry is clear and ready for December 1st. Nothing to bag up, nothing to store."
+            "title": "Optional removal",
+            "desc": "Add removal at checkout and we return after Halloween to clear everything. Nothing left on your list."
           }
         }
       },
       "block_order": [
-        "checklist_item_ATqQ37",
-        "checklist_item_3Kxxen",
-        "checklist_item_JNJ9pH",
-        "checklist_item_L6YVBw",
-        "checklist_item_VqbzTp",
-        "process_item_RPNVbp",
-        "process_item_UmCT3X",
-        "process_item_PzWFr4"
+        "step-1",
+        "step-2",
+        "step-3",
+        "step-4"
       ],
-      "disabled": true,
-      "name": "Fall — Content",
       "settings": {
-        "service_eyebrow": "The service",
-        "service_headline": "Pumpkins, gourds, hay bales. All of it handled.",
-        "service_body_1": "We select the pumpkins, source the gourds and hay bales, and arrange everything at your front door. You never touch a thing. When autumn ends, we come back and collect it all if you want us to.",
-        "service_body_2": "Every pumpkin and gourd is sourced fresh for the season. We do not offer storage. Add the removal service and we collect everything mid-to-end of November so your entry is clear and ready for December 1st.",
-        "process_eyebrow": "The process",
-        "process_headline": "How it unfolds."
+        "eyebrow": "Simple process",
+        "headline": "How it works."
       }
     },
     "fall-packages": {
@@ -124,15 +69,14 @@
         "pkg-petite": {
           "type": "package",
           "settings": {
-            "image": "shopify://shop_images/petite_1.png",
-            "label": "SIMPLE",
+            "label": "Perfect for a stoop",
             "name": "Petite Patch",
             "price": "$385",
             "desc": "A curated mix of pumpkins and gourds, hand-arranged on delivery day. Ideal for a single-door entry or welcoming front stoop.",
             "inclusions": "4 Large Jack O'Lantern Pumpkins\n4 Medium Jack O'Lantern Pumpkins\n4 White Ghost Pumpkins\n6 Specialty Pumpkins\nAssortment of Pie Pumpkins",
             "addons": "Hay Bale|+40\nCustom Design|+75\nRemoval|+75",
             "featured": false,
-            "cta_label": "Customize Your Package",
+            "cta_label": "Customize this package",
             "cta_url": "/products/petite-patch",
             "handle": "petite-patch"
           }
@@ -140,15 +84,14 @@
         "pkg-cozy": {
           "type": "package",
           "settings": {
-            "image": "shopify://shop_images/Cozy_Corner_1.png",
-            "label": "BALANCED",
+            "label": "Great for porches",
             "name": "Cozy Corner",
             "price": "$585",
             "desc": "A fuller display for a porch or covered entry. More pumpkins, more gourds, same careful arrangement by hand.",
             "inclusions": "6 Large Jack O'Lantern Pumpkins\n6 Medium Jack O'Lantern Pumpkins\n6 White Ghost Pumpkins\n8 Specialty Pumpkins\nAssortment of Pie Pumpkins",
             "addons": "Hay Bale|+40\nCustom Design|+100\nRemoval|+100",
             "featured": false,
-            "cta_label": "Customize Your Package",
+            "cta_label": "Customize this package",
             "cta_url": "/products/cozy-corner",
             "handle": "cozy-corner"
           }
@@ -156,15 +99,14 @@
         "pkg-favorites": {
           "type": "package",
           "settings": {
-            "image": "shopify://shop_images/Fall_Favorite_1.png",
-            "label": "ABUNDANT",
+            "label": "Most popular",
             "name": "Fall Favorites",
             "price": "$885",
             "desc": "Our most-booked display. A generous mix of pumpkins, specialty gourds, and two hay bales — everything it takes to make a real impression at the door.",
             "inclusions": "8 Large Jack O'Lantern Pumpkins\n8 Medium Jack O'Lantern Pumpkins\n8 White Ghost Pumpkins\n14 Specialty Pumpkins\n2 Hay Bales (included)\nAssortment of Pie Pumpkins",
             "addons": "Residential Gate Pumpkins & Design\nRemoval|+150",
             "featured": true,
-            "cta_label": "Customize Your Package",
+            "cta_label": "Customize this package",
             "cta_url": "/products/fall-favorite",
             "handle": "fall-favorites"
           }
@@ -172,15 +114,14 @@
         "pkg-grande": {
           "type": "package",
           "settings": {
-            "image": "shopify://shop_images/Grande_Harvest_1.png",
-            "label": "UNMATCHED",
+            "label": "The full treatment",
             "name": "Grande Harvest",
             "price": "$1,285",
             "desc": "Hay bales, ornamental gourds, pie pumpkins, mini varieties — the kind of display that carries the whole season and stops everyone who passes.",
             "inclusions": "10 Large Jack O'Lantern Pumpkins\n8 Medium Jack O'Lantern Pumpkins\n8 White Ghost Pumpkins\n16 Specialty Pumpkins\n2 Hay Bales (included)\nMini White & Mini Orange Pumpkins\nOrnamental Gourds\nAssortment of Pie Pumpkins",
             "addons": "Residential Gate Pumpkins & Design\nRemoval|+200",
             "featured": false,
-            "cta_label": "Customize Your Package",
+            "cta_label": "Customize this package",
             "cta_url": "/products/grande-harvest",
             "handle": "grande-harvest"
           }
@@ -196,41 +137,78 @@
     },
     "fall-rec": {
       "type": "fall-rec",
-      "blocks": {
-        "forms_inline_6bmJyj": {
-          "type": "shopify://apps/forms/blocks/inline/8744a304-fcb1-4347-b211-bb6b4759a76a",
-          "settings": {
-            "form_id": "1103400",
-            "text_color": "#202020",
-            "button_background_color": "#202020",
-            "button_label_color": "#ffffff",
-            "links_color": "#1878b9",
-            "errors_color": "#e02229",
-            "text_alignment": "center",
-            "form_alignment": "center",
-            "padding_top": 0,
-            "padding_bottom": 24,
-            "padding_right": 0,
-            "padding_left": 0
-          }
-        }
-      },
-      "block_order": [
-        "forms_inline_6bmJyj"
-      ],
       "settings": {
         "eyebrow": "Not sure which package fits?",
         "headline": "Send us a photo. We'll recommend the right one.",
         "steps": "Fill out the short form and share a photo of your entry — porch, stoop, or driveway gate||Our design team reviews your space and replies with a package recommendation, usually within one business day||Book the package that fits — we handle delivery, installation, and styling from there"
       }
+    },
+    "fall-faq": {
+      "type": "fall-faq",
+      "blocks": {
+        "faq-1": {
+          "type": "faq",
+          "settings": {
+            "question": "What area do you serve?",
+            "answer": "We currently serve Nashville, TN and surrounding areas. Enter your zip at checkout and we'll confirm availability."
+          }
+        },
+        "faq-2": {
+          "type": "faq",
+          "settings": {
+            "question": "When do installs happen?",
+            "answer": "September through late October. You pick your week at checkout — we'll follow up with your exact date and arrival window."
+          }
+        },
+        "faq-3": {
+          "type": "faq",
+          "settings": {
+            "question": "What if I'm not home?",
+            "answer": "No problem. Leave placement notes and any gate codes in your order. We'll style the display and send a photo when we're done."
+          }
+        },
+        "faq-4": {
+          "type": "faq",
+          "settings": {
+            "question": "Do I need to provide anything?",
+            "answer": "Nothing. We bring all pumpkins, gourds, hay bales, and styling materials. Just let us know where you'd like the display."
+          }
+        },
+        "faq-5": {
+          "type": "faq",
+          "settings": {
+            "question": "Can I add removal later?",
+            "answer": "It's easiest at checkout, but email hello@madetowelcome.com before October 15th and we'll add it for you."
+          }
+        },
+        "faq-6": {
+          "type": "faq",
+          "settings": {
+            "question": "What if something doesn't look right?",
+            "answer": "We stand behind our work. Send us a photo and we'll make it right — no hassle."
+          }
+        }
+      },
+      "block_order": [
+        "faq-1",
+        "faq-2",
+        "faq-3",
+        "faq-4",
+        "faq-5",
+        "faq-6"
+      ],
+      "settings": {
+        "eyebrow": "Questions",
+        "headline": "Common questions.",
+        "closing": "Still have a question? We'd love to hear it — reach us at hello@madetowelcome.com."
+      }
     }
   },
   "order": [
     "fall-header",
-    "countdown_halloween_iaFFDg",
     "fall-hiw",
-    "fall_content_tYPq3t",
     "fall-packages",
-    "fall-rec"
+    "fall-rec",
+    "fall-faq"
   ]
 }
