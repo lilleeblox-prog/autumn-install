@@ -72,7 +72,8 @@
         "pkg-petite": {
           "type": "package",
           "settings": {
-            "label": "Perfect for a stoop",
+            "image": "shopify://shop_images/petite_1.png",
+            "label": "SIMPLE",
             "name": "Petite Patch",
             "price": "$385",
             "desc": "A curated mix of pumpkins and gourds, hand-arranged on delivery day. Ideal for a single-door entry or welcoming front stoop.",
@@ -87,7 +88,8 @@
         "pkg-cozy": {
           "type": "package",
           "settings": {
-            "label": "Great for porches",
+            "image": "shopify://shop_images/Cozy_Corner_1.png",
+            "label": "BALANCED",
             "name": "Cozy Corner",
             "price": "$585",
             "desc": "A fuller display for a porch or covered entry. More pumpkins, more gourds, same careful arrangement by hand.",
@@ -102,7 +104,8 @@
         "pkg-favorites": {
           "type": "package",
           "settings": {
-            "label": "Most popular",
+            "image": "shopify://shop_images/Fall_Favorite_1.png",
+            "label": "ABUNDANT",
             "name": "Fall Favorites",
             "price": "$885",
             "desc": "Our most-booked display. A generous mix of pumpkins, specialty gourds, and two hay bales — everything it takes to make a real impression at the door.",
@@ -117,7 +120,8 @@
         "pkg-grande": {
           "type": "package",
           "settings": {
-            "label": "The full treatment",
+            "image": "shopify://shop_images/Grande_Harvest_1.png",
+            "label": "UNMATCHED",
             "name": "Grande Harvest",
             "price": "$1,285",
             "desc": "Hay bales, ornamental gourds, pie pumpkins, mini varieties — the kind of display that carries the whole season and stops everyone who passes.",
