@@ -92,11 +92,17 @@
             "location": ""
           }
         },
+        "photo_XXrtXq": {
+          "type": "photo",
+          "settings": {
+            "location": ""
+          }
+        },
         "photo_KfMPUk": {
           "type": "photo",
           "settings": {
             "image": "shopify://shop_images/petite_patch_2.png",
-            "location": "Belle Meade"
+            "location": "Belle Meade, TN"
           }
         },
         "slide-1": {
@@ -123,6 +129,7 @@
       },
       "block_order": [
         "photo_MrGrgm",
+        "photo_XXrtXq",
         "photo_KfMPUk",
         "slide-1",
         "slide-2",
