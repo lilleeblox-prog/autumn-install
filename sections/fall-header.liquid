@@ -12,6 +12,9 @@
       <span class="mtw-fp__meta-divider">·</span>
       <span>{{ section.settings.meta_weeks | default: 'Install weeks: Sept – Oct 2026' }}</span>
     </div>
+    <a href="{{ section.settings.cta_url | default: '/products/fall-favorite' }}" class="mtw-btn mtw-btn--primary mtw-fp__header-cta">
+      {{ section.settings.cta_label | default: 'Book your install' }}
+    </a>
   </div>
 </header>
 
@@ -24,7 +27,9 @@
     { "type": "textarea", "id": "intro",           "label": "Intro text",          "default": "Every display is delivered and installed by hand. Choose your size, select your week, and we handle the rest." },
     { "type": "text",     "id": "status_text",     "label": "Status pill text",    "default": "Ordering open" },
     { "type": "text",     "id": "meta_weeks",      "label": "Install weeks blurb", "default": "Install weeks: Sept – Oct 2026" },
-    { "type": "text",     "id": "countdown_label", "label": "Countdown label",     "default": "Days until Halloween" }
+    { "type": "text",     "id": "countdown_label", "label": "Countdown label",     "default": "Days until Halloween" },
+    { "type": "text",     "id": "cta_label",       "label": "CTA button text",     "default": "Book your install" },
+    { "type": "url",      "id": "cta_url",         "label": "CTA button link" }
   ],
   "presets": [{ "name": "Fall — Header" }]
 }
