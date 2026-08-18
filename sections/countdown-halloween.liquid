@@ -1,33 +1,4 @@
-<style>
-.mtw-countdown { position: relative; overflow: hidden; }
-
-.mtw-leaves {
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-  z-index: 0;
-}
-.mtw-countdown__inner { position: relative; z-index: 1; }
-
-.mtw-leaf {
-  position: absolute;
-  top: -80px;
-  opacity: 0;
-  animation: mtw-leaf-fall linear infinite;
-  will-change: transform, opacity;
-}
-
-@keyframes mtw-leaf-fall {
-  0%   { transform: translateY(0) translateX(0)   rotate(0deg);   opacity: 0; }
-  5%   { opacity: 0.75; }
-  90%  { opacity: 0.6; }
-  100% { transform: translateY(110vh) translateX(var(--sway)) rotate(var(--spin)); opacity: 0; }
-}
-</style>
-
 <section class="mtw-countdown {{ section.settings.bg_style }}">
-  <div class="mtw-leaves" id="mtw-leaves-{{ section.id }}" aria-hidden="true"></div>
-
   <div class="mtw-container mtw-countdown__inner">
     <div class="mtw-countdown__copy">
       <span class="mtw-mono mtw-eyebrow mtw-eyebrow--primary">{{ section.settings.eyebrow | default: 'Hello Harvest · Fall 2026' }}</span>
@@ -87,49 +58,6 @@
   tick();
   setInterval(tick, 1000);
 
-  /* ── Falling leaves ── */
-  var container = document.getElementById('mtw-leaves-'+sid);
-  if(!container) return;
-
-  /* Serrated birch/elm leaf with stem */
-  var leafD = 'M25,92 L24,86 C20,83 17,79 15,75 L18,72 L13,66 L17,62 L12,56 L16,52 L11,46 L15,42 L11,36 L15,32 L12,26 L16,22 L14,16 L18,13 L17,7 L21,5 L25,2 L29,5 L33,7 L32,13 L36,16 L34,22 L38,26 L35,32 L39,36 L35,42 L39,46 L34,52 L38,56 L33,62 L37,66 L32,72 L35,75 C33,79 30,83 26,86 Z';
-  var shapes = [leafD];
-
-  var colors = ['#C45C1A','#E07B2A','#D4A017','#8B3A0F','#B85C00','#A0390A','#D96C1A'];
-
-  var COUNT = 18;
-
-  for(var i = 0; i < COUNT; i++){
-    (function(i){
-      var leaf = document.createElement('div');
-      leaf.className = 'mtw-leaf';
-
-      var size    = 14 + Math.random() * 18;          /* 14–32 px */
-      var left    = Math.random() * 100;               /* % across */
-      var dur     = 8 + Math.random() * 10;            /* 8–18 s */
-      var delay   = -(Math.random() * dur);            /* stagger start */
-      var swayPx  = (Math.random() < 0.5 ? -1 : 1) * (40 + Math.random() * 80);
-      var spin    = (Math.random() < 0.5 ? -1 : 1) * (120 + Math.random() * 200);
-      var color   = colors[Math.floor(Math.random() * colors.length)];
-      var shape   = shapes[Math.floor(Math.random() * shapes.length)];
-
-      leaf.style.cssText = [
-        'left:' + left + '%',
-        'width:' + size + 'px',
-        'height:' + size + 'px',
-        'animation-duration:' + dur + 's',
-        'animation-delay:' + delay + 's',
-        '--sway:' + swayPx + 'px',
-        '--spin:' + spin + 'deg'
-      ].join(';');
-
-      leaf.innerHTML = '<svg viewBox="0 0 50 95" width="' + size + '" height="' + size + '" xmlns="http://www.w3.org/2000/svg">'
-        + '<path d="' + shape + '" fill="' + color + '" opacity="0.85"/>'
-        + '</svg>';
-
-      container.appendChild(leaf);
-    })(i);
-  }
 })();
 </script>
 
