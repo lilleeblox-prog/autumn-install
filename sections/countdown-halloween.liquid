@@ -1,4 +1,33 @@
+<style>
+.mtw-countdown { position: relative; overflow: hidden; }
+
+.mtw-leaves {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+}
+.mtw-countdown__inner { position: relative; z-index: 1; }
+
+.mtw-leaf {
+  position: absolute;
+  top: -80px;
+  opacity: 0;
+  animation: mtw-leaf-fall linear infinite;
+  will-change: transform, opacity;
+}
+
+@keyframes mtw-leaf-fall {
+  0%   { transform: translateY(0) translateX(0)   rotate(0deg);   opacity: 0; }
+  5%   { opacity: 0.75; }
+  90%  { opacity: 0.6; }
+  100% { transform: translateY(110vh) translateX(var(--sway)) rotate(var(--spin)); opacity: 0; }
+}
+</style>
+
 <section class="mtw-countdown {{ section.settings.bg_style }}">
+  <div class="mtw-leaves" id="mtw-leaves-{{ section.id }}" aria-hidden="true"></div>
+
   <div class="mtw-container mtw-countdown__inner">
     <div class="mtw-countdown__copy">
       <span class="mtw-mono mtw-eyebrow mtw-eyebrow--primary">{{ section.settings.eyebrow | default: 'Hello Harvest · Fall 2026' }}</span>
@@ -7,7 +36,7 @@
         <p class="mtw-countdown__sub">{{ section.settings.subtext }}</p>
       {%- endif -%}
       {%- if section.settings.cta_text != blank -%}
-        <a href="{{ section.settings.cta_url | default: '#packages' }}" class="mtw-btn mtw-btn--primary mtw-countdown__cta">
+        <a href="{{ section.settings.cta_url | default: '/products/fall-favorite' }}" class="mtw-btn mtw-btn--primary mtw-countdown__cta">
           {{ section.settings.cta_text }}
           <svg width="14" height="14" viewBox="0 0 14 14" fill="none" style="margin-left:0.5rem;flex-shrink:0"><path d="M1 7h12M8 2l5 5-5 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
         </a>
@@ -40,6 +69,7 @@
 
 <script>
 (function(){
+  /* ── Countdown ── */
   var target = new Date('{{ section.settings.target_date | default: "October 31, 2026 23:59:59" }}').getTime();
   var sid    = '{{ section.id }}';
   function pad(n){ return String(n).padStart(2,'0'); }
@@ -62,6 +92,54 @@
   }
   tick();
   setInterval(tick, 1000);
+
+  /* ── Falling leaves ── */
+  var container = document.getElementById('mtw-leaves-'+sid);
+  if(!container) return;
+
+  /* Autumn leaf SVG paths — 4 natural shapes */
+  var shapes = [
+    /* maple-ish */ 'M12,2 C10,5 6,5 4,8 C2,11 3,15 6,16 C8,17 10,15 12,17 C14,15 16,17 18,16 C21,15 22,11 20,8 C18,5 14,5 12,2 Z',
+    /* oak-ish */   'M12,1 C9,4 5,4 4,7 C3,10 5,12 4,15 C5,17 8,17 10,15 C11,17 12,19 12,19 C12,19 13,17 14,15 C16,17 19,17 20,15 C19,12 21,10 20,7 C19,4 15,4 12,1 Z',
+    /* simple */    'M12,2 Q18,6 18,12 Q18,18 12,20 Q6,18 6,12 Q6,6 12,2 Z',
+    /* elongated */ 'M12,1 C15,5 17,9 16,14 C15,18 13,20 12,21 C11,20 9,18 8,14 C7,9 9,5 12,1 Z'
+  ];
+
+  var colors = ['#C45C1A','#E07B2A','#D4A017','#8B3A0F','#B85C00','#A0390A','#D96C1A'];
+
+  var COUNT = 18;
+
+  for(var i = 0; i < COUNT; i++){
+    (function(i){
+      var leaf = document.createElement('div');
+      leaf.className = 'mtw-leaf';
+
+      var size    = 14 + Math.random() * 18;          /* 14–32 px */
+      var left    = Math.random() * 100;               /* % across */
+      var dur     = 8 + Math.random() * 10;            /* 8–18 s */
+      var delay   = -(Math.random() * dur);            /* stagger start */
+      var swayPx  = (Math.random() < 0.5 ? -1 : 1) * (40 + Math.random() * 80);
+      var spin    = (Math.random() < 0.5 ? -1 : 1) * (120 + Math.random() * 200);
+      var color   = colors[Math.floor(Math.random() * colors.length)];
+      var shape   = shapes[Math.floor(Math.random() * shapes.length)];
+
+      leaf.style.cssText = [
+        'left:' + left + '%',
+        'width:' + size + 'px',
+        'height:' + size + 'px',
+        'animation-duration:' + dur + 's',
+        'animation-delay:' + delay + 's',
+        '--sway:' + swayPx + 'px',
+        '--spin:' + spin + 'deg'
+      ].join(';');
+
+      leaf.innerHTML = '<svg viewBox="0 0 24 24" width="' + size + '" height="' + size + '" xmlns="http://www.w3.org/2000/svg">'
+        + '<path d="' + shape + '" fill="' + color + '" opacity="0.85"/>'
+        + '</svg>';
+
+      container.appendChild(leaf);
+    })(i);
+  }
 })();
 </script>
 
@@ -77,7 +155,7 @@
     { "type": "text",    "id": "headline",    "label": "Headline",     "default": "Order before Halloween." },
     { "type": "textarea","id": "subtext",     "label": "Subtext",      "default": "Install weeks are filling fast. Secure your display now — we handle everything." },
     { "type": "text",    "id": "cta_text",    "label": "Button label", "default": "Book your install" },
-    { "type": "text",    "id": "cta_url",     "label": "Button URL",   "default": "#packages" },
+    { "type": "text",    "id": "cta_url",     "label": "Button URL",   "default": "/products/fall-favorite" },
     { "type": "text",    "id": "target_date", "label": "Target date",  "default": "October 31, 2026 23:59:59", "info": "Use format: Month DD, YYYY HH:MM:SS" },
     { "type": "text",    "id": "done_text",   "label": "Expired message", "default": "Season complete — see you next fall." }
   ],
