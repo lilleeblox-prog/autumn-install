@@ -91,11 +91,11 @@
   var container = document.getElementById('mtw-leaves-'+sid);
   if(!container) return;
 
-  /* Pumpkin silhouette — 3-lobed body with stem */
-  var pumpkinD = 'M50,80 C35,80 18,70 18,53 C18,38 28,27 34,24 C30,19 31,12 38,11 C42,10 46,14 48,20 C49,14 49,9 50,9 C51,9 51,14 52,20 C54,14 58,10 62,11 C69,12 70,19 66,24 C72,27 82,38 82,53 C82,70 65,80 50,80 Z M48,9 L47,4 C47,2 53,2 53,4 L52,9 Z';
-  var shapes = [pumpkinD];
+  /* Serrated birch/elm leaf with stem */
+  var leafD = 'M25,92 L24,86 C20,83 17,79 15,75 L18,72 L13,66 L17,62 L12,56 L16,52 L11,46 L15,42 L11,36 L15,32 L12,26 L16,22 L14,16 L18,13 L17,7 L21,5 L25,2 L29,5 L33,7 L32,13 L36,16 L34,22 L38,26 L35,32 L39,36 L35,42 L39,46 L34,52 L38,56 L33,62 L37,66 L32,72 L35,75 C33,79 30,83 26,86 Z';
+  var shapes = [leafD];
 
-  var colors = ['#E8640A','#F07820','#D4500A','#C84800','#F28C30','#E05808','#CC5000'];
+  var colors = ['#C45C1A','#E07B2A','#D4A017','#8B3A0F','#B85C00','#A0390A','#D96C1A'];
 
   var COUNT = 18;
 
@@ -123,7 +123,7 @@
         '--spin:' + spin + 'deg'
       ].join(';');
 
-      leaf.innerHTML = '<svg viewBox="0 0 100 85" width="' + size + '" height="' + size + '" xmlns="http://www.w3.org/2000/svg">'
+      leaf.innerHTML = '<svg viewBox="0 0 50 95" width="' + size + '" height="' + size + '" xmlns="http://www.w3.org/2000/svg">'
         + '<path d="' + shape + '" fill="' + color + '" opacity="0.85"/>'
         + '</svg>';
 
