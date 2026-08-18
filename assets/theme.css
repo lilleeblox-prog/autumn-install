@@ -98,7 +98,7 @@ button { cursor: pointer; background: none; border: none; }
   padding: 1.1rem 2rem;
   transition: background 0.18s, color 0.18s, opacity 0.18s;
   border: none;
-  border-radius: 99px;
+  border-radius: 10px;
   cursor: pointer;
 }
 .mtw-btn--primary {
