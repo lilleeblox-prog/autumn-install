@@ -92,12 +92,6 @@
             "location": ""
           }
         },
-        "photo_XXrtXq": {
-          "type": "photo",
-          "settings": {
-            "location": ""
-          }
-        },
         "photo_KfMPUk": {
           "type": "photo",
           "settings": {
@@ -129,7 +123,6 @@
       },
       "block_order": [
         "photo_MrGrgm",
-        "photo_XXrtXq",
         "photo_KfMPUk",
         "slide-1",
         "slide-2",
