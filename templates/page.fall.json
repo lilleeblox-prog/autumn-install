@@ -39,6 +39,7 @@
     },
     "fall-hiw": {
       "type": "fall-hiw",
+      "disabled": true,
       "settings": {}
     },
     "fall_content_tYPq3t": {
@@ -106,6 +107,7 @@
         "process_item_UmCT3X",
         "process_item_PzWFr4"
       ],
+      "disabled": true,
       "name": "Fall — Content",
       "settings": {
         "service_eyebrow": "The service",

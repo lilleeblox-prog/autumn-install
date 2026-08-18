@@ -27,7 +27,7 @@
         "hero_body": "Choose your package below. We deliver, install, and style your seasonal display by hand.",
         "hero_cta_text": "See packages",
         "hero_cta_url": "#packages",
-        "hero_cta_note": "Delivery and installation included in every package.",
+        "hero_cta_note": "",
         "form_id": "",
         "form_title": "Add Your Name",
         "form_desc": "We'll reach out in mid-August when ordering opens. No payment now.",
@@ -288,10 +288,10 @@
   "order": [
     "hero-home",
     "how-it-works",
+    "gallery",
     "packages-grid",
     "countdown",
     "cta-dark",
-    "gallery",
     "season-cards",
     "footer"
   ]
