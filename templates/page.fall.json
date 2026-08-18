@@ -30,7 +30,7 @@
         "headline": "Order before Halloween.",
         "subtext": "We're holding a small number of install weeks for Fall '26, Once they're gone, we're fully booked until next season.",
         "cta_text": "Book your install",
-        "cta_url": " products › fall-favorite",
+        "cta_url": "gid://shopify/Product/9788888383718",
         "target_date": "October 31, 2026 23:59:59",
         "done_text": "Season complete — see you next fall."
       }
@@ -144,6 +144,42 @@
         "headline": "Send us a photo. We'll recommend the right one.",
         "steps": "Fill out the short form and share a photo of your entry — porch, stoop, or driveway gate||Our design team reviews your space and replies with a package recommendation, usually within one business day||Book the package that fits — we handle delivery, installation, and styling from there"
       }
+    },
+    "fall_faq_YmaPnz": {
+      "type": "fall-faq",
+      "blocks": {
+        "faq_tmW3NA": {
+          "type": "faq",
+          "settings": {
+            "question": "Question goes here",
+            "answer": "Answer goes here"
+          }
+        },
+        "faq_m49YwN": {
+          "type": "faq",
+          "settings": {
+            "question": "Question goes here",
+            "answer": "Answer goes here"
+          }
+        },
+        "faq_AGMyJd": {
+          "type": "faq",
+          "settings": {
+            "question": "Question goes here",
+            "answer": "Answer goes here"
+          }
+        }
+      },
+      "block_order": [
+        "faq_tmW3NA",
+        "faq_m49YwN",
+        "faq_AGMyJd"
+      ],
+      "name": "Fall — FAQ",
+      "settings": {
+        "eyebrow": "Questions",
+        "headline": "Common questions."
+      }
     }
   },
   "order": [
@@ -151,6 +187,7 @@
     "countdown_halloween_iaFFDg",
     "fall-hiw",
     "fall-packages",
-    "fall-rec"
+    "fall-rec",
+    "fall_faq_YmaPnz"
   ]
 }
