@@ -1,0 +1,31 @@
+<!-- Fall page header -->
+<header class="mtw-fp__header">
+  <div class="mtw-container mtw-fp__header-inner">
+    <span class="mtw-mono mtw-eyebrow mtw-eyebrow--primary">{{ section.settings.eyebrow | default: 'Hello Harvest · Fall 2026 · Tennessee' }}</span>
+    <h1 class="mtw-fp__title">{{ section.settings.headline | default: 'Fall packages.' }}</h1>
+    <p class="mtw-fp__intro">{{ section.settings.intro | default: 'Every display is delivered and installed by hand. Choose your size, select your week, and we handle the rest.' }}</p>
+    <div class="mtw-fp__header-meta">
+      <span class="mtw-fp__meta-pill">
+        <svg width="10" height="10" viewBox="0 0 10 10" fill="currentColor"><circle cx="5" cy="5" r="5"/></svg>
+        {{ section.settings.status_text | default: 'Ordering open' }}
+      </span>
+      <span class="mtw-fp__meta-divider">·</span>
+      <span>{{ section.settings.meta_weeks | default: 'Install weeks: Sept – Oct 2026' }}</span>
+    </div>
+  </div>
+</header>
+
+{% schema %}
+{
+  "name": "Fall — Header",
+  "settings": [
+    { "type": "text",     "id": "eyebrow",        "label": "Eyebrow",             "default": "Hello Harvest · Fall 2026 · Tennessee" },
+    { "type": "text",     "id": "headline",        "label": "Headline",            "default": "Fall packages." },
+    { "type": "textarea", "id": "intro",           "label": "Intro text",          "default": "Every display is delivered and installed by hand. Choose your size, select your week, and we handle the rest." },
+    { "type": "text",     "id": "status_text",     "label": "Status pill text",    "default": "Ordering open" },
+    { "type": "text",     "id": "meta_weeks",      "label": "Install weeks blurb", "default": "Install weeks: Sept – Oct 2026" },
+    { "type": "text",     "id": "countdown_label", "label": "Countdown label",     "default": "Days until Halloween" }
+  ],
+  "presets": [{ "name": "Fall — Header" }]
+}
+{% endschema %}

@@ -9,24 +9,16 @@
  */
 {
   "sections": {
-    "countdown_halloween_JHDPdP": {
-      "type": "countdown-halloween",
-      "name": "Countdown — Halloween",
-      "settings": {
-        "bg_style": "mtw-countdown--dark",
-        "eyebrow": "Hello Harvest · Fall 2026",
-        "headline": "Order before Halloween.",
-        "subtext": "We're holding a small number of install weeks for Fall '26. Once they're gone, we're fully booked until next season.",
-        "cta_text": "Book your install",
-        "cta_url": "#packages",
-        "target_date": "October 31, 2026 23:59:59",
-        "done_text": "Season complete — see you next fall."
-      }
-    },
     "fall-header": {
       "type": "fall-header",
-      "disabled": true,
-      "settings": {}
+      "settings": {
+        "eyebrow": "Hello Harvest · Fall 2026 · Tennessee",
+        "headline": "Fall packages.",
+        "intro": "Every display is delivered and installed by hand. Choose your size, select your week, and we handle the rest.",
+        "status_text": "Ordering open",
+        "meta_weeks": "Install weeks: Sept – Oct 2026",
+        "countdown_label": "Days until Halloween"
+      }
     },
     "fall-hiw": {
       "type": "fall-hiw",
@@ -35,7 +27,7 @@
           "type": "step",
           "settings": {
             "title": "Choose your package",
-            "desc": "Select the size that fits your entry, then personalize the details and finishing touches  to make it yours."
+            "desc": "Pick the size that fits your entry. Each package includes delivery and hand-installation."
           }
         },
         "step-2": {
@@ -56,7 +48,7 @@
           "type": "step",
           "settings": {
             "title": "Optional removal",
-            "desc": "Add removal at checkout and we return after Halloween to clear everything. One less thing left on your to-do list."
+            "desc": "Add removal at checkout and we return after Halloween to clear everything. Nothing left on your list."
           }
         }
       },
@@ -71,9 +63,80 @@
         "headline": "How it works."
       }
     },
-    "fall_rec_qbGXjr": {
+    "fall-packages": {
+      "type": "fall-packages",
+      "blocks": {
+        "pkg-petite": {
+          "type": "package",
+          "settings": {
+            "label": "Perfect for a stoop",
+            "name": "Petite Patch",
+            "price": "$385",
+            "desc": "A curated mix of pumpkins and gourds, hand-arranged on delivery day. Ideal for a single-door entry or welcoming front stoop.",
+            "inclusions": "4 Large Jack O'Lantern Pumpkins\n4 Medium Jack O'Lantern Pumpkins\n4 White Ghost Pumpkins\n6 Specialty Pumpkins\nAssortment of Pie Pumpkins",
+            "addons": "Hay Bale|+40\nCustom Design|+75\nRemoval|+75",
+            "featured": false,
+            "cta_label": "Customize this package",
+            "cta_url": "/products/petite-patch",
+            "handle": "petite-patch"
+          }
+        },
+        "pkg-cozy": {
+          "type": "package",
+          "settings": {
+            "label": "Great for porches",
+            "name": "Cozy Corner",
+            "price": "$585",
+            "desc": "A fuller display for a porch or covered entry. More pumpkins, more gourds, same careful arrangement by hand.",
+            "inclusions": "6 Large Jack O'Lantern Pumpkins\n6 Medium Jack O'Lantern Pumpkins\n6 White Ghost Pumpkins\n8 Specialty Pumpkins\nAssortment of Pie Pumpkins",
+            "addons": "Hay Bale|+40\nCustom Design|+100\nRemoval|+100",
+            "featured": false,
+            "cta_label": "Customize this package",
+            "cta_url": "/products/cozy-corner",
+            "handle": "cozy-corner"
+          }
+        },
+        "pkg-favorites": {
+          "type": "package",
+          "settings": {
+            "label": "Most popular",
+            "name": "Fall Favorites",
+            "price": "$885",
+            "desc": "Our most-booked display. A generous mix of pumpkins, specialty gourds, and two hay bales — everything it takes to make a real impression at the door.",
+            "inclusions": "8 Large Jack O'Lantern Pumpkins\n8 Medium Jack O'Lantern Pumpkins\n8 White Ghost Pumpkins\n14 Specialty Pumpkins\n2 Hay Bales (included)\nAssortment of Pie Pumpkins",
+            "addons": "Residential Gate Pumpkins & Design\nRemoval|+150",
+            "featured": true,
+            "cta_label": "Customize this package",
+            "cta_url": "/products/fall-favorites",
+            "handle": "fall-favorites"
+          }
+        },
+        "pkg-grande": {
+          "type": "package",
+          "settings": {
+            "label": "The full treatment",
+            "name": "Grande Harvest",
+            "price": "$1,285",
+            "desc": "Hay bales, ornamental gourds, pie pumpkins, mini varieties — the kind of display that carries the whole season and stops everyone who passes.",
+            "inclusions": "10 Large Jack O'Lantern Pumpkins\n8 Medium Jack O'Lantern Pumpkins\n8 White Ghost Pumpkins\n16 Specialty Pumpkins\n2 Hay Bales (included)\nMini White & Mini Orange Pumpkins\nOrnamental Gourds\nAssortment of Pie Pumpkins",
+            "addons": "Residential Gate Pumpkins & Design\nRemoval|+200",
+            "featured": false,
+            "cta_label": "Customize this package",
+            "cta_url": "/products/grande-harvest",
+            "handle": "grande-harvest"
+          }
+        }
+      },
+      "block_order": [
+        "pkg-petite",
+        "pkg-cozy",
+        "pkg-favorites",
+        "pkg-grande"
+      ],
+      "settings": {}
+    },
+    "fall-rec": {
       "type": "fall-rec",
-      "name": "Fall — Get a Recommendation",
       "settings": {
         "eyebrow": "Not sure which package fits?",
         "headline": "Send us a photo. We'll recommend the right one.",
@@ -143,10 +206,10 @@
     }
   },
   "order": [
-    "countdown_halloween_JHDPdP",
     "fall-header",
     "fall-hiw",
-    "fall_rec_qbGXjr",
+    "fall-packages",
+    "fall-rec",
     "fall-faq"
   ]
 }
