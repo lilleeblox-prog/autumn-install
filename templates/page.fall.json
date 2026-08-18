@@ -16,7 +16,7 @@
         "bg_style": "mtw-countdown--dark",
         "eyebrow": "Hello Harvest · Fall 2026",
         "headline": "Order before Halloween.",
-        "subtext": "Install weeks are filling fast. Secure your display now — we handle everything.",
+        "subtext": "We're holding a small number of install weeks for Fall '26. Once they're gone, we're fully booked until next season.",
         "cta_text": "Book your install",
         "cta_url": "#packages",
         "target_date": "October 31, 2026 23:59:59",
@@ -35,7 +35,7 @@
           "type": "step",
           "settings": {
             "title": "Choose your package",
-            "desc": "Pick the size that fits your entry. Each package includes delivery and hand-installation."
+            "desc": "Select the size that fits your entry, then personalize the details and finishing touches  to make it yours."
           }
         },
         "step-2": {
@@ -56,7 +56,7 @@
           "type": "step",
           "settings": {
             "title": "Optional removal",
-            "desc": "Add removal at checkout and we return after Halloween to clear everything. Nothing left on your list."
+            "desc": "Add removal at checkout and we return after Halloween to clear everything. One less thing left on your to-do list."
           }
         }
       },
@@ -151,14 +151,7 @@
         "headline": "Send us a photo. We'll recommend the right one.",
         "steps": "Fill out the short form and share a photo of your entry — porch, stoop, or driveway gate||Our design team reviews your space and replies with a package recommendation, usually within one business day||Book the package that fits — we handle delivery, installation, and styling from there",
         "form_title": "Get a Recommendation",
-        "form_sub": "Get a recommendation from our design team.",
-        "f_name": "First name",
-        "f_phone": "Phone number",
-        "f_email": "Email",
-        "f_photo": "Share a link to a photo of your entry, or describe your space",
-        "f_notes": "Additional notes (optional)",
-        "f_submit": "Send to Design Team",
-        "success_msg": "Sent! We'll be in touch within one business day."
+        "form_sub": "Get a recommendation from our design team."
       }
     },
     "fall-faq": {
