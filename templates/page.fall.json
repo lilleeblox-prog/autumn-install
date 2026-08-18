@@ -18,7 +18,9 @@
         "intro": "Every display is delivered and installed by hand. Choose your size, select your week, and we handle the rest.",
         "status_text": "Ordering open",
         "meta_weeks": "Install weeks: Sept – Oct 2026",
-        "countdown_label": "Days until Halloween"
+        "countdown_label": "Days until Halloween",
+        "cta_label": "Book your install",
+        "cta_url": ""
       }
     },
     "countdown_halloween_iaFFDg": {
@@ -53,7 +55,7 @@
             "inclusions": "4 Large Jack O'Lantern Pumpkins\n4 Medium Jack O'Lantern Pumpkins\n4 White Ghost Pumpkins\n6 Specialty Pumpkins\nAssortment of Pie Pumpkins",
             "addons": "Hay Bale|+40\nCustom Design|+75\nRemoval|+75",
             "featured": false,
-            "cta_label": "Customize this package",
+            "cta_label": "Customize Your Package",
             "cta_url": "/products/petite-patch",
             "handle": "petite-patch"
           }
@@ -69,7 +71,7 @@
             "inclusions": "6 Large Jack O'Lantern Pumpkins\n6 Medium Jack O'Lantern Pumpkins\n6 White Ghost Pumpkins\n8 Specialty Pumpkins\nAssortment of Pie Pumpkins",
             "addons": "Hay Bale|+40\nCustom Design|+100\nRemoval|+100",
             "featured": false,
-            "cta_label": "Customize this package",
+            "cta_label": "Customize Your Package",
             "cta_url": "/products/cozy-corner",
             "handle": "cozy-corner"
           }
@@ -85,7 +87,7 @@
             "inclusions": "8 Large Jack O'Lantern Pumpkins\n8 Medium Jack O'Lantern Pumpkins\n8 White Ghost Pumpkins\n14 Specialty Pumpkins\n2 Hay Bales (included)\nAssortment of Pie Pumpkins",
             "addons": "Residential Gate Pumpkins & Design\nRemoval|+150",
             "featured": true,
-            "cta_label": "Customize this package",
+            "cta_label": "Customize Your Package",
             "cta_url": "/products/fall-favorite",
             "handle": "fall-favorites"
           }
@@ -101,7 +103,7 @@
             "inclusions": "10 Large Jack O'Lantern Pumpkins\n8 Medium Jack O'Lantern Pumpkins\n8 White Ghost Pumpkins\n16 Specialty Pumpkins\n2 Hay Bales (included)\nMini White & Mini Orange Pumpkins\nOrnamental Gourds\nAssortment of Pie Pumpkins",
             "addons": "Residential Gate Pumpkins & Design\nRemoval|+200",
             "featured": false,
-            "cta_label": "Customize this package",
+            "cta_label": "Customize Your Package",
             "cta_url": "/products/grande-harvest",
             "handle": "grande-harvest"
           }
