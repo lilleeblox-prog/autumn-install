@@ -11,7 +11,6 @@
   "sections": {
     "fall-header": {
       "type": "fall-header",
-      "disabled": true,
       "settings": {
         "eyebrow": "Hello Harvest · Fall 2026 · Tennessee",
         "headline": "Fall packages.",
@@ -19,20 +18,6 @@
         "status_text": "Ordering open",
         "meta_weeks": "Install weeks: Sept – Oct 2026",
         "countdown_label": "Days until Halloween"
-      }
-    },
-    "countdown_halloween_aBKYjm": {
-      "type": "countdown-halloween",
-      "name": "Countdown — Halloween",
-      "settings": {
-        "bg_style": "mtw-countdown--dark",
-        "eyebrow": "Hello Harvest · Fall 2026",
-        "headline": "Order before Halloween.",
-        "subtext": "We're holding a small number of install weeks for Fall '26 — once they're gone, we're fully booked until next season",
-        "cta_text": "Book your install",
-        "cta_url": "#packages",
-        "target_date": "October 31, 2026 23:59:59",
-        "done_text": "Season complete — see you next fall."
       }
     },
     "fall-hiw": {
@@ -84,8 +69,7 @@
         "pkg-petite": {
           "type": "package",
           "settings": {
-            "image": "shopify://shop_images/petite_1.png",
-            "label": "SIMPLE",
+            "label": "Perfect for a stoop",
             "name": "Petite Patch",
             "price": "$385",
             "desc": "A curated mix of pumpkins and gourds, hand-arranged on delivery day. Ideal for a single-door entry or welcoming front stoop.",
@@ -100,8 +84,7 @@
         "pkg-cozy": {
           "type": "package",
           "settings": {
-            "image": "shopify://shop_images/Cozy_Corner_1.png",
-            "label": "BALANCED",
+            "label": "Great for porches",
             "name": "Cozy Corner",
             "price": "$585",
             "desc": "A fuller display for a porch or covered entry. More pumpkins, more gourds, same careful arrangement by hand.",
@@ -116,8 +99,7 @@
         "pkg-favorites": {
           "type": "package",
           "settings": {
-            "image": "shopify://shop_images/Fall_Favorite_1.png",
-            "label": "ABUNDANT",
+            "label": "Most popular",
             "name": "Fall Favorites",
             "price": "$885",
             "desc": "Our most-booked display. A generous mix of pumpkins, specialty gourds, and two hay bales — everything it takes to make a real impression at the door.",
@@ -125,15 +107,14 @@
             "addons": "Residential Gate Pumpkins & Design\nRemoval|+150",
             "featured": true,
             "cta_label": "Customize this package",
-            "cta_url": "products/fall-favorites",
+            "cta_url": "/products/fall-favorite",
             "handle": "fall-favorites"
           }
         },
         "pkg-grande": {
           "type": "package",
           "settings": {
-            "image": "shopify://shop_images/Grande_Harvest_1.png",
-            "label": "UNMATCHED",
+            "label": "The full treatment",
             "name": "Grande Harvest",
             "price": "$1,285",
             "desc": "Hay bales, ornamental gourds, pie pumpkins, mini varieties — the kind of display that carries the whole season and stops everyone who passes.",
@@ -156,28 +137,6 @@
     },
     "fall-rec": {
       "type": "fall-rec",
-      "blocks": {
-        "forms_inline_tQmA6P": {
-          "type": "shopify://apps/forms/blocks/inline/8744a304-fcb1-4347-b211-bb6b4759a76a",
-          "settings": {
-            "form_id": "1103400",
-            "text_color": "#202020",
-            "button_background_color": "#202020",
-            "button_label_color": "#FFFFFF",
-            "links_color": "#1878B9",
-            "errors_color": "#E02229",
-            "text_alignment": "center",
-            "form_alignment": "center",
-            "padding_top": 0,
-            "padding_bottom": 24,
-            "padding_right": 0,
-            "padding_left": 0
-          }
-        }
-      },
-      "block_order": [
-        "forms_inline_tQmA6P"
-      ],
       "settings": {
         "eyebrow": "Not sure which package fits?",
         "headline": "Send us a photo. We'll recommend the right one.",
@@ -246,7 +205,6 @@
   },
   "order": [
     "fall-header",
-    "countdown_halloween_aBKYjm",
     "fall-hiw",
     "fall-packages",
     "fall-rec",
