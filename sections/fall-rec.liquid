@@ -23,9 +23,6 @@
 
     <!-- Right: form card -->
     <div class="mtw-fp__rec-card">
-      <p class="mtw-fp__rec-card-title">{{ section.settings.form_title | default: 'Get a Recommendation' }}</p>
-      <p class="mtw-fp__rec-card-sub">{{ section.settings.form_sub | default: 'Get a recommendation from our design team.' }}</p>
-
       <div class="mtw-fp__rec-embed">
         {%- for block in section.blocks -%}
           {%- case block.type -%}
@@ -49,9 +46,6 @@
     { "type": "text",     "id": "eyebrow",    "label": "Eyebrow",                  "default": "Not sure which package fits?" },
     { "type": "textarea", "id": "headline",   "label": "Headline",                 "default": "Send us a photo. We'll recommend the right one." },
     { "type": "textarea", "id": "steps",      "label": "Steps (separate with ||)", "default": "Fill out the short form and share a photo of your entry — porch, stoop, or driveway gate||Our design team reviews your space and replies with a package recommendation, usually within one business day||Book the package that fits — we handle delivery, installation, and styling from there" },
-    { "type": "header",   "content": "Form card" },
-    { "type": "text", "id": "form_title", "label": "Card title",    "default": "Get a Recommendation" },
-    { "type": "text", "id": "form_sub",   "label": "Card sub-copy", "default": "Get a recommendation from our design team." }
   ],
   "blocks": [{ "type": "@app" }],
   "presets": [{ "name": "Fall — Get a Recommendation" }]
