@@ -11,6 +11,7 @@
   "sections": {
     "fall-header": {
       "type": "fall-header",
+      "disabled": true,
       "settings": {
         "eyebrow": "Hello Harvest · Fall 2026 · Tennessee",
         "headline": "Fall packages.",
@@ -18,6 +19,20 @@
         "status_text": "Ordering open",
         "meta_weeks": "Install weeks: Sept – Oct 2026",
         "countdown_label": "Days until Halloween"
+      }
+    },
+    "countdown_halloween_iaFFDg": {
+      "type": "countdown-halloween",
+      "name": "Countdown — Halloween",
+      "settings": {
+        "bg_style": "mtw-countdown--dark",
+        "eyebrow": "Hello Harvest · Fall 2026",
+        "headline": "Order before Halloween.",
+        "subtext": "Install weeks are filling fast. Secure your display now — we handle everything.",
+        "cta_text": "Book your install",
+        "cta_url": "#packages",
+        "target_date": "October 31, 2026 23:59:59",
+        "done_text": "Season complete — see you next fall."
       }
     },
     "fall-hiw": {
@@ -205,6 +220,7 @@
   },
   "order": [
     "fall-header",
+    "countdown_halloween_iaFFDg",
     "fall-hiw",
     "fall-packages",
     "fall-rec",
