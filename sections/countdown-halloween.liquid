@@ -91,11 +91,11 @@
   var container = document.getElementById('mtw-leaves-'+sid);
   if(!container) return;
 
-  /* Classic 11-point maple leaf with stem */
-  var mapleD = 'M50,5 L43,22 L28,15 L33,30 L15,27 L25,42 L7,50 L27,53 L20,70 L38,65 L35,82 L50,75 L65,82 L62,65 L80,70 L73,53 L93,50 L75,42 L85,27 L67,30 L72,15 L57,22 Z M48,75 L46,110 L54,110 L52,75 Z';
-  var shapes = [mapleD];
+  /* Pumpkin silhouette — 3-lobed body with stem */
+  var pumpkinD = 'M50,80 C35,80 18,70 18,53 C18,38 28,27 34,24 C30,19 31,12 38,11 C42,10 46,14 48,20 C49,14 49,9 50,9 C51,9 51,14 52,20 C54,14 58,10 62,11 C69,12 70,19 66,24 C72,27 82,38 82,53 C82,70 65,80 50,80 Z M48,9 L47,4 C47,2 53,2 53,4 L52,9 Z';
+  var shapes = [pumpkinD];
 
-  var colors = ['#C45C1A','#E07B2A','#D4A017','#8B3A0F','#B85C00','#A0390A','#D96C1A'];
+  var colors = ['#E8640A','#F07820','#D4500A','#C84800','#F28C30','#E05808','#CC5000'];
 
   var COUNT = 18;
 
@@ -123,7 +123,7 @@
         '--spin:' + spin + 'deg'
       ].join(';');
 
-      leaf.innerHTML = '<svg viewBox="0 0 100 115" width="' + size + '" height="' + size + '" xmlns="http://www.w3.org/2000/svg">'
+      leaf.innerHTML = '<svg viewBox="0 0 100 85" width="' + size + '" height="' + size + '" xmlns="http://www.w3.org/2000/svg">'
         + '<path d="' + shape + '" fill="' + color + '" opacity="0.85"/>'
         + '</svg>';
 
