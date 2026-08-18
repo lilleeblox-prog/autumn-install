@@ -1,12 +1,51 @@
 <div class="mtw-product" id="product-{{ product.id }}">
   <div class="mtw-container mtw-product__wrap">
 
-    <!-- Image -->
+    <!-- Media gallery -->
     <div class="mtw-product__media">
-      {%- if product.featured_image -%}
-        <div class="mtw-product__img-wrap">
-          {{ product.featured_image | image_url: width: 900 | image_tag: loading: 'eager', alt: product.title, class: 'mtw-product__img' }}
+      {%- if product.media.size > 0 -%}
+
+        <!-- Main viewer -->
+        <div class="mtw-product__img-wrap" id="mtw-main-media-{{ product.id }}">
+          {%- assign first = product.media.first -%}
+          {%- if first.media_type == 'video' or first.media_type == 'external_video' -%}
+            {{ first | video_tag: class: 'mtw-product__img', controls: true, autoplay: false, muted: false }}
+          {%- else -%}
+            <img
+              id="mtw-main-img-{{ product.id }}"
+              src="{{ first | image_url: width: 1000 }}"
+              alt="{{ first.alt | default: product.title | escape }}"
+              width="{{ first.preview_image.width }}"
+              height="{{ first.preview_image.height }}"
+              class="mtw-product__img"
+              loading="eager"
+            >
+          {%- endif -%}
         </div>
+
+        <!-- Thumbnail strip (only shown when >1 media) -->
+        {%- if product.media.size > 1 -%}
+          <div class="mtw-product__thumbs" role="list" aria-label="Product images">
+            {%- for media in product.media -%}
+              <button
+                class="mtw-product__thumb{% if forloop.first %} mtw-product__thumb--active{% endif %}"
+                data-src="{{ media | image_url: width: 1000 }}"
+                data-alt="{{ media.alt | default: product.title | escape }}"
+                aria-label="View image {{ forloop.index }}"
+                type="button"
+              >
+                <img
+                  src="{{ media | image_url: width: 160 }}"
+                  alt="{{ media.alt | default: product.title | escape }}"
+                  width="80"
+                  height="80"
+                  loading="lazy"
+                >
+              </button>
+            {%- endfor -%}
+          </div>
+        {%- endif -%}
+
       {%- endif -%}
     </div>
 
@@ -297,6 +336,23 @@
       .catch(function(err) {
         if (submitBtn) { submitBtn.textContent = originalText; submitBtn.disabled = false; }
         alert(err.message || 'Could not add to cart. Please try again.');
+      });
+    });
+  })();
+
+  // Thumbnail gallery swap
+  (function() {
+    var mainImg = document.getElementById('mtw-main-img-{{ product.id }}');
+    if (!mainImg) return;
+    var thumbs = document.querySelectorAll('#product-{{ product.id }} .mtw-product__thumb');
+    thumbs.forEach(function(btn) {
+      btn.addEventListener('click', function() {
+        mainImg.src = btn.dataset.src;
+        mainImg.alt = btn.dataset.alt;
+        thumbs.forEach(function(b) { b.classList.remove('mtw-product__thumb--active'); });
+        btn.classList.add('mtw-product__thumb--active');
+        // Smooth scroll main image into view on mobile
+        mainImg.closest('.mtw-product__img-wrap').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
       });
     });
   })();
