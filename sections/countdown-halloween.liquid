@@ -35,12 +35,6 @@
       {%- if section.settings.subtext != blank -%}
         <p class="mtw-countdown__sub">{{ section.settings.subtext }}</p>
       {%- endif -%}
-      {%- if section.settings.cta_text != blank -%}
-        <a href="{{ section.settings.cta_url | default: '/products/fall-favorite' }}" class="mtw-btn mtw-btn--primary mtw-countdown__cta">
-          {{ section.settings.cta_text }}
-          <svg width="14" height="14" viewBox="0 0 14 14" fill="none" style="margin-left:0.5rem;flex-shrink:0"><path d="M1 7h12M8 2l5 5-5 5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-        </a>
-      {%- endif -%}
     </div>
 
     <div class="mtw-countdown__clock" id="mtw-clock-{{ section.id }}" aria-live="polite" aria-atomic="true">
@@ -97,13 +91,9 @@
   var container = document.getElementById('mtw-leaves-'+sid);
   if(!container) return;
 
-  /* Autumn leaf SVG paths — 4 natural shapes */
-  var shapes = [
-    /* maple-ish */ 'M12,2 C10,5 6,5 4,8 C2,11 3,15 6,16 C8,17 10,15 12,17 C14,15 16,17 18,16 C21,15 22,11 20,8 C18,5 14,5 12,2 Z',
-    /* oak-ish */   'M12,1 C9,4 5,4 4,7 C3,10 5,12 4,15 C5,17 8,17 10,15 C11,17 12,19 12,19 C12,19 13,17 14,15 C16,17 19,17 20,15 C19,12 21,10 20,7 C19,4 15,4 12,1 Z',
-    /* simple */    'M12,2 Q18,6 18,12 Q18,18 12,20 Q6,18 6,12 Q6,6 12,2 Z',
-    /* elongated */ 'M12,1 C15,5 17,9 16,14 C15,18 13,20 12,21 C11,20 9,18 8,14 C7,9 9,5 12,1 Z'
-  ];
+  /* Classic 11-point maple leaf with stem */
+  var mapleD = 'M50,5 L43,22 L28,15 L33,30 L15,27 L25,42 L7,50 L27,53 L20,70 L38,65 L35,82 L50,75 L65,82 L62,65 L80,70 L73,53 L93,50 L75,42 L85,27 L67,30 L72,15 L57,22 Z M48,75 L46,110 L54,110 L52,75 Z';
+  var shapes = [mapleD];
 
   var colors = ['#C45C1A','#E07B2A','#D4A017','#8B3A0F','#B85C00','#A0390A','#D96C1A'];
 
@@ -133,7 +123,7 @@
         '--spin:' + spin + 'deg'
       ].join(';');
 
-      leaf.innerHTML = '<svg viewBox="0 0 24 24" width="' + size + '" height="' + size + '" xmlns="http://www.w3.org/2000/svg">'
+      leaf.innerHTML = '<svg viewBox="0 0 100 115" width="' + size + '" height="' + size + '" xmlns="http://www.w3.org/2000/svg">'
         + '<path d="' + shape + '" fill="' + color + '" opacity="0.85"/>'
         + '</svg>';
 
