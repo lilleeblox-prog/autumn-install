@@ -71,78 +71,6 @@
         "headline": "How it works."
       }
     },
-    "fall-packages": {
-      "type": "fall-packages",
-      "blocks": {
-        "pkg-petite": {
-          "type": "package",
-          "settings": {
-            "label": "Perfect for a stoop",
-            "name": "Petite Patch",
-            "price": "$385",
-            "desc": "A curated mix of pumpkins and gourds, hand-arranged on delivery day. Ideal for a single-door entry or welcoming front stoop.",
-            "inclusions": "4 Large Jack O'Lantern Pumpkins\n4 Medium Jack O'Lantern Pumpkins\n4 White Ghost Pumpkins\n6 Specialty Pumpkins\nAssortment of Pie Pumpkins",
-            "addons": "Hay Bale|+40\nCustom Design|+75\nRemoval|+75",
-            "featured": false,
-            "cta_label": "Customize this package",
-            "cta_url": "/products/petite-patch",
-            "handle": "petite-patch"
-          }
-        },
-        "pkg-cozy": {
-          "type": "package",
-          "settings": {
-            "label": "Great for porches",
-            "name": "Cozy Corner",
-            "price": "$585",
-            "desc": "A fuller display for a porch or covered entry. More pumpkins, more gourds, same careful arrangement by hand.",
-            "inclusions": "6 Large Jack O'Lantern Pumpkins\n6 Medium Jack O'Lantern Pumpkins\n6 White Ghost Pumpkins\n8 Specialty Pumpkins\nAssortment of Pie Pumpkins",
-            "addons": "Hay Bale|+40\nCustom Design|+100\nRemoval|+100",
-            "featured": false,
-            "cta_label": "Customize this package",
-            "cta_url": "/products/cozy-corner",
-            "handle": "cozy-corner"
-          }
-        },
-        "pkg-favorites": {
-          "type": "package",
-          "settings": {
-            "label": "Most popular",
-            "name": "Fall Favorites",
-            "price": "$885",
-            "desc": "Our most-booked display. A generous mix of pumpkins, specialty gourds, and two hay bales — everything it takes to make a real impression at the door.",
-            "inclusions": "8 Large Jack O'Lantern Pumpkins\n8 Medium Jack O'Lantern Pumpkins\n8 White Ghost Pumpkins\n14 Specialty Pumpkins\n2 Hay Bales (included)\nAssortment of Pie Pumpkins",
-            "addons": "Residential Gate Pumpkins & Design\nRemoval|+150",
-            "featured": true,
-            "cta_label": "Customize this package",
-            "cta_url": "/products/fall-favorites",
-            "handle": "fall-favorites"
-          }
-        },
-        "pkg-grande": {
-          "type": "package",
-          "settings": {
-            "label": "The full treatment",
-            "name": "Grande Harvest",
-            "price": "$1,285",
-            "desc": "Hay bales, ornamental gourds, pie pumpkins, mini varieties — the kind of display that carries the whole season and stops everyone who passes.",
-            "inclusions": "10 Large Jack O'Lantern Pumpkins\n8 Medium Jack O'Lantern Pumpkins\n8 White Ghost Pumpkins\n16 Specialty Pumpkins\n2 Hay Bales (included)\nMini White & Mini Orange Pumpkins\nOrnamental Gourds\nAssortment of Pie Pumpkins",
-            "addons": "Residential Gate Pumpkins & Design\nRemoval|+200",
-            "featured": false,
-            "cta_label": "Customize this package",
-            "cta_url": "/products/grande-harvest",
-            "handle": "grande-harvest"
-          }
-        }
-      },
-      "block_order": [
-        "pkg-petite",
-        "pkg-cozy",
-        "pkg-favorites",
-        "pkg-grande"
-      ],
-      "settings": {}
-    },
     "fall_rec_qbGXjr": {
       "type": "fall-rec",
       "name": "Fall — Get a Recommendation",
@@ -218,7 +146,6 @@
     "countdown_halloween_JHDPdP",
     "fall-header",
     "fall-hiw",
-    "fall-packages",
     "fall_rec_qbGXjr",
     "fall-faq"
   ]
