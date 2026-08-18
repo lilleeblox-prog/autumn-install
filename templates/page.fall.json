@@ -9,15 +9,18 @@
  */
 {
   "sections": {
-    "fall-header": {
-      "type": "fall-header",
+    "countdown_halloween_jTitnW": {
+      "type": "countdown-halloween",
+      "name": "Countdown — Halloween",
       "settings": {
-        "eyebrow": "Hello Harvest · Fall 2026 · Tennessee",
-        "headline": "Fall packages.",
-        "intro": "Every display is delivered and installed by hand. Choose your size, select your week, and we handle the rest.",
-        "status_text": "Ordering open",
-        "meta_weeks": "Install weeks: Sept – Oct 2026",
-        "countdown_label": "Days until Halloween"
+        "bg_style": "mtw-countdown--dark",
+        "eyebrow": "Hello Harvest · Fall 2026",
+        "headline": "Order before Halloween.",
+        "subtext": "Install weeks are filling fast. Secure your display now — we handle everything.",
+        "cta_text": "Book your install",
+        "cta_url": "/products/fall-favorite",
+        "target_date": "October 31, 2026 23:59:59",
+        "done_text": "Season complete — see you next fall."
       }
     },
     "fall-hiw": {
@@ -137,6 +140,28 @@
     },
     "fall-rec": {
       "type": "fall-rec",
+      "blocks": {
+        "forms_inline_RdQrh9": {
+          "type": "shopify://apps/forms/blocks/inline/8744a304-fcb1-4347-b211-bb6b4759a76a",
+          "settings": {
+            "form_id": "1103400",
+            "text_color": "#202020",
+            "button_background_color": "#202020",
+            "button_label_color": "#FFFFFF",
+            "links_color": "#1878B9",
+            "errors_color": "#E02229",
+            "text_alignment": "center",
+            "form_alignment": "center",
+            "padding_top": 0,
+            "padding_bottom": 24,
+            "padding_right": 0,
+            "padding_left": 0
+          }
+        }
+      },
+      "block_order": [
+        "forms_inline_RdQrh9"
+      ],
       "settings": {
         "eyebrow": "Not sure which package fits?",
         "headline": "Send us a photo. We'll recommend the right one.",
@@ -198,14 +223,14 @@
         "faq-6"
       ],
       "settings": {
-        "eyebrow": "Questions",
+        "eyebrow": "FAQ",
         "headline": "Common questions.",
         "closing": "Still have a question? We'd love to hear it — reach us at hello@madetowelcome.com."
       }
     }
   },
   "order": [
-    "fall-header",
+    "countdown_halloween_jTitnW",
     "fall-hiw",
     "fall-packages",
     "fall-rec",
