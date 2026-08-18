@@ -2631,9 +2631,9 @@ details[open] .mtw-campaign-faq__chevron { transform: rotate(90deg); }
 }
 
 /* FAQ */
-.mtw-fp__faq { padding-block: 6rem; background: var(--mtw-muted); }
+.mtw-fp__faq { padding-block: 6rem; background: var(--mtw-bg); }
 .mtw-fp__faq-inner { max-width: 52rem; }
-.mtw-fp__faq-hd { margin-bottom: 2.5rem; }
+.mtw-fp__faq-hd { margin-bottom: 3rem; }
 .mtw-fp__faq-hd .mtw-h2 { margin-top: 0.5rem; }
 .mtw-fp__faq-list { display: flex; flex-direction: column; }
 .mtw-fp__faq-item { border-bottom: 1px solid var(--mtw-border); }
@@ -2642,18 +2642,34 @@ details[open] .mtw-campaign-faq__chevron { transform: rotate(90deg); }
   display: flex;
   justify-content: space-between;
   align-items: center;
-  gap: 1rem;
-  padding-block: 1.25rem;
+  gap: 2rem;
+  padding-block: 1.6rem;
   font-family: var(--mtw-font-serif);
-  font-size: 1.05rem;
+  font-size: 1.1rem;
   font-weight: 500;
+  color: var(--mtw-fg);
   cursor: pointer;
   list-style: none;
+  user-select: none;
 }
 .mtw-fp__faq-q::-webkit-details-marker { display: none; }
-.mtw-fp__faq-chevron { font-size: 0.7rem; color: var(--mtw-primary); flex-shrink: 0; transition: transform 0.2s; }
-details[open] .mtw-fp__faq-chevron { transform: rotate(90deg); }
-.mtw-fp__faq-a { font-size: 0.9rem; color: var(--mtw-muted-fg); line-height: 1.7; padding-bottom: 1.25rem; margin: 0; }
+.mtw-fp__faq-q-text { flex: 1; }
+.mtw-fp__faq-icon { flex-shrink: 0; font-size: 1.25rem; font-weight: 300; color: var(--mtw-primary); line-height: 1; }
+.mtw-fp__faq-minus { display: none; }
+details[open] .mtw-fp__faq-plus  { display: none; }
+details[open] .mtw-fp__faq-minus { display: inline; }
+.mtw-fp__faq-a-wrap { padding-bottom: 1.5rem; }
+.mtw-fp__faq-a { font-size: 0.95rem; color: var(--mtw-muted-fg); line-height: 1.75; margin: 0; }
+.mtw-fp__faq-closing {
+  margin-top: 3.5rem;
+  padding-top: 2.5rem;
+  border-top: 1px solid var(--mtw-border);
+  font-family: var(--mtw-font-serif);
+  font-style: italic;
+  font-size: 1rem;
+  color: var(--mtw-muted-fg);
+  text-align: center;
+}
 
 /* Final CTA */
 .mtw-fp__final { padding-block: 5rem; background: var(--mtw-dark); color: var(--mtw-primary-fg); }

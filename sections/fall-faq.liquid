@@ -2,18 +2,37 @@
 {%- if section.blocks.size > 0 -%}
 <section class="mtw-fp__faq">
   <div class="mtw-container mtw-fp__faq-inner">
+    {%- if section.settings.eyebrow != blank or section.settings.headline != blank -%}
     <div class="mtw-fp__faq-hd">
-      <span class="mtw-mono mtw-eyebrow mtw-eyebrow--primary">{{ section.settings.eyebrow | default: 'Questions' }}</span>
-      <h2 class="mtw-h2">{{ section.settings.headline | default: 'Common questions.' }}</h2>
+      {%- if section.settings.eyebrow != blank -%}
+        <span class="mtw-mono mtw-eyebrow mtw-eyebrow--primary">{{ section.settings.eyebrow }}</span>
+      {%- endif -%}
+      {%- if section.settings.headline != blank -%}
+        <h2 class="mtw-h2">{{ section.settings.headline }}</h2>
+      {%- endif -%}
     </div>
+    {%- endif -%}
+
     <div class="mtw-fp__faq-list">
       {%- for block in section.blocks -%}
         <details class="mtw-fp__faq-item" {{ block.shopify_attributes }}>
-          <summary class="mtw-fp__faq-q">{{ block.settings.question }}<span class="mtw-fp__faq-chevron">&#x276F;</span></summary>
-          <p class="mtw-fp__faq-a">{{ block.settings.answer }}</p>
+          <summary class="mtw-fp__faq-q">
+            <span class="mtw-fp__faq-q-text">{{ block.settings.question }}</span>
+            <span class="mtw-fp__faq-icon" aria-hidden="true">
+              <span class="mtw-fp__faq-plus">+</span>
+              <span class="mtw-fp__faq-minus">&#x2212;</span>
+            </span>
+          </summary>
+          <div class="mtw-fp__faq-a-wrap">
+            <p class="mtw-fp__faq-a">{{ block.settings.answer }}</p>
+          </div>
         </details>
       {%- endfor -%}
     </div>
+
+    {%- if section.settings.closing != blank -%}
+      <p class="mtw-fp__faq-closing">{{ section.settings.closing }}</p>
+    {%- endif -%}
   </div>
 </section>
 {%- endif -%}
@@ -22,8 +41,9 @@
 {
   "name": "Fall — FAQ",
   "settings": [
-    { "type": "text", "id": "eyebrow",  "label": "Eyebrow",   "default": "Questions" },
-    { "type": "text", "id": "headline", "label": "Headline",  "default": "Common questions." }
+    { "type": "text",     "id": "eyebrow",  "label": "Eyebrow",          "default": "Questions" },
+    { "type": "text",     "id": "headline", "label": "Headline",         "default": "Common questions." },
+    { "type": "textarea", "id": "closing",  "label": "Closing line",     "default": "Still have a question? We'd love to hear it — reach us at hello@madetowelcome.com." }
   ],
   "blocks": [
     {
