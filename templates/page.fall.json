@@ -125,7 +125,7 @@
             "addons": "Residential Gate Pumpkins & Design\nRemoval|+150",
             "featured": true,
             "cta_label": "Customize this package",
-            "cta_url": "/products/fall-favorites",
+            "cta_url": "products/fall-favorites",
             "handle": "fall-favorites"
           }
         },
