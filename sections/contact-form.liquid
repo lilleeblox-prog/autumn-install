@@ -29,12 +29,63 @@
       <!-- Right: form -->
       <div class="mtw-two-col__col">
         <div class="mtw-form-card">
-          <!-- Add Shopify Forms app block here via theme editor -->
+          {%- assign has_app_block = false -%}
           {%- for block in section.blocks -%}
             {%- if block.type == '@app' -%}
-              {% render block %}
+              {%- assign has_app_block = true -%}
             {%- endif -%}
           {%- endfor -%}
+
+          {%- if section.settings.form_embed != blank -%}
+            <!-- Custom form embed code from the theme editor -->
+            {{ section.settings.form_embed }}
+          {%- elsif has_app_block -%}
+            <!-- Shopify Forms or another installed form app -->
+            {%- for block in section.blocks -%}
+              {%- if block.type == '@app' -%}
+                {% render block %}
+              {%- endif -%}
+            {%- endfor -%}
+          {%- else -%}
+            <!-- Native Shopify contact form fallback -->
+            {%- form 'contact', class: 'mtw-contact-form' -%}
+              {%- if form.posted_successfully? -%}
+                <div class="mtw-form-success" role="status">
+                  <p class="mtw-form-success__title">Thanks for reaching out.</p>
+                  <p class="mtw-form-success__body">Your message is on its way. We'll get back to you within one business day.</p>
+                </div>
+              {%- else -%}
+                {%- if form.errors -%}
+                  <div class="mtw-contact-form__errors" role="alert">
+                    {{ form.errors | default_errors }}
+                  </div>
+                {%- endif -%}
+
+                <div class="mtw-form-row mtw-form-row--2col">
+                  <div class="mtw-form-field">
+                    <label class="mtw-label" for="ContactForm-name">Name</label>
+                    <input class="mtw-input" type="text" id="ContactForm-name" name="contact[name]" autocomplete="name" required>
+                  </div>
+                  <div class="mtw-form-field">
+                    <label class="mtw-label" for="ContactForm-email">Email</label>
+                    <input class="mtw-input" type="email" id="ContactForm-email" name="contact[email]" autocomplete="email" required>
+                  </div>
+                </div>
+
+                <div class="mtw-form-field">
+                  <label class="mtw-label" for="ContactForm-subject">Subject</label>
+                  <input class="mtw-input" type="text" id="ContactForm-subject" name="contact[subject]">
+                </div>
+
+                <div class="mtw-form-field">
+                  <label class="mtw-label" for="ContactForm-body">Message</label>
+                  <textarea class="mtw-input mtw-textarea" id="ContactForm-body" name="contact[body]" rows="6" required></textarea>
+                </div>
+
+                <button type="submit" class="mtw-btn mtw-btn--primary mtw-btn--full">Send message</button>
+              {%- endif -%}
+            {%- endform -%}
+          {%- endif -%}
         </div>
       </div>
 
@@ -45,7 +96,14 @@
 {% schema %}
 {
   "name": "Contact Form",
-  "settings": [],
+  "settings": [
+    {
+      "type": "liquid",
+      "id": "form_embed",
+      "label": "Custom form embed code",
+      "info": "Paste HTML or Liquid form embed code here. If blank, the Shopify app block is used; if no app block is installed, the built-in contact form appears."
+    }
+  ],
   "blocks": [
     { "type": "@app" }
   ],
