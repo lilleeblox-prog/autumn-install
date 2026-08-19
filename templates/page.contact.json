@@ -1,13 +1,50 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
 {
   "sections": {
     "contact-form": {
       "type": "contact-form",
+      "blocks": {
+        "forms_inline_zYTBfQ": {
+          "type": "shopify://apps/forms/blocks/inline/8744a304-fcb1-4347-b211-bb6b4759a76a",
+          "settings": {
+            "form_id": "1119686",
+            "text_color": "#202020",
+            "button_background_color": "#202020",
+            "button_label_color": "#FFFFFF",
+            "links_color": "#1878B9",
+            "errors_color": "#E02229",
+            "text_alignment": "center",
+            "form_alignment": "center",
+            "padding_top": 0,
+            "padding_bottom": 24,
+            "padding_right": 0,
+            "padding_left": 0
+          }
+        }
+      },
+      "block_order": [
+        "forms_inline_zYTBfQ"
+      ],
       "settings": {}
     },
     "footer": {
       "type": "footer",
-      "settings": {}
+      "settings": {
+        "brand_name": "Made to Welcome",
+        "tagline": "Seasonal décor · Delivery & installation · Tennessee"
+      }
     }
   },
-  "order": ["contact-form", "footer"]
+  "order": [
+    "contact-form",
+    "footer"
+  ]
 }
