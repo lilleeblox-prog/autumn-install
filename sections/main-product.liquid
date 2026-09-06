@@ -165,22 +165,33 @@
             <p class="mtw-product__label">Customize your order <span class="mtw-product__optional">(optional)</span></p>
             <div class="mtw-product__addons">
               {%- for block in addon_blocks -%}
+                {%- assign addon_product = block.settings.product -%}
+                {%- assign addon_variant = addon_product.selected_or_first_available_variant -%}
                 <div class="mtw-addon-wrap" {{ block.shopify_attributes }}>
                   <label class="mtw-addon">
                     <input
                       type="checkbox"
-                      name="properties[Add-on: {{ block.settings.name }}]"
-                      value="{{ block.settings.price }}"
+                      value="{{ addon_variant.id }}"
+                      data-addon-variant-id="{{ addon_variant.id }}"
+                      data-addon-name="{{ block.settings.name | escape }}"
                       class="mtw-addon__check{% if block.settings.is_removal or block.settings.name contains 'Removal' or block.settings.name contains 'removal' %} mtw-addon__check--removal{% endif %}"
+                      {%- if addon_variant == blank or addon_variant.available == false %} disabled{%- endif -%}
                     >
                     <span class="mtw-addon__box"></span>
                     <span class="mtw-addon__text">
                       {{ block.settings.name }}
-                      {%- if block.settings.price != blank -%}
+                      {%- if addon_variant != blank -%}
+                        <span class="mtw-addon__price">+ {{ addon_variant.price | money }}</span>
+                      {%- elsif block.settings.price != blank -%}
                         <span class="mtw-addon__price">+ {{ block.settings.price }}</span>
                       {%- endif -%}
                       {%- if block.settings.note != blank -%}
                         <span class="mtw-addon__note">{{ block.settings.note }}</span>
+                      {%- endif -%}
+                      {%- if addon_variant == blank and request.design_mode -%}
+                        <span class="mtw-addon__note">Select the Shopify add-on product in this block's settings.</span>
+                      {%- elsif addon_variant.available == false -%}
+                        <span class="mtw-addon__note">Currently unavailable</span>
                       {%- endif -%}
                     </span>
                   </label>
@@ -316,11 +327,39 @@
       if (submitBtn) { submitBtn.textContent = 'Adding…'; submitBtn.disabled = true; }
 
       var data = new FormData(form);
+      var properties = {};
+
+      data.forEach(function(value, key) {
+        var match = key.match(/^properties\[(.+)\]$/);
+        if (match && value !== '') properties[match[1]] = value;
+      });
+
+      var mainVariant = data.get('id');
+      var quantity = parseInt(data.get('quantity') || '1', 10);
+      var items = [{
+        id: Number(mainVariant),
+        quantity: quantity,
+        properties: properties
+      }];
+
+      form.querySelectorAll('.mtw-addon__check:checked').forEach(function(addon) {
+        var variantId = addon.dataset.addonVariantId;
+        if (variantId) {
+          items.push({
+            id: Number(variantId),
+            quantity: 1
+          });
+        }
+      });
 
       fetch('/cart/add.js', {
         method: 'POST',
-        headers: { 'X-Requested-With': 'XMLHttpRequest' },
-        body: data,
+        headers: {
+          'X-Requested-With': 'XMLHttpRequest',
+          'Content-Type': 'application/json',
+          'Accept': 'application/json'
+        },
+        body: JSON.stringify({ items: items }),
         credentials: 'same-origin'
       })
       .then(function(res) {
@@ -420,6 +459,12 @@
       "type": "addon",
       "name": "Add-on",
       "settings": [
+        {
+          "type": "product",
+          "id": "product",
+          "label": "Shopify add-on product",
+          "info": "Required for this checkbox to add a separately priced item to the cart."
+        },
         {
           "type": "text",
           "id": "name",
