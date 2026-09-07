@@ -331,10 +331,25 @@
     btn.addEventListener('click', function() {
       btn.textContent = 'Removing…';
       btn.disabled = true;
-      fetch('/cart/change.js', {
+      
+      var line = btn.closest('[data-cart-line]');
+      var updates = {};
+      updates[btn.dataset.key] = 0;
+
+      if (line && line.dataset.isCustomization !== 'true') {
+        var packageTitle = line.dataset.packageTitle;
+        document.querySelectorAll('[data-cart-line][data-is-customization="true"]').forEach(function(customizationLine) {
+          if (customizationLine.dataset.packageTitle === packageTitle) {
+            var customizationButton = customizationLine.querySelector('.mtw-cart__remove[data-key]');
+            if (customizationButton) updates[customizationButton.dataset.key] = 0;
+          }
+        });
+      }
+
+      fetch('/cart/update.js', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ id: btn.dataset.key, quantity: 0 })
+        body: JSON.stringify({ updates: updates })
       }).then(function() { window.location.reload(); });
     });
   });

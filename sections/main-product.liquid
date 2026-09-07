@@ -320,6 +320,7 @@
     if (!form) return;
 
     form.addEventListener('submit', function(e) {
+      if (e.defaultPrevented) return;
       e.preventDefault();
 
       var submitBtn = form.querySelector('[type="submit"]');
