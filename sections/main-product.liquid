@@ -347,7 +347,10 @@
         if (variantId) {
           items.push({
             id: Number(variantId),
-            quantity: 1
+            quantity: 1,
+            properties: {
+              '_Package': {{ product.title | json }}
+            }
           });
         }
       });

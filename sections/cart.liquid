@@ -27,7 +27,13 @@
               {%- assign notes        = item.properties['Notes'] -%}
               {%- assign removal_week = item.properties['Removal week'] -%}
 
-              <div class="mtw-cart__item">
+              {%- assign linked_package = item.properties['_Package'] -%}
+              {%- assign is_addon = false -%}
+              {%- if linked_package != blank or item.product.handle contains '-addon' -%}
+                {%- assign is_addon = true -%}
+              {%- endif -%}
+
+              <div class="mtw-cart__item{% if is_addon %} mtw-cart__item--addon{% endif %}">
 
                 {%- if item.image -%}
                   <img
@@ -36,12 +42,17 @@
                     class="mtw-cart__item-img"
                     loading="lazy"
                   >
+                {%- elsif is_addon -%}
+                  <div class="mtw-cart__item-img mtw-cart__item-img--placeholder" aria-hidden="true">+</div>
                 {%- endif -%}
 
                 <div class="mtw-cart__item-body">
 
                   <div class="mtw-cart__item-top">
                     <div>
+                      {%- if is_addon -%}
+                        <span class="mtw-cart__item-type">Add-on{% if linked_package != blank %} for {{ linked_package }}{% endif %}</span>
+                      {%- endif -%}
                       <p class="mtw-cart__item-title">{{ item.product_title }}</p>
                       {%- unless item.variant_title == 'Default Title' or item.variant_title == blank -%}
                         <p class="mtw-cart__item-variant">{{ item.variant_title }}</p>
@@ -50,9 +61,11 @@
                     <p class="mtw-cart__item-price">{{ item.final_line_price | money }}</p>
                   </div>
 
-                  <div class="mtw-divider-dashed" style="margin-block: 1rem"></div>
+                  {%- unless is_addon -%}
+                    <div class="mtw-divider-dashed" style="margin-block: 1rem"></div>
+                  {%- endunless -%}
 
-                  <div class="mtw-cart__details">
+                  <div class="mtw-cart__details{% if is_addon %} mtw-cart__details--addon{% endif %}">
                     {%- if install_week != blank -%}
                       <div class="mtw-cart__detail-row">
                         <span class="mtw-cart__detail-key">Install week</span>
@@ -65,6 +78,12 @@
                         <span class="mtw-cart__detail-val">{{ zip_code }}</span>
                       </div>
                     {%- endif -%}
+                    {%- if removal_week != blank and is_addon == false -%}
+                      <div class="mtw-cart__detail-row">
+                        <span class="mtw-cart__detail-key">Removal week</span>
+                        <span class="mtw-cart__detail-val">{{ removal_week }}</span>
+                      </div>
+                    {%- endif -%}
                   </div>
 
                   {%- assign has_addons = false -%}
@@ -74,7 +93,7 @@
                     {%- endunless -%}
                   {%- endfor -%}
 
-                  {%- if has_addons -%}
+                  {%- if has_addons and is_addon == false -%}
                     <div class="mtw-cart__customizations">
 
                       <p class="mtw-cart__customizations-label">Customizations</p>
@@ -109,7 +128,7 @@
                     </div>
                   {%- endif -%}
 
-                  {%- if notes != blank -%}
+                  {%- if notes != blank and is_addon == false -%}
                     <div class="mtw-cart__notes">
                       <span class="mtw-cart__detail-key">Notes</span>
                       <p class="mtw-cart__notes-text">{{ notes }}</p>
@@ -122,7 +141,7 @@
                     data-key="{{ item.key }}"
                     aria-label="Remove {{ item.product_title | escape }}"
                   >
-                    Remove item
+                    {% if is_addon %}Remove add-on{% else %}Remove package{% endif %}
                   </button>
 
                 </div>
@@ -180,27 +199,22 @@
 
               <div class="mtw-cart__totals">
                 {%- for item in cart.items -%}
-                  <div class="mtw-cart__total-row">
-                    <span>{{ item.product_title }}</span>
+                  {%- assign summary_package = item.properties['_Package'] -%}
+                  {%- assign summary_is_addon = false -%}
+                  {%- if summary_package != blank or item.product.handle contains '-addon' -%}
+                    {%- assign summary_is_addon = true -%}
+                  {%- endif -%}
+                  <div class="mtw-cart__total-row{% if summary_is_addon %} mtw-cart__total-row--addon{% endif %}">
+                    <span>{% if summary_is_addon %}+ {% endif %}{{ item.product_title }}</span>
                     <span>{{ item.final_line_price | money }}</span>
                   </div>
-                  {%- for p in item.properties -%}
-                    {%- unless p.last == blank -%}
-                      {%- if p.first contains 'Add-on' -%}
-                        <div class="mtw-cart__total-row mtw-cart__total-row--addon">
-                          <span>+ {{ p.first | remove: 'Add-on: ' }}</span>
-                          <span>{{ p.last }}</span>
-                        </div>
-                      {%- endif -%}
-                    {%- endunless -%}
-                  {%- endfor -%}
                 {%- endfor -%}
               </div>
 
               <div class="mtw-divider-dashed" style="margin-block:1.25rem"></div>
 
               <div class="mtw-cart__total-row mtw-cart__total-row--grand">
-                <span>Package total</span>
+                <span>Order total</span>
                 <span>{{ cart.total_price | money }}</span>
               </div>
 
