@@ -349,7 +349,8 @@
             id: Number(variantId),
             quantity: 1,
             properties: {
-              '_Package': {{ product.title | json }}
+              '_Package': {{ product.title | json }},
+              '_Customization': addon.dataset.addonName
             }
           });
         }

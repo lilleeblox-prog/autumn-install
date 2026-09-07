@@ -28,12 +28,18 @@
               {%- assign removal_week = item.properties['Removal week'] -%}
 
               {%- assign linked_package = item.properties['_Package'] -%}
+              {%- assign customization_title = item.properties['_Customization'] -%}
               {%- assign is_addon = false -%}
               {%- if linked_package != blank or item.product.handle contains '-addon' -%}
                 {%- assign is_addon = true -%}
               {%- endif -%}
 
-              <div class="mtw-cart__item{% if is_addon %} mtw-cart__item--addon{% endif %}">
+              <div
+                class="mtw-cart__item{% if is_addon %} mtw-cart__item--addon{% endif %}"
+                data-cart-line
+                data-is-customization="{{ is_addon }}"
+                data-package-title="{% if is_addon %}{{ linked_package | escape }}{% else %}{{ item.product_title | escape }}{% endif %}"
+              >
 
                 {%- if item.image -%}
                   <img
@@ -51,9 +57,15 @@
                   <div class="mtw-cart__item-top">
                     <div>
                       {%- if is_addon -%}
-                        <span class="mtw-cart__item-type">Add-on{% if linked_package != blank %} for {{ linked_package }}{% endif %}</span>
+                        <span class="mtw-cart__item-type">Customization{% if linked_package != blank %} for {{ linked_package }}{% endif %}</span>
                       {%- endif -%}
-                      <p class="mtw-cart__item-title">{{ item.product_title }}</p>
+                      <p class="mtw-cart__item-title">
+                        {%- if is_addon -%}
+                          {{ customization_title | default: item.product.title | default: item.title }}
+                        {%- else -%}
+                          {{ item.product_title }}
+                        {%- endif -%}
+                      </p>
                       {%- unless item.variant_title == 'Default Title' or item.variant_title == blank -%}
                         <p class="mtw-cart__item-variant">{{ item.variant_title }}</p>
                       {%- endunless -%}
@@ -141,7 +153,7 @@
                     data-key="{{ item.key }}"
                     aria-label="Remove {{ item.product_title | escape }}"
                   >
-                    {% if is_addon %}Remove add-on{% else %}Remove package{% endif %}
+                    {% if is_addon %}Remove customization{% else %}Remove package{% endif %}
                   </button>
 
                 </div>
@@ -204,8 +216,19 @@
                   {%- if summary_package != blank or item.product.handle contains '-addon' -%}
                     {%- assign summary_is_addon = true -%}
                   {%- endif -%}
-                  <div class="mtw-cart__total-row{% if summary_is_addon %} mtw-cart__total-row--addon{% endif %}">
-                    <span>{% if summary_is_addon %}+ {% endif %}{{ item.product_title }}</span>
+                  <div
+                    class="mtw-cart__total-row{% if summary_is_addon %} mtw-cart__total-row--addon{% endif %}"
+                    data-summary-line
+                    data-is-customization="{{ summary_is_addon }}"
+                    data-package-title="{% if summary_is_addon %}{{ summary_package | escape }}{% else %}{{ item.product_title | escape }}{% endif %}"
+                  >
+                    <span>
+                      {%- if summary_is_addon -%}
+                        + {{ item.properties['_Customization'] | default: item.product.title | default: item.title }}
+                      {%- else -%}
+                        {{ item.product_title }}
+                      {%- endif -%}
+                    </span>
                     <span>{{ item.final_line_price | money }}</span>
                   </div>
                 {%- endfor -%}
@@ -242,6 +265,67 @@
 </section>
 
 <script>
+  /* Place each customization immediately beneath its package. */
+  (function() {
+    var container = document.querySelector('.mtw-cart__items');
+    if (!container) return;
+
+    var lines = Array.prototype.slice.call(container.querySelectorAll('[data-cart-line]'));
+    var packages = lines.filter(function(line) {
+      return line.dataset.isCustomization !== 'true';
+    });
+    var customizations = lines.filter(function(line) {
+      return line.dataset.isCustomization === 'true';
+    });
+
+    packages.forEach(function(packageLine) {
+      var packageTitle = packageLine.dataset.packageTitle;
+      var insertionPoint = packageLine;
+
+      customizations
+        .filter(function(line) {
+          return line.dataset.packageTitle === packageTitle;
+        })
+        .forEach(function(line) {
+          insertionPoint.insertAdjacentElement('afterend', line);
+          insertionPoint = line;
+        });
+    });
+
+    customizations
+      .filter(function(line) {
+        return !line.dataset.packageTitle;
+      })
+      .forEach(function(line) {
+        container.appendChild(line);
+      });
+
+    var summaryContainer = document.querySelector('.mtw-cart__totals');
+    if (!summaryContainer) return;
+
+    var summaryLines = Array.prototype.slice.call(summaryContainer.querySelectorAll('[data-summary-line]'));
+    var summaryPackages = summaryLines.filter(function(line) {
+      return line.dataset.isCustomization !== 'true';
+    });
+    var summaryCustomizations = summaryLines.filter(function(line) {
+      return line.dataset.isCustomization === 'true';
+    });
+
+    summaryPackages.forEach(function(packageLine) {
+      var packageTitle = packageLine.dataset.packageTitle;
+      var insertionPoint = packageLine;
+
+      summaryCustomizations
+        .filter(function(line) {
+          return line.dataset.packageTitle === packageTitle;
+        })
+        .forEach(function(line) {
+          insertionPoint.insertAdjacentElement('afterend', line);
+          insertionPoint = line;
+        });
+    });
+  })();
+
   /* ── Remove item ── */
   document.querySelectorAll('.mtw-cart__remove').forEach(function(btn) {
     btn.addEventListener('click', function() {
