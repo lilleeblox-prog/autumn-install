@@ -1275,12 +1275,14 @@ button { cursor: pointer; background: none; border: none; }
   grid-template-columns: 110px 1fr;
   gap: 1.5rem;
   align-items: start;
+  order: 1;
   padding-bottom: 2rem;
   border-bottom: 1px solid var(--mtw-border);
 }
 .mtw-cart__item--addon {
   grid-template-columns: 72px 1fr;
   gap: 1rem;
+  order: 2;
   margin-top: -1rem;
   margin-left: 1.25rem;
   padding: 1rem 1.25rem;
@@ -1300,7 +1302,10 @@ button { cursor: pointer; background: none; border: none; }
   font-family: var(--mtw-font-serif);
   font-size: 1.5rem;
 }
-.mtw-cart__item--addon .mtw-cart__item-title { font-size: 0.95rem; }
+.mtw-cart__item--addon .mtw-cart__item-title {
+  font-size: 0.95rem;
+  font-weight: 400;
+}
 .mtw-cart__item--addon .mtw-cart__remove { margin-top: 0.5rem; }
 .mtw-cart__item-type {
   display: block;
