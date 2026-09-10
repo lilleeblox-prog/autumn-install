@@ -1,0 +1,73 @@
+<section class="mtw-section mtw-section--bordered mtw-corp-quote mtw-scroll-mt" id="corporate-quote">
+  <div class="mtw-container">
+    <div class="mtw-two-col mtw-two-col--asymmetric mtw-two-col--form">
+      <div class="mtw-corp-quote__intro">
+        <span class="mtw-mono mtw-eyebrow mtw-eyebrow--primary">{{ section.settings.eyebrow }}</span>
+        <h2 class="mtw-h2">{{ section.settings.headline }}</h2>
+        <p class="mtw-body mtw-text-muted">{{ section.settings.intro }}</p>
+        <div class="mtw-corp-quote__details">
+          <p><span class="mtw-mono">Response time</span> {{ section.settings.response_time }}</p>
+          <p><span class="mtw-mono">Planning note</span> {{ section.settings.planning_note }}</p>
+        </div>
+      </div>
+
+      <div class="mtw-form-card">
+        {%- assign has_app_block = false -%}
+        {%- for block in section.blocks -%}
+          {%- if block.type == '@app' -%}{%- assign has_app_block = true -%}{%- endif -%}
+        {%- endfor -%}
+
+        {%- if section.settings.form_embed != blank -%}
+          {{ section.settings.form_embed }}
+        {%- elsif has_app_block -%}
+          {%- for block in section.blocks -%}
+            {%- if block.type == '@app' -%}{% render block %}{%- endif -%}
+          {%- endfor -%}
+        {%- else -%}
+          {%- form 'contact', class: 'mtw-contact-form' -%}
+            {%- if form.posted_successfully? -%}
+              <div class="mtw-form-success" role="status">
+                <p class="mtw-form-success__title">Thanks for reaching out.</p>
+                <p class="mtw-form-success__body">Your request is on its way. We’ll follow up with next steps and any questions about your property.</p>
+              </div>
+            {%- else -%}
+              {%- if form.errors -%}<div class="mtw-contact-form__errors" role="alert">{{ form.errors | default_errors }}</div>{%- endif -%}
+              <div class="mtw-form-row mtw-form-row--2col">
+                <div class="mtw-form-field"><label class="mtw-label" for="CorporateForm-name">Name</label><input class="mtw-input" type="text" id="CorporateForm-name" name="contact[name]" autocomplete="name" required></div>
+                <div class="mtw-form-field"><label class="mtw-label" for="CorporateForm-company">Company or property</label><input class="mtw-input" type="text" id="CorporateForm-company" name="contact[company]" required></div>
+              </div>
+              <div class="mtw-form-row mtw-form-row--2col">
+                <div class="mtw-form-field"><label class="mtw-label" for="CorporateForm-email">Email</label><input class="mtw-input" type="email" id="CorporateForm-email" name="contact[email]" autocomplete="email" required></div>
+                <div class="mtw-form-field"><label class="mtw-label" for="CorporateForm-phone">Phone</label><input class="mtw-input" type="tel" id="CorporateForm-phone" name="contact[phone]" autocomplete="tel"></div>
+              </div>
+              <div class="mtw-form-row mtw-form-row--2col">
+                <div class="mtw-form-field"><label class="mtw-label" for="CorporateForm-property">Property type</label><input class="mtw-input" type="text" id="CorporateForm-property" name="contact[property_type]" placeholder="Apartment community, hotel, storefront…"></div>
+                <div class="mtw-form-field"><label class="mtw-label" for="CorporateForm-timing">Timing</label><input class="mtw-input" type="text" id="CorporateForm-timing" name="contact[timing]" placeholder="Preferred install or event week"></div>
+              </div>
+              <div class="mtw-form-field"><label class="mtw-label" for="CorporateForm-body">Tell us about your space</label><textarea class="mtw-input mtw-textarea" id="CorporateForm-body" name="contact[body]" rows="6" placeholder="Share the location, approximate size, number of zones, and what you have in mind." required></textarea></div>
+              <input type="hidden" name="contact[subject]" value="Corporate décor quote request">
+              <button type="submit" class="mtw-btn mtw-btn--primary mtw-btn--full">{{ section.settings.submit_label }}</button>
+            {%- endif -%}
+          {%- endform -%}
+        {%- endif -%}
+      </div>
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Corporate — Quote Form",
+  "settings": [
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "Bring your property to life" },
+    { "type": "text", "id": "headline", "label": "Headline", "default": "Tell us what you’re planning." },
+    { "type": "textarea", "id": "intro", "label": "Intro", "default": "Tell us about your property, your timing, and the spaces you want to welcome people into. We’ll recommend a package and follow up with a quote." },
+    { "type": "text", "id": "response_time", "label": "Response time", "default": "We reply within one business day." },
+    { "type": "text", "id": "planning_note", "label": "Planning note", "default": "Approximate details are enough to get started." },
+    { "type": "text", "id": "submit_label", "label": "Submit button label", "default": "Request a quote" },
+    { "type": "liquid", "id": "form_embed", "label": "Custom form embed code", "info": "Optional. If blank, the built-in Shopify contact form is used." }
+  ],
+  "blocks": [{ "type": "@app" }],
+  "presets": [{ "name": "Corporate — Quote Form" }]
+}
+{% endschema %}
