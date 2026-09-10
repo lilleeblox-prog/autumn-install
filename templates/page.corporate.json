@@ -1,0 +1,153 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "corporate-hero": {
+      "type": "corporate-hero",
+      "settings": {}
+    },
+    "corporate-packages": {
+      "type": "corporate-packages",
+      "settings": {},
+      "blocks": {
+        "welcome-accent": {
+          "type": "package",
+          "settings": {
+            "name": "Welcome Accent",
+            "positioning": "A thoughtfully styled harvest moment for compact commercial spaces.",
+            "best_for": "Front desks, reception counters, leasing offices, and compact retail displays",
+            "coverage": "Approximately 3–5 feet · 1 compact zone",
+            "included": "18 pumpkins\n1 hay bale\n1 riser or small crate\ngreenery\nsurface protection",
+            "service": "Designed, delivered, and styled",
+            "callout": "Ideal for front desks and reception areas",
+            "petite_patch_note": "Petite Patch available as an add-on",
+            "removal_note": "Removal available separately",
+            "price": "",
+            "price_prefix": "Starting at",
+            "cta_label": "Request a quote"
+          }
+        },
+        "signature-welcome": {
+          "type": "package",
+          "settings": {
+            "name": "Signature Welcome",
+            "positioning": "A layered seasonal welcome for entrances, storefronts, and reception spaces.",
+            "best_for": "Storefronts, small entrances, reception areas, and assisted-living lobbies",
+            "coverage": "Approximately 6–10 feet · 1 primary zone",
+            "included": "45 pumpkins\n1 hay bale\nup to 2 risers, crates, planters, or equivalent props",
+            "service": "Designed, delivered, and styled",
+            "callout": "A complete welcome without the sourcing, hauling, or arranging",
+            "petite_patch_note": "Petite Patch available as an add-on",
+            "removal_note": "Removal available separately",
+            "price": "",
+            "price_prefix": "Starting at",
+            "cta_label": "Request a quote"
+          }
+        },
+        "grand-welcome": {
+          "type": "package",
+          "settings": {
+            "name": "Grand Welcome",
+            "positioning": "An abundant, statement-making display for prominent commercial spaces.",
+            "best_for": "Apartment or hotel lobbies, clubhouses, HOA entrances, larger storefronts, and photo moments",
+            "coverage": "One large area or two coordinated zones",
+            "included": "85 pumpkins\n2 hay bales\nup to 3 additional major styling props",
+            "service": "Designed, delivered, and styled",
+            "callout": "Photo-ready and scaled for lobbies, clubhouses, and entrances",
+            "petite_patch_note": "Petite Patch available as an add-on",
+            "removal_note": "Removal available separately",
+            "price": "",
+            "price_prefix": "Starting at",
+            "cta_label": "Request a quote"
+          }
+        },
+        "full-property": {
+          "type": "package",
+          "settings": {
+            "name": "Full Property Welcome",
+            "positioning": "A coordinated harvest experience across the property's most important guest-facing spaces.",
+            "best_for": "Multi-zone properties, large entryways, event spaces, and coordinated photo experiences",
+            "coverage": "Up to 3 zones · approximately 20–30 total feet",
+            "included": "150 pumpkins\n4 hay bales\nup to 6 additional major styling props across the property",
+            "service": "Designed, delivered, and styled",
+            "callout": "Includes a Petite Patch Pop-Up with 25 pumpkins and 2 hay bales",
+            "petite_patch_note": "Petite Patch 25 included",
+            "removal_note": "Removal available separately",
+            "price": "",
+            "price_prefix": "Starting at",
+            "cta_label": "Request a quote"
+          }
+        }
+      },
+      "block_order": ["welcome-accent", "signature-welcome", "grand-welcome", "full-property"]
+    },
+    "corporate-popups": {
+      "type": "corporate-popups",
+      "settings": {},
+      "blocks": {
+        "patch-25": {
+          "type": "popup",
+          "settings": {
+            "tier_label": "Tier 01",
+            "name": "Petite Patch 25",
+            "best_for": "Small resident events, employee appreciation, or front-office activations",
+            "guests": "Up to 25 guests",
+            "included": "25 guaranteed take-home pumpkins, 2 hay bales, up to 2 display crates, compact styled patch with branded sign",
+            "price": "",
+            "price_prefix": "Starting at",
+            "cta_label": "Request a quote"
+          }
+        },
+        "patch-50": {
+          "type": "popup",
+          "settings": {
+            "tier_label": "Tier 02",
+            "name": "Petite Patch 50",
+            "best_for": "Apartment, assisted-living, hotel, or business events",
+            "guests": "Up to 50 guests",
+            "included": "50 guaranteed take-home pumpkins, 3 hay bales, up to 3 display crates, larger patch with a small photo corner",
+            "price": "",
+            "price_prefix": "Starting at",
+            "cta_label": "Request a quote"
+          }
+        },
+        "patch-100": {
+          "type": "popup",
+          "settings": {
+            "tier_label": "Tier 03",
+            "name": "Petite Patch 100",
+            "best_for": "Large community, HOA, hospitality, or corporate gatherings",
+            "guests": "Up to 100 guests",
+            "included": "100 guaranteed take-home pumpkins, 5 hay bales, up to 5 display crates, full patch experience with a defined photo area",
+            "price": "",
+            "price_prefix": "Starting at",
+            "cta_label": "Request a quote"
+          }
+        }
+      },
+      "block_order": ["patch-25", "patch-50", "patch-100"]
+    },
+    "corporate-incentive": {
+      "type": "corporate-incentive",
+      "settings": {}
+    },
+    "corporate-quote": {
+      "type": "corporate-quote",
+      "settings": {}
+    }
+  },
+  "order": [
+    "corporate-hero",
+    "corporate-packages",
+    "corporate-popups",
+    "corporate-incentive",
+    "corporate-quote"
+  ]
+}
