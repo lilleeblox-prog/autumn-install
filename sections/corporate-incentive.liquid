@@ -1,0 +1,28 @@
+<section class="mtw-section mtw-corp-incentive">
+  <div class="mtw-container">
+    <div class="mtw-corp-incentive__inner">
+      <div>
+        <span class="mtw-mono mtw-eyebrow mtw-eyebrow--primary">{{ section.settings.eyebrow }}</span>
+        <h2 class="mtw-h2">{{ section.settings.headline }}</h2>
+      </div>
+      <div>
+        <p class="mtw-corp-incentive__body">{{ section.settings.body }}</p>
+        <a href="{{ section.settings.cta_url | default: '#corporate-quote' }}" class="mtw-btn mtw-btn--dark">{{ section.settings.cta_label }}</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Corporate — Incentive",
+  "settings": [
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "Full Property Welcome" },
+    { "type": "text", "id": "headline", "label": "Headline", "default": "Included with Full Property Welcome" },
+    { "type": "textarea", "id": "body", "label": "Body", "default": "A Petite Patch Pop-Up for up to 25 guests is included with every Full Property Welcome. We will bring and style 25 carving-size pumpkins with 2 hay bales at your property, creating an easy seasonal experience for residents, guests, employees, or customers." },
+    { "type": "text", "id": "cta_label", "label": "Button label", "default": "Request a quote" },
+    { "type": "url", "id": "cta_url", "label": "Button link" }
+  ],
+  "presets": [{ "name": "Corporate — Incentive" }]
+}
+{% endschema %}
