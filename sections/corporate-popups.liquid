@@ -1,0 +1,79 @@
+<section class="mtw-section mtw-section--card-bg mtw-corp-popups mtw-scroll-mt" id="corporate-popups">
+  <div class="mtw-container">
+    <div class="mtw-section-header mtw-corp-section-header">
+      <span class="mtw-mono mtw-eyebrow mtw-eyebrow--primary">{{ section.settings.eyebrow }}</span>
+      <h2 class="mtw-h2">{{ section.settings.headline }}</h2>
+      <p class="mtw-body mtw-text-muted">{{ section.settings.intro }}</p>
+    </div>
+
+    <div class="mtw-corp-popup-grid">
+      {% for block in section.blocks %}
+        {% assign linked_product = block.settings.product %}
+        {% assign card_url = block.settings.cta_url %}
+        {% if card_url == blank and linked_product != blank %}
+          {% assign card_url = linked_product.url %}
+        {% endif %}
+        {% if card_url == blank %}
+          {% assign card_url = '#corporate-quote' %}
+        {% endif %}
+        <article class="mtw-corp-popup" {{ block.shopify_attributes }}>
+          <span class="mtw-mono mtw-corp-popup__tier">{{ block.settings.tier_label }}</span>
+          <h3 class="mtw-corp-popup__name">{{ block.settings.name }}</h3>
+          <p class="mtw-corp-popup__best-for">{{ block.settings.best_for }}</p>
+          <p class="mtw-corp-popup__guests">{{ block.settings.guests }}</p>
+          <p class="mtw-corp-popup__included">{{ block.settings.included }}</p>
+          <p class="mtw-corp-popup__price">
+            {% if block.settings.price != blank %}
+              {{ block.settings.price }}
+            {% elsif linked_product != blank %}
+              {{ block.settings.price_prefix }} {{ linked_product.price | money }}
+            {% else %}
+              {{ section.settings.no_price_text }}
+            {% endif %}
+          </p>
+          <a href="{{ card_url }}" class="mtw-link-arrow">{{ block.settings.cta_label }} <span aria-hidden="true">→</span></a>
+        </article>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Corporate — Pop-Ups",
+  "settings": [
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "Optional with any package" },
+    { "type": "text", "id": "headline", "label": "Headline", "default": "Bring a Petite Patch to your property" },
+    { "type": "textarea", "id": "intro", "label": "Intro", "default": "A Petite Patch Pop-Up can be added to any commercial package—or booked on its own. Give residents, guests, employees, or customers a seasonal moment with guaranteed take-home pumpkins." },
+    { "type": "text", "id": "no_price_text", "label": "Price text when no product is selected", "default": "Price available by quote" }
+  ],
+  "blocks": [
+    {
+      "type": "popup",
+      "name": "Pop-up tier",
+      "settings": [
+        { "type": "product", "id": "product", "label": "Shopify product", "info": "Links this tier to a product and supplies its price when the custom price is blank." },
+        { "type": "text", "id": "tier_label", "label": "Tier label", "default": "Tier 01" },
+        { "type": "text", "id": "name", "label": "Name", "default": "Petite Patch 25" },
+        { "type": "text", "id": "best_for", "label": "Best for", "default": "Small resident events, employee appreciation, or front-office activations" },
+        { "type": "text", "id": "guests", "label": "Guest count", "default": "Up to 25 guests" },
+        { "type": "textarea", "id": "included", "label": "Included", "default": "25 guaranteed take-home pumpkins, 2 hay bales, up to 2 display crates, compact styled patch with branded sign" },
+        { "type": "text", "id": "price", "label": "Custom price override", "info": "Leave blank to use the selected Shopify product's price." },
+        { "type": "text", "id": "price_prefix", "label": "Product price prefix", "default": "Starting at" },
+        { "type": "text", "id": "cta_label", "label": "Link label", "default": "Request a quote" },
+        { "type": "url", "id": "cta_url", "label": "Custom link", "info": "Leave blank to link to the selected Shopify product." }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Corporate — Pop-Ups",
+      "blocks": [
+        { "type": "popup", "settings": { "name": "Petite Patch 25", "best_for": "Small resident events, employee appreciation, or front-office activations", "guests": "Up to 25 guests", "included": "25 guaranteed take-home pumpkins, 2 hay bales, up to 2 display crates, compact styled patch with branded sign" } },
+        { "type": "popup", "settings": { "name": "Petite Patch 50", "best_for": "Apartment, assisted-living, hotel, or business events", "guests": "Up to 50 guests", "included": "50 guaranteed take-home pumpkins, 3 hay bales, up to 3 display crates, larger patch with a small photo corner" } },
+        { "type": "popup", "settings": { "name": "Petite Patch 100", "best_for": "Large community, HOA, hospitality, or corporate gatherings", "guests": "Up to 100 guests", "included": "100 guaranteed take-home pumpkins, 5 hay bales, up to 5 display crates, full patch experience with a defined photo area" } }
+      ]
+    }
+  ]
+}
+{% endschema %}

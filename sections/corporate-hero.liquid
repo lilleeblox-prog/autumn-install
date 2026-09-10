@@ -1,0 +1,33 @@
+<section class="mtw-corp-hero">
+  <div class="mtw-container mtw-corp-hero__inner">
+    <div class="mtw-corp-hero__copy">
+      <span class="mtw-mono mtw-eyebrow mtw-eyebrow--primary">{{ section.settings.eyebrow }}</span>
+      <h1 class="mtw-corp-hero__title">{{ section.settings.headline }}</h1>
+      <p class="mtw-corp-hero__intro">{{ section.settings.intro }}</p>
+      <a href="{{ section.settings.cta_url | default: '#corporate-quote' }}" class="mtw-btn mtw-btn--primary">
+        {{ section.settings.cta_label }}
+      </a>
+    </div>
+
+    <div class="mtw-corp-hero__note">
+      <span class="mtw-mono mtw-corp-hero__note-label">{{ section.settings.note_label }}</span>
+      <p>{{ section.settings.note }}</p>
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Corporate — Hero",
+  "settings": [
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "Commercial Décor · Fall 2026" },
+    { "type": "text", "id": "headline", "label": "Headline", "default": "A scalable harvest system for storefronts, lobbies, and communities" },
+    { "type": "textarea", "id": "intro", "label": "Intro", "default": "From a front desk accent to a full-property experience, every commercial package is designed, delivered, and styled for your space. Add a Petite Patch Pop-Up or removal service when you need it." },
+    { "type": "text", "id": "cta_label", "label": "Button label", "default": "Request a quote" },
+    { "type": "url", "id": "cta_url", "label": "Button link" },
+    { "type": "text", "id": "note_label", "label": "Note label", "default": "Built for your property" },
+    { "type": "textarea", "id": "note", "label": "Note", "default": "Choose one primary welcome zone or coordinate a complete seasonal experience across the spaces your guests see first." }
+  ],
+  "presets": [{ "name": "Corporate — Hero" }]
+}
+{% endschema %}

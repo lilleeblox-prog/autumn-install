@@ -1,0 +1,130 @@
+<section class="mtw-section mtw-corp-packages mtw-scroll-mt" id="corporate-packages">
+  <div class="mtw-container">
+    <div class="mtw-section-header mtw-corp-section-header">
+      <span class="mtw-mono mtw-eyebrow mtw-eyebrow--primary">{{ section.settings.eyebrow }}</span>
+      <h2 class="mtw-h2">{{ section.settings.headline }}</h2>
+      <p class="mtw-body mtw-text-muted">{{ section.settings.subhead }}</p>
+    </div>
+
+    <div class="mtw-corp-package-grid">
+      {% for block in section.blocks %}
+        {% assign linked_product = block.settings.product %}
+        {% assign card_image = block.settings.image %}
+        {% if card_image == blank and linked_product != blank %}
+          {% assign card_image = linked_product.featured_image %}
+        {% endif %}
+        {% assign card_url = block.settings.cta_url %}
+        {% if card_url == blank and linked_product != blank %}
+          {% assign card_url = linked_product.url %}
+        {% endif %}
+        {% if card_url == blank %}
+          {% assign card_url = '#corporate-quote' %}
+        {% endif %}
+        {% assign included_lines = block.settings.included | newline_to_br | split: '<br />' %}
+        <article class="mtw-corp-package" {{ block.shopify_attributes }}>
+          {% if card_image != blank %}
+            <div class="mtw-corp-package__image-wrap">
+              <img src="{{ card_image | image_url: width: 1000 }}" alt="{{ block.settings.name | default: linked_product.title | escape }}" class="mtw-corp-package__image" loading="lazy">
+            </div>
+          {% else %}
+            <div class="mtw-corp-package__image-wrap mtw-corp-package__image-wrap--empty" aria-hidden="true">
+              <span>{{ block.settings.name }}</span>
+            </div>
+          {% endif %}
+
+          <div class="mtw-corp-package__body">
+            <div class="mtw-corp-package__topline">
+              <span class="mtw-mono mtw-corp-package__number">0{{ forloop.index }}</span>
+            </div>
+            <h3 class="mtw-corp-package__name">{{ block.settings.name }}</h3>
+            <p class="mtw-corp-package__positioning">
+              {{ block.settings.positioning }}
+              {% if block.settings.best_for != blank %} Best suited for {{ block.settings.best_for }}.{% endif %}
+              {% if block.settings.coverage != blank %} Coverage: {{ block.settings.coverage }}.{% endif %}
+            </p>
+
+            <div class="mtw-corp-package__included">
+              <span class="mtw-mono mtw-corp-package__label">Included</span>
+              <ul>
+                {% for line in included_lines %}
+                  {% assign clean_line = line | strip %}
+                  {% if clean_line != blank %}<li>{{ clean_line }}</li>{% endif %}
+                {% endfor %}
+              </ul>
+            </div>
+
+            <p class="mtw-corp-package__service">{{ block.settings.service }}</p>
+            {% if block.settings.callout != blank %}<p class="mtw-corp-package__callout">{{ block.settings.callout }}</p>{% endif %}
+            <div class="mtw-corp-package__options">
+              {% if block.settings.petite_patch_note != blank %}
+                <span class="mtw-corp-package__option">{{ block.settings.petite_patch_note }}</span>
+              {% endif %}
+              {% if block.settings.removal_note != blank %}
+                <span class="mtw-corp-package__option mtw-corp-package__option--muted">{{ block.settings.removal_note }}</span>
+              {% endif %}
+            </div>
+            <p class="mtw-corp-package__price">
+              {% if block.settings.price != blank %}
+                {{ block.settings.price }}
+              {% elsif linked_product != blank %}
+                {{ block.settings.price_prefix }} {{ linked_product.price | money }}
+              {% else %}
+                {{ section.settings.no_price_text }}
+              {% endif %}
+            </p>
+            <a href="{{ card_url }}" class="mtw-btn mtw-btn--dark mtw-btn--full">{{ block.settings.cta_label }}</a>
+          </div>
+        </article>
+      {% endfor %}
+    </div>
+
+    <p class="mtw-corp-disclaimer">{{ section.settings.disclaimer }}</p>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Corporate — Packages",
+  "settings": [
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "Commercial packages" },
+    { "type": "text", "id": "headline", "label": "Headline", "default": "Choose the scale that fits your property" },
+    { "type": "textarea", "id": "subhead", "label": "Subhead", "default": "Each package includes design, delivery, and styling. Add a Petite Patch Pop-Up to any package, and choose removal separately if you want us to return after the season." },
+    { "type": "text", "id": "no_price_text", "label": "Price text when no product is selected", "default": "Price available by quote" },
+    { "type": "textarea", "id": "disclaimer", "label": "Coverage disclaimer", "default": "Approximate dimensions and zone counts are planning guides. Final coverage depends on the site and pumpkin shapes. Made to Welcome may substitute equivalent pumpkin varieties while preserving overall volume, palette, and design value." }
+  ],
+  "blocks": [
+    {
+      "type": "package",
+      "name": "Commercial package",
+      "settings": [
+        { "type": "product", "id": "product", "label": "Shopify product", "info": "Links this card to a product. The product image and price are used when the manual fields below are blank." },
+        { "type": "image_picker", "id": "image", "label": "Custom photo override" },
+        { "type": "text", "id": "name", "label": "Package name", "default": "Welcome Accent" },
+        { "type": "textarea", "id": "positioning", "label": "Positioning", "default": "A thoughtfully styled harvest moment for compact commercial spaces." },
+        { "type": "textarea", "id": "best_for", "label": "Best suited for", "default": "Front desks, reception counters, leasing offices, and compact retail displays" },
+        { "type": "text", "id": "coverage", "label": "Coverage", "default": "Approximately 3–5 feet · 1 compact zone" },
+        { "type": "textarea", "id": "included", "label": "Included (one item per line)", "default": "18 pumpkins\n1 hay bale\n1 riser or small crate\ngreenery\nsurface protection" },
+        { "type": "text", "id": "service", "label": "Included service line", "default": "Designed, delivered, and styled" },
+        { "type": "text", "id": "callout", "label": "Callout" },
+        { "type": "text", "id": "petite_patch_note", "label": "Petite Patch note", "default": "Petite Patch available as an add-on" },
+        { "type": "text", "id": "removal_note", "label": "Removal note", "default": "Removal available separately" },
+        { "type": "text", "id": "price", "label": "Custom price override", "info": "Leave blank to use the selected Shopify product's price." },
+        { "type": "text", "id": "price_prefix", "label": "Product price prefix", "default": "Starting at" },
+        { "type": "text", "id": "cta_label", "label": "Button label", "default": "Request a quote" },
+        { "type": "url", "id": "cta_url", "label": "Custom button link", "info": "Leave blank to link to the selected Shopify product." }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Corporate — Packages",
+      "blocks": [
+        { "type": "package", "settings": { "name": "Welcome Accent", "positioning": "A thoughtfully styled harvest moment for compact commercial spaces.", "best_for": "Front desks, reception counters, leasing offices, and compact retail displays", "coverage": "Approximately 3–5 feet · 1 compact zone", "included": "18 pumpkins\n1 hay bale\n1 riser or small crate\ngreenery\nsurface protection", "callout": "Ideal for front desks and reception areas", "petite_patch_note": "Petite Patch available as an add-on", "removal_note": "Removal available separately" } },
+        { "type": "package", "settings": { "name": "Signature Welcome", "positioning": "A layered seasonal welcome for entrances, storefronts, and reception spaces.", "best_for": "Storefronts, small entrances, reception areas, and assisted-living lobbies", "coverage": "Approximately 6–10 feet · 1 primary zone", "included": "45 pumpkins\n1 hay bale\nup to 2 risers, crates, planters, or equivalent props", "callout": "A complete welcome without the sourcing, hauling, or arranging", "petite_patch_note": "Petite Patch available as an add-on", "removal_note": "Removal available separately" } },
+        { "type": "package", "settings": { "name": "Grand Welcome", "positioning": "An abundant, statement-making display for prominent commercial spaces.", "best_for": "Apartment or hotel lobbies, clubhouses, HOA entrances, larger storefronts, and photo moments", "coverage": "One large area or two coordinated zones", "included": "85 pumpkins\n2 hay bales\nup to 3 additional major styling props", "callout": "Photo-ready and scaled for lobbies, clubhouses, and entrances", "petite_patch_note": "Petite Patch available as an add-on", "removal_note": "Removal available separately" } },
+        { "type": "package", "settings": { "name": "Full Property Welcome", "positioning": "A coordinated harvest experience across the property's most important guest-facing spaces.", "best_for": "Multi-zone properties, large entryways, event spaces, and coordinated photo experiences", "coverage": "Up to 3 zones · approximately 20–30 total feet", "included": "150 pumpkins\n4 hay bales\nup to 6 additional major styling props across the property", "callout": "Includes a Petite Patch Pop-Up with 25 pumpkins and 2 hay bales", "petite_patch_note": "Petite Patch 25 included", "removal_note": "Removal available separately" } }
+      ]
+    }
+  ]
+}
+{% endschema %}
