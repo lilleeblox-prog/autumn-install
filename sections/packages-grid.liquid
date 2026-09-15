@@ -9,7 +9,7 @@
 
     <div class="mtw-packages__grid">
       {%- for block in section.blocks -%}
-        {%- if block.type == 'package' -%}
+        {%- if block.type == 'package' and block.settings.visible -%}
 
           {%- assign card_image = block.settings.image -%}
           {%- if card_image == blank and block.settings.product != blank -%}
@@ -90,6 +90,7 @@
       "name": "Package",
       "settings": [
         { "type": "text",         "id": "label",            "label": "Label (e.g. P1)",                          "default": "P1" },
+        { "type": "checkbox",     "id": "visible",          "label": "Show this package card",                   "default": true },
         { "type": "text",         "id": "name",             "label": "Package name",                             "default": "Petite Patch" },
         { "type": "image_picker", "id": "image",            "label": "Package photo (overrides product image)" },
         { "type": "product",      "id": "product",          "label": "Shopify product (links price + Buy button)" },
