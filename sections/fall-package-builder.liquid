@@ -1,0 +1,219 @@
+{% assign inventory_count = 0 %}
+{% assign addon_count = 0 %}
+{% for block in section.blocks %}
+  {% if block.settings.product != blank %}
+    {% if block.settings.role == 'addon' %}
+      {% assign addon_count = addon_count | plus: 1 %}
+    {% else %}
+      {% assign inventory_count = inventory_count | plus: 1 %}
+    {% endif %}
+  {% endif %}
+{% endfor %}
+
+{% if inventory_count > 0 or request.design_mode %}
+<section class="mtw-byo" id="build-your-own" data-byo-section>
+  <div class="mtw-container">
+    <div class="mtw-byo__header">
+      <span class="mtw-mono mtw-eyebrow mtw-eyebrow--primary">{{ section.settings.eyebrow }}</span>
+      <h2 class="mtw-h2">{{ section.settings.headline }}</h2>
+      <p class="mtw-body mtw-text-muted">{{ section.settings.intro }}</p>
+    </div>
+
+    {% if inventory_count > 0 %}
+      <form class="mtw-byo__form" data-byo-form>
+        <div class="mtw-byo__step">
+          <div class="mtw-byo__step-heading">
+            <span class="mtw-byo__step-number">01</span>
+            <div><h3>Choose your fall pieces</h3><p>Mix, match, and adjust quantities. Your total updates as you build.</p></div>
+          </div>
+          <div class="mtw-byo__grid">
+            {% for block in section.blocks %}
+              {% assign chosen_product = block.settings.product %}
+              {% if block.settings.role == 'inventory' and chosen_product != blank %}
+                {% assign chosen_variant = chosen_product.selected_or_first_available_variant %}
+                <article class="mtw-byo__item{% unless chosen_variant.available %} mtw-byo__item--sold{% endunless %}" {{ block.shopify_attributes }}>
+                  <label class="mtw-byo__item-select">
+                    <input type="checkbox" aria-label="Select {{ block.settings.title | default: chosen_product.title | escape }}" data-byo-choice data-role="inventory" data-variant-id="{{ chosen_variant.id }}" data-title="{{ chosen_product.title | escape }}" data-price="{{ chosen_variant.price }}" {% unless chosen_variant.available %}disabled{% endunless %}>
+                    <span class="mtw-byo__check" aria-hidden="true"></span>
+                    {% if block.settings.badge != blank %}<span class="mtw-byo__badge">{{ block.settings.badge }}</span>{% endif %}
+                  </label>
+                  {% if chosen_product.featured_image %}
+                    <img class="mtw-byo__image" src="{{ chosen_product.featured_image | image_url: width: 600 }}" alt="{{ chosen_product.title | escape }}" loading="lazy">
+                  {% endif %}
+                  <div class="mtw-byo__item-body">
+                    <div class="mtw-byo__item-top"><h4>{{ block.settings.title | default: chosen_product.title }}</h4><span>{{ chosen_variant.price | money }}</span></div>
+                    {% if block.settings.description != blank %}<p>{{ block.settings.description }}</p>{% endif %}
+                    <div class="mtw-byo__quantity" data-byo-quantity hidden>
+                      <button type="button" data-quantity-minus aria-label="Decrease quantity">−</button>
+                      <input type="number" value="1" min="1" max="{{ block.settings.max_quantity }}" step="1" required data-quantity-input aria-label="Quantity of {{ block.settings.title | default: chosen_product.title | escape }}">
+                      <button type="button" data-quantity-plus aria-label="Increase quantity">+</button>
+                    </div>
+                  </div>
+                </article>
+              {% endif %}
+            {% endfor %}
+          </div>
+        </div>
+
+        {% if addon_count > 0 %}
+          <div class="mtw-byo__step mtw-byo__step--addons">
+            <div class="mtw-byo__step-heading">
+              <span class="mtw-byo__step-number">02</span>
+              <div><h3>Make it complete</h3><p>Add the services and finishing touches you want.</p></div>
+            </div>
+            <div class="mtw-byo__addons">
+              {% for block in section.blocks %}
+                {% assign chosen_product = block.settings.product %}
+                {% if block.settings.role == 'addon' and chosen_product != blank %}
+                  {% assign chosen_variant = chosen_product.selected_or_first_available_variant %}
+                  <label class="mtw-byo__addon{% unless chosen_variant.available %} mtw-byo__item--sold{% endunless %}" {{ block.shopify_attributes }}>
+                    <input type="checkbox" aria-label="Add {{ block.settings.title | default: chosen_product.title | escape }}" data-byo-choice data-role="addon" data-variant-id="{{ chosen_variant.id }}" data-title="{{ chosen_product.title | escape }}" data-price="{{ chosen_variant.price }}" {% unless chosen_variant.available %}disabled{% endunless %}>
+                    <span class="mtw-byo__check" aria-hidden="true"></span>
+                    <span class="mtw-byo__addon-copy"><strong>{{ block.settings.title | default: chosen_product.title }}</strong>{% if block.settings.description != blank %}<small>{{ block.settings.description }}</small>{% endif %}</span>
+                    <span class="mtw-byo__addon-price">+{{ chosen_variant.price | money }}</span>
+                  </label>
+                {% endif %}
+              {% endfor %}
+            </div>
+          </div>
+        {% endif %}
+
+        <div class="mtw-byo__checkout">
+          <div aria-live="polite"><span class="mtw-mono">Your custom package</span><strong data-byo-total>{{ 0 | money }}</strong><small data-byo-count>Choose at least one fall piece to begin.</small></div>
+          <button type="submit" class="mtw-btn mtw-btn--primary" data-byo-submit disabled>{{ section.settings.cart_label }}</button>
+        </div>
+        <p class="mtw-byo__error" data-byo-error role="alert" hidden></p>
+      </form>
+    {% elsif request.design_mode %}
+      <div class="mtw-byo__empty">
+        <p>Add Shopify products to this section in the theme editor to open the package builder.</p>
+      </div>
+    {% endif %}
+
+    <div class="mtw-byo__assisted">
+      <div><span class="mtw-mono">{{ section.settings.assisted_eyebrow }}</span><h3>{{ section.settings.assisted_title }}</h3><p>{{ section.settings.assisted_text }}</p></div>
+      <a class="mtw-btn mtw-btn--outline" href="{{ section.settings.assisted_url }}">{{ section.settings.assisted_label }}</a>
+    </div>
+  </div>
+</section>
+{% endif %}
+
+<script>
+(() => {
+  const section = document.querySelector('[data-byo-section]');
+  if (!section || section.dataset.ready) return;
+  section.dataset.ready = 'true';
+  const form = section.querySelector('[data-byo-form]');
+  if (!form) return;
+  const choices = [...form.querySelectorAll('[data-byo-choice]')];
+  const total = form.querySelector('[data-byo-total]');
+  const count = form.querySelector('[data-byo-count]');
+  const submit = form.querySelector('[data-byo-submit]');
+  const error = form.querySelector('[data-byo-error]');
+  const money = cents => new Intl.NumberFormat(document.documentElement.lang || 'en-US', { style: 'currency', currency: {{ cart.currency.iso_code | default: shop.currency | json }} }).format(cents / 100);
+  const normalizedQuantity = input => {
+    if (!input) return 1;
+    const min = Number(input.min) || 1;
+    const max = Number(input.max) || 50;
+    const entered = Math.round(Number(input.value));
+    const value = Math.min(max, Math.max(min, Number.isFinite(entered) ? entered : min));
+    input.value = value;
+    return value;
+  };
+
+  const refresh = () => {
+    let sum = 0, pieces = 0;
+    choices.forEach(choice => {
+      const item = choice.closest('.mtw-byo__item');
+      const qtyWrap = item && item.querySelector('[data-byo-quantity]');
+      const qty = qtyWrap ? normalizedQuantity(qtyWrap.querySelector('[data-quantity-input]')) : 1;
+      if (qtyWrap) qtyWrap.hidden = !choice.checked;
+      if (choice.checked) {
+        sum += Number(choice.dataset.price) * qty;
+        if (choice.dataset.role === 'inventory') pieces += qty;
+      }
+    });
+    total.textContent = money(sum);
+    count.textContent = pieces ? `${pieces} fall piece${pieces === 1 ? '' : 's'} selected` : 'Choose at least one fall piece to begin.';
+    submit.disabled = pieces === 0;
+  };
+
+  choices.forEach(choice => choice.addEventListener('change', refresh));
+  form.querySelectorAll('[data-quantity-minus], [data-quantity-plus]').forEach(button => button.addEventListener('click', () => {
+    const input = button.parentElement.querySelector('[data-quantity-input]');
+    const next = Number(input.value) + (button.hasAttribute('data-quantity-plus') ? 1 : -1);
+    input.value = next;
+    normalizedQuantity(input);
+    refresh();
+  }));
+  form.querySelectorAll('[data-quantity-input]').forEach(input => input.addEventListener('change', refresh));
+
+  form.addEventListener('submit', async event => {
+    event.preventDefault();
+    const selectedInventory = choices.filter(choice => choice.checked && choice.dataset.role === 'inventory');
+    if (!selectedInventory.length) return;
+    submit.disabled = true;
+    submit.textContent = 'Adding your package…';
+    error.hidden = true;
+    const packageName = 'Build Your Own Fall Package';
+    const items = choices.filter(choice => choice.checked).map((choice, index) => {
+      const item = choice.closest('.mtw-byo__item');
+      const qtyInput = item && item.querySelector('[data-quantity-input]');
+      const properties = { 'Package': packageName };
+      if (index > 0 || choice.dataset.role === 'addon') {
+        properties['_Package'] = selectedInventory[0].dataset.title;
+        properties['_Customization'] = choice.dataset.title;
+      }
+      return { id: Number(choice.dataset.variantId), quantity: normalizedQuantity(qtyInput), properties };
+    });
+    try {
+      const response = await fetch(`${window.Shopify?.routes?.root || '/'}cart/add.js`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+        body: JSON.stringify({ items })
+      });
+      if (!response.ok) throw new Error((await response.json()).description || 'Unable to add this package.');
+      window.location.href = `${window.Shopify?.routes?.root || '/'}cart`;
+    } catch (err) {
+      error.textContent = err.message;
+      error.hidden = false;
+      submit.disabled = false;
+      submit.textContent = {{ section.settings.cart_label | json }};
+    }
+  });
+  refresh();
+})();
+</script>
+
+{% schema %}
+{
+  "name": "Fall — Build your own",
+  "settings": [
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "Build your own" },
+    { "type": "text", "id": "headline", "label": "Headline", "default": "Create a fall display that fits your space." },
+    { "type": "textarea", "id": "intro", "label": "Introduction", "default": "Choose exactly what you want, see your total as you go, and add your finished package directly to cart." },
+    { "type": "text", "id": "cart_label", "label": "Cart button", "default": "Add custom package to cart" },
+    { "type": "text", "id": "assisted_eyebrow", "label": "Assisted-order eyebrow", "default": "Prefer a little help?" },
+    { "type": "text", "id": "assisted_title", "label": "Assisted-order title", "default": "We can build it for you." },
+    { "type": "textarea", "id": "assisted_text", "label": "Assisted-order text", "default": "Tell us about your space and budget. We’ll assemble your custom package and email a Shopify invoice that is ready to pay." },
+    { "type": "text", "id": "assisted_label", "label": "Assisted-order button", "default": "Have us build my package" },
+    { "type": "url", "id": "assisted_url", "label": "Assisted-order link" }
+  ],
+  "blocks": [
+    {
+      "type": "item",
+      "name": "Inventory item or add-on",
+      "settings": [
+        { "type": "product", "id": "product", "label": "Shopify product" },
+        { "type": "select", "id": "role", "label": "Type", "default": "inventory", "options": [{ "value": "inventory", "label": "Fall inventory" }, { "value": "addon", "label": "Add-on or service" }] },
+        { "type": "text", "id": "title", "label": "Display title override" },
+        { "type": "textarea", "id": "description", "label": "Short sales description" },
+        { "type": "text", "id": "badge", "label": "Optional badge", "info": "Examples: Best value, Most popular" },
+        { "type": "range", "id": "max_quantity", "label": "Maximum quantity", "min": 1, "max": 50, "step": 1, "default": 12 }
+      ]
+    }
+  ],
+  "max_blocks": 24,
+  "presets": [{ "name": "Fall — Build your own" }]
+}
+{% endschema %}
