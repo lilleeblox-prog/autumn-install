@@ -55,7 +55,7 @@
               {% if block.settings.role == 'inventory' and chosen_product != blank %}
                 {% assign chosen_variant = chosen_product.selected_or_first_available_variant %}
                 <article class="mtw-byo__item{% unless chosen_variant.available %} mtw-byo__item--sold{% endunless %}" {{ block.shopify_attributes }}>
-                  <input type="checkbox" class="mtw-byo__inventory-choice" aria-hidden="true" tabindex="-1" data-byo-choice data-role="inventory" data-variant-id="{{ chosen_variant.id }}" data-title="{{ chosen_product.title | escape }}" data-price="{{ chosen_variant.price }}" data-recommend-small="{{ block.settings.recommend_small }}" data-recommend-standard="{{ block.settings.recommend_standard }}" data-recommend-large="{{ block.settings.recommend_large }}" {% unless chosen_variant.available %}disabled{% endunless %}>
+                  <input type="checkbox" class="mtw-byo__inventory-choice" aria-hidden="true" tabindex="-1" data-byo-choice data-role="inventory" data-variant-id="{{ chosen_variant.id }}" data-title="{{ block.settings.title | default: chosen_product.title | escape }}" data-price="{{ chosen_variant.price }}" data-recommendation-key="{{ block.settings.recommendation_key }}" {% unless chosen_variant.available %}disabled{% endunless %}>
                   {% if block.settings.badge != blank %}<span class="mtw-byo__badge">{{ block.settings.badge }}</span>{% endif %}
                   {% if chosen_product.featured_image %}
                     <img class="mtw-byo__image" src="{{ chosen_product.featured_image | image_url: width: 600 }}" alt="{{ chosen_product.title | escape }}" loading="lazy">
@@ -87,7 +87,7 @@
                 {% if block.settings.role == 'addon' and chosen_product != blank %}
                   {% assign chosen_variant = chosen_product.selected_or_first_available_variant %}
                   <label class="mtw-byo__addon{% unless chosen_variant.available %} mtw-byo__item--sold{% endunless %}" {{ block.shopify_attributes }}>
-                    <input type="checkbox" aria-label="Add {{ block.settings.title | default: chosen_product.title | escape }}" data-byo-choice data-role="addon" data-variant-id="{{ chosen_variant.id }}" data-title="{{ chosen_product.title | escape }}" data-price="{{ chosen_variant.price }}" {% unless chosen_variant.available %}disabled{% endunless %}>
+                    <input type="checkbox" aria-label="Add {{ block.settings.title | default: chosen_product.title | escape }}" data-byo-choice data-role="addon" data-variant-id="{{ chosen_variant.id }}" data-title="{{ block.settings.title | default: chosen_product.title | escape }}" data-price="{{ chosen_variant.price }}" data-recommendation-key="{{ block.settings.recommendation_key }}" {% unless chosen_variant.available %}disabled{% endunless %}>
                     <span class="mtw-byo__check" aria-hidden="true"></span>
                     <span class="mtw-byo__addon-copy"><strong>{{ block.settings.title | default: chosen_product.title }}</strong>{% if block.settings.description != blank %}<small>{{ block.settings.description }}</small>{% endif %}</span>
                     <span class="mtw-byo__addon-price">+{{ chosen_variant.price | money }}</span>
@@ -110,10 +110,12 @@
       </div>
     {% endif %}
 
-    <div class="mtw-byo__assisted">
-      <div><span class="mtw-mono">{{ section.settings.assisted_eyebrow }}</span><h3>{{ section.settings.assisted_title }}</h3><p>{{ section.settings.assisted_text }}</p></div>
-      <a class="mtw-btn mtw-btn--outline" href="{{ section.settings.assisted_url }}">{{ section.settings.assisted_label }}</a>
-    </div>
+    {% if section.settings.show_assisted %}
+      <div class="mtw-byo__assisted">
+        <div><span class="mtw-mono">{{ section.settings.assisted_eyebrow }}</span><h3>{{ section.settings.assisted_title }}</h3><p>{{ section.settings.assisted_text }}</p></div>
+        <a class="mtw-btn mtw-btn--outline" href="{{ section.settings.assisted_url }}">{{ section.settings.assisted_label }}</a>
+      </div>
+    {% endif %}
   </div>
 </section>
 {% endif %}
@@ -174,10 +176,25 @@
   form.querySelectorAll('[data-quantity-input]').forEach(input => input.addEventListener('change', refresh));
 
   const inventoryChoices = choices.filter(choice => choice.dataset.role === 'inventory' && !choice.disabled);
+  const recommendationRecipes = {
+    small: { 'large-orange': 2, 'medium-orange': 2, 'white-ghost': 2, minis: 6 },
+    standard: { 'large-orange': 4, 'medium-orange': 4, 'white-ghost': 4, minis: 12 },
+    large: { 'large-orange': 8, 'medium-orange': 8, 'white-ghost': 6, minis: 15, 'hay-bales': 4 }
+  };
+  const recommendationKey = choice => {
+    if (choice.dataset.recommendationKey && choice.dataset.recommendationKey !== 'none') return choice.dataset.recommendationKey;
+    const title = choice.dataset.title.toLowerCase();
+    if ((title.includes('large') || title.includes('lrg')) && title.includes('orange')) return 'large-orange';
+    if ((title.includes('medium') || title.includes('med')) && title.includes('orange')) return 'medium-orange';
+    if (title.includes('ghost') || title.includes('polar')) return 'white-ghost';
+    if (title.includes('mini')) return 'minis';
+    if (title.includes('hay') && title.includes('bale')) return 'hay-bales';
+    return 'none';
+  };
   ['small', 'standard', 'large'].forEach(size => {
     const recommendedPieces = inventoryChoices.reduce((sum, choice) => {
       const input = choice.closest('.mtw-byo__item').querySelector('[data-quantity-input]');
-      const recommended = Number(choice.dataset[`recommend${size[0].toUpperCase()}${size.slice(1)}`] || 0);
+      const recommended = recommendationRecipes[size][recommendationKey(choice)] || 0;
       return sum + Math.min(recommended, Number(input.max));
     }, 0);
     const label = form.querySelector(`[data-preset-count="${size}"]`);
@@ -187,7 +204,7 @@
     const size = button.dataset.byoPreset;
     inventoryChoices.forEach(choice => {
       const input = choice.closest('.mtw-byo__item').querySelector('[data-quantity-input]');
-      input.value = size === 'clear' ? 0 : Number(choice.dataset[`recommend${size[0].toUpperCase()}${size.slice(1)}`] || 0);
+      input.value = size === 'clear' ? 0 : recommendationRecipes[size][recommendationKey(choice)] || 0;
     });
     form.querySelectorAll('[data-byo-preset]').forEach(option => option.classList.toggle('is-active', option === button));
     const note = form.querySelector('[data-byo-preset-note]');
@@ -241,6 +258,7 @@
     { "type": "text", "id": "headline", "label": "Headline", "default": "Create a fall display that fits your space." },
     { "type": "textarea", "id": "intro", "label": "Introduction", "default": "Choose exactly what you want, see your total as you go, and add your finished package directly to cart." },
     { "type": "text", "id": "cart_label", "label": "Cart button", "default": "Add custom package to cart" },
+    { "type": "checkbox", "id": "show_assisted", "label": "Show assisted-order card", "default": false },
     { "type": "text", "id": "assisted_eyebrow", "label": "Assisted-order eyebrow", "default": "Prefer a little help?" },
     { "type": "text", "id": "assisted_title", "label": "Assisted-order title", "default": "We can build it for you." },
     { "type": "textarea", "id": "assisted_text", "label": "Assisted-order text", "default": "Tell us about your space and budget. We’ll assemble your custom package and email a Shopify invoice that is ready to pay." },
@@ -259,9 +277,14 @@
         { "type": "text", "id": "badge", "label": "Optional badge", "info": "Examples: Best value, Most popular" },
         { "type": "range", "id": "max_quantity", "label": "Maximum quantity", "min": 1, "max": 50, "step": 1, "default": 12 },
         { "type": "header", "content": "Porch recommendations" },
-        { "type": "range", "id": "recommend_small", "label": "Small stoop quantity", "min": 0, "max": 20, "step": 1, "default": 1 },
-        { "type": "range", "id": "recommend_standard", "label": "Standard porch quantity", "min": 0, "max": 30, "step": 1, "default": 2 },
-        { "type": "range", "id": "recommend_large", "label": "Large porch quantity", "min": 0, "max": 40, "step": 1, "default": 3 }
+        { "type": "select", "id": "recommendation_key", "label": "Recommendation category", "default": "none", "info": "Assign the matching category so the porch-size buttons add the correct quantity.", "options": [
+          { "value": "none", "label": "Not used in recommendations" },
+          { "value": "large-orange", "label": "Large orange" },
+          { "value": "medium-orange", "label": "Medium orange" },
+          { "value": "white-ghost", "label": "White ghost" },
+          { "value": "minis", "label": "Minis" },
+          { "value": "hay-bales", "label": "Hay bales" }
+        ] }
       ]
     }
   ],
