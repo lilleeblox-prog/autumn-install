@@ -12,10 +12,38 @@
     "fall-package-builder": {
       "type": "fall-package-builder",
       "blocks": {
+        "item_J3yLTG": {
+          "type": "item",
+          "settings": {
+            "product": "prizewinner",
+            "role": "inventory",
+            "title": "",
+            "description": "",
+            "badge": "",
+            "max_quantity": 12,
+            "recommend_small": 1,
+            "recommend_standard": 2,
+            "recommend_large": 3
+          }
+        },
         "item_9RCgdi": {
           "type": "item",
           "settings": {
             "product": "fairytale",
+            "role": "inventory",
+            "title": "",
+            "description": "",
+            "badge": "",
+            "max_quantity": 12,
+            "recommend_small": 1,
+            "recommend_standard": 2,
+            "recommend_large": 3
+          }
+        },
+        "item_E3ndED": {
+          "type": "item",
+          "settings": {
+            "product": "scarface",
             "role": "inventory",
             "title": "",
             "description": "",
@@ -82,6 +110,20 @@
             "recommend_large": 3
           }
         },
+        "item_W9Tgrz": {
+          "type": "item",
+          "settings": {
+            "product": "sm-white-ghost",
+            "role": "inventory",
+            "title": "",
+            "description": "",
+            "badge": "",
+            "max_quantity": 12,
+            "recommend_small": 1,
+            "recommend_standard": 2,
+            "recommend_large": 3
+          }
+        },
         "item_QkfxqW": {
           "type": "item",
           "settings": {
@@ -123,17 +165,35 @@
             "recommend_standard": 2,
             "recommend_large": 3
           }
+        },
+        "item_cfUa9D": {
+          "type": "item",
+          "settings": {
+            "product": "hay-bale-addon",
+            "role": "inventory",
+            "title": "",
+            "description": "",
+            "badge": "",
+            "max_quantity": 12,
+            "recommend_small": 1,
+            "recommend_standard": 2,
+            "recommend_large": 3
+          }
         }
       },
       "block_order": [
+        "item_J3yLTG",
         "item_9RCgdi",
+        "item_E3ndED",
         "item_6UnYBq",
         "item_FWpmcC",
         "item_wU7Vr3",
         "item_mGatYL",
+        "item_W9Tgrz",
         "item_QkfxqW",
         "item_VYAzV3",
-        "item_kngLM9"
+        "item_kngLM9",
+        "item_cfUa9D"
       ],
       "settings": {
         "eyebrow": "Build your own · Fall 2026",
