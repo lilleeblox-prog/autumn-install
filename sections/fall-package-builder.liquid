@@ -21,10 +21,33 @@
 
     {% if inventory_count > 0 %}
       <form class="mtw-byo__form" data-byo-form>
+        <div class="mtw-byo__recommend">
+          <div class="mtw-byo__recommend-copy">
+            <span class="mtw-mono">Not sure how much you need?</span>
+            <h3>Start with a porch recommendation.</h3>
+            <p>Choose the space closest to yours. We’ll fill in a balanced starting mix, then you can adjust every item.</p>
+          </div>
+          <div class="mtw-byo__presets" role="group" aria-label="Recommended porch sizes">
+            <button type="button" class="mtw-byo__preset" data-byo-preset="small">
+              <strong>Small stoop</strong><span>Simple front-door accent</span><small data-preset-count="small"></small>
+            </button>
+            <button type="button" class="mtw-byo__preset" data-byo-preset="standard">
+              <strong>Standard porch</strong><span>Full, balanced welcome</span><small data-preset-count="standard"></small>
+            </button>
+            <button type="button" class="mtw-byo__preset" data-byo-preset="large">
+              <strong>Large porch</strong><span>Abundant, layered display</span><small data-preset-count="large"></small>
+            </button>
+            <button type="button" class="mtw-byo__preset mtw-byo__preset--clear" data-byo-preset="clear">
+              <strong>Start empty</strong><span>Choose every piece yourself</span>
+            </button>
+          </div>
+          <p class="mtw-byo__preset-note" data-byo-preset-note aria-live="polite">Pick a recommendation or start adding pieces below.</p>
+        </div>
+
         <div class="mtw-byo__step">
           <div class="mtw-byo__step-heading">
             <span class="mtw-byo__step-number">01</span>
-            <div><h3>Choose your fall pieces</h3><p>Mix, match, and adjust quantities. Your total updates as you build.</p></div>
+            <div><h3>Choose your pumpkins</h3><p>Use the plus and minus buttons for each item. Your total updates automatically.</p></div>
           </div>
           <div class="mtw-byo__grid">
             {% for block in section.blocks %}
@@ -32,21 +55,18 @@
               {% if block.settings.role == 'inventory' and chosen_product != blank %}
                 {% assign chosen_variant = chosen_product.selected_or_first_available_variant %}
                 <article class="mtw-byo__item{% unless chosen_variant.available %} mtw-byo__item--sold{% endunless %}" {{ block.shopify_attributes }}>
-                  <label class="mtw-byo__item-select">
-                    <input type="checkbox" aria-label="Select {{ block.settings.title | default: chosen_product.title | escape }}" data-byo-choice data-role="inventory" data-variant-id="{{ chosen_variant.id }}" data-title="{{ chosen_product.title | escape }}" data-price="{{ chosen_variant.price }}" {% unless chosen_variant.available %}disabled{% endunless %}>
-                    <span class="mtw-byo__check" aria-hidden="true"></span>
-                    {% if block.settings.badge != blank %}<span class="mtw-byo__badge">{{ block.settings.badge }}</span>{% endif %}
-                  </label>
+                  <input type="checkbox" class="mtw-byo__inventory-choice" aria-hidden="true" tabindex="-1" data-byo-choice data-role="inventory" data-variant-id="{{ chosen_variant.id }}" data-title="{{ chosen_product.title | escape }}" data-price="{{ chosen_variant.price }}" data-recommend-small="{{ block.settings.recommend_small }}" data-recommend-standard="{{ block.settings.recommend_standard }}" data-recommend-large="{{ block.settings.recommend_large }}" {% unless chosen_variant.available %}disabled{% endunless %}>
+                  {% if block.settings.badge != blank %}<span class="mtw-byo__badge">{{ block.settings.badge }}</span>{% endif %}
                   {% if chosen_product.featured_image %}
                     <img class="mtw-byo__image" src="{{ chosen_product.featured_image | image_url: width: 600 }}" alt="{{ chosen_product.title | escape }}" loading="lazy">
                   {% endif %}
                   <div class="mtw-byo__item-body">
-                    <div class="mtw-byo__item-top"><h4>{{ block.settings.title | default: chosen_product.title }}</h4><span>{{ chosen_variant.price | money }}</span></div>
+                    <div class="mtw-byo__item-top"><h4>{{ block.settings.title | default: chosen_product.title }}</h4><span>{{ chosen_variant.price | money }} each</span></div>
                     {% if block.settings.description != blank %}<p>{{ block.settings.description }}</p>{% endif %}
-                    <div class="mtw-byo__quantity" data-byo-quantity hidden>
-                      <button type="button" data-quantity-minus aria-label="Decrease quantity">−</button>
-                      <input type="number" value="1" min="1" max="{{ block.settings.max_quantity }}" step="1" required data-quantity-input aria-label="Quantity of {{ block.settings.title | default: chosen_product.title | escape }}">
-                      <button type="button" data-quantity-plus aria-label="Increase quantity">+</button>
+                    <div class="mtw-byo__quantity" data-byo-quantity>
+                      <button type="button" data-quantity-minus aria-label="Remove one {{ block.settings.title | default: chosen_product.title | escape }}" disabled>−</button>
+                      <input type="number" value="0" min="0" max="{{ block.settings.max_quantity }}" step="1" readonly data-quantity-input aria-label="Quantity of {{ block.settings.title | default: chosen_product.title | escape }}">
+                      <button type="button" data-quantity-plus aria-label="Add one {{ block.settings.title | default: chosen_product.title | escape }}" {% unless chosen_variant.available %}disabled{% endunless %}>+</button>
                     </div>
                   </div>
                 </article>
@@ -113,7 +133,7 @@
   const money = cents => new Intl.NumberFormat(document.documentElement.lang || 'en-US', { style: 'currency', currency: {{ cart.currency.iso_code | default: shop.currency | json }} }).format(cents / 100);
   const normalizedQuantity = input => {
     if (!input) return 1;
-    const min = Number(input.min) || 1;
+    const min = Number(input.min) || 0;
     const max = Number(input.max) || 50;
     const entered = Math.round(Number(input.value));
     const value = Math.min(max, Math.max(min, Number.isFinite(entered) ? entered : min));
@@ -127,7 +147,12 @@
       const item = choice.closest('.mtw-byo__item');
       const qtyWrap = item && item.querySelector('[data-byo-quantity]');
       const qty = qtyWrap ? normalizedQuantity(qtyWrap.querySelector('[data-quantity-input]')) : 1;
-      if (qtyWrap) qtyWrap.hidden = !choice.checked;
+      if (qtyWrap) {
+        choice.checked = qty > 0;
+        item.classList.toggle('is-selected', qty > 0);
+        qtyWrap.querySelector('[data-quantity-minus]').disabled = qty === 0;
+        qtyWrap.querySelector('[data-quantity-plus]').disabled = qty >= Number(qtyWrap.querySelector('[data-quantity-input]').max);
+      }
       if (choice.checked) {
         sum += Number(choice.dataset.price) * qty;
         if (choice.dataset.role === 'inventory') pieces += qty;
@@ -138,7 +163,6 @@
     submit.disabled = pieces === 0;
   };
 
-  choices.forEach(choice => choice.addEventListener('change', refresh));
   form.querySelectorAll('[data-quantity-minus], [data-quantity-plus]').forEach(button => button.addEventListener('click', () => {
     const input = button.parentElement.querySelector('[data-quantity-input]');
     const next = Number(input.value) + (button.hasAttribute('data-quantity-plus') ? 1 : -1);
@@ -146,7 +170,31 @@
     normalizedQuantity(input);
     refresh();
   }));
+  choices.filter(choice => choice.dataset.role === 'addon').forEach(choice => choice.addEventListener('change', refresh));
   form.querySelectorAll('[data-quantity-input]').forEach(input => input.addEventListener('change', refresh));
+
+  const inventoryChoices = choices.filter(choice => choice.dataset.role === 'inventory' && !choice.disabled);
+  ['small', 'standard', 'large'].forEach(size => {
+    const recommendedPieces = inventoryChoices.reduce((sum, choice) => {
+      const input = choice.closest('.mtw-byo__item').querySelector('[data-quantity-input]');
+      const recommended = Number(choice.dataset[`recommend${size[0].toUpperCase()}${size.slice(1)}`] || 0);
+      return sum + Math.min(recommended, Number(input.max));
+    }, 0);
+    const label = form.querySelector(`[data-preset-count="${size}"]`);
+    if (label) label.textContent = `${recommendedPieces} pieces`;
+  });
+  form.querySelectorAll('[data-byo-preset]').forEach(button => button.addEventListener('click', () => {
+    const size = button.dataset.byoPreset;
+    inventoryChoices.forEach(choice => {
+      const input = choice.closest('.mtw-byo__item').querySelector('[data-quantity-input]');
+      input.value = size === 'clear' ? 0 : Number(choice.dataset[`recommend${size[0].toUpperCase()}${size.slice(1)}`] || 0);
+    });
+    form.querySelectorAll('[data-byo-preset]').forEach(option => option.classList.toggle('is-active', option === button));
+    const note = form.querySelector('[data-byo-preset-note]');
+    note.textContent = size === 'clear' ? 'Your builder is empty. Add exactly the pieces you want.' : `${button.querySelector('strong').textContent} recommendation added. Adjust anything below.`;
+    refresh();
+    form.querySelector('.mtw-byo__step').scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }));
 
   form.addEventListener('submit', async event => {
     event.preventDefault();
@@ -209,7 +257,11 @@
         { "type": "text", "id": "title", "label": "Display title override" },
         { "type": "textarea", "id": "description", "label": "Short sales description" },
         { "type": "text", "id": "badge", "label": "Optional badge", "info": "Examples: Best value, Most popular" },
-        { "type": "range", "id": "max_quantity", "label": "Maximum quantity", "min": 1, "max": 50, "step": 1, "default": 12 }
+        { "type": "range", "id": "max_quantity", "label": "Maximum quantity", "min": 1, "max": 50, "step": 1, "default": 12 },
+        { "type": "header", "content": "Porch recommendations" },
+        { "type": "range", "id": "recommend_small", "label": "Small stoop quantity", "min": 0, "max": 20, "step": 1, "default": 1 },
+        { "type": "range", "id": "recommend_standard", "label": "Standard porch quantity", "min": 0, "max": 30, "step": 1, "default": 2 },
+        { "type": "range", "id": "recommend_large", "label": "Large porch quantity", "min": 0, "max": 40, "step": 1, "default": 3 }
       ]
     }
   ],
