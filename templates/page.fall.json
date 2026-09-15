@@ -73,6 +73,7 @@
           "type": "package",
           "settings": {
             "image": "shopify://shop_images/petite_1.png",
+            "visible": true,
             "label": "SIMPLE",
             "name": "Petite Patch",
             "price": "$385",
@@ -89,6 +90,7 @@
           "type": "package",
           "settings": {
             "image": "shopify://shop_images/Cozy_Corner_1.png",
+            "visible": true,
             "label": "BALANCED",
             "name": "Cozy Corner",
             "price": "$585",
@@ -105,6 +107,7 @@
           "type": "package",
           "settings": {
             "image": "shopify://shop_images/Fall_Favorite_1.png",
+            "visible": true,
             "label": "ABUNDANT",
             "name": "Fall Favorites",
             "price": "$885",
@@ -121,6 +124,7 @@
           "type": "package",
           "settings": {
             "image": "shopify://shop_images/Grande_Harvest_1.png",
+            "visible": true,
             "label": "UNMATCHED",
             "name": "Grande Harvest",
             "price": "$1,285",
@@ -132,13 +136,31 @@
             "cta_url": "/products/grande-harvest",
             "handle": "grande-harvest"
           }
+        },
+        "package_amkjRx": {
+          "type": "package",
+          "settings": {
+            "image": "shopify://shop_images/3262_2.jpg",
+            "visible": true,
+            "label": "Build Your Own",
+            "name": "Your Pumpkins Your Way",
+            "price": "",
+            "desc": "Build a display that fits the occasion — carving parties, corporate welcomes and fall gatherings, or simply skipping the patch entirely — with hay bales and white-glove delivery available on every build.",
+            "inclusions": "",
+            "addons": "Assortment of Pumpkins, Hay bales, Delivery",
+            "featured": false,
+            "cta_label": "Start your Build",
+            "cta_url": "/pages/build-your-own-fall-package",
+            "handle": "/pages/build-your-own-fall-package"
+          }
         }
       },
       "block_order": [
         "pkg-petite",
         "pkg-cozy",
         "pkg-favorites",
-        "pkg-grande"
+        "pkg-grande",
+        "package_amkjRx"
       ],
       "settings": {}
     },
