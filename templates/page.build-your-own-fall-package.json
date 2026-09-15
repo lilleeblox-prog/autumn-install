@@ -11,6 +11,130 @@
   "sections": {
     "fall-package-builder": {
       "type": "fall-package-builder",
+      "blocks": {
+        "item_9RCgdi": {
+          "type": "item",
+          "settings": {
+            "product": "fairytale",
+            "role": "inventory",
+            "title": "",
+            "description": "",
+            "badge": "",
+            "max_quantity": 12,
+            "recommend_small": 1,
+            "recommend_standard": 2,
+            "recommend_large": 3
+          }
+        },
+        "item_6UnYBq": {
+          "type": "item",
+          "settings": {
+            "product": "lrg-gourds",
+            "role": "inventory",
+            "title": "",
+            "description": "",
+            "badge": "",
+            "max_quantity": 12,
+            "recommend_small": 1,
+            "recommend_standard": 2,
+            "recommend_large": 3
+          }
+        },
+        "item_FWpmcC": {
+          "type": "item",
+          "settings": {
+            "product": "lrg-orange",
+            "role": "inventory",
+            "title": "",
+            "description": "",
+            "badge": "",
+            "max_quantity": 12,
+            "recommend_small": 1,
+            "recommend_standard": 2,
+            "recommend_large": 3
+          }
+        },
+        "item_wU7Vr3": {
+          "type": "item",
+          "settings": {
+            "product": "med-orange",
+            "role": "inventory",
+            "title": "",
+            "description": "",
+            "badge": "",
+            "max_quantity": 12,
+            "recommend_small": 1,
+            "recommend_standard": 2,
+            "recommend_large": 3
+          }
+        },
+        "item_mGatYL": {
+          "type": "item",
+          "settings": {
+            "product": "med-polar-bear",
+            "role": "inventory",
+            "title": "",
+            "description": "",
+            "badge": "",
+            "max_quantity": 12,
+            "recommend_small": 1,
+            "recommend_standard": 2,
+            "recommend_large": 3
+          }
+        },
+        "item_QkfxqW": {
+          "type": "item",
+          "settings": {
+            "product": "field-trip",
+            "role": "inventory",
+            "title": "",
+            "description": "",
+            "badge": "",
+            "max_quantity": 12,
+            "recommend_small": 1,
+            "recommend_standard": 2,
+            "recommend_large": 3
+          }
+        },
+        "item_VYAzV3": {
+          "type": "item",
+          "settings": {
+            "product": "mini-gourds",
+            "role": "inventory",
+            "title": "",
+            "description": "",
+            "badge": "",
+            "max_quantity": 12,
+            "recommend_small": 1,
+            "recommend_standard": 2,
+            "recommend_large": 3
+          }
+        },
+        "item_kngLM9": {
+          "type": "item",
+          "settings": {
+            "product": "minis",
+            "role": "inventory",
+            "title": "",
+            "description": "",
+            "badge": "",
+            "max_quantity": 12,
+            "recommend_small": 1,
+            "recommend_standard": 2,
+            "recommend_large": 3
+          }
+        }
+      },
+      "block_order": [
+        "item_9RCgdi",
+        "item_6UnYBq",
+        "item_FWpmcC",
+        "item_wU7Vr3",
+        "item_mGatYL",
+        "item_QkfxqW",
+        "item_VYAzV3",
+        "item_kngLM9"
+      ],
       "settings": {
         "eyebrow": "Build your own · Fall 2026",
         "headline": "Create a fall display that fits your space.",
