@@ -21,9 +21,7 @@
             "description": "",
             "badge": "",
             "max_quantity": 12,
-            "recommend_small": 1,
-            "recommend_standard": 2,
-            "recommend_large": 3
+            "recommendation_key": "none"
           }
         },
         "item_9RCgdi": {
@@ -35,9 +33,7 @@
             "description": "",
             "badge": "",
             "max_quantity": 12,
-            "recommend_small": 1,
-            "recommend_standard": 2,
-            "recommend_large": 3
+            "recommendation_key": "none"
           }
         },
         "item_E3ndED": {
@@ -49,9 +45,7 @@
             "description": "",
             "badge": "",
             "max_quantity": 12,
-            "recommend_small": 1,
-            "recommend_standard": 2,
-            "recommend_large": 3
+            "recommendation_key": "none"
           }
         },
         "item_6UnYBq": {
@@ -63,9 +57,7 @@
             "description": "",
             "badge": "",
             "max_quantity": 12,
-            "recommend_small": 1,
-            "recommend_standard": 2,
-            "recommend_large": 3
+            "recommendation_key": "none"
           }
         },
         "item_FWpmcC": {
@@ -77,9 +69,7 @@
             "description": "",
             "badge": "",
             "max_quantity": 12,
-            "recommend_small": 1,
-            "recommend_standard": 2,
-            "recommend_large": 3
+            "recommendation_key": "none"
           }
         },
         "item_wU7Vr3": {
@@ -91,9 +81,7 @@
             "description": "",
             "badge": "",
             "max_quantity": 12,
-            "recommend_small": 1,
-            "recommend_standard": 2,
-            "recommend_large": 3
+            "recommendation_key": "none"
           }
         },
         "item_mGatYL": {
@@ -105,9 +93,7 @@
             "description": "",
             "badge": "",
             "max_quantity": 12,
-            "recommend_small": 1,
-            "recommend_standard": 2,
-            "recommend_large": 3
+            "recommendation_key": "none"
           }
         },
         "item_W9Tgrz": {
@@ -119,9 +105,7 @@
             "description": "",
             "badge": "",
             "max_quantity": 12,
-            "recommend_small": 1,
-            "recommend_standard": 2,
-            "recommend_large": 3
+            "recommendation_key": "none"
           }
         },
         "item_QkfxqW": {
@@ -133,9 +117,7 @@
             "description": "",
             "badge": "",
             "max_quantity": 12,
-            "recommend_small": 1,
-            "recommend_standard": 2,
-            "recommend_large": 3
+            "recommendation_key": "none"
           }
         },
         "item_VYAzV3": {
@@ -147,9 +129,7 @@
             "description": "",
             "badge": "",
             "max_quantity": 12,
-            "recommend_small": 1,
-            "recommend_standard": 2,
-            "recommend_large": 3
+            "recommendation_key": "none"
           }
         },
         "item_kngLM9": {
@@ -161,9 +141,7 @@
             "description": "",
             "badge": "",
             "max_quantity": 12,
-            "recommend_small": 1,
-            "recommend_standard": 2,
-            "recommend_large": 3
+            "recommendation_key": "none"
           }
         },
         "item_cfUa9D": {
@@ -175,9 +153,7 @@
             "description": "",
             "badge": "",
             "max_quantity": 12,
-            "recommend_small": 1,
-            "recommend_standard": 2,
-            "recommend_large": 3
+            "recommendation_key": "none"
           }
         }
       },
@@ -198,8 +174,9 @@
       "settings": {
         "eyebrow": "Build your own · Fall 2026",
         "headline": "Create a Custom Package for Any Occassion",
-        "intro": "Choose exactly what you want, adjust quantities, add services, and see your total as you build. Every finished package can be added directly to your cart.",
+        "intro": "",
         "cart_label": "Add custom package to cart",
+        "show_assisted": false,
         "assisted_eyebrow": "Prefer a little help?",
         "assisted_title": "We can build it for you.",
         "assisted_text": "Tell us about your space and budget. We’ll assemble your custom package and email a Shopify invoice that is ready to pay.",
