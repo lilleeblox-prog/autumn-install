@@ -1,0 +1,30 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "fall-package-builder": {
+      "type": "fall-package-builder",
+      "settings": {
+        "eyebrow": "Build your own · Fall 2026",
+        "headline": "Create a fall display that fits your space.",
+        "intro": "Choose exactly what you want, adjust quantities, add services, and see your total as you build. Every finished package can be added directly to your Shopify cart.",
+        "cart_label": "Add custom package to cart",
+        "assisted_eyebrow": "Prefer a little help?",
+        "assisted_title": "We can build it for you.",
+        "assisted_text": "Tell us about your space and budget. We’ll assemble your custom package and email a Shopify invoice that is ready to pay.",
+        "assisted_label": "Have us build my package",
+        "assisted_url": "/pages/contact"
+      }
+    }
+  },
+  "order": [
+    "fall-package-builder"
+  ]
+}
