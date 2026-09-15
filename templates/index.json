@@ -137,6 +137,7 @@
           "type": "package",
           "settings": {
             "label": "",
+            "visible": true,
             "name": "Petite Patch",
             "product": "product-petite-patch",
             "price_placeholder": "$385",
@@ -151,6 +152,7 @@
           "type": "package",
           "settings": {
             "label": "",
+            "visible": true,
             "name": "Cozy Corner",
             "product": "product-cozy-corner",
             "price_placeholder": "$585",
@@ -165,6 +167,7 @@
           "type": "package",
           "settings": {
             "label": "",
+            "visible": true,
             "name": "Fall Favorites",
             "product": "fall-favorite",
             "price_placeholder": "$885",
@@ -179,6 +182,7 @@
           "type": "package",
           "settings": {
             "label": "",
+            "visible": true,
             "name": "Grande Harvest",
             "product": "product-grande-harvest",
             "price_placeholder": "$1,285",
@@ -188,13 +192,30 @@
             "cta_text": "See Package Details",
             "cta_url": "/products/grande-harvest"
           }
+        },
+        "package_xnV6fj": {
+          "type": "package",
+          "settings": {
+            "label": "",
+            "visible": true,
+            "name": "Build Your Own",
+            "image": "shopify://shop_images/LOT1-FAIRYTALE.jpg",
+            "product": "",
+            "price_placeholder": "$12+",
+            "description": "Build a package that fits your needs, skipping the patch entirely. We bring the harvest to you.",
+            "included": "4 Large Jack O Lantern\n4 Medium Jack O Lantern\n4 White Ghost\n6 Specialty Pumpkins\nAssortment of Pie Pumpkins",
+            "addons": "Hay Bale — $40\nDesign — $75\nRemoval — $75",
+            "cta_text": "build your package",
+            "cta_url": "shopify://pages/build-your-own-fall-package"
+          }
         }
       },
       "block_order": [
         "p1",
         "p2",
         "p3",
-        "p4"
+        "p4",
+        "package_xnV6fj"
       ],
       "settings": {
         "eyebrow": "Hello Harvest · Fall 2026",
