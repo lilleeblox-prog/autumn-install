@@ -1,0 +1,85 @@
+<header class="site-header">
+  <div class="container site-header__inner">
+    <a href="{{ routes.root_url }}" class="site-header__logo">
+      {{ section.settings.wordmark }}
+    </a>
+    
+    <button class="site-header__menu-toggle" aria-expanded="false" aria-controls="MobileNav" data-menu-toggle>
+      Menu
+    </button>
+
+    <nav class="site-header__nav" aria-label="Main navigation">
+      {% if linklists[section.settings.menu].links.size > 0 %}
+        {% for link in linklists[section.settings.menu].links %}
+          <a href="{{ link.url }}" class="site-header__nav-link">{{ link.title }}</a>
+        {% endfor %}
+      {% else %}
+        {% if pages.process != blank %}
+          <a href="{{ pages.process.url }}" class="site-header__nav-link">Process</a>
+        {% endif %}
+        <a href="{{ routes.root_url }}#compose" class="site-header__nav-link">Compose</a>
+        {% if pages.gallery != blank %}
+          <a href="{{ pages.gallery.url }}" class="site-header__nav-link">Gallery</a>
+        {% endif %}
+        {% if pages.faq != blank %}
+          <a href="{{ pages.faq.url }}" class="site-header__nav-link">FAQ</a>
+        {% endif %}
+        {% if pages.contact != blank %}
+          <a href="{{ pages.contact.url }}" class="site-header__nav-link">Contact</a>
+        {% endif %}
+      {% endif %}
+    </nav>
+    
+    <div class="site-header__icons">
+      <a href="{{ routes.cart_url }}" class="site-header__cart" id="cart-icon-bubble">
+        Your design
+        {% if cart.item_count > 0 %}
+          <span class="cart-count">{{ cart.item_count }}</span>
+        {% endif %}
+      </a>
+    </div>
+  </div>
+
+  <nav id="MobileNav" class="container mobile-nav hidden" data-mobile-nav aria-label="Mobile navigation">
+    {% if linklists[section.settings.menu].links.size > 0 %}
+      {% for link in linklists[section.settings.menu].links %}
+        <a href="{{ link.url }}" class="site-header__nav-link">{{ link.title }}</a>
+      {% endfor %}
+    {% else %}
+      {% if pages.process != blank %}
+        <a href="{{ pages.process.url }}" class="site-header__nav-link">Process</a>
+      {% endif %}
+      <a href="{{ routes.root_url }}#compose" class="site-header__nav-link">Compose</a>
+      {% if pages.gallery != blank %}
+        <a href="{{ pages.gallery.url }}" class="site-header__nav-link">Gallery</a>
+      {% endif %}
+      {% if pages.faq != blank %}
+        <a href="{{ pages.faq.url }}" class="site-header__nav-link">FAQ</a>
+      {% endif %}
+      {% if pages.contact != blank %}
+        <a href="{{ pages.contact.url }}" class="site-header__nav-link">Contact</a>
+      {% endif %}
+    {% endif %}
+  </nav>
+</header>
+
+{% schema %}
+{
+  "name": "Header",
+  "settings": [
+    {
+      "type": "html",
+      "id": "wordmark",
+      "label": "Wordmark (HTML)",
+      "default": "palette<span>/</span>install",
+      "info": "Use <span> for the accent color."
+    },
+    {
+      "type": "link_list",
+      "id": "menu",
+      "default": "main-menu",
+      "label": "Menu"
+    }
+  ]
+}
+{% endschema %}

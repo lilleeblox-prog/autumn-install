@@ -1,0 +1,95 @@
+<style>
+.faq-section { padding: var(--spacing-xl) 0; max-width: 800px; margin: 0 auto; }
+.faq-header { text-align: center; margin-bottom: var(--spacing-lg); }
+.faq-header h1, .faq-header h2 { font-size: 3.5rem; margin-bottom: var(--spacing-sm); }
+.faq-header > p { max-width: 680px; margin: 0 auto; color: var(--color-muted); line-height: 1.7; }
+.faq-list { border-top: 1px solid var(--color-border); }
+.faq-item { border-bottom: 1px solid var(--color-border); }
+.faq-item__question { 
+  display: block; width: 100%; padding: var(--spacing-md) 0; 
+  text-align: left; background: none; border: none; 
+  font-family: var(--font-sans); font-size: 1.125rem; font-weight: 600; 
+  cursor: pointer; position: relative;
+  list-style: none;
+}
+.faq-item__question::-webkit-details-marker { display: none; }
+.faq-item__question::after {
+  content: '+';
+  position: absolute; right: 0; top: 50%; transform: translateY(-50%);
+  font-family: var(--font-mono); color: var(--color-accent); font-size: 1.25rem;
+}
+.faq-item[open] .faq-item__question::after { content: '−'; }
+.faq-item__answer { 
+  padding-bottom: var(--spacing-md); color: var(--color-muted); line-height: 1.6;
+}
+</style>
+
+<section class="faq-section container">
+  <div class="faq-header">
+    <div class="eyebrow">{{ section.settings.eyebrow | escape }}</div>
+    {% if template.name == 'page' %}<h1>{{ section.settings.title | escape }}</h1>{% else %}<h2>{{ section.settings.title | escape }}</h2>{% endif %}
+    {% if section.settings.intro != blank %}<p>{{ section.settings.intro | escape }}</p>{% endif %}
+  </div>
+  
+  <div class="faq-list">
+    {% for block in section.blocks %}
+      <details class="faq-item" {% if forloop.first %}open{% endif %}>
+        <summary class="faq-item__question"><span><small class="faq-number">{{ forloop.index | prepend: '0' | slice: -2, 2 }}</small>{{ block.settings.question | escape }}</span></summary>
+        <div class="faq-item__answer rte">
+          {{ block.settings.answer }}
+        </div>
+      </details>
+    {% endfor %}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "FAQ",
+  "settings": [
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Eyebrow text",
+      "default": "The particulars / Good to know"
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Heading",
+      "default": "A few good questions."
+    },
+    {
+      "type": "textarea",
+      "id": "intro",
+      "label": "Introduction",
+      "default": "Everything you may want to know about materials, timing, installation and what it means to approve a design."
+    }
+  ],
+  "blocks": [
+    {
+      "type": "qa",
+      "name": "Q&A",
+      "settings": [
+        {
+          "type": "text",
+          "id": "question",
+          "label": "Question",
+          "default": "How long do the pumpkins last?"
+        },
+        {
+          "type": "richtext",
+          "id": "answer",
+          "label": "Answer",
+          "default": "<p>Longevity varies with weather and exposure. Contact the studio for care guidance specific to your entry.</p>"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "FAQ"
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,43 @@
+{
+  "sections": {
+    "main": {
+      "type": "main-product",
+      "settings": {
+        "delivery_small_product": "small-display-delivery",
+        "delivery_medium_product": "medium-display-delivery",
+        "delivery_large_product": "large-display-delivery",
+        "removal_small_product": "small-display-removal",
+        "removal_medium_product": "medium-display-removal",
+        "removal_large_product": "large-display-removal",
+        "monogram_product": "monogrammed-pumpkin"
+      },
+      "blocks": {
+        "palette-image-countryside": {
+          "type": "palette_image",
+          "settings": {
+            "palette": "Autumn in the Countryside",
+            "placeholder": "palette-countryside"
+          }
+        },
+        "palette-image-classic-harvest": {
+          "type": "palette_image",
+          "settings": {
+            "palette": "Classic Harvest",
+            "placeholder": "palette-classic-harvest"
+          }
+        },
+        "palette-image-coastal-cowgirl": {
+          "type": "palette_image",
+          "settings": {
+            "palette": "Coastal Cowgirl",
+            "placeholder": "palette-coastal-cowgirl"
+          }
+        }
+      },
+      "block_order": ["palette-image-countryside", "palette-image-classic-harvest", "palette-image-coastal-cowgirl"]
+    }
+  },
+  "order": [
+    "main"
+  ]
+}

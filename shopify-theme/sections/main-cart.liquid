@@ -1,0 +1,158 @@
+<style>
+.cart-page { padding: var(--spacing-lg) 0 var(--spacing-xl); max-width: 980px; }
+.cart-header { display: flex; justify-content: space-between; align-items: end; gap: 2rem; margin-bottom: var(--spacing-md); border-bottom: 1px solid var(--color-border); padding-bottom: var(--spacing-md); }
+.cart-header h1 { font-size: clamp(3.25rem, 6vw, 5.5rem); line-height: .98; margin-bottom: .8rem; }
+.cart-header p { max-width: 32rem; color: var(--color-muted); font-size: .9rem; margin: 0; }
+.cart-continue { flex-shrink: 0; border-bottom: 1px solid var(--color-accent); color: var(--color-accent); font-size: .75rem; letter-spacing: .04em; padding-bottom: .2rem; }
+.cart-item { display: grid; grid-template-columns: 116px minmax(0, 1fr) auto; gap: var(--spacing-md); padding: var(--spacing-md) 0; border-bottom: 1px solid var(--color-border); }
+.cart-item__image { border: 1px solid var(--color-border); }
+.cart-item__image img { width: 100%; aspect-ratio: 4/5; object-fit: cover; display: block; }
+.cart-item__info h3 { margin: 0 0 0.5rem; font-family: var(--font-serif); font-size: 1.65rem; font-weight: 400; }
+.cart-item__variant { font-size: 0.75rem; color: var(--color-muted); margin-bottom: 0.25rem; }
+.cart-item__properties { font-size: 0.75rem; color: var(--color-muted); margin-top: 0.5rem; }
+.cart-item__properties dl { margin: .75rem 0; }
+.cart-item__properties .property-line { display: flex; gap: .35rem; margin: .25rem 0; }
+.cart-item__properties dt { display: inline; font-weight: 600; }
+.cart-item__properties dd { display: inline; margin: 0 0 0 0.25rem; }
+.cart-item__price { font-family: var(--font-serif); font-size: 1.6rem; margin-top: 0.75rem; }
+.cart-item__remove { font-family: var(--font-mono); font-size: 0.65rem; text-transform: uppercase; color: var(--color-accent); text-decoration: underline; margin-top: 1rem; display: inline-block; }
+.cart-item--grouped[data-service-kind]:not([data-service-kind=""]) .cart-item__remove { text-decoration: none; color: var(--color-muted); pointer-events: none; }
+.cart-item__remove[data-remove-composition] { border: 0; background: transparent; padding: 0; cursor: pointer; font: inherit; }
+.cart-item__edit { display: inline-block; margin-top: .75rem; font-size: .75rem; text-decoration: underline; color: var(--color-accent); }
+.cart-item--grouped .quantity__input { background: var(--color-border); pointer-events: none; }
+.cart-item--grouped .quantity__button { display: none; }
+.no-js #cart.cart-has-grouped .cart-buttons { display: none; }
+.cart-noscript { display: none; }
+.no-js #cart.cart-has-grouped .cart-noscript { display: block; color: var(--color-accent); font-size: .8rem; }
+
+.cart-footer { margin-top: var(--spacing-lg); border: 1px solid var(--color-border); padding: clamp(1.5rem, 4vw, 3rem); background: #f8f6f1; }
+.cart-subtotal { display: flex; justify-content: space-between; align-items: baseline; font-family: var(--font-serif); font-size: 1.5rem; margin-bottom: var(--spacing-sm); }
+.cart-note { font-size: 0.75rem; color: var(--color-muted); margin-bottom: var(--spacing-md); }
+.cart-buttons { display: flex; justify-content: flex-end; gap: 1rem; }
+
+.cart-empty { text-align: center; padding: var(--spacing-xl) 0; }
+.cart-empty p { color: var(--color-muted); margin-bottom: var(--spacing-md); }
+
+@media (max-width: 600px) {
+  .cart-header { display: block; }
+  .cart-header .cart-continue { display: inline-block; margin-top: 1.25rem; }
+  .cart-item { grid-template-columns: 80px 1fr; }
+  .cart-item__totals { grid-column: 1 / -1; display: flex; justify-content: space-between; align-items: center; }
+  .cart-buttons { flex-direction: column; }
+  .cart-buttons .button { width: 100%; }
+}
+</style>
+
+<div class="container cart-page">
+  <div class="cart-header">
+    <div>
+      <span class="eyebrow">The final details</span>
+      <h1>Your composition</h1>
+      <p>Take a moment with your design. Every element can be reviewed before you proceed.</p>
+    </div>
+    <a href="{{ routes.root_url }}#compose" class="cart-continue">Explore more designs &rarr;</a>
+  </div>
+
+  {% if cart.item_count > 0 %}
+    {% assign has_grouped = false %}
+    {% for grouped_item in cart.items %}
+      {% if grouped_item.properties['_Composition ID'] != blank %}{% assign has_grouped = true %}{% endif %}
+    {% endfor %}
+    <form action="{{ routes.cart_url }}" method="post" id="cart"{% if has_grouped %} class="cart-has-grouped"{% endif %}>
+      <div class="cart-items">
+        {% for item in cart.items %}
+          {% assign composition_id = item.properties['_Composition ID'] %}
+          {% assign service_kind = item.properties['_Service Kind'] %}
+          {% assign artwork_choice = item.properties['Vinyl Artwork'] | default: item.properties['Monogram'] %}
+          {% assign artwork_quantity = item.properties['Vinyl-wrapped Pumpkins'] | default: item.properties['Monogrammed Pumpkins'] %}
+          {% assign artwork_url_https = item.properties['Artwork File'] | slice: 0, 24 %}
+          {% assign artwork_url_relative = item.properties['Artwork File'] | slice: 0, 18 %}
+          {% assign has_uploaded_artwork = false %}
+          {% if artwork_url_https == 'https://cdn.shopify.com/' or artwork_url_relative == '//cdn.shopify.com/' %}
+            {% assign has_uploaded_artwork = true %}
+          {% endif %}
+          <div class="cart-item{% if composition_id != blank %} cart-item--grouped{% endif %}" data-cart-item data-line-key="{{ item.key | escape }}" data-composition-id="{{ composition_id | escape }}" data-service-kind="{{ service_kind | escape }}" data-item-quantity="{{ item.quantity }}" data-display-size="{{ item.product.handle | split: '-' | first | escape }}" data-service="{{ item.properties['Service'] | escape }}" data-hay="{{ item.properties['Hay Bales'] | escape }}" data-monogram="{{ artwork_choice | escape }}" data-monogram-qty="{{ artwork_quantity | escape }}" data-artwork-required="{% if item.properties['Vinyl Artwork'] == 'Yes' %}true{% else %}false{% endif %}" data-artwork-present="{{ has_uploaded_artwork }}" data-removal="{{ item.properties['Removal'] | escape }}">
+            <div class="cart-item__image">
+              {% if item.image %}
+                <img src="{{ item.image | image_url: width: 200 }}" width="{{ item.image.width }}" height="{{ item.image.height }}" alt="{{ item.image.alt | escape }}" loading="lazy">
+              {% endif %}
+            </div>
+            <div class="cart-item__info">
+                <h3><a href="{{ item.url }}">{% if service_kind == 'monogram' %}Vinyl artwork · per pumpkin{% else %}{{ item.product.title | escape }}{% endif %}</a></h3>
+              {% unless item.product.has_only_default_variant %}
+                <div class="cart-item__variant">{{ item.variant.title }}</div>
+              {% endunless %}
+              
+              {%- if item.properties.size > 0 -%}
+                <div class="cart-item__properties">
+                  <dl>
+                    {%- for property in item.properties -%}
+                      {%- assign property_first_char = property.first | slice: 0 -%}
+                      {%- if property.last != blank and property_first_char != '_' -%}
+                        <div class="property-line">
+                          <dt>{{ property.first | escape }}:</dt>
+                          <dd>
+                            {% assign artwork_https = property.last | slice: 0, 24 %}
+                            {% assign artwork_protocol_relative = property.last | slice: 0, 18 %}
+                            {% if property.first == 'Artwork File' and artwork_https == 'https://cdn.shopify.com/' or property.first == 'Artwork File' and artwork_protocol_relative == '//cdn.shopify.com/' %}
+                              <a href="{{ property.last | escape }}" target="_blank" rel="noopener noreferrer">View uploaded artwork</a>
+                            {% else %}
+                              {{ property.last | escape }}
+                            {% endif %}
+                          </dd>
+                        </div>
+                      {%- endif -%}
+                    {%- endfor -%}
+                  </dl>
+                </div>
+              {%- endif -%}
+              
+              <div class="cart-item__price">{{ item.final_line_price | money }}</div>
+              
+               {% if composition_id != blank and service_kind == blank %}
+                 <a href="{{ item.product.url }}?edit={{ composition_id | url_encode }}" class="cart-item__edit">Edit design</a><br>
+                 <button type="button" class="cart-item__remove" data-remove-composition="{{ composition_id | escape }}">Remove composition</button>
+               {% elsif composition_id == blank %}
+                 <a href="{{ item.url_to_remove }}" class="cart-item__remove">Remove</a>
+               {% endif %}
+            </div>
+            <div class="cart-item__totals">
+              <div class="quantity">
+                 <button class="quantity__button" name="minus" type="button" aria-label="Decrease quantity of {{ item.product.title | escape }}">&minus;</button>
+                 <input class="quantity__input" type="number" name="updates[]" value="{{ item.quantity }}" min="0" {% if composition_id != blank %}readonly{% endif %} aria-label="Quantity of {{ item.product.title | escape }}">
+                 <button class="quantity__button" name="plus" type="button" aria-label="Increase quantity of {{ item.product.title | escape }}">+</button>
+              </div>
+            </div>
+          </div>
+        {% endfor %}
+      </div>
+      
+       <p class="cart-noscript">JavaScript is required to safely validate grouped composition services before checkout. Your variant selections remain visible above.</p>
+       <div class="cart-footer">
+        <div class="cart-subtotal">
+          <span>Estimated Total</span>
+          <span>{{ cart.total_price | money }}</span>
+        </div>
+         <p class="cart-note">Your display and selected services are shown separately. To refine the design, select “Edit design” above. Your preferred week is subject to confirmation; taxes and delivery details are calculated at checkout.</p>
+        <div class="cart-buttons">
+          <button type="submit" name="update" class="button button--secondary">Update selection</button>
+          <button type="submit" name="checkout" class="button button--accent">Proceed to checkout</button>
+        </div>
+      </div>
+    </form>
+  {% else %}
+    <div class="cart-empty">
+      <span class="eyebrow">A beginning</span>
+      <h2>Your design begins here.</h2>
+      <p>Explore our considered displays and create a welcome of your own.</p>
+      <a href="{{ routes.root_url }}" class="button button--accent">Explore the collection</a>
+    </div>
+  {% endif %}
+</div>
+
+{% schema %}
+{
+  "name": "Cart",
+  "settings": []
+}
+{% endschema %}

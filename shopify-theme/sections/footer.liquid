@@ -1,0 +1,95 @@
+<footer class="site-footer">
+  <div class="container site-footer__inner">
+    <div class="site-footer__brand">
+      <h2 class="site-footer__title">{{ section.settings.brand_name | escape }}</h2>
+      <p class="site-footer__link">{{ section.settings.text }}</p>
+      {% if settings.social_instagram_link != blank %}
+        <a class="site-footer__link" href="{{ settings.social_instagram_link | escape }}" rel="noopener noreferrer" target="_blank">Instagram ↗</a>
+      {% endif %}
+    </div>
+    
+    {% for block in section.blocks %}
+      <div class="site-footer__links">
+        <h2 class="site-footer__title">{{ block.settings.heading }}</h2>
+        <ul class="site-footer__list">
+          {% if linklists[block.settings.menu].links.size > 0 %}
+            {% for link in linklists[block.settings.menu].links %}
+              <li><a href="{{ link.url }}" class="site-footer__link">{{ link.title }}</a></li>
+            {% endfor %}
+          {% else %}
+            <li><a href="{{ routes.root_url }}#compose" class="site-footer__link">Compose</a></li>
+            {% if pages.gallery != blank %}<li><a href="{{ pages.gallery.url }}" class="site-footer__link">Gallery</a></li>{% endif %}
+            {% if pages.process != blank %}<li><a href="{{ pages.process.url }}" class="site-footer__link">Process</a></li>{% endif %}
+            {% if pages.faq != blank %}<li><a href="{{ pages.faq.url }}" class="site-footer__link">FAQ</a></li>{% endif %}
+            {% if pages.contact != blank %}<li><a href="{{ pages.contact.url }}" class="site-footer__link">Contact</a></li>{% endif %}
+            {% if pages.about != blank %}<li><a href="{{ pages.about.url }}" class="site-footer__link">Studio</a></li>{% endif %}
+            <li><a href="{{ routes.root_url }}#compose" class="site-footer__link">Explore packages</a></li>
+          {% endif %}
+        </ul>
+      </div>
+    {% endfor %}
+    {% if section.blocks.size == 0 %}
+      <div class="site-footer__links">
+        <h2 class="site-footer__title">Explore</h2>
+        <ul class="site-footer__list">
+          <li><a href="{{ routes.root_url }}#compose" class="site-footer__link">Compose</a></li>
+          {% if pages.gallery != blank %}<li><a href="{{ pages.gallery.url }}" class="site-footer__link">Gallery</a></li>{% endif %}
+          {% if pages.process != blank %}<li><a href="{{ pages.process.url }}" class="site-footer__link">Process</a></li>{% endif %}
+          {% if pages.faq != blank %}<li><a href="{{ pages.faq.url }}" class="site-footer__link">FAQ</a></li>{% endif %}
+          {% if pages.contact != blank %}<li><a href="{{ pages.contact.url }}" class="site-footer__link">Contact</a></li>{% endif %}
+          {% if pages.about != blank %}<li><a href="{{ pages.about.url }}" class="site-footer__link">Studio</a></li>{% endif %}
+          <li><a href="{{ routes.root_url }}#compose" class="site-footer__link">Explore packages</a></li>
+        </ul>
+      </div>
+    {% endif %}
+  </div>
+  <div class="container site-footer__bottom">
+    <span>&copy; {{ 'now' | date: "%Y" }} {{ shop.name }}. All rights reserved.</span>
+    {% if section.settings.footer_note != blank %}<span>{{ section.settings.footer_note | escape }}</span>{% endif %}
+  </div>
+</footer>
+
+{% schema %}
+{
+  "name": "Footer",
+  "settings": [
+    {
+      "type": "text",
+      "id": "brand_name",
+      "label": "Brand name",
+      "default": "Palette Install"
+    },
+    {
+      "type": "textarea",
+      "id": "text",
+      "label": "Text",
+      "default": "Seasonal displays composed with care for the character and proportions of your entry."
+    },
+    {
+      "type": "text",
+      "id": "footer_note",
+      "label": "Footer note",
+      "default": "Considered color, proportion and a sense of place"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "link_list",
+      "name": "Menu",
+      "settings": [
+        {
+          "type": "text",
+          "id": "heading",
+          "label": "Heading",
+          "default": "Quick links"
+        },
+        {
+          "type": "link_list",
+          "id": "menu",
+          "label": "Menu"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

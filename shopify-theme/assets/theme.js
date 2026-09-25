@@ -1,0 +1,966 @@
+/* Palette Install Theme JS */
+
+function formatMoney(cents, format) {
+  if (typeof cents === 'string') { cents = cents.replace('.', ''); }
+  let value = '';
+  const placeholderRegex = /\{\{\s*(\w+)\s*\}\}/;
+  const formatString = format || '${{amount}}';
+  
+  function defaultOption(opt, def) { return (typeof opt == 'undefined' ? def : opt); }
+  function formatWithDelimiters(number, precision, thousands, decimal) {
+    precision = defaultOption(precision, 2);
+    thousands = defaultOption(thousands, ',');
+    decimal = defaultOption(decimal, '.');
+    if (isNaN(number) || number == null) { return 0; }
+    number = (number / 100.0).toFixed(precision);
+    const parts = number.split('.');
+    const dollars = parts[0].replace(/(\d)(?=(\d\d\d)+(?!\d))/g, '$1' + thousands);
+    const centsParts = parts[1] ? (decimal + parts[1]) : '';
+    return dollars + centsParts;
+  }
+  
+  switch(formatString.match(placeholderRegex)[1]) {
+    case 'amount': value = formatWithDelimiters(cents, 2); break;
+    case 'amount_no_decimals': value = formatWithDelimiters(cents, 0); break;
+    case 'amount_with_comma_separator': value = formatWithDelimiters(cents, 2, '.', ','); break;
+    case 'amount_no_decimals_with_comma_separator': value = formatWithDelimiters(cents, 0, '.', ','); break;
+  }
+  return formatString.replace(placeholderRegex, value);
+}
+
+function updatePaletteGalleries(palette) {
+  document.querySelectorAll('[data-palette-gallery]').forEach((gallery) => {
+    const items = gallery.querySelectorAll('[data-palette]');
+    let visibleCount = 0;
+    items.forEach((item) => {
+      const isMatch = item.dataset.palette === palette;
+      item.classList.toggle('hidden', !isMatch);
+      if (isMatch) visibleCount += 1;
+    });
+    const emptyMessage = gallery.querySelector('.gallery-empty, .palette-gallery__empty');
+    if (emptyMessage) emptyMessage.hidden = visibleCount > 0;
+  });
+}
+
+function syncPaletteGalleries(selector, variant) {
+  document.querySelectorAll('[data-palette-gallery]').forEach((gallery) => {
+    const index = Number(gallery.dataset.paletteOptionIndex);
+    if (variant && Number.isInteger(index) && variant.options[index]) {
+      updatePaletteGalleries(variant.options[index]);
+      return;
+    }
+    const selected = selector && selector.querySelectorAll('input[type="radio"]:checked');
+    if (selected && selected[index]) updatePaletteGalleries(selected[index].value);
+  });
+}
+
+function selectPaletteFromQuery(selector) {
+  const palette = new URLSearchParams(window.location.search).get('palette');
+  if (!palette) return { requested: false, matched: false, changed: false };
+  const groups = selector.querySelectorAll('.variant-picker__group');
+  let changed = false;
+  let matched = false;
+  groups.forEach((group) => {
+    const label = group.querySelector('.variant-picker__label');
+    if (!label || !label.textContent.toLowerCase().includes('palette')) return;
+    const radio = Array.from(group.querySelectorAll('input[type="radio"]'))
+      .find(input => input.value === palette);
+    if (radio) {
+      matched = true;
+      if (!radio.checked) {
+        radio.checked = true;
+        changed = true;
+      }
+    }
+  });
+  return { requested: true, matched, changed };
+}
+
+function setupVariantSelectors() {
+  document.querySelectorAll('variant-selects').forEach((selector) => {
+    if (selector.dataset.paletteVariantBound === 'true') return;
+    selector.dataset.paletteVariantBound = 'true';
+    selector.addEventListener('change', () => {
+      const form = selector.closest('form');
+      if (!form) return;
+      const error = form.querySelector('#product-form-error');
+      if (error) {
+        error.textContent = '';
+        error.classList.add('hidden');
+      }
+
+      const selectedOptions = Array.from(selector.querySelectorAll('input[type="radio"]:checked')).map(input => input.value);
+      const scriptData = selector.querySelector('[type="application/json"]');
+      if (!scriptData) return;
+
+      const variantsData = JSON.parse(scriptData.textContent);
+      const currentVariant = variantsData.find(variant => selectedOptions.every((option, index) => variant.options[index] === option));
+      const approveBtn = form.querySelector('[data-approve-design]');
+      const masterSelect = form.querySelector('select[name="id"]');
+      const priceContainer = document.querySelector('[data-price-container]');
+
+      if (currentVariant) {
+        if (masterSelect) masterSelect.value = currentVariant.id;
+        if (priceContainer) {
+          const moneyFormat = window.shopMoneyFormat || "${{amount}}";
+          priceContainer.textContent = Number(currentVariant.price) > 0
+            ? formatMoney(currentVariant.price, moneyFormat)
+            : 'Pricing to be confirmed';
+        }
+        if (currentVariant.featured_image) {
+          const mainImage = document.querySelector('[data-main-image]');
+          if (mainImage) mainImage.src = currentVariant.featured_image.src;
+        }
+        const url = new URL(window.location.href);
+        url.searchParams.set('variant', currentVariant.id);
+        const paletteGallery = form.querySelector('[data-palette-gallery]');
+        const paletteIndex = paletteGallery ? Number(paletteGallery.dataset.paletteOptionIndex) : -1;
+        if (Number.isInteger(paletteIndex) && paletteIndex >= 0 && currentVariant.options[paletteIndex]) {
+          url.searchParams.set('palette', currentVariant.options[paletteIndex]);
+        }
+        window.history.replaceState({}, '', url);
+        if (approveBtn) {
+          approveBtn.disabled = !currentVariant.available || Number(currentVariant.price) <= 0;
+          approveBtn.textContent = !currentVariant.available ? 'Sold out' : Number(currentVariant.price) <= 0 ? 'Pricing pending' : form.dataset.editCompositionId ? 'Approve changes' : 'Approve design';
+        }
+      } else if (approveBtn) {
+        approveBtn.disabled = true;
+        approveBtn.textContent = 'Unavailable';
+      }
+
+      // Sync even when no variant matches the selected combination.
+      syncPaletteGalleries(selector, currentVariant);
+    });
+    const selection = selectPaletteFromQuery(selector);
+    if (selection.requested && !selection.matched) {
+      const form = selector.closest('form');
+      const error = form && form.querySelector('#product-form-error');
+      if (error) {
+        error.textContent = 'This palette is not offered in this size. Choose an available palette above.';
+        error.classList.remove('hidden');
+      }
+      const submit = form && form.querySelector('[data-approve-design]');
+      if (submit) submit.disabled = true;
+    }
+    if (selection.changed) {
+      const selectedPalette = selector.querySelector('input[type="radio"]:checked');
+      if (selectedPalette) selectedPalette.dispatchEvent(new Event('change', { bubbles: true }));
+    } else {
+      syncPaletteGalleries(selector);
+    }
+  });
+}
+
+const CONSULTATION_STORAGE_KEY = 'palette-install-consultation-v1';
+
+function saveConsultationDraft(choices) {
+  try {
+    sessionStorage.setItem(CONSULTATION_STORAGE_KEY, JSON.stringify({ savedAt: Date.now(), choices }));
+    document.dispatchEvent(new Event('palette-install:consultation-updated'));
+    return true;
+  } catch {
+    return false;
+  }
+}
+
+function productConsultationChoices(form) {
+  const data = new FormData(form);
+  const text = key => String(data.get(key) || '');
+  const paletteGroup = Array.from(form.querySelectorAll('.variant-picker__group'))
+    .find(group => group.querySelector('.variant-picker__label')?.textContent.toLowerCase().includes('palette'));
+  const artwork = text('properties[Vinyl Artwork]');
+  return {
+    display: form.dataset.productTitle || '',
+    displaySize: form.querySelector('[data-service-products]')?.dataset.displaySize || '',
+    palette: paletteGroup?.querySelector('input[type="radio"]:checked')?.value || '',
+    service: text('properties[Service]'),
+    artwork,
+    artworkSelected: artwork === 'Yes' && !!form.querySelector('[data-artwork-file]')?.files?.[0],
+    quantity: artwork === 'Yes' ? text('properties[Vinyl-wrapped Pumpkins]') : '',
+    pumpkinColor: artwork === 'Yes' ? text('properties[Pumpkin Color Preference]') : '',
+    vinylColor: artwork === 'Yes' ? text('properties[Vinyl Color Preference]') : '',
+    week: text('properties[Requested Week]'),
+    removal: text('properties[Removal]'),
+    notes: text('properties[General Notes]'),
+    custom: !!form.querySelector('[data-custom-request]')?.checked
+  };
+}
+
+function setupConsultationForm(root) {
+  if (root.dataset.consultationBound === 'true') return;
+  root.dataset.consultationBound = 'true';
+  if (root.querySelector('[data-contact-success]')) {
+    try { sessionStorage.removeItem(CONSULTATION_STORAGE_KEY); } catch { /* Storage may be unavailable. */ }
+    return;
+  }
+  const timing = root.querySelector('[name="contact[timing]"]');
+  const body = root.querySelector('[name="contact[body]"]');
+  const notice = root.querySelector('[data-consultation-prefill-notice]');
+  const apply = () => {
+    let saved;
+    try { saved = JSON.parse(sessionStorage.getItem(CONSULTATION_STORAGE_KEY) || 'null'); } catch { return; }
+    if (!saved || typeof saved.savedAt !== 'number' || Date.now() - saved.savedAt < 0 ||
+        Date.now() - saved.savedAt > 2 * 60 * 60 * 1000 || !saved.choices || typeof saved.choices !== 'object') return;
+    const choices = saved.choices;
+    const includesHay = ['medium', 'large'].includes(choices.displaySize) ||
+      (!choices.displaySize && ['The Porch', 'The Estate'].includes(choices.display));
+    const lines = [
+      choices.display && `Display: ${choices.display}`,
+      choices.palette && `Palette: ${choices.palette}`,
+      choices.service && `Fulfillment: ${choices.service}`,
+      includesHay && 'Hay bales: 2 included with the display',
+      choices.artwork && `Vinyl artwork: ${choices.artwork}`,
+      choices.artwork === 'Yes' && choices.quantity && `Vinyl-wrapped pumpkins: ${choices.quantity}`,
+      choices.artwork === 'Yes' && choices.pumpkinColor && `Pumpkin color: ${choices.pumpkinColor}`,
+      choices.artwork === 'Yes' && choices.vinylColor && `Vinyl color: ${choices.vinylColor}`,
+      choices.artwork === 'Yes' && choices.artworkSelected && 'Artwork file: selected on the product page (file not transferred)',
+      choices.removal && `Removal: ${choices.removal}`,
+      choices.custom && 'Further customization: Consultation requested',
+      typeof choices.notes === 'string' && choices.notes.trim() && `Your vision: ${choices.notes.trim()}`
+    ];
+    const message = lines.filter(Boolean).join('\n');
+    if (timing && typeof choices.week === 'string' && choices.week &&
+        (!timing.value || timing.value === timing.dataset.prefillValue)) {
+      timing.value = choices.week;
+      timing.dataset.prefillValue = timing.value;
+    }
+    if (body && message && (!body.value || body.value === body.dataset.prefillValue)) {
+      body.value = message;
+      body.dataset.prefillValue = message;
+    }
+    if (notice && message) notice.hidden = false;
+  };
+  document.addEventListener('palette-install:consultation-updated', apply);
+  apply();
+}
+
+function setupProductJourney(form) {
+  if (form.dataset.journeyBound === 'true') return;
+  form.dataset.journeyBound = 'true';
+  const monogramFields = form.querySelector('[data-monogram-fields]');
+  const monogramInputs = monogramFields ? monogramFields.querySelectorAll('input, select') : [];
+   const dateLabel = form.querySelector('[data-date-label]');
+   const weekSelect = form.querySelector('[data-requested-week]');
+   if (weekSelect && weekSelect.options.length === 1) {
+     const today = new Date();
+     const monday = new Date(today.getFullYear(), today.getMonth(), today.getDate() - ((today.getDay() + 6) % 7));
+     const format = new Intl.DateTimeFormat('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+     for (let index = 0; index < 52; index++) {
+       const start = new Date(monday.getFullYear(), monday.getMonth(), monday.getDate() + index * 7);
+       const end = new Date(start.getFullYear(), start.getMonth(), start.getDate() + 6);
+       const label = `Week of ${format.format(start)} – ${format.format(end)}`;
+       weekSelect.add(new Option(label, label));
+     }
+   }
+  const setVisibility = () => {
+    const service = form.querySelector('[data-service]:checked');
+    const isDelivery = service && service.dataset.service === 'delivery';
+    const hasMonogram = form.querySelector('[data-monogram-choice="yes"]:checked');
+    const customRequest = form.querySelector('[data-custom-request]');
+    const customNote = form.querySelector('[data-custom-request-note]');
+    if (customNote && customRequest) customNote.hidden = !customRequest.checked;
+    if (monogramFields) monogramFields.hidden = !hasMonogram;
+    monogramInputs.forEach(input => { input.disabled = !hasMonogram; input.required = !!hasMonogram; });
+    if (dateLabel) dateLabel.innerHTML = isDelivery
+       ? '03 / Requested delivery week'
+       : '03 / Requested delivery &amp; installation week';
+  };
+  form.querySelectorAll('[data-service], [data-monogram-choice], [data-custom-request]').forEach(input => input.addEventListener('change', setVisibility));
+  const saveChoices = () => saveConsultationDraft(productConsultationChoices(form));
+  form.addEventListener('change', saveChoices);
+  form.querySelector('[name="properties[General Notes]"]')?.addEventListener('input', saveChoices);
+  form.querySelector('[data-consultation-link]')?.addEventListener('click', event => {
+    if (!saveChoices()) {
+      event.preventDefault();
+      productFormError(form, 'Your choices could not be carried to the consultation form. Please try again in this tab.');
+    }
+  });
+  setVisibility();
+}
+
+function setupCompositionBrief(form) {
+  if (form.dataset.briefBound === 'true') return;
+  form.dataset.briefBound = 'true';
+  const brief = form.querySelector('[data-composition-brief]');
+  if (!brief) return;
+  const update = () => {
+    const paletteGroup = Array.from(form.querySelectorAll('.variant-picker__group'))
+      .find(group => group.querySelector('.variant-picker__label')?.textContent.toLowerCase().includes('palette'));
+    const palette = paletteGroup?.querySelector('input[type="radio"]:checked')?.value || 'Choose a palette';
+    const data = new FormData(form);
+    const service = data.get('properties[Service]') || 'Yours to choose';
+    const monogram = data.get('properties[Vinyl Artwork]');
+    const artwork = form.querySelector('[data-artwork-file]')?.files?.[0];
+    const pumpkin = data.get('properties[Pumpkin Color Preference]');
+    const vinyl = data.get('properties[Vinyl Color Preference]');
+    const week = data.get('properties[Requested Week]') || 'Yours to choose';
+    const removal = data.get('properties[Removal]');
+    brief.querySelector('[data-brief-palette]').textContent = palette;
+    brief.querySelector('[data-brief-service]').textContent = service;
+    brief.querySelector('[data-brief-monogram]').textContent =
+      monogram === 'Yes'
+        ? `Vinyl-wrapped pumpkin${artwork?.name ? ` · ${artwork.name}` : ''}${pumpkin && vinyl ? ` · ${pumpkin} / ${vinyl}` : ''}`
+        : monogram === 'No' ? 'No vinyl artwork' : 'Yours to choose';
+    brief.querySelector('[data-brief-week]').textContent = week;
+    brief.querySelector('[data-brief-removal]').textContent =
+      removal === 'Yes' ? 'Requested' : removal === 'No' ? 'Not requested' : 'Yours to choose';
+  };
+  form.addEventListener('input', update);
+  form.addEventListener('change', update);
+  update();
+}
+
+function calculateCompositionEstimate(baseCents, additions) {
+  const validPrice = value => Number.isSafeInteger(Number(value)) && Number(value) > 0;
+  let knownCents = validPrice(baseCents) ? Number(baseCents) : 0;
+  const pending = validPrice(baseCents) ? [] : ['Base display'];
+  const rows = [{ label: 'Display · base', priceCents: validPrice(baseCents) ? Number(baseCents) : null }];
+  additions.forEach(({ label, priceCents, quantity = 1, included = false }) => {
+    if (included) {
+      rows.push({ label, priceCents: 0, included: true });
+      return;
+    }
+    const count = Number(quantity);
+    if (!validPrice(priceCents) || !Number.isSafeInteger(count) || count < 1) {
+      pending.push(label);
+      rows.push({ label, priceCents: null });
+      return;
+    }
+    const amount = Number(priceCents) * count;
+    knownCents += amount;
+    rows.push({ label: count > 1 ? `${label} × ${count}` : label, priceCents: amount });
+  });
+  return { knownCents, pending, rows };
+}
+
+function setupProductEstimate(form) {
+  if (form.dataset.estimateBound === 'true') return;
+  form.dataset.estimateBound = 'true';
+  const estimate = form.querySelector('[data-composition-estimate]');
+  const products = form.querySelector('[data-service-products]');
+  if (!estimate || !products) return;
+  const moneyFormat = window.shopMoneyFormat || '${{amount}}';
+  const update = () => {
+    const selectedVariant = form.querySelector('select[name="id"]')?.selectedOptions?.[0];
+    const additions = [];
+    if (form.querySelector('[data-service]:checked')) {
+      additions.push({ label: 'Delivery', priceCents: products.dataset.deliveryPrice });
+    }
+    if (form.querySelector('[data-service="install"]:checked')) {
+      additions.push({ label: 'Custom installation · setup', included: true });
+    }
+    if (['medium', 'large'].includes(products.dataset.displaySize)) {
+      additions.push({ label: 'Hay bales · pair', included: true });
+    }
+    if (form.querySelector('[data-monogram-choice="yes"]:checked')) {
+      additions.push({
+        label: 'Vinyl-wrapped pumpkin',
+        priceCents: products.dataset.monogramPrice,
+        quantity: form.querySelector('[data-monogram-quantity]')?.value,
+      });
+    }
+    if (form.querySelector('input[name="properties[Removal]"][value="Yes"]:checked')) {
+      additions.push({ label: 'Removal · not included', priceCents: products.dataset.removalPrice });
+    }
+    form.querySelectorAll('input[name="addons[]"]:checked').forEach(input => {
+      additions.push({ label: input.closest('.addon-option')?.querySelector('strong')?.textContent || 'Finishing touch', priceCents: input.dataset.addonPrice });
+    });
+    if (form.querySelector('[data-custom-request]:checked')) {
+      additions.push({ label: 'Further customization', priceCents: 0 });
+    }
+    const result = calculateCompositionEstimate(selectedVariant?.dataset.price, additions);
+    const rows = estimate.querySelector('[data-estimate-rows]');
+    rows.replaceChildren(...result.rows.map(row => {
+      const line = document.createElement('div');
+      line.className = 'composition-price-estimate__row';
+      const title = document.createElement('span');
+      title.textContent = row.label;
+      const amount = document.createElement('strong');
+      amount.textContent = row.included ? 'Included' : row.priceCents === null ? 'Rate pending' : formatMoney(row.priceCents, moneyFormat);
+      line.append(title, amount);
+      return line;
+    }));
+    estimate.querySelector('[data-estimate-total]').textContent = formatMoney(result.knownCents, moneyFormat);
+    estimate.querySelector('[data-estimate-note]').textContent = result.pending.length
+      ? `${result.pending.join(', ')} ${result.pending.length === 1 ? 'is' : 'are'} not included in this subtotal. Taxes and any other Shopify checkout charges are shown before payment.`
+      : 'Delivery is charged for both fulfillment choices. Removal is a separate size-based charge. Taxes and any other Shopify checkout charges are shown before payment.';
+  };
+  form.addEventListener('input', update);
+  form.addEventListener('change', update);
+  update();
+}
+
+function newCompositionId() {
+  if (window.crypto && typeof window.crypto.randomUUID === 'function') return window.crypto.randomUUID();
+  return `composition-${Date.now()}-${Math.random().toString(36).slice(2, 10)}`;
+}
+
+const PENDING_ARTWORK_KEY = 'palette-pending-artwork-composition';
+const MAX_ARTWORK_SIZE = 20 * 1024 * 1024;
+
+function productFormError(form, message) {
+  const container = form.querySelector('#product-form-error');
+  if (!container) return;
+  container.textContent = message;
+  container.classList.toggle('hidden', !message);
+}
+
+function designSignature(form) {
+  return JSON.stringify(Array.from(new FormData(form).entries())
+    .filter(([key]) => key !== 'properties[_Composition ID]')
+    .map(([key, value]) => [key, value && typeof value === 'object' && 'size' in value
+      ? [value.name, value.size, value.type, value.lastModified] : value]));
+}
+
+function configuredCartItems(form) {
+  if (!form.reportValidity()) throw new Error('Please complete the highlighted choices before approving your design.');
+  if (form.querySelector('[data-custom-request]')?.checked) {
+    throw new Error('Further customization needs a consultation before this design can be ordered. Please request a consultation.');
+  }
+  const data = new FormData(form);
+  const masterId = String(data.get('id') || '');
+  const selected = Array.from(form.querySelector('select[name="id"]').options).find(option => option.value === masterId);
+  if (!selected || selected.disabled || Number(selected.dataset.price) <= 0) {
+    throw new Error('This package is not priced and available yet. Please choose an available package.');
+  }
+  const requestedWeek = String(data.get('properties[Requested Week]') || '').trim();
+  const weekSelect = form.querySelector('[data-requested-week]');
+  if (!requestedWeek || !weekSelect || !Array.from(weekSelect.options).some(option => option.value === requestedWeek && option.value)) {
+    throw new Error('Please select an upcoming week.');
+  }
+  const service = data.get('properties[Service]');
+  const monogram = data.get('properties[Vinyl Artwork]');
+  const removal = data.get('properties[Removal]');
+  const hayBales = data.get('properties[Hay Bales]');
+  const serviceProducts = form.querySelector('[data-service-products]');
+  const displaySize = serviceProducts?.dataset.displaySize;
+  if (!['Custom installation', 'Delivery only'].includes(service) || !monogram || !['Yes', 'No'].includes(removal)) {
+    throw new Error('Please complete the service, vinyl artwork, and removal choices.');
+  }
+  if (!['small', 'medium', 'large'].includes(displaySize) ||
+      hayBales !== (displaySize === 'small' ? 'No' : 'Yes')) {
+    throw new Error('The hay-bale inclusion does not match this display. Please refresh and try again.');
+  }
+  if (Number(data.get('quantity')) !== 1) throw new Error('Each composition must have exactly one base package.');
+  const artwork = form.querySelector('[data-artwork-file]')?.files?.[0];
+  const monogramQuantity = Number(data.get('properties[Vinyl-wrapped Pumpkins]') || 0);
+  const pumpkinColor = String(data.get('properties[Pumpkin Color Preference]') || '').trim();
+  const vinylColor = String(data.get('properties[Vinyl Color Preference]') || '').trim();
+  if (monogram === 'Yes') {
+    const expectedMime = /\.png$/i.test(artwork?.name || '') ? 'image/png'
+      : /\.pdf$/i.test(artwork?.name || '') ? 'application/pdf' : '';
+    if (!artwork || !expectedMime || (artwork.type && artwork.type !== expectedMime) ||
+        artwork.size < 1 || artwork.size > MAX_ARTWORK_SIZE) {
+      throw new Error('Upload a PNG or PDF artwork file 20 MB or smaller.');
+    }
+    if (!Number.isInteger(monogramQuantity) || monogramQuantity < 1 ||
+        !['White', 'Orange'].includes(pumpkinColor) ||
+        !['White', 'Black', 'Gold'].includes(vinylColor)) {
+      throw new Error('Choose the number of pumpkins, a white or orange pumpkin, and white, black, or gold vinyl.');
+    }
+  }
+
+  const compositionId = newCompositionId();
+  const properties = {
+    '_Composition ID': compositionId,
+    'Requested Week': requestedWeek,
+    'Service': service,
+    'Vinyl Artwork': monogram,
+    'Removal': removal,
+    'Hay Bales': hayBales
+  };
+  const notes = String(data.get('properties[General Notes]') || '').trim();
+  if (notes) properties['General Notes'] = notes;
+  if (monogram === 'Yes') {
+    properties['Vinyl-wrapped Pumpkins'] = String(monogramQuantity);
+    properties['Pumpkin Color Preference'] = pumpkinColor;
+    properties['Vinyl Color Preference'] = vinylColor;
+  }
+  const items = [{ id: masterId, quantity: 1, properties }];
+  const addService = (id, quantity, label, kind) => {
+    if (!id) throw new Error(`${label} is not available to order yet. Please choose another option or contact us.`);
+    items.push({ id, quantity, properties: { '_Composition ID': compositionId, '_Service Kind': kind } });
+  };
+  const approvedFees = { small: 2500, medium: 5000, large: 8500 };
+  const approvedFee = approvedFees[serviceProducts?.dataset.displaySize];
+  if (!approvedFee) throw new Error('This display size needs a delivery price before it can be ordered.');
+  if (!serviceProducts.dataset.deliveryId) throw new Error('Delivery is not available to order yet. Please contact us.');
+  if (Number(serviceProducts.dataset.deliveryPrice) !== approvedFee) {
+    throw new Error('The delivery price no longer matches this display size. Please contact us before ordering.');
+  }
+  addService(serviceProducts.dataset.deliveryId, 1, 'Delivery', 'delivery');
+  if (monogram === 'Yes') addService(serviceProducts?.dataset.monogramId, monogramQuantity, 'Vinyl artwork', 'monogram');
+  if (removal === 'Yes') {
+    if (!serviceProducts.dataset.removalId) throw new Error('Removal is not available to order yet. Please contact us.');
+    if (Number(serviceProducts.dataset.removalPrice) !== approvedFee) {
+      throw new Error('The removal price no longer matches this display size. Please contact us before ordering.');
+    }
+    addService(serviceProducts.dataset.removalId, 1, 'Removal', 'removal');
+  }
+  form.querySelectorAll('[name="addons[]"]:checked').forEach(addon => {
+    items.push({ id: addon.value, quantity: 1, properties: { '_Composition ID': compositionId, '_Service Kind': 'extra' } });
+  });
+  return { items, compositionId };
+}
+
+async function cartJson() {
+  const response = await fetch((window.cartUrl || '/cart') + '.js');
+  if (!response.ok) throw new Error('Could not load your design selection. Please try again.');
+  return response.json();
+}
+
+function cartContainsComposition(cart, id) {
+  return cart.items.some(item => item.properties && item.properties['_Composition ID'] === id);
+}
+
+class CartReviewRequired extends Error {
+  constructor(message) {
+    super(message);
+    this.name = 'CartReviewRequired';
+  }
+}
+
+async function addCompositionToCart(configured) {
+  let response;
+  try {
+    response = await fetch((window.cartAddUrl || '/cart/add') + '.js', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ items: configured.items })
+    });
+  } catch {
+    // A lost response is not proof that Shopify rejected the cart update.
+  }
+  if (response?.ok) return;
+  const cart = await cartJson().catch(() => null);
+  if (cart && cartContainsComposition(cart, configured.compositionId)) return;
+  const body = response ? await response.json().catch(() => ({})) : {};
+  throw new CartReviewRequired(body.description || 'We could not confirm your selection. Review your composition before trying again so you do not add the same design twice.');
+}
+
+async function removeComposition(compositionId) {
+  const cart = await cartJson();
+  const lines = cart.items.filter(item => item.properties && item.properties['_Composition ID'] === compositionId);
+  if (!lines.length) throw new Error('The original design is no longer in your selection. Review your composition before continuing.');
+  const updates = Object.fromEntries(lines.map(item => [item.key, 0]));
+  const response = await fetch((window.cartUrl || '/cart') + '/update.js', {
+    method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ updates })
+  });
+  if (!response.ok) throw new Error('Could not replace the original design in your selection.');
+}
+
+async function replaceComposition(oldId, newId) {
+  try {
+    await removeComposition(oldId);
+  } catch {
+    // Never delete the new group to "roll back": Shopify may have removed
+    // the old group and lost its response. Preserve at least one version.
+    const cart = await cartJson().catch(() => null);
+    if (cart && !cartContainsComposition(cart, oldId) && cartContainsComposition(cart, newId)) return;
+    throw new CartReviewRequired('The change was interrupted. Both versions may be in your selection. Review and remove any extra design before checkout.');
+  }
+}
+
+function artworkExtrasComplete(cart, pending) {
+  const group = cart.items.filter(item => item.properties?.['_Composition ID'] === pending.compositionId &&
+    item.properties?.['_Service Kind']);
+  const tally = (items, variantKey, quantityKey, kindKey) => {
+    const counts = new Map();
+    items.forEach(item => {
+      const key = `${item[variantKey]}:${item.properties[kindKey]}`;
+      counts.set(key, (counts.get(key) || 0) + Number(item[quantityKey]));
+    });
+    return counts;
+  };
+  const expected = tally(pending.extras, 'id', 'quantity', '_Service Kind');
+  const actual = tally(group, 'variant_id', 'quantity', '_Service Kind');
+  return expected.size === actual.size && Array.from(expected).every(([key, count]) => actual.get(key) === count);
+}
+
+async function finishPendingArtwork(cartForm) {
+  const serialized = sessionStorage.getItem(PENDING_ARTWORK_KEY);
+  if (!serialized) return;
+  cartForm.dataset.cartNeedsReview = 'true';
+  let pending;
+  try {
+    pending = JSON.parse(serialized);
+    if (!pending?.compositionId || !Array.isArray(pending.extras) || !pending.extras.length) throw new Error();
+  } catch {
+    sessionStorage.removeItem(PENDING_ARTWORK_KEY);
+    throw new CartReviewRequired('We could not confirm the uploaded artwork. Please review your composition before checkout.');
+  }
+  const cart = await cartJson();
+  const base = cart.items.find(item => item.properties?.['_Composition ID'] === pending.compositionId &&
+    !item.properties?.['_Service Kind']);
+  if (!base) {
+    sessionStorage.removeItem(PENDING_ARTWORK_KEY);
+    throw new CartReviewRequired('Your artwork was not added to the selection. Please return to the design and upload it again.');
+  }
+  const artworkUrl = String(base.properties['Artwork File'] || '');
+  if (!/^https:\/\/cdn\.shopify\.com\/|^\/\/cdn\.shopify\.com\//i.test(artworkUrl)) {
+    sessionStorage.removeItem(PENDING_ARTWORK_KEY);
+    throw new CartReviewRequired('The artwork file did not reach the order. Remove this composition and upload it again before checkout.');
+  }
+  if (!artworkExtrasComplete(cart, pending)) {
+    const existing = cart.items.some(item => item.properties?.['_Composition ID'] === pending.compositionId &&
+      item.properties?.['_Service Kind']);
+    if (pending.started || existing) {
+      throw new CartReviewRequired('Your artwork arrived, but the paid services could not be verified. Remove this composition and try again before checkout.');
+    }
+    // Mark the attempt before sending it: an interrupted response must not trigger a duplicate charge on reload.
+    pending.started = true;
+    sessionStorage.setItem(PENDING_ARTWORK_KEY, JSON.stringify(pending));
+    let response;
+    try {
+      response = await fetch((window.cartAddUrl || '/cart/add') + '.js', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ items: pending.extras })
+      });
+    } catch {
+      // Verify the cart rather than retrying a request whose outcome is unknown.
+    }
+    const verified = await cartJson().catch(() => null);
+    if (!verified || !artworkExtrasComplete(verified, pending)) {
+      const description = response && !response.ok ? (await response.json().catch(() => ({}))).description : '';
+      throw new CartReviewRequired(description || 'We could not confirm the paid services. Remove this composition and try again before checkout.');
+    }
+  }
+  if (pending.editId) await replaceComposition(pending.editId, pending.compositionId);
+  sessionStorage.removeItem(PENDING_ARTWORK_KEY);
+  window.location.replace(window.cartUrl || '/cart');
+}
+
+async function loadEditingComposition(form) {
+  const id = new URLSearchParams(window.location.search).get('edit');
+  if (!id) return;
+  const cart = await cartJson();
+  const group = cart.items.filter(item => item.properties && item.properties['_Composition ID'] === id);
+  const base = group.find(item => !item.properties['_Service Kind'] && String(item.product_id) === form.dataset.productId);
+  if (!base) throw new Error('This design is no longer in your selection. Return to your composition to review the details.');
+  const select = form.querySelector('select[name="id"]');
+  if (!Array.from(select.options).some(option => option.value === String(base.variant_id))) {
+    throw new Error('The original palette is no longer available. Return to your composition to review the details.');
+  }
+  form.dataset.editCompositionId = id;
+  select.value = String(base.variant_id);
+  const selector = form.querySelector('variant-selects');
+  const variants = selector && JSON.parse(selector.querySelector('[type="application/json"]').textContent);
+  const variant = variants && variants.find(item => String(item.id) === String(base.variant_id));
+  if (variant) {
+    selector.querySelectorAll('.variant-picker__group').forEach((groupNode, index) => {
+      const radio = Array.from(groupNode.querySelectorAll('input[type="radio"]')).find(input => input.value === variant.options[index]);
+      if (radio) radio.checked = true;
+    });
+    selector.dispatchEvent(new Event('change', { bubbles: true }));
+  }
+  const properties = {
+    ...base.properties,
+    'Vinyl Artwork': base.properties['Vinyl Artwork'] || base.properties.Monogram,
+    'Vinyl-wrapped Pumpkins': base.properties['Vinyl-wrapped Pumpkins'] || base.properties['Monogrammed Pumpkins']
+  };
+  for (const [name, value] of Object.entries(properties)) {
+    const radio = Array.from(form.elements).find(element => element.name === `properties[${name}]` && element.type === 'radio' && element.value === value);
+    if (radio) radio.checked = true;
+  }
+  form.querySelector('[data-service]:checked')?.dispatchEvent(new Event('change', { bubbles: true }));
+  form.querySelector('[data-monogram-choice]:checked')?.dispatchEvent(new Event('change', { bubbles: true }));
+  // The requested week may have expired since the original order; require a new choice then.
+  const week = form.querySelector('[data-requested-week]');
+  if (Array.from(week.options).some(option => option.value === properties['Requested Week'])) week.value = properties['Requested Week'];
+  for (const [name, value] of Object.entries(properties)) {
+    const input = Array.from(form.elements).find(element => element.name === `properties[${name}]` && element.type !== 'radio' && element.type !== 'file');
+    if (input && name !== 'Requested Week') input.value = value;
+  }
+  week.dispatchEvent(new Event('change', { bubbles: true }));
+  const extras = group.filter(item => item.properties['_Service Kind'] === 'extra').map(item => String(item.variant_id));
+  form.querySelectorAll('[name="addons[]"]').forEach(addon => { addon.checked = extras.includes(addon.value); });
+  const approve = form.querySelector('[data-approve-design]');
+  if (!approve.disabled) approve.textContent = 'Approve changes';
+  productFormError(form, '');
+}
+
+function validateCartGroups(cartForm) {
+  const error = cartForm.querySelector('[data-cart-validation-error]') || (() => {
+    const node = document.createElement('p');
+    node.dataset.cartValidationError = 'true';
+    node.setAttribute('role', 'alert');
+    node.style.color = 'var(--color-accent)';
+    cartForm.querySelector('.cart-footer').prepend(node);
+    return node;
+  })();
+  error.textContent = '';
+  if (cartForm.dataset.cartNeedsReview === 'true') {
+    error.textContent = 'Your artwork and paid services are still being checked. Please wait or review this composition before checkout.';
+    return false;
+  }
+  const groups = {};
+  for (const item of cartForm.querySelectorAll('[data-cart-item]')) {
+    if (!item.dataset.compositionId &&
+        (item.dataset.service || item.dataset.hay || item.dataset.monogram || item.dataset.removal)) {
+      error.textContent = 'A composition is missing its private grouping ID. Please remove it and add it again before checkout.';
+      return false;
+    }
+  }
+  cartForm.querySelectorAll('[data-cart-item][data-composition-id]').forEach((item) => {
+    const id = item.dataset.compositionId;
+    if (!id) return;
+    (groups[id] ||= []).push(item);
+  });
+  for (const [id, items] of Object.entries(groups)) {
+    const base = items.filter(item => !item.dataset.serviceKind);
+    if (base.length !== 1 || Number(base[0].dataset.itemQuantity) !== 1 ||
+        Number(base[0].querySelector('.quantity__input')?.value) !== 1) {
+      error.textContent = `Composition ${id} must have exactly one base display.`;
+      return false;
+    }
+    if (base[0].dataset.artworkRequired === 'true' && base[0].dataset.artworkPresent !== 'true') {
+      error.textContent = 'Artwork is missing from this vinyl-wrapped pumpkin. Remove the composition and upload the file again before checkout.';
+      return false;
+    }
+    const expected = [];
+    if (!['Custom installation', 'Delivery only'].includes(base[0].dataset.service)) {
+      error.textContent = 'Choose a valid fulfillment method before checkout.';
+      return false;
+    }
+    const size = base[0].dataset.displaySize;
+    if (!['small', 'medium', 'large'].includes(size) || base[0].dataset.hay !== (size === 'small' ? 'No' : 'Yes')) {
+      error.textContent = 'The hay bales in this composition do not match the display. Please edit or replace it before checkout.';
+      return false;
+    }
+    expected.push(['delivery', 1]);
+    if (base[0].dataset.monogram === 'Yes') expected.push(['monogram', Number(base[0].dataset.monogramQty)]);
+    if (base[0].dataset.removal === 'Yes') expected.push(['removal', 1]);
+    const actual = items.filter(item => item.dataset.serviceKind && item.dataset.serviceKind !== 'extra').map(item => [
+      item.dataset.serviceKind, Number(item.dataset.itemQuantity)
+    ]);
+    if (actual.length !== expected.length || expected.some(([kind, qty]) =>
+      actual.filter(([actualKind]) => actualKind === kind).reduce((sum, [, n]) => sum + n, 0) !== qty)) {
+      error.textContent = 'A composition is missing or has mismatched paid service lines. Please remove it and add it again, or contact us before checkout.';
+      return false;
+    }
+    if (items.some(item => item.dataset.serviceKind === 'extra' && Number(item.dataset.itemQuantity) !== 1)) {
+      error.textContent = 'Edit the design to change its finishing touches.';
+      return false;
+    }
+  }
+  return true;
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  document.querySelectorAll('[data-gallery-image]').forEach((thumbnail) => {
+    thumbnail.addEventListener('click', () => {
+      const main = document.querySelector('[data-main-image]');
+      if (main) {
+        main.src = thumbnail.dataset.galleryImage;
+        main.alt = thumbnail.dataset.galleryAlt || '';
+      }
+    });
+  });
+  // Mobile Menu Toggle
+  const menuToggle = document.querySelector('[data-menu-toggle]');
+  const mobileNav = document.querySelector('[data-mobile-nav]');
+  
+  if (menuToggle && mobileNav) {
+    menuToggle.addEventListener('click', () => {
+      const isExpanded = menuToggle.getAttribute('aria-expanded') === 'true';
+      menuToggle.setAttribute('aria-expanded', !isExpanded);
+      mobileNav.classList.toggle('hidden');
+    });
+  }
+
+  setupVariantSelectors();
+  document.querySelectorAll('[data-product-form]').forEach(setupProductJourney);
+  document.querySelectorAll('[data-product-form]').forEach(setupCompositionBrief);
+  document.querySelectorAll('[data-product-form]').forEach(setupProductEstimate);
+  document.querySelectorAll('[data-consultation-form]').forEach(setupConsultationForm);
+  const cartForm = document.querySelector('#cart');
+  if (cartForm) {
+    finishPendingArtwork(cartForm).catch(error => {
+      cartForm.dataset.cartNeedsReview = 'true';
+      const notice = cartForm.querySelector('[data-cart-validation-error]') || document.createElement('p');
+      notice.dataset.cartValidationError = 'true';
+      notice.setAttribute('role', 'alert');
+      notice.style.color = 'var(--color-accent)';
+      notice.textContent = error.message || 'The artwork upload could not be verified. Review your composition before checkout.';
+      cartForm.querySelector('.cart-footer').prepend(notice);
+    });
+    cartForm.querySelectorAll('[data-remove-composition]').forEach((button) => {
+      button.addEventListener('click', async () => {
+        const id = button.dataset.removeComposition;
+        const updates = {};
+        cartForm.querySelectorAll(`[data-composition-id="${CSS.escape(id)}"]`).forEach(item => {
+          updates[item.dataset.lineKey] = 0;
+        });
+        button.disabled = true;
+        try {
+          const response = await fetch((window.cartUrl || '/cart') + '/update.js', {
+            method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ updates })
+          });
+          if (response.ok) {
+            window.location.reload();
+          } else {
+            throw new Error('The composition could not be removed. Please try again.');
+          }
+        } catch (removeError) {
+          const error = cartForm.querySelector('[data-cart-validation-error]') || document.createElement('p');
+          error.dataset.cartValidationError = 'true';
+          error.setAttribute('role', 'alert');
+          error.style.color = 'var(--color-accent)';
+          error.textContent = removeError.message || 'A network error prevented removal. Please try again.';
+          cartForm.querySelector('.cart-footer').prepend(error);
+          button.disabled = false;
+        }
+      });
+    });
+    cartForm.addEventListener('submit', (event) => {
+      if (!validateCartGroups(cartForm)) event.preventDefault();
+    });
+  }
+  if (!document.querySelector('variant-selects') && new URLSearchParams(window.location.search).has('palette')) {
+    const form = document.querySelector('[data-product-form]');
+    if (form) {
+      const error = form.querySelector('#product-form-error');
+      if (error) {
+        error.textContent = 'This size does not offer palette choices yet. Please choose another size.';
+        error.classList.remove('hidden');
+      }
+      const submit = form.querySelector('[data-approve-design]');
+      if (submit) submit.disabled = true;
+    }
+  }
+
+  // Quantity updates
+  const quantityInputs = document.querySelectorAll('.quantity');
+  quantityInputs.forEach(wrapper => {
+    const btnMinus = wrapper.querySelector('[name="minus"]');
+    const btnPlus = wrapper.querySelector('[name="plus"]');
+    const input = wrapper.querySelector('input');
+
+    if (btnMinus && btnPlus && input) {
+      btnMinus.addEventListener('click', (e) => {
+        e.preventDefault();
+        if (Number(input.value) > Number(input.min || 0)) {
+          input.stepDown();
+          if (wrapper.closest('#cart')) wrapper.closest('form').requestSubmit(wrapper.closest('form').querySelector('[name="update"]'));
+        }
+      });
+      btnPlus.addEventListener('click', (e) => {
+        e.preventDefault();
+        input.stepUp();
+        if (wrapper.closest('#cart')) wrapper.closest('form').requestSubmit(wrapper.closest('form').querySelector('[name="update"]'));
+      });
+    }
+  });
+
+  // Approval is local to the current form values; changes invalidate it.
+  const bindApproval = (productForm) => {
+    if (productForm.dataset.approvalBound === 'true') return;
+    productForm.dataset.approvalBound = 'true';
+    const approve = productForm.querySelector('[data-approve-design]');
+    const submit = productForm.querySelector('[data-cart-submit]');
+    const approvalStatus = productForm.querySelector('[data-approval-status]');
+    const resetApproval = () => {
+      if (productForm.dataset.cartNeedsReview === 'true') {
+        approvalStatus.hidden = true;
+        return;
+      }
+      productForm.dataset.approvedSignature = '';
+      approvalStatus.hidden = true;
+      submit.hidden = true;
+      approve.hidden = false;
+      productFormError(productForm, '');
+    };
+    productForm.addEventListener('input', resetApproval);
+    productForm.addEventListener('change', resetApproval);
+    approve.addEventListener('click', () => {
+      try {
+        configuredCartItems(productForm);
+        productForm.dataset.approvedSignature = designSignature(productForm);
+        approvalStatus.hidden = false;
+        submit.hidden = false;
+        approve.hidden = true;
+        productFormError(productForm, '');
+        // A valid approval goes straight through the existing cart flow.
+        productForm.requestSubmit(submit);
+      } catch (error) {
+        productFormError(productForm, error.message);
+      }
+    });
+    productForm.addEventListener('submit', async (event) => {
+      event.preventDefault();
+      if (!productForm.dataset.approvedSignature || productForm.dataset.approvedSignature !== designSignature(productForm)) {
+        resetApproval();
+        productFormError(productForm, 'Please approve your updated design before reviewing your composition.');
+        return;
+      }
+      let configured;
+      try {
+        configured = configuredCartItems(productForm);
+      } catch (error) {
+        resetApproval();
+        productFormError(productForm, error.message);
+        return;
+      }
+      submit.disabled = true;
+      submit.textContent = 'Preparing your design…';
+      const cartUrl = window.cartUrl || '/cart';
+      const requireCartReview = (message) => {
+        productForm.dataset.cartNeedsReview = 'true';
+        approve.disabled = true;
+        approvalStatus.hidden = true;
+        productFormError(productForm, message);
+        submit.textContent = 'Review your composition';
+        submit.disabled = false;
+        submit.type = 'button';
+        submit.addEventListener('click', () => { window.location.href = cartUrl; }, { once: true });
+      };
+      try {
+        if (configured.items[0].properties['Vinyl Artwork'] === 'Yes') {
+          const compositionInput = productForm.querySelector('[data-composition-id-input]');
+          if (!compositionInput) throw new Error('The artwork upload could not be prepared. Please try again.');
+          sessionStorage.setItem(PENDING_ARTWORK_KEY, JSON.stringify({
+            compositionId: configured.compositionId,
+            extras: configured.items.slice(1),
+            editId: productForm.dataset.editCompositionId || null
+          }));
+          compositionInput.value = configured.compositionId;
+          // Shopify's native multipart product form stores the actual file as a line-item property.
+          // JSON Cart API requests would only send a filename, not the uploaded artwork.
+          HTMLFormElement.prototype.submit.call(productForm);
+          return;
+        }
+        await addCompositionToCart(configured);
+        if (productForm.dataset.editCompositionId) {
+          await replaceComposition(productForm.dataset.editCompositionId, configured.compositionId);
+        }
+        window.location.href = cartUrl;
+      } catch (error) {
+        if (error instanceof CartReviewRequired) {
+          requireCartReview(error.message);
+          return;
+        }
+        productFormError(productForm, error.message || 'Your selection could not be updated. Please try again.');
+        submit.disabled = false;
+        submit.textContent = 'Review your composition';
+      }
+    });
+    loadEditingComposition(productForm).catch(error => {
+      approve.disabled = true;
+      productFormError(productForm, error.message);
+    });
+  };
+  document.querySelectorAll('[data-product-form]').forEach(bindApproval);
+  document.addEventListener('shopify:section:load', () => {
+    document.querySelectorAll('[data-product-form]').forEach(bindApproval);
+  });
+});
+
+document.addEventListener('shopify:section:load', () => {
+  setupVariantSelectors();
+  document.querySelectorAll('[data-product-form]').forEach(setupProductJourney);
+  document.querySelectorAll('[data-product-form]').forEach(setupCompositionBrief);
+  document.querySelectorAll('[data-product-form]').forEach(setupProductEstimate);
+  document.querySelectorAll('[data-consultation-form]').forEach(setupConsultationForm);
+  syncPaletteGalleries(document.querySelector('variant-selects'));
+});

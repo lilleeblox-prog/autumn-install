@@ -1,0 +1,61 @@
+<style>
+.collection-page { padding: var(--spacing-xl) 0; }
+.collection-header { text-align: center; margin-bottom: var(--spacing-lg); }
+.collection-header h1 { font-size: 3rem; margin-bottom: var(--spacing-sm); }
+.collection-header p { color: var(--color-muted); max-width: 600px; margin: 0 auto; }
+</style>
+
+<div class="container collection-page">
+  <div class="collection-header">
+    <h1>{{ collection.title }}</h1>
+    {% if collection.description != blank %}
+      <div class="rte">{{ collection.description }}</div>
+    {% endif %}
+  </div>
+
+  <div class="package-browser__grid">
+    {% for prod in collection.products %}
+      <a href="{{ prod.url }}" class="package-card">
+        <div class="package-image">
+          {% if prod.featured_image %}
+            {{ prod.featured_image | image_url: width: 600 | image_tag: loading: 'lazy' }}
+          {% else %}
+             {% if section.settings.fallback_image != blank %}
+               {{ section.settings.fallback_image | image_url: width: 600 | image_tag: loading: 'lazy', alt: prod.title }}
+             {% else %}
+               <div class="gallery-empty">Imagery for this display is being prepared.</div>
+             {% endif %}
+          {% endif %}
+        </div>
+        <div class="package-info">
+          <div class="package-head">
+            <h3 class="package-title">{{ prod.title }}</h3>
+            <span class="package-price">{{ prod.price | money }}</span>
+          </div>
+          {% if prod.metafields.custom.display_size != blank %}
+            <span class="package-dimensions">{{ prod.metafields.custom.display_size }}</span>
+          {% endif %}
+          {% if prod.metafields.custom.recommended_for != blank %}
+            <span class="package-room">{{ prod.metafields.custom.recommended_for }}</span>
+          {% endif %}
+        </div>
+      </a>
+    {% else %}
+      <p>No products found in this collection.</p>
+    {% endfor %}
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Collection Grid",
+  "settings": [
+    {
+      "type": "image_picker",
+      "id": "fallback_image",
+      "label": "Fallback collection image",
+      "info": "Used only for products without a featured image."
+    }
+  ]
+}
+{% endschema %}

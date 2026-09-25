@@ -1,0 +1,166 @@
+<style>
+.hero {
+  display: grid;
+  min-height: 568px;
+  grid-template-columns: minmax(0, 1fr) minmax(360px, 500px);
+  gap: 100px;
+  align-items: center;
+  padding: 96px var(--spacing-md) 104px;
+}
+.hero__content h1 {
+  max-width: 760px;
+  margin: 16px 0 25px;
+  font-family: var(--font-serif);
+  font-size: clamp(64px, 9vw, 128px);
+  font-weight: 400;
+  letter-spacing: -.045em;
+  line-height: .84;
+}
+.hero__content h1 em { color: var(--color-accent); font-style: italic; }
+.hero__copy { max-width: 430px; margin: 0; color: var(--color-muted); font-size: 0.875rem; line-height: 1.75; }
+.hero__actions { display: flex; align-items: center; gap: 28px; margin-top: 39px; }
+
+.hero__image-wrap {
+  position: relative;
+  min-height: 520px;
+  border: 1px solid var(--color-border);
+  box-shadow: var(--shadow-card);
+  overflow: hidden;
+}
+.hero__image-wrap::after {
+  content: '';
+  position: absolute;
+  inset: 15px;
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  pointer-events: none;
+  z-index: 2;
+}
+.hero__image-wrap img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center 75%;
+  position: absolute;
+  inset: 0;
+  transition: transform 1.5s ease;
+}
+.hero__image-wrap:hover img { transform: scale(1.02); }
+.hero__caption {
+  position: absolute;
+  right: 25px;
+  bottom: 25px;
+  z-index: 3;
+  color: #fff;
+  background: rgba(35, 35, 30, 0.4);
+  backdrop-filter: blur(4px);
+  padding: 6px 10px;
+  font-family: var(--font-mono);
+  font-size: 0.55rem;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+}
+
+@media (max-width: 900px) {
+  .hero { grid-template-columns: 1fr; gap: 50px; padding-top: 70px; }
+  .hero__image-wrap { min-height: 320px; max-width: 560px; }
+}
+@media (max-width: 600px) {
+  .hero h1 { font-size: clamp(60px, 17vw, 84px); }
+  .hero__image-wrap { min-height: 250px; }
+}
+</style>
+
+<section class="container hero">
+  <div class="hero__content animate-fade">
+    <div class="eyebrow">{{ section.settings.eyebrow }}</div>
+    <h1>{{ section.settings.heading }}</h1>
+    <p class="hero__copy">{{ section.settings.text }}</p>
+    <div class="hero__actions">
+      {% if section.settings.button_link != blank %}
+        <a href="{{ section.settings.button_link }}" class="button button--accent">
+          {{ section.settings.button_label }}
+        </a>
+      {% endif %}
+      {% if section.settings.secondary_link != blank %}
+        <a href="{{ section.settings.secondary_link }}" class="btn button--secondary" style="border:0; padding:0;">
+          {{ section.settings.secondary_label }} &rarr;
+        </a>
+      {% endif %}
+    </div>
+  </div>
+  <div class="hero__image-wrap animate-fade" style="animation-delay: 0.2s;">
+    {% if section.settings.image != blank %}
+      {{ section.settings.image | image_url: width: 1000 | image_tag: alt: section.settings.image.alt, widths: '500, 750, 1000, 1500', sizes: '(max-width: 900px) 100vw, 500px' }}
+    {% else %}
+      <img src="{{ 'package-medium.webp' | asset_url }}" width="1200" height="1500" alt="Symmetrical front-door pumpkin display">
+    {% endif %}
+    {% if section.settings.caption != blank %}
+      <div class="hero__caption">{{ section.settings.caption }}</div>
+    {% endif %}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Hero",
+  "settings": [
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Eyebrow text",
+      "default": "A premium pumpkin display, designed for your entry"
+    },
+    {
+      "type": "textarea",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Curate your\n<em>arrival.</em>",
+      "info": "Use <em> for italicized accent text."
+    },
+    {
+      "type": "textarea",
+      "id": "text",
+      "label": "Body text",
+      "default": "A bespoke pumpkin and gourd installation designed for your stoop, porch, or storefront. Choose your palette and scale. We handle the delivery and styling."
+    },
+    {
+      "type": "text",
+      "id": "button_label",
+      "label": "Primary Button Label",
+      "default": "Start composing"
+    },
+    {
+      "type": "url",
+      "id": "button_link",
+      "label": "Primary Button Link"
+    },
+    {
+      "type": "text",
+      "id": "secondary_label",
+      "label": "Secondary Link Label",
+      "default": "See the options"
+    },
+    {
+      "type": "url",
+      "id": "secondary_link",
+      "label": "Secondary Link"
+    },
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Hero Image"
+    },
+    {
+      "type": "text",
+      "id": "caption",
+      "label": "Image Caption",
+      "default": "Plate 01 / The Porch"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Hero"
+    }
+  ]
+}
+{% endschema %}

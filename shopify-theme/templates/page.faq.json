@@ -1,0 +1,58 @@
+{
+  "sections": {
+    "faq": {
+      "type": "faq",
+      "settings": {
+        "eyebrow": "The particulars / Good to know",
+        "title": "A few good questions.",
+        "intro": "Everything you may want to know about materials, timing, installation and what it means to approve a design."
+      },
+      "blocks": {
+        "q1": {
+          "type": "qa",
+          "settings": {
+            "question": "Does the photo show my exact finished display?",
+            "answer": "<p>Package photos are scale references. Your chosen palette sets the color direction; individual heirloom varieties may vary with the harvest.</p>"
+          }
+        },
+        "q2": {
+          "type": "qa",
+          "settings": {
+            "question": "What is the difference between delivery and installation?",
+            "answer": "<p>With custom installation, the display is styled at your entry. With delivery only, the curated pumpkins and gourds are dropped off for you to arrange. You may choose either option when shaping your design.</p>"
+          }
+        },
+        "q3": {
+          "type": "qa",
+          "settings": {
+            "question": "Is my requested week a confirmed booking?",
+            "answer": "<p>No. The week is a preference for your brief, not a reserved date. Scheduling and availability will be confirmed separately; add a specific event date to your notes if one matters.</p>"
+          }
+        },
+        "q4": {
+          "type": "qa",
+          "settings": {
+            "question": "Can I add custom vinyl artwork or arrange removal?",
+            "answer": "<p>Yes. Upload your artwork as a PNG or PDF, choose how many pumpkins to wrap, then select a white or orange pumpkin and white, black, or gold vinyl. We’ll confirm the artwork before production. You can also request post-season removal.</p>"
+          }
+        },
+        "q5": {
+          "type": "qa",
+          "settings": {
+            "question": "How long do the pumpkins last?",
+            "answer": "<p>Longevity varies with weather, sun exposure, and the pumpkins themselves. Keep your display out of prolonged standing water where possible, and check individual pieces regularly for softness or damage.</p>"
+          }
+        },
+        "q6": {
+          "type": "qa",
+          "settings": {
+            "question": "Do I need to be home for the installation?",
+            "answer": "<p>Access and placement details would be confirmed with you before an installation. You can add entry instructions or an event date to the notes in your brief.</p>"
+          }
+        }
+      },
+      "block_order": ["q1", "q2", "q3", "q4", "q5", "q6"]
+    }
+  },
+  "order": ["faq"]
+}

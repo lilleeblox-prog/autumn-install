@@ -1,0 +1,50 @@
+<style>
+.list-collections-page { padding: var(--spacing-xl) 0; }
+.list-collections-header { text-align: center; margin-bottom: var(--spacing-lg); }
+.list-collections-header h1 { font-size: 3rem; }
+.collections-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: var(--spacing-md); }
+.collection-card { border: 1px solid var(--color-border); text-align: center; text-decoration: none; color: var(--color-foreground); transition: border-color 0.2s ease; }
+.collection-card:hover { border-color: var(--color-accent); }
+.collection-image { height: 250px; overflow: hidden; border-bottom: 1px solid var(--color-border); }
+.collection-image img { width: 100%; height: 100%; object-fit: cover; }
+.collection-card h3 { padding: var(--spacing-sm); margin: 0; font-size: 1.25rem; }
+</style>
+
+<div class="container list-collections-page">
+  <div class="list-collections-header">
+    <h1>Collections</h1>
+  </div>
+
+  <div class="collections-grid">
+    {% for collection in collections %}
+      <a href="{{ collection.url }}" class="collection-card">
+        <div class="collection-image">
+          {% if collection.image %}
+            {{ collection.image | image_url: width: 500 | image_tag: loading: 'lazy' }}
+          {% else %}
+             {% if section.settings.fallback_image != blank %}
+               {{ section.settings.fallback_image | image_url: width: 500 | image_tag: loading: 'lazy', alt: collection.title }}
+             {% else %}
+               <div class="gallery-empty">A closer look is coming soon.</div>
+             {% endif %}
+          {% endif %}
+        </div>
+        <h3>{{ collection.title }}</h3>
+      </a>
+    {% endfor %}
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Collections List",
+  "settings": [
+    {
+      "type": "image_picker",
+      "id": "fallback_image",
+      "label": "Fallback collection image",
+      "info": "Used only for collections without an image."
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,163 @@
+{
+  "sections": {
+    "hero": {
+      "type": "hero",
+      "settings": {
+        "eyebrow": "A premium pumpkin display, designed for your entry",
+        "heading": "Curate your\n<em>arrival.</em>",
+        "text": "A bespoke pumpkin and gourd installation designed for your stoop, porch, or storefront. Choose your palette and scale. We handle the delivery and styling.",
+        "button_label": "Start composing",
+        "button_link": "#compose",
+        "secondary_label": "See the displays",
+        "secondary_link": "",
+        "caption": "Plate 01 / The Porch"
+      }
+    },
+    "process": {
+      "type": "process-steps",
+      "settings": {
+        "title": "Compose your entry in three steps.",
+        "text": "Begin with a palette and a scale suited to your entry. The selected product page is where remaining details and approval options are reviewed.",
+        "button_label": "Explore packages",
+        "button_link": "#compose"
+      },
+      "blocks": {
+        "step1": {
+          "type": "step",
+          "settings": {
+            "title": "01 / Find your palette",
+            "text": "Choose the color direction that suits your entry. Matching studies appear only when photography is available."
+          }
+        },
+        "step2": {
+          "type": "step",
+          "settings": {
+            "title": "02 / Set the scale",
+            "text": "Compare The Stoop, The Porch, and The Estate while keeping your chosen palette."
+          }
+        },
+        "step3": {
+          "type": "step",
+          "settings": {
+            "title": "03 / Continue to your product",
+            "text": "Complete the finishing details on the next page, then approve your design and review every element before checkout."
+          }
+        }
+      },
+      "block_order": ["step1", "step2", "step3"]
+    },
+    "packages": {
+      "type": "package-browser",
+      "settings": {
+        "eyebrow": "Palette Install / Seasonal composition",
+        "section_id": "compose",
+        "title": "An entrance to remember.",
+        "text": "Compose a seasonal welcome with the care you would give any other room. Begin with a considered color story, then find a scale suited to your architecture.",
+        "palette_heading": "01 / The palette",
+        "summary_heading": "The view from here.",
+        "summary_disclosure": "Your choices appear here as you make them. Palette photographs show color direction, not a rendering of the finished display.",
+        "scale_eyebrow": "02 / The proportion",
+        "scale_heading": "Find your scale.",
+        "continue_label": "Continue designing",
+        "continue_disclosure": "Next, choose the finishing details, delivery, and your preferred week. You can approve and review the full composition before checkout."
+      },
+      "blocks": {
+        "small": {
+          "type": "package",
+          "settings": {
+            "scale_name": "The Stoop",
+            "included_items": "6 Large Pumpkins\n6 Medium Pumpkins\n6 White Pumpkins\nAssortment of Specialty Pumpkins\nAssortment of Pie Pumpkins",
+            "subtitle_fallback": "Compact entry",
+            "room_fallback": "Perfect for a single door or narrow stoop"
+          }
+        },
+        "medium": {
+          "type": "package",
+          "settings": {
+            "scale_name": "The Porch",
+            "included_items": "8 Large Pumpkins\n8 Medium Pumpkins\n8 White Pumpkins\nAssortment of Specialty Pumpkins\nAssortment of Pie Pumpkins\n2 Hay Bales",
+            "default_selected": true,
+            "most_popular": true,
+            "subtitle_fallback": "Full entry",
+            "room_fallback": "Substantial symmetric or asymmetrical entry"
+          }
+        },
+        "large": {
+          "type": "package",
+          "settings": {
+            "scale_name": "The Estate",
+            "included_items": "2 Grand Prize Pumpkins\n10 Large Pumpkins\n8 Medium Pumpkins\n8 White Pumpkins\n16 Specialty Pumpkins\n2 Hay Bales\nassortment of minis\nOrnamental Gourds\nAssortment of Pie Pumpkins",
+            "subtitle_fallback": "Expansive entry",
+            "room_fallback": "Expansive installation for wide steps or commercial facades"
+          }
+        },
+        "palette-countryside": {
+          "type": "palette_image",
+          "settings": {
+            "palette": "Autumn in the Countryside",
+            "reference_asset": "palette-countryside-landscape"
+          }
+        },
+        "palette-classic-harvest": {
+          "type": "palette_image",
+          "settings": {
+            "palette": "Classic Harvest",
+            "reference_asset": "palette-classic-harvest-landscape"
+          }
+        },
+        "palette-coastal-cowgirl": {
+          "type": "palette_image",
+          "settings": {
+            "palette": "Coastal Cowgirl",
+            "reference_asset": "palette-coastal-cowgirl-landscape"
+          }
+        }
+      },
+      "block_order": ["palette-countryside", "palette-classic-harvest", "palette-coastal-cowgirl", "small", "medium", "large"]
+    },
+    "studio-about": {
+      "type": "image-with-text",
+      "settings": {
+        "eyebrow": "Our Studio",
+        "title": "Architectural styling for the season.",
+        "text": "<p>Palette Install approaches the seasonal entry as an extension of the spaces within. Select a considered display for a residential porch, stoop, or storefront.</p>",
+        "layout": "left"
+      }
+    },
+    "faq": {
+      "type": "faq",
+      "settings": {
+        "title": "Frequently Asked Questions"
+      },
+      "blocks": {
+        "q1": {
+          "type": "qa",
+          "settings": {
+            "question": "How long do the pumpkins last?",
+            "answer": "<p>Longevity varies with weather and exposure. Contact us for guidance on caring for your display.</p>"
+          }
+        },
+        "q2": {
+          "type": "qa",
+          "settings": {
+            "question": "Do I need to be home for the installation?",
+            "answer": "<p>We will confirm access and installation details with you before the visit.</p>"
+          }
+        }
+      },
+      "block_order": ["q1", "q2"]
+    },
+    "contact": {
+      "type": "contact-form",
+      "settings": {}
+    }
+  },
+  "order": [
+    "packages",
+    "hero",
+    "process",
+    "studio-about",
+    "faq",
+    "contact"
+  ]
+}

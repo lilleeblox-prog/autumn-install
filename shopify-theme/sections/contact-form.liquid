@@ -1,0 +1,123 @@
+<style>
+.contact-form-section { padding: var(--spacing-xl) 0; max-width: 1120px; margin: 0 auto; }
+.contact-form-header { text-align: center; margin-bottom: var(--spacing-lg); }
+.contact-form-header h1, .contact-form-header h2 { font-size: 3.5rem; margin-bottom: var(--spacing-sm); }
+.contact-form-header > p { max-width: 720px; margin: 0 auto; color: var(--color-muted); line-height: 1.7; }
+.contact-form-content { max-width: 820px; margin: 0 auto; }
+.contact-form__note { font-size: 0.875rem; }
+.contact-form__success { padding: var(--spacing-md); background: rgba(155, 76, 57, 0.05); border: 1px solid var(--color-accent); color: var(--color-accent); margin-bottom: var(--spacing-md); text-align: center; font-size: 0.875rem; }
+.contact-form__prefill { padding: 14px 16px; margin: 0 0 var(--spacing-md); border-left: 2px solid var(--color-accent); background: rgba(155, 76, 57, 0.05); color: var(--color-foreground); font-size: .85rem; line-height: 1.6; }
+.contact-form__prefill[hidden] { display: none; }
+</style>
+
+<section class="contact-form-section container" id="consultation-form" data-consultation-form>
+  <div class="contact-form-header">
+    <div class="eyebrow">{{ section.settings.eyebrow }}</div>
+    {% if template.name == 'page' %}<h1>{{ section.settings.title | escape }}</h1>{% else %}<h2>{{ section.settings.title | escape }}</h2>{% endif %}
+    <p>{{ section.settings.text | escape }}</p>
+  </div>
+
+  <div class="contact-form-content">
+    <section aria-labelledby="consultation-form-title">
+      <span class="eyebrow">Further customization / Consultation required</span>
+      <h3 id="consultation-form-title">{{ section.settings.form_heading | escape }}</h3>
+      <p>{{ section.settings.form_intro | escape }}</p>
+
+  {% form 'contact' %}
+    {% if form.posted_successfully? %}
+       <div class="contact-form__success" data-contact-success>
+        Thank you for sharing your idea. Your inquiry has been received; we will be in touch to discuss what may be possible.
+      </div>
+    {% endif %}
+
+    {{ form.errors | default_errors }}
+    <p class="contact-form__prefill" data-consultation-prefill-notice hidden>Your choices have been added below. Please review them and add your contact details; an inquiry is not a booking or quote.</p>
+
+    <div class="form-field">
+      <label class="form-label" for="ContactFormName-{{ section.id }}">Name</label>
+       <input type="text" id="ContactFormName-{{ section.id }}" name="contact[name]" class="form-input" autocomplete="name" value="{{ form.name | escape }}" required>
+    </div>
+    
+    <div class="form-field">
+      <label class="form-label" for="ContactFormEmail-{{ section.id }}">Email</label>
+       <input type="email" id="ContactFormEmail-{{ section.id }}" name="contact[email]" class="form-input" autocomplete="email" value="{{ form.email | escape }}" required>
+    </div>
+    
+    <div class="form-field">
+      <label class="form-label" for="ContactFormSpace-{{ section.id }}">Space or location</label>
+      <input type="text" id="ContactFormSpace-{{ section.id }}" name="contact[space]" class="form-input" placeholder="Porch, stoop, storefront…">
+    </div>
+
+    <div class="form-field">
+      <label class="form-label" for="ContactFormTiming-{{ section.id }}">Preferred timing or event date</label>
+      <input type="text" id="ContactFormTiming-{{ section.id }}" name="contact[timing]" class="form-input" placeholder="A preference only; availability is confirmed separately">
+    </div>
+
+    <div class="form-field">
+      <label class="form-label" for="ContactFormMessage-{{ section.id }}">Your ideas and special requests</label>
+       <textarea rows="6" id="ContactFormMessage-{{ section.id }}" name="contact[body]" class="form-textarea" required>{{ form.body | escape }}</textarea>
+    </div>
+    
+    <div class="form-field" style="text-align: center; margin-top: var(--spacing-md);">
+      <button type="submit" class="button button--accent">{{ section.settings.submit_label | escape }}</button>
+    </div>
+  {% endform %}
+      <p class="contact-form__note">{{ section.settings.form_note | escape }}</p>
+    </section>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Contact Form",
+  "settings": [
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Eyebrow text",
+      "default": "The conversation / Begin here"
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Heading",
+      "default": "Tell us about the space."
+    },
+    {
+      "type": "textarea",
+      "id": "text",
+      "label": "Text",
+      "default": "The doorway, the occasion, the feeling you want guests to have. The best compositions begin with a conversation."
+    },
+    {
+      "type": "text",
+      "id": "form_heading",
+      "label": "Form heading",
+      "default": "Let’s talk about your idea."
+    },
+    {
+      "type": "textarea",
+      "id": "form_intro",
+      "label": "Form introduction",
+      "default": "Need a different scale, a particular palette, or a design for a unique space? A consultation lets us discuss what’s possible before confirming scope, pricing, or a date."
+    },
+    {
+      "type": "text",
+      "id": "submit_label",
+      "label": "Submit button label",
+      "default": "Send an inquiry"
+    },
+    {
+      "type": "textarea",
+      "id": "form_note",
+      "label": "Form note",
+      "default": "A consultation request is not a confirmed booking, quote, or order."
+    }
+  ],
+  "presets": [
+    {
+      "name": "Contact Form"
+    }
+  ]
+}
+{% endschema %}

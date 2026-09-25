@@ -1,0 +1,41 @@
+{
+  "sections": {
+    "process": {
+      "type": "process-steps",
+      "settings": {
+        "eyebrow": "Our approach / From idea to entrance",
+        "title": "A considered way in.",
+        "text": "Every memorable entrance begins with a point of view. Here is how a composition takes shape, and what happens after you approve yours.",
+        "button_label": "Create your design"
+      },
+      "blocks": {
+        "s1": {
+          "type": "step",
+          "settings": {
+            "kicker": "Review",
+            "title": "Approve your design.",
+            "text": "Review your palette, scale, services, and notes before approving. If you change a choice afterward, you will need to approve the updated design again. Approval is not an order or a reservation; the final review and checkout become available only when the offers are ready."
+          }
+        },
+        "s2": {
+          "type": "step",
+          "settings": {
+            "kicker": "When confirmed",
+            "title": "Plan the timing.",
+            "text": "Your selected week is a preference, not a booked date. Add an event date in your notes if timing matters. Availability and scheduling will need confirmation before an installation or delivery."
+          }
+        },
+        "s3": {
+          "type": "step",
+          "settings": {
+            "kicker": "At your entry",
+            "title": "Choose how it arrives.",
+            "text": "Custom installation means the display is styled at your entry. Delivery only leaves the arrangement to you. You can also upload a PNG or PDF for vinyl-wrapped artwork on a white or orange pumpkin, choosing white, black, or gold vinyl, or request post-season removal. Once details and pricing are confirmed, you can review your selection before secure checkout."
+          }
+        }
+      },
+      "block_order": ["s1", "s2", "s3"]
+    }
+  },
+  "order": ["process"]
+}

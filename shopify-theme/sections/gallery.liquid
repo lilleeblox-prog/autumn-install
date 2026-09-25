@@ -1,0 +1,182 @@
+<style>
+.gallery-section { padding: var(--spacing-xl) 0; }
+.gallery-header { text-align: center; margin-bottom: var(--spacing-lg); }
+.gallery-header h1, .gallery-header h2 { font-size: 3.5rem; margin-bottom: var(--spacing-sm); }
+.gallery-header > p { max-width: 720px; margin: 0 auto; color: var(--color-muted); line-height: 1.7; }
+.gallery-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: var(--spacing-sm); }
+.gallery-item { position: relative; overflow: hidden; aspect-ratio: 4/5; }
+.gallery-item img { width: 100%; height: 100%; object-fit: cover; object-position: var(--palette-x, 50%) var(--palette-y, 50%); transform: rotate(var(--palette-turn, 0deg)) scale(var(--palette-zoom, 1)); transform-origin: var(--palette-x, 50%) var(--palette-y, 50%); transition: filter .8s ease; }
+.gallery-item:hover img { filter: brightness(.97); }
+.gallery-caption { padding: var(--spacing-sm) 0; color: var(--color-muted); font-size: 0.875rem; }
+.gallery-empty { padding: var(--spacing-lg); border: 1px dashed var(--color-border); text-align: center; color: var(--color-muted); }
+
+@media (max-width: 768px) {
+  .gallery-grid { grid-template-columns: 1fr; }
+}
+</style>
+
+<section class="gallery-section container" id="{{ section.settings.section_id }}">
+  <div class="gallery-header">
+    <div class="eyebrow">{{ section.settings.eyebrow | escape }}</div>
+    {% if template.name == 'page' %}<h1>{{ section.settings.title | escape }}</h1>{% else %}<h2>{{ section.settings.title | escape }}</h2>{% endif %}
+    {% if section.settings.intro != blank %}<p>{{ section.settings.intro | escape }}</p>{% endif %}
+  </div>
+  
+  {% assign rendered_count = 0 %}
+  <div class="gallery-grid">
+    {% for block in section.blocks %}
+      {% if block.settings.image != blank or block.settings.reference_asset != blank and block.settings.reference_asset != 'none' %}
+        {% assign rendered_count = rendered_count | plus: 1 %}
+        {% assign gallery_alt = block.settings.image.alt | default: block.settings.caption | default: 'Seasonal entry display' %}
+        <div class="gallery-entry" {{ block.shopify_attributes }}>
+          <div class="gallery-item" style="--palette-x: {{ block.settings.position_x | default: 50 }}%; --palette-y: {{ block.settings.position_y | default: 50 }}%; --palette-zoom: {{ block.settings.zoom | default: 100 | divided_by: 100.0 }}; --palette-turn: {% if block.settings.flip_180 %}180deg{% else %}0deg{% endif %};">
+            {% if block.settings.image != blank %}
+              {{ block.settings.image | image_url: width: 1000 | image_tag: loading: 'lazy', alt: gallery_alt, widths: '400, 700, 1000', sizes: '(max-width: 768px) 100vw, 50vw' }}
+            {% else %}
+              {% assign reference_image = block.settings.reference_asset | append: '.webp' %}
+              <img src="{{ reference_image | asset_url }}" width="1000" height="1500" loading="lazy" alt="{{ gallery_alt | escape }}">
+            {% endif %}
+          </div>
+          {% if block.settings.caption != blank %}
+            <p class="gallery-caption">{{ block.settings.caption | escape }}</p>
+          {% endif %}
+        </div>
+      {% endif %}
+    {% endfor %}
+  </div>
+  {% if rendered_count == 0 %}<p class="gallery-empty">{{ section.settings.empty_message | escape }}</p>{% endif %}
+  {% if section.settings.outro != blank %}
+    <div class="gallery-outro rte">{{ section.settings.outro }}</div>
+  {% endif %}
+  {% if section.settings.button_label != blank %}
+    <p class="gallery-outro"><a class="text-link" href="{{ routes.root_url }}#compose">{{ section.settings.button_label | escape }} &rarr;</a></p>
+  {% endif %}
+</section>
+
+{% schema %}
+{
+  "name": "Editorial Gallery",
+  "settings": [
+    {
+      "type": "text",
+      "id": "section_id",
+      "label": "Section ID",
+      "default": "gallery"
+    },
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Eyebrow text",
+      "default": "The palettes / 01—03"
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Heading",
+      "default": "Color stories, gathered."
+    },
+    {
+      "type": "textarea",
+      "id": "intro",
+      "label": "Introduction",
+      "default": "Close-up photographs of the pumpkins and gourds in each color story. These are palette studies, not finished entry installations."
+    },
+    {
+      "type": "richtext",
+      "id": "outro",
+      "label": "Closing text",
+      "default": "<p>Explore these three color directions in the builder. Scale photographs are separate references for proportion, not renderings of a finished display.</p>"
+    },
+    {
+      "type": "text",
+      "id": "button_label",
+      "label": "Closing link label",
+      "default": "Explore the palettes"
+    },
+    {
+      "type": "checkbox",
+      "id": "filter_by_palette",
+      "label": "Legacy setting (gallery images are never filtered by palette)",
+      "default": false
+    },
+    {
+      "type": "text",
+      "id": "empty_message",
+      "label": "Empty gallery message",
+      "default": "The studio portfolio is being prepared. Please return soon."
+    }
+  ],
+  "blocks": [
+    {
+      "type": "image",
+      "name": "Image",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Image"
+        },
+        {
+          "type": "text",
+          "id": "caption",
+          "label": "Caption"
+        },
+        {
+          "type": "select",
+          "id": "palette",
+          "label": "Legacy palette note (not shown on the storefront)",
+          "options": [
+            { "value": "unassigned", "label": "Unassigned (not shown for a selected palette)" },
+            { "value": "Autumn in the Countryside", "label": "Autumn in the Countryside" },
+            { "value": "Classic Harvest", "label": "Classic Harvest" },
+            { "value": "Coastal Cowgirl", "label": "Coastal Cowgirl" }
+          ],
+          "default": "unassigned"
+        },
+        {
+          "type": "select",
+          "id": "reference_asset",
+          "label": "Built-in palette photo",
+          "options": [
+            { "value": "none", "label": "None" },
+            { "value": "palette-countryside", "label": "Autumn in the Countryside" },
+            { "value": "palette-classic-harvest", "label": "Classic Harvest" },
+            { "value": "palette-coastal-cowgirl", "label": "Coastal Cowgirl" }
+          ],
+          "default": "none",
+          "info": "Choose the photo matching this palette."
+        },
+        {
+          "type": "range",
+          "id": "position_x",
+          "label": "Horizontal image position",
+          "min": 0, "max": 100, "step": 5, "unit": "%", "default": 50
+        },
+        {
+          "type": "range",
+          "id": "position_y",
+          "label": "Vertical image position",
+          "min": 0, "max": 100, "step": 5, "unit": "%", "default": 50
+        },
+        {
+          "type": "range",
+          "id": "zoom",
+          "label": "Image zoom for repositioning",
+          "min": 100, "max": 160, "step": 10, "unit": "%", "default": 100
+        },
+        {
+          "type": "checkbox",
+          "id": "flip_180",
+          "label": "Rotate image 180°",
+          "default": false
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Editorial Gallery"
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,44 @@
+{
+  "sections": {
+    "gallery": {
+      "type": "gallery",
+      "settings": {
+        "eyebrow": "The palettes / 01—03",
+        "title": "Color stories, gathered.",
+        "intro": "Close-up photographs of the pumpkins and gourds in each color story. These are palette studies, not finished entry installations.",
+        "outro": "<p>Explore these three color directions in the builder. Scale photographs are separate references for proportion, not renderings of a finished display.</p>",
+        "button_label": "Explore the palettes",
+        "filter_by_palette": false,
+        "empty_message": "The studio portfolio is being prepared. Please return soon."
+      },
+      "blocks": {
+        "countryside": {
+          "type": "image",
+          "settings": {
+            "palette": "Autumn in the Countryside",
+            "reference_asset": "palette-countryside",
+            "caption": "Autumn in the Countryside / Palette photograph"
+          }
+        },
+        "classic-harvest": {
+          "type": "image",
+          "settings": {
+            "palette": "Classic Harvest",
+            "reference_asset": "palette-classic-harvest",
+            "caption": "Classic Harvest / Palette photograph"
+          }
+        },
+        "coastal-cowgirl": {
+          "type": "image",
+          "settings": {
+            "palette": "Coastal Cowgirl",
+            "reference_asset": "palette-coastal-cowgirl",
+            "caption": "Coastal Cowgirl / Palette photograph"
+          }
+        }
+      },
+      "block_order": ["countryside", "classic-harvest", "coastal-cowgirl"]
+    }
+  },
+  "order": ["gallery"]
+}

@@ -1,0 +1,91 @@
+<style>
+.image-with-text { padding: var(--spacing-xl) 0; }
+.image-with-text__inner { display: grid; grid-template-columns: 1fr 1fr; gap: var(--spacing-lg); align-items: center; }
+.image-with-text--reverse .image-with-text__inner { grid-template-columns: 1fr 1fr; direction: rtl; }
+.image-with-text--reverse .image-with-text__content { direction: ltr; }
+
+.image-with-text__image { border: 1px solid var(--color-border); box-shadow: var(--shadow-card); }
+.image-with-text__image img { width: 100%; height: auto; display: block; }
+.image-with-text__content h2 { font-size: 2.5rem; margin-bottom: var(--spacing-sm); }
+.image-with-text__content p { color: var(--color-muted); font-size: 0.875rem; margin-bottom: var(--spacing-md); line-height: 1.8; }
+
+@media (max-width: 900px) {
+  .image-with-text__inner, .image-with-text--reverse .image-with-text__inner { grid-template-columns: 1fr; direction: ltr; }
+}
+</style>
+
+<section class="image-with-text container {% if section.settings.layout == 'right' %}image-with-text--reverse{% endif %}">
+  <div class="image-with-text__inner">
+    <div class="image-with-text__image">
+      {% if section.settings.image != blank %}
+        {{ section.settings.image | image_url: width: 800 | image_tag: loading: 'lazy' }}
+      {% else %}
+        <img src="{{ 'package-large.webp' | asset_url }}" width="1800" height="1200" alt="Studio Image" loading="lazy">
+      {% endif %}
+    </div>
+    <div class="image-with-text__content">
+      <div class="eyebrow">{{ section.settings.eyebrow }}</div>
+      <h2>{{ section.settings.title }}</h2>
+      <div class="rte">{{ section.settings.text }}</div>
+      {% if section.settings.button_label != blank %}
+        <a href="{{ section.settings.button_link }}" class="button button--secondary">{{ section.settings.button_label }}</a>
+      {% endif %}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Image with Text",
+  "settings": [
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Image"
+    },
+    {
+      "type": "select",
+      "id": "layout",
+      "label": "Image alignment",
+      "options": [
+        { "value": "left", "label": "Left" },
+        { "value": "right", "label": "Right" }
+      ],
+      "default": "left"
+    },
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Eyebrow text",
+      "default": "The Studio"
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Heading",
+      "default": "Elevating the seasonal entry"
+    },
+    {
+      "type": "richtext",
+      "id": "text",
+      "label": "Text",
+      "default": "<p>We compose seasonal pumpkin displays to complement the scale and character of each entry.</p>"
+    },
+    {
+      "type": "text",
+      "id": "button_label",
+      "label": "Button Label"
+    },
+    {
+      "type": "url",
+      "id": "button_link",
+      "label": "Button Link"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Image with Text"
+    }
+  ]
+}
+{% endschema %}

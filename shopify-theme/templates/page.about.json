@@ -1,0 +1,16 @@
+{
+  "sections": {
+    "studio": {
+      "type": "studio-about",
+      "settings": {
+        "eyebrow": "The Studio",
+        "title": "Architectural styling for the season.",
+        "intro": "We look at the doorway as part of the whole home. A seasonal display should feel considered in its colors, proportions, and placement.",
+        "subheading": "Thoughtful from the threshold out.",
+        "body_one": "Height matters on a broad stair. A narrow stoop needs room to breathe. For a storefront, the display should welcome people without hiding the entrance. These are the practical details behind an intentional composition.",
+        "body_two": "Begin with the scale of your space, then choose a color story. Notes in your brief are the place to describe the architecture, an event date, or a particular detail you would like considered. Individual pumpkins and gourds may vary with the harvest."
+      }
+    }
+  },
+  "order": ["studio"]
+}

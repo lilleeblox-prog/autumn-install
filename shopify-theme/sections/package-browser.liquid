@@ -1,0 +1,757 @@
+<style>
+  #PackageBrowser-{{ section.id }} {
+    --pb-ink: var(--color-foreground, #302d28);
+    --pb-muted: var(--color-muted, #77736b);
+    --pb-line: var(--color-border, #d8d2c8);
+    --pb-accent: var(--color-accent, #9b4c39);
+    color: var(--pb-ink);
+    padding: clamp(48px, 8vw, 104px) 0;
+  }
+  #PackageBrowser-{{ section.id }} .package-browser__header {
+    max-width: 760px;
+    margin: 0 auto clamp(30px, 5vw, 56px);
+    text-align: center;
+  }
+  #PackageBrowser-{{ section.id }} .package-browser__header h1 {
+    margin: 12px 0 16px;
+    font-family: var(--font-serif);
+    font-size: clamp(2.5rem, 6vw, 5rem);
+    font-weight: 400;
+    line-height: 1.02;
+    letter-spacing: -.04em;
+  }
+  #PackageBrowser-{{ section.id }} .package-browser__header p {
+    max-width: 610px;
+    margin: 0 auto;
+    color: var(--pb-muted);
+    line-height: 1.7;
+  }
+  #PackageBrowser-{{ section.id }} .package-browser__step {
+    margin: 0 0 20px;
+    font-family: var(--font-mono);
+    font-size: .68rem;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+  }
+  #PackageBrowser-{{ section.id }} .palette-choices {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 12px;
+  }
+  #PackageBrowser-{{ section.id }} .palette-choice {
+    position: relative;
+    display: block;
+    min-height: 164px;
+    padding: 18px;
+    border: 1px solid var(--pb-line);
+    background: transparent;
+    cursor: pointer;
+    transition: border-color .2s ease, background-color .2s ease;
+  }
+  #PackageBrowser-{{ section.id }} .palette-choice:has(input:checked) {
+    border-color: var(--pb-accent);
+    background: color-mix(in srgb, var(--pb-accent) 5%, transparent);
+  }
+  #PackageBrowser-{{ section.id }} .palette-choice:focus-within,
+  #PackageBrowser-{{ section.id }} .package-card:focus-visible,
+  #PackageBrowser-{{ section.id }} .package-browser__continue:focus-visible {
+    outline: 2px solid var(--pb-accent);
+    outline-offset: 3px;
+  }
+  #PackageBrowser-{{ section.id }} .palette-choice input {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+  }
+  #PackageBrowser-{{ section.id }} .palette-choice__swatches {
+    display: flex;
+    gap: 6px;
+    margin-bottom: 22px;
+  }
+  #PackageBrowser-{{ section.id }} .palette-choice__swatch {
+    width: 23px;
+    height: 23px;
+    border: 1px solid rgba(48, 45, 40, .14);
+    border-radius: 50%;
+  }
+  #PackageBrowser-{{ section.id }} .palette-choice__name {
+    display: block;
+    margin-bottom: 6px;
+    font-family: var(--font-serif);
+    font-size: 1.2rem;
+  }
+  #PackageBrowser-{{ section.id }} .palette-choice__note {
+    display: block;
+    color: var(--pb-muted);
+    font-size: .77rem;
+    line-height: 1.45;
+  }
+  #PackageBrowser-{{ section.id }} .package-browser__study {
+    display: grid;
+    grid-template-columns: minmax(0, 1.3fr) minmax(240px, .7fr);
+    gap: clamp(24px, 5vw, 64px);
+    align-items: center;
+    margin: 32px 0 clamp(48px, 8vw, 88px);
+    padding: clamp(18px, 3vw, 34px);
+    border: 1px solid var(--pb-line);
+    background: rgba(255, 255, 255, .18);
+  }
+  #PackageBrowser-{{ section.id }} .palette-study__grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 10px;
+  }
+  #PackageBrowser-{{ section.id }} .palette-study__item {
+    aspect-ratio: 3 / 2;
+    overflow: hidden;
+  }
+  #PackageBrowser-{{ section.id }} .palette-study__item img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: var(--palette-x, 50%) var(--palette-y, 50%);
+    transform: rotate(var(--palette-turn, 0deg)) scale(var(--palette-zoom, 1));
+    transform-origin: var(--palette-x, 50%) var(--palette-y, 50%);
+  }
+  #PackageBrowser-{{ section.id }} .palette-study__empty {
+    display: grid;
+    min-height: 230px;
+    place-content: center;
+    padding: 24px;
+    border: 1px dashed var(--pb-line);
+    color: var(--pb-muted);
+    text-align: center;
+    line-height: 1.6;
+  }
+  #PackageBrowser-{{ section.id }} .palette-study__empty[hidden] { display: none; }
+  #PackageBrowser-{{ section.id }} .palette-study__caption {
+    margin: 10px 0 0;
+    color: var(--pb-muted);
+    font-size: .72rem;
+    line-height: 1.5;
+  }
+  #PackageBrowser-{{ section.id }} .composition-summary {
+    border-left: 1px solid var(--pb-line);
+    padding-left: clamp(20px, 4vw, 44px);
+  }
+  #PackageBrowser-{{ section.id }} .composition-summary h2 {
+    margin: 10px 0 24px;
+    font-family: var(--font-serif);
+    font-size: clamp(1.8rem, 3vw, 2.65rem);
+    font-weight: 400;
+    line-height: 1.08;
+  }
+  #PackageBrowser-{{ section.id }} .composition-summary__row {
+    display: flex;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 13px 0;
+    border-top: 1px solid var(--pb-line);
+    font-size: .86rem;
+  }
+  #PackageBrowser-{{ section.id }} .composition-summary__row span:first-child {
+    color: var(--pb-muted);
+  }
+  #PackageBrowser-{{ section.id }} .composition-summary__row strong {
+    text-align: right;
+    font-weight: 500;
+  }
+  #PackageBrowser-{{ section.id }} .composition-summary__disclosure {
+    margin: 18px 0 0;
+    color: var(--pb-muted);
+    font-size: .77rem;
+    line-height: 1.65;
+  }
+  #PackageBrowser-{{ section.id }} .package-browser__scale-heading {
+    margin: 0 0 22px;
+    font-family: var(--font-serif);
+    font-size: clamp(1.8rem, 3vw, 2.7rem);
+    font-weight: 400;
+  }
+  #PackageBrowser-{{ section.id }} .package-browser__grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 16px;
+  }
+  #PackageBrowser-{{ section.id }} .package-card-shell { min-width: 0; }
+  #PackageBrowser-{{ section.id }} .package-card {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    min-width: 0;
+    min-height: 210px;
+    padding: 0;
+    border: 1px solid var(--pb-line);
+    background: transparent;
+    color: inherit;
+    text-align: left;
+    cursor: pointer;
+    transition: border-color .2s ease, background-color .2s ease;
+  }
+  #PackageBrowser-{{ section.id }} .package-card:hover,
+  #PackageBrowser-{{ section.id }} .package-card[aria-pressed="true"] {
+    border-color: var(--pb-accent);
+  }
+  #PackageBrowser-{{ section.id }} .package-card[aria-pressed="true"] {
+    background: color-mix(in srgb, var(--pb-accent) 4%, transparent);
+  }
+  #PackageBrowser-{{ section.id }} .package-info { display: flex; flex: 1; flex-direction: column; padding: 24px; }
+  #PackageBrowser-{{ section.id }} .package-card__popular {
+    display: block;
+    margin-bottom: 13px;
+    color: var(--pb-accent);
+    font-family: var(--font-mono);
+    font-size: .65rem;
+    font-weight: 700;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+  }
+  #PackageBrowser-{{ section.id }} .package-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 12px;
+    margin-bottom: 8px;
+  }
+  #PackageBrowser-{{ section.id }} .package-title {
+    margin: 0;
+    font-family: var(--font-serif);
+    font-size: 1.45rem;
+    font-weight: 400;
+  }
+  #PackageBrowser-{{ section.id }} .package-price {
+    flex-shrink: 0;
+    font-family: var(--font-serif);
+    font-size: 1.15rem;
+  }
+  #PackageBrowser-{{ section.id }} .package-dimensions,
+  #PackageBrowser-{{ section.id }} .package-room,
+  #PackageBrowser-{{ section.id }} .package-status {
+    display: block;
+    font-size: .78rem;
+    line-height: 1.5;
+  }
+  #PackageBrowser-{{ section.id }} .package-dimensions { margin-bottom: 5px; }
+  #PackageBrowser-{{ section.id }} .package-room,
+  #PackageBrowser-{{ section.id }} .package-status { color: var(--pb-muted); }
+  #PackageBrowser-{{ section.id }} .package-status { margin-top: auto; padding-top: 18px; }
+  #PackageBrowser-{{ section.id }} .package-card__disclosure {
+    display: block;
+    margin-top: 18px;
+    color: var(--pb-accent);
+    font-size: .7rem;
+    font-weight: 700;
+    letter-spacing: .06em;
+  }
+  #PackageBrowser-{{ section.id }} .package-card-details {
+    padding: 20px 23px 24px;
+    border: 1px solid var(--pb-accent);
+    border-top: 0;
+    background: color-mix(in srgb, var(--pb-accent) 4%, transparent);
+  }
+  #PackageBrowser-{{ section.id }} .package-card-details[hidden] { display: none; }
+  #PackageBrowser-{{ section.id }} .package-card-details p { margin: 0 0 12px; color: var(--pb-accent); font-size: .7rem; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; }
+  #PackageBrowser-{{ section.id }} .package-card-details ul { margin: 0; padding-left: 18px; font-size: .82rem; line-height: 1.6; }
+  #PackageBrowser-{{ section.id }} .package-card-details li + li { margin-top: 6px; }
+  #PackageBrowser-{{ section.id }} .package-browser__action {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+    margin-top: 28px;
+    padding-top: 20px;
+    border-top: 1px solid var(--pb-line);
+  }
+  #PackageBrowser-{{ section.id }} .package-browser__action p {
+    max-width: 640px;
+    margin: 0;
+    color: var(--pb-muted);
+    font-size: .8rem;
+    line-height: 1.6;
+  }
+  #PackageBrowser-{{ section.id }} .package-browser__continue {
+    display: inline-block;
+    flex-shrink: 0;
+    padding: 14px 22px;
+    background: var(--pb-accent);
+    color: #fff;
+    font-size: .78rem;
+    letter-spacing: .04em;
+    text-align: center;
+    text-decoration: none;
+  }
+  #PackageBrowser-{{ section.id }} .package-browser__continue[aria-disabled="true"] {
+    background: #77736b;
+    cursor: not-allowed;
+    opacity: .68;
+  }
+  #PackageBrowser-{{ section.id }} .package-browser__transfer-error { margin: 20px 0 0; color: var(--pb-accent); font-size: .8rem; }
+  #PackageBrowser-{{ section.id }} .package-browser__transfer-error[hidden] { display: none; }
+  @media (max-width: 850px) {
+    #PackageBrowser-{{ section.id }} .palette-choices { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    #PackageBrowser-{{ section.id }} .package-browser__grid { grid-template-columns: 1fr; }
+    #PackageBrowser-{{ section.id }} .package-card { min-height: 0; }
+  }
+  @media (max-width: 600px) {
+    #PackageBrowser-{{ section.id }} .package-browser__study { grid-template-columns: 1fr; }
+    #PackageBrowser-{{ section.id }} .composition-summary { border-left: 0; border-top: 1px solid var(--pb-line); padding: 24px 0 0; }
+    #PackageBrowser-{{ section.id }} .package-browser__action { align-items: stretch; flex-direction: column; }
+    #PackageBrowser-{{ section.id }} .package-browser__continue { width: 100%; }
+  }
+  @media (max-width: 420px) {
+    #PackageBrowser-{{ section.id }} .palette-choice { min-height: 152px; padding: 13px; }
+    #PackageBrowser-{{ section.id }} .palette-study__grid { grid-template-columns: 1fr; }
+  }
+</style>
+
+{% assign palette_names = 'Autumn in the Countryside|Classic Harvest|Coastal Cowgirl' | split: '|' %}
+{% assign palette_descriptions = 'Burnt orange, soft white, and deep garden greens|Harvest orange, warm ivory, and golden gourds|Blush peach, ghost white, and sea-glass sage' | split: '|' %}
+{% assign palette_colors = '#bd7439,#f0e8da,#819080,#415a50|#d67621,#f0e6d3,#cfaf6b,#995623|#dba99a,#f0e9dc,#a5b9a6,#6e8b75' | split: '|' %}
+{% assign initial_palette = palette_names.first %}
+{% assign initial_palette_count = 0 %}
+{% assign initial_scale = 'Choose a scale below' %}
+{% assign package_count = 0 %}
+{% for block in section.blocks %}
+  {% if block.type == 'package' %}{% assign package_count = package_count | plus: 1 %}{% endif %}
+  {% if block.type == 'package' and block.settings.default_selected and initial_scale == 'Choose a scale below' %}
+    {% assign initial_scale = block.settings.scale_name | default: block.settings.subtitle_fallback %}
+  {% endif %}
+  {% if block.type == 'palette_image' and block.settings.palette == initial_palette and block.settings.image != blank or block.type == 'palette_image' and block.settings.palette == initial_palette and block.settings.reference_asset != blank and block.settings.reference_asset != 'none' %}
+    {% assign initial_palette_count = initial_palette_count | plus: 1 %}
+  {% endif %}
+{% endfor %}
+
+<div id="{{ section.settings.section_id | default: 'compose' | escape }}" style="scroll-margin-top: 100px"></div>
+<section class="package-browser container" id="PackageBrowser-{{ section.id }}" data-package-browser="{{ section.id }}">
+  <div class="package-browser__header">
+    <div class="eyebrow">{{ section.settings.eyebrow | escape }}</div>
+    <h1>{{ section.settings.title | escape }}</h1>
+    <p>{{ section.settings.text | escape }}</p>
+  </div>
+
+  <div class="package-browser__step">{{ section.settings.palette_heading | escape }}</div>
+  <fieldset style="border:0;margin:0;padding:0">
+    <legend class="visually-hidden">Choose a color palette</legend>
+    <div class="palette-choices">
+      {% for palette in palette_names %}
+        {% assign palette_index = forloop.index0 %}
+        {% assign swatches = palette_colors[palette_index] | split: ',' %}
+        <label class="palette-choice">
+          <input type="radio" name="package-palette-{{ section.id }}" value="{{ palette | escape }}" {% if forloop.first %}checked{% endif %}>
+          <span class="palette-choice__swatches" aria-hidden="true">
+            {% for swatch in swatches %}<span class="palette-choice__swatch" style="background-color: {{ swatch }}"></span>{% endfor %}
+          </span>
+          <span class="palette-choice__name">{{ palette }}</span>
+          <span class="palette-choice__note">{{ palette_descriptions[palette_index] }}</span>
+        </label>
+      {% endfor %}
+    </div>
+  </fieldset>
+
+  <div class="package-browser__study">
+    <div class="palette-study" data-palette-browser-gallery aria-live="polite">
+      <div class="palette-study__grid">
+        {% for block in section.blocks %}
+          {% if block.type == 'palette_image' and block.settings.image != blank or block.type == 'palette_image' and block.settings.reference_asset != blank and block.settings.reference_asset != 'none' %}
+            {% assign palette_study_alt = block.settings.image.alt | default: block.settings.palette %}
+            <div class="palette-study__item{% unless block.settings.palette == initial_palette %} hidden{% endunless %}" data-palette="{{ block.settings.palette | escape }}" style="--palette-x: {{ block.settings.position_x | default: 50 }}%; --palette-y: {{ block.settings.position_y | default: 50 }}%; --palette-zoom: {{ block.settings.zoom | default: 100 | divided_by: 100.0 }}; --palette-turn: {% if block.settings.flip_180 %}180deg{% else %}0deg{% endif %};" {{ block.shopify_attributes }}>
+              {% if block.settings.image != blank %}
+                {{ block.settings.image | image_url: width: 1000 | image_tag: loading: 'lazy', alt: palette_study_alt, widths: '400, 700, 1000' }}
+              {% else %}
+                {% assign reference_image = block.settings.reference_asset | append: '.webp' %}
+                 <img src="{{ reference_image | asset_url }}" width="1000" height="667" loading="lazy" alt="{{ block.settings.palette | escape }} palette photograph">
+              {% endif %}
+            </div>
+          {% endif %}
+        {% endfor %}
+      </div>
+      <p class="palette-study__empty" {% if initial_palette_count > 0 %}hidden{% endif %}>A matching study for this palette is being prepared. For now, the swatches above are your color reference.</p>
+      <p class="palette-study__caption">Palette photographs show color direction, not a finished installation.</p>
+    </div>
+    <aside class="composition-summary" aria-label="Live composition summary" aria-live="polite">
+      <div class="eyebrow">Your composition / Live study</div>
+      <h2>{{ section.settings.summary_heading | escape }}</h2>
+      <div class="composition-summary__row"><span>Palette</span><strong data-selected-palette>{{ palette_names.first }}</strong></div>
+      <div class="composition-summary__row"><span>Color story</span><strong data-selected-palette-description>{{ palette_descriptions.first }}</strong></div>
+      <div class="composition-summary__row"><span>Scale</span><strong data-selected-scale>{{ initial_scale | escape }}</strong></div>
+      <p class="composition-summary__disclosure">{{ section.settings.summary_disclosure | escape }}</p>
+    </aside>
+  </div>
+
+  <div class="package-browser__step">{{ section.settings.scale_eyebrow | escape }}</div>
+  <h2 class="package-browser__scale-heading">{{ section.settings.scale_heading | escape }}</h2>
+  {% if package_count > 0 %}
+    <div class="package-browser__grid" role="group" aria-label="Choose a display scale">
+      {% for block in section.blocks %}
+        {% if block.type == 'package' %}
+          {% assign prod = block.settings.product %}
+          {% assign palette_option_index = blank %}
+          {% if prod != blank %}
+            {% for option_name in prod.options %}
+              {% assign option_name_downcase = option_name | downcase %}
+              {% if option_name_downcase contains 'palette' %}{% assign palette_option_index = forloop.index0 %}{% endif %}
+            {% endfor %}
+          {% endif %}
+          {% assign purchasable = false %}
+          {% if prod != blank and prod.published_at != blank and prod.available and prod.price > 0 and palette_option_index != blank %}
+            {% assign purchasable = true %}
+          {% endif %}
+          <div class="package-card-shell">
+          <button type="button" class="package-card" data-package-card data-scale-name="{{ block.settings.scale_name | default: block.settings.subtitle_fallback | escape }}" data-default-scale="{% if block.settings.default_selected %}true{% else %}false{% endif %}" {% if purchasable %}data-product-url="{{ prod.url | escape }}" data-palette-option-index="{{ palette_option_index }}" data-palette-variants="{{ prod.variants | json | escape }}"{% endif %} aria-pressed="{% if block.settings.default_selected %}true{% else %}false{% endif %}" aria-expanded="false" aria-controls="PackageContents-{{ section.id }}-{{ block.id }}" {{ block.shopify_attributes }}>
+            <span class="package-info">
+              {% if block.settings.most_popular %}<span class="package-card__popular">Most popular</span>{% endif %}
+              <span class="package-head">
+                <span class="package-title">{% if purchasable %}{{ prod.title | escape }}{% else %}{{ block.settings.scale_name | escape }}{% endif %}</span>
+                {% if purchasable %}<span class="package-price">{{ prod.price | money }}</span>{% endif %}
+              </span>
+              <span class="package-dimensions">{% if prod != blank and prod.metafields.custom.display_size.value != blank %}{{ prod.metafields.custom.display_size.value | escape }}{% else %}{{ block.settings.subtitle_fallback | escape }}{% endif %}</span>
+              <span class="package-room">{% if prod != blank and prod.metafields.custom.recommended_for.value != blank %}{{ prod.metafields.custom.recommended_for.value | escape }}{% else %}{{ block.settings.room_fallback | escape }}{% endif %}</span>
+              {% if prod == blank %}
+                <span class="package-status">This scale is being prepared.</span>
+              {% elsif prod.published_at == blank or prod.available == false %}
+                <span class="package-status">This scale is not available to order yet.</span>
+              {% elsif prod.price <= 0 %}
+                <span class="package-status">Pricing for this scale is being finalized.</span>
+              {% else %}
+                <span class="package-status" data-palette-availability>Select this scale to continue designing.</span>
+              {% endif %}
+               <span class="package-card__disclosure" data-package-disclosure>See what’s included ↓</span>
+            </span>
+          </button>
+           <div id="PackageContents-{{ section.id }}-{{ block.id }}" class="package-card-details" data-package-details hidden>
+             <p>Included in {{ block.settings.scale_name | escape }}</p>
+             {% assign included_items = block.settings.included_items | newline_to_br | split: '<br />' %}
+             <ul>
+               {% for item in included_items %}
+                 {% assign included_item = item | strip %}
+                 {% if included_item != blank %}<li>{{ included_item | escape }}</li>{% endif %}
+               {% endfor %}
+             </ul>
+           </div>
+          </div>
+        {% endif %}
+      {% endfor %}
+    </div>
+  {% else %}
+    <p class="package-study__empty">Scale options are being prepared. Please check back soon.</p>
+  {% endif %}
+
+  <p class="package-browser__transfer-error" role="alert" data-consultation-transfer-error hidden>Your choices could not be carried to the consultation form in this tab. Please enter them in the form yourself.</p>
+  <div class="package-browser__action">
+    <p>{{ section.settings.continue_disclosure | escape }}</p>
+    <a class="package-browser__continue" data-package-continue aria-disabled="true" tabindex="-1">{{ section.settings.continue_label | escape }}</a>
+  </div>
+</section>
+
+<script>
+  (() => {
+    const root = document.querySelector('[data-package-browser="{{ section.id }}"]');
+    if (!root || root.dataset.initialized === 'true') return;
+    root.dataset.initialized = 'true';
+    const paletteNames = {{ palette_names | json }};
+    const paletteDescriptions = {{ palette_descriptions | json }};
+    const paletteRadios = root.querySelectorAll('input[name="package-palette-{{ section.id }}"]');
+    const paletteImages = root.querySelectorAll('[data-palette-browser-gallery] [data-palette]');
+    const emptyStudy = root.querySelector('.palette-study__empty');
+    const selectedPalette = root.querySelector('[data-selected-palette]');
+    const selectedDescription = root.querySelector('[data-selected-palette-description]');
+    const selectedScale = root.querySelector('[data-selected-scale]');
+    const cards = root.querySelectorAll('[data-package-card]');
+    const continueLink = root.querySelector('[data-package-continue]');
+    let activeScale = null;
+
+    const rememberSelection = () => {
+      const palette = root.querySelector('input[name="package-palette-{{ section.id }}"]:checked')?.value;
+      if (!activeScale || !palette) return;
+      try {
+        sessionStorage.setItem('palette-install-consultation-v1', JSON.stringify({
+          savedAt: Date.now(),
+          choices: { display: activeScale.dataset.scaleName, palette }
+        }));
+        document.dispatchEvent(new Event('palette-install:consultation-updated'));
+        const notice = root.querySelector('[data-consultation-transfer-error]');
+        if (notice) notice.hidden = true;
+      } catch {
+        const notice = root.querySelector('[data-consultation-transfer-error]');
+        if (notice) notice.hidden = false;
+      }
+    };
+
+    const hasAvailablePalette = (card, palette) => {
+      if (!card?.dataset.productUrl || !palette) return false;
+      const index = Number(card.dataset.paletteOptionIndex);
+      if (!Number.isInteger(index) || index < 0) return false;
+      try {
+        const variants = JSON.parse(card.dataset.paletteVariants);
+        return variants.some((variant) =>
+          variant.options[index] === palette && variant.available && Number(variant.price) > 0
+        );
+      } catch {
+        return false;
+      }
+    };
+    const updatePalette = (palette) => {
+      let imageCount = 0;
+      paletteImages.forEach((image) => {
+        const match = image.dataset.palette === palette;
+        image.classList.toggle('hidden', !match);
+        if (match) imageCount += 1;
+      });
+      if (emptyStudy) emptyStudy.hidden = imageCount > 0;
+      const paletteIndex = paletteNames.indexOf(palette);
+      if (selectedPalette) selectedPalette.textContent = palette;
+      if (selectedDescription && paletteIndex >= 0) selectedDescription.textContent = paletteDescriptions[paletteIndex];
+      cards.forEach((card) => {
+        const status = card.querySelector('[data-palette-availability]');
+        if (status) status.textContent = hasAvailablePalette(card, palette)
+          ? 'Select this scale to continue designing.'
+          : 'This palette is not available in this scale yet.';
+      });
+      updateContinue();
+    };
+
+    const updateContinue = () => {
+      const palette = root.querySelector('input[name="package-palette-{{ section.id }}"]:checked')?.value;
+      const productUrl = activeScale?.dataset.productUrl;
+      if (!productUrl || !palette || !hasAvailablePalette(activeScale, palette)) {
+        continueLink.removeAttribute('href');
+        continueLink.setAttribute('aria-disabled', 'true');
+        continueLink.setAttribute('tabindex', '-1');
+        if (selectedScale && !activeScale) selectedScale.textContent = 'Choose a scale below';
+        return;
+      }
+      const url = new URL(productUrl, window.location.origin);
+      url.searchParams.set('palette', palette);
+      continueLink.href = url.pathname + url.search + url.hash;
+      continueLink.setAttribute('aria-disabled', 'false');
+      continueLink.removeAttribute('tabindex');
+    };
+
+    paletteRadios.forEach((radio) => radio.addEventListener('change', () => {
+      updatePalette(radio.value);
+      rememberSelection();
+    }));
+    const selectScale = (card, toggleDetails = false) => {
+      if (toggleDetails) {
+        const willOpen = card.getAttribute('aria-expanded') !== 'true';
+        cards.forEach((item) => {
+          const opened = item === card && willOpen;
+          item.setAttribute('aria-expanded', opened ? 'true' : 'false');
+          const details = item.parentElement?.querySelector('[data-package-details]');
+          if (details) details.hidden = !opened;
+          const disclosure = item.querySelector('[data-package-disclosure]');
+          if (disclosure) disclosure.textContent = opened ? 'Hide what’s included ↑' : 'See what’s included ↓';
+        });
+      }
+      cards.forEach((item) => item.setAttribute('aria-pressed', item === card ? 'true' : 'false'));
+      activeScale = card;
+      if (selectedScale) selectedScale.textContent = card.dataset.scaleName;
+      updateContinue();
+    };
+    cards.forEach((card) => card.addEventListener('click', () => {
+      selectScale(card, true);
+      rememberSelection();
+    }));
+    const defaultCard = root.querySelector('[data-package-card][data-default-scale="true"]') || cards[0];
+    if (defaultCard) selectScale(defaultCard);
+    const initialPalette = new URLSearchParams(window.location.search).get('palette');
+    const initialRadio = Array.from(paletteRadios).find((radio) => radio.value === initialPalette) || paletteRadios[0];
+    if (initialRadio) {
+      initialRadio.checked = true;
+      updatePalette(initialRadio.value);
+    }
+  })();
+</script>
+
+{% schema %}
+{
+  "name": "Package Browser",
+  "settings": [
+    {
+      "type": "text",
+      "id": "section_id",
+      "label": "Section ID",
+      "default": "compose"
+    },
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Eyebrow text",
+      "default": "Palette Install / Seasonal composition"
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Heading",
+      "default": "An entrance to remember."
+    },
+    {
+      "type": "textarea",
+      "id": "text",
+      "label": "Introduction",
+      "default": "Compose a seasonal welcome with the care you would give any other room. Begin with a considered color story, then find a scale suited to your architecture."
+    },
+    {
+      "type": "text",
+      "id": "palette_heading",
+      "label": "Palette step heading",
+      "default": "01 / The palette"
+    },
+    {
+      "type": "text",
+      "id": "summary_heading",
+      "label": "Composition summary heading",
+      "default": "The view from here."
+    },
+    {
+      "type": "textarea",
+      "id": "summary_disclosure",
+      "label": "Composition disclosure",
+      "default": "Your choices appear here as you make them. Palette photographs show color direction, not a rendering of the finished display."
+    },
+    {
+      "type": "text",
+      "id": "scale_eyebrow",
+      "label": "Scale step heading",
+      "default": "02 / The proportion"
+    },
+    {
+      "type": "text",
+      "id": "scale_heading",
+      "label": "Scale heading",
+      "default": "Find your scale."
+    },
+    {
+      "type": "text",
+      "id": "continue_label",
+      "label": "Continue button label",
+      "default": "Continue designing"
+    },
+    {
+      "type": "textarea",
+      "id": "continue_disclosure",
+      "label": "Continue action disclosure",
+      "default": "Next, choose the finishing details, delivery, and your preferred week. You can approve and review the full composition before checkout."
+    }
+  ],
+  "blocks": [
+    {
+      "type": "package",
+      "name": "Package Product",
+      "settings": [
+        {
+          "type": "product",
+          "id": "product",
+          "label": "Product"
+        },
+        {
+          "type": "text",
+          "id": "scale_name",
+          "label": "Scale name when product is unavailable",
+          "default": "Display scale"
+        },
+        {
+          "type": "textarea",
+          "id": "included_items",
+          "label": "Included items (one per line)"
+        },
+        {
+          "type": "checkbox",
+          "id": "default_selected",
+          "label": "Preselect this scale",
+          "default": false,
+          "info": "Select this on only one scale block. The Porch is selected in the supplied theme."
+        },
+        {
+          "type": "checkbox",
+          "id": "most_popular",
+          "label": "Show Most popular badge",
+          "default": false
+        },
+        {
+          "type": "text",
+          "id": "subtitle_fallback",
+          "label": "Dimensions or subtitle fallback",
+          "default": "Package layout"
+        },
+        {
+          "type": "text",
+          "id": "room_fallback",
+          "label": "Recommended setting fallback",
+          "default": "A considered seasonal welcome for your entry"
+        }
+      ]
+    },
+    {
+      "type": "palette_image",
+      "name": "Palette study image",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Image",
+          "info": "Upload a matching photo to replace the built-in study. Adjust its crop below."
+        },
+        {
+          "type": "select",
+          "id": "reference_asset",
+          "label": "Verified built-in palette study",
+          "options": [
+            { "value": "none", "label": "None" },
+            { "value": "palette-countryside-landscape", "label": "Autumn in the Countryside" },
+            { "value": "palette-classic-harvest-landscape", "label": "Classic Harvest" },
+            { "value": "palette-coastal-cowgirl-landscape", "label": "Coastal Cowgirl" }
+          ],
+          "default": "none",
+          "info": "Choose the photo matching this block's palette."
+        },
+        {
+          "type": "select",
+          "id": "palette",
+          "label": "Palette",
+          "options": [
+            { "value": "Autumn in the Countryside", "label": "Autumn in the Countryside" },
+            { "value": "Classic Harvest", "label": "Classic Harvest" },
+            { "value": "Coastal Cowgirl", "label": "Coastal Cowgirl" }
+          ],
+          "default": "Autumn in the Countryside"
+        },
+        {
+          "type": "range",
+          "id": "position_x",
+          "label": "Horizontal image position",
+          "min": 0, "max": 100, "step": 5, "unit": "%", "default": 50
+        },
+        {
+          "type": "range",
+          "id": "position_y",
+          "label": "Vertical image position",
+          "min": 0, "max": 100, "step": 5, "unit": "%", "default": 50
+        },
+        {
+          "type": "range",
+          "id": "zoom",
+          "label": "Image zoom for repositioning",
+          "min": 100, "max": 160, "step": 10, "unit": "%", "default": 100
+        },
+        {
+          "type": "checkbox",
+          "id": "flip_180",
+          "label": "Rotate image 180°",
+          "default": false
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Package Browser"
+    }
+  ]
+}
+{% endschema %}

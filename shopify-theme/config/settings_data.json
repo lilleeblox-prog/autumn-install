@@ -1,0 +1,14 @@
+{
+  "current": {
+    "color_background": "#f7f3ed",
+    "color_foreground": "#312e29",
+    "color_accent": "#8f4f3d"
+  },
+  "presets": {
+    "Default": {
+      "color_background": "#f7f3ed",
+      "color_foreground": "#312e29",
+      "color_accent": "#8f4f3d"
+    }
+  }
+}
