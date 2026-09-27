@@ -432,15 +432,16 @@ const PENDING_ARTWORK_KEY = 'palette-pending-artwork-composition';
 const MAX_ARTWORK_SIZE = 20 * 1024 * 1024;
 
 function productFormError(form, message) {
-  const container = form.querySelector('#product-form-error');
-  if (!container) return;
-  container.textContent = message;
-  container.classList.toggle('hidden', !message);
+  form.querySelectorAll('#product-form-error, [data-review-error]').forEach(container => {
+    container.textContent = message;
+    container.classList.toggle('hidden', !message);
+  });
 }
 
 function focusFirstInvalidComposerField(form) {
   const root = form.closest('[data-package-browser]');
   if (root) {
+    root.dataset.reviewStage = 'build';
     root.dataset.mobilePane = 'build';
     root.querySelectorAll('[data-pane-tab]').forEach(tab => {
       const active = tab.dataset.paneTab === 'build';
