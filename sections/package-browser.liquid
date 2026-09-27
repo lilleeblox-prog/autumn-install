@@ -877,12 +877,18 @@
 {% assign initial_palette = blank %}
 {% assign initial_palette_count = 0 %}
 {% assign initial_scale = 'Choose a scale below' %}
+{% assign initial_base_estimate_cents = 0 %}
 {% assign package_count = 0 %}
 {% assign monogram_product = section.settings.monogram_product %}
 {% for block in section.blocks %}
   {% if block.type == 'package' %}{% assign package_count = package_count | plus: 1 %}{% endif %}
   {% if block.type == 'package' and block.settings.default_selected and initial_scale == 'Choose a scale below' %}
     {% assign initial_scale = block.settings.scale_name | default: block.settings.subtitle_fallback %}
+    {% assign initial_base_estimate_cents = block.settings.draft_estimate_cents | default: 0 %}
+    {% assign initial_product = block.settings.product %}
+    {% if initial_product != blank and initial_product.price_min > 0 and initial_product.price_min == initial_product.price_max %}
+      {% assign initial_base_estimate_cents = initial_product.price_min %}
+    {% endif %}
   {% endif %}
   {% if block.type == 'palette_image' and block.settings.palette == initial_palette and block.settings.image != blank or block.type == 'palette_image' and block.settings.palette == initial_palette and block.settings.reference_asset != blank and block.settings.reference_asset != 'none' %}
     {% assign initial_palette_count = initial_palette_count | plus: 1 %}
@@ -895,7 +901,7 @@
     <button type="button" aria-pressed="true" data-pane-tab="build">Create your look</button>
     <button type="button" aria-pressed="false" data-pane-tab="preview">See your design</button>
   </nav>
-  <form class="palette-composer__form" method="post" action="{{ routes.cart_add_url }}" enctype="multipart/form-data" data-product-form data-product-title="{{ section.settings.title | escape }}">
+  <form class="palette-composer__form" method="post" action="{{ routes.cart_add_url }}" enctype="multipart/form-data" data-product-form data-product-title="{{ section.settings.title | escape }}" data-selected-scale-name="{{ initial_scale | escape }}" data-base-estimate-cents="{{ initial_base_estimate_cents }}">
     <input type="hidden" name="form_type" value="product">
     <input type="hidden" name="quantity" value="1">
     <input type="hidden" name="properties[_Composition ID]" value="" data-composition-id-input>
@@ -942,11 +948,11 @@
                 {% when 'large' %}{% assign delivery = section.settings.delivery_large_product %}{% assign removal = section.settings.removal_large_product %}{% assign expected_service_fee = 8500 %}
               {% endcase %}
               <div class="package-card-shell" {{ block.shopify_attributes }}>
-                <button type="button" class="package-card" data-composer-scale data-scale-name="{{ block.settings.scale_name | escape }}" data-display-size="{{ display_size }}" data-expected-service-fee="{{ expected_service_fee }}" data-product-id="{% if prod != blank %}{{ prod.id }}{% endif %}" data-product-title="{% if prod != blank %}{{ prod.title | escape }}{% else %}{{ block.settings.scale_name | escape }}{% endif %}" data-product-available="{% if prod != blank and prod.available and prod.published_at != blank %}true{% else %}false{% endif %}" data-palette-index="{{ option_index }}" data-variants="{% if prod != blank %}{{ prod.variants | json | escape }}{% endif %}" data-delivery-id="{% if delivery != blank and delivery.available and delivery.published_at != blank and delivery.selected_or_first_available_variant.price > 0 %}{{ delivery.selected_or_first_available_variant.id }}{% endif %}" data-delivery-price="{{ delivery.selected_or_first_available_variant.price | default: 0 }}" data-removal-id="{% if removal != blank and removal.available and removal.published_at != blank and removal.selected_or_first_available_variant.price > 0 %}{{ removal.selected_or_first_available_variant.id }}{% endif %}" data-removal-price="{{ removal.selected_or_first_available_variant.price | default: 0 }}" aria-pressed="{% if block.settings.default_selected %}true{% else %}false{% endif %}" aria-expanded="false" aria-controls="package-includes-{{ block.id }}">
+                <button type="button" class="package-card" data-composer-scale data-scale-name="{{ block.settings.scale_name | escape }}" data-display-size="{{ display_size }}" data-expected-service-fee="{{ expected_service_fee }}" data-base-estimate-cents="{% if prod != blank and prod.price_min > 0 and prod.price_min == prod.price_max %}{{ prod.price_min }}{% else %}{{ block.settings.draft_estimate_cents | default: 0 }}{% endif %}" data-product-id="{% if prod != blank %}{{ prod.id }}{% endif %}" data-product-title="{% if prod != blank %}{{ prod.title | escape }}{% else %}{{ block.settings.scale_name | escape }}{% endif %}" data-product-available="{% if prod != blank and prod.available and prod.published_at != blank %}true{% else %}false{% endif %}" data-palette-index="{{ option_index }}" data-variants="{% if prod != blank %}{{ prod.variants | json | escape }}{% endif %}" data-delivery-id="{% if delivery != blank and delivery.available and delivery.published_at != blank and delivery.selected_or_first_available_variant.price > 0 %}{{ delivery.selected_or_first_available_variant.id }}{% endif %}" data-delivery-price="{{ delivery.selected_or_first_available_variant.price | default: 0 }}" data-removal-id="{% if removal != blank and removal.available and removal.published_at != blank and removal.selected_or_first_available_variant.price > 0 %}{{ removal.selected_or_first_available_variant.id }}{% endif %}" data-removal-price="{{ removal.selected_or_first_available_variant.price | default: 0 }}" aria-pressed="{% if block.settings.default_selected %}true{% else %}false{% endif %}" aria-expanded="false" aria-controls="package-includes-{{ block.id }}">
                   {% if block.settings.most_popular %}<small class="package-card__popular">Most popular</small>{% endif %}
                   <span class="package-title">{{ block.settings.scale_name | escape }}</span>
                   <span class="package-room">{{ block.settings.room_fallback | default: block.settings.subtitle_fallback | escape }}</span>
-                  <span class="package-card__hint"><span data-scale-disclosure-label>See what’s included</span><span class="package-card__hint-arrow" aria-hidden="true">›</span></span>
+                  <span class="package-card__hint"><span class="visually-hidden" data-scale-disclosure-label>Show package details</span><span class="package-card__hint-arrow" aria-hidden="true">›</span></span>
                 </button>
                 <div class="package-card-details" id="package-includes-{{ block.id }}" aria-labelledby="package-includes-title-{{ block.id }}" hidden>
                   <p id="package-includes-title-{{ block.id }}">Included in {{ block.settings.scale_name | escape }}</p>
@@ -1144,7 +1150,7 @@
     };
     const chosenVariant = (card, palette) => {
       const index = Number(card?.dataset.paletteIndex);
-      if (!card || index < 0 || !palette) return null;
+      if (!card || card.dataset.productAvailable !== 'true' || index < 0 || !palette) return null;
       try {
         return JSON.parse(card.dataset.variants || '[]').find(variant =>
           variant.options[index] === palette && variant.available && Number(variant.price) > 0
@@ -1158,6 +1164,9 @@
       const variant = chosenVariant(card, palette);
       if (price) {
         if (variant) price.textContent = formatMoney(variant.price, window.shopMoneyFormat);
+        else if (Number(card.dataset.baseEstimateCents) > 0) {
+          price.textContent = `Draft estimate · ${formatMoney(card.dataset.baseEstimateCents, window.shopMoneyFormat)}`;
+        }
         else if (!card.dataset.productId || card.dataset.productAvailable !== 'true' || Number(card.dataset.paletteIndex) < 0) {
           price.textContent = 'Pricing unavailable';
         } else if (!palette) {
@@ -1226,6 +1235,8 @@
         variantSelect.value = String(variant.id);
       }
       form.dataset.productTitle = card.dataset.productTitle || card.dataset.scaleName || '';
+      form.dataset.selectedScaleName = card.dataset.scaleName || '';
+      form.dataset.baseEstimateCents = card.dataset.baseEstimateCents || '0';
       services.dataset.displaySize = card.dataset.displaySize || '';
       services.dataset.expectedServiceFee = card.dataset.expectedServiceFee || '0';
       services.dataset.deliveryId = card.dataset.deliveryId || '';
@@ -1290,7 +1301,7 @@
         const details = item.closest('.package-card-shell')?.querySelector('.package-card-details');
         if (details) details.hidden = !expanded;
         const label = item.querySelector('[data-scale-disclosure-label]');
-        if (label) label.textContent = expanded ? 'Hide what’s included' : 'See what’s included';
+        if (label) label.textContent = expanded ? 'Hide package details' : 'Show package details';
       });
       selectScale(card);
     }));
@@ -1428,6 +1439,13 @@
           "id": "scale_name",
           "label": "Scale name when product is unavailable",
           "default": "Display scale"
+        },
+        {
+          "type": "number",
+          "id": "draft_estimate_cents",
+          "label": "Draft display estimate (cents)",
+          "default": 0,
+          "info": "Reference estimate from the draft Shopify catalog when the product is unavailable to the theme. This never enables checkout; update it if catalog prices change."
         },
         {
           "type": "select",

@@ -76,6 +76,7 @@
             "product": "small-pumpkin-display",
             "service_fee_tier": "small",
             "scale_name": "The Stoop",
+            "draft_estimate_cents": 42500,
             "included_items": "6 Large Pumpkins\n6 Medium Pumpkins\n6 White Pumpkins\nAssortment of Specialty Pumpkins\nAssortment of Pie Pumpkins",
             "subtitle_fallback": "Compact entry",
             "room_fallback": "Perfect for a single door or narrow stoop"
@@ -87,6 +88,7 @@
             "product": "medium-pumpkin-display",
             "service_fee_tier": "medium",
             "scale_name": "The Porch",
+            "draft_estimate_cents": 82500,
             "included_items": "8 Large Pumpkins\n8 Medium Pumpkins\n8 White Pumpkins\nAssortment of Specialty Pumpkins\nAssortment of Pie Pumpkins\n2 Hay Bales",
             "default_selected": true,
             "most_popular": true,
@@ -100,6 +102,7 @@
             "product": "large-pumpkin-display",
             "service_fee_tier": "large",
             "scale_name": "The Estate",
+            "draft_estimate_cents": 125000,
             "included_items": "2 Grand Prize Pumpkins\n10 Large Pumpkins\n8 Medium Pumpkins\n8 White Pumpkins\n16 Specialty Pumpkins\n2 Hay Bales\nassortment of minis\nOrnamental Gourds\nAssortment of Pie Pumpkins",
             "subtitle_fallback": "Expansive entry",
             "room_fallback": "Expansive installation for wide steps or commercial facades"

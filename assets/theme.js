@@ -314,11 +314,11 @@ function setupCompositionBrief(form) {
   update();
 }
 
-function calculateCompositionEstimate(baseCents, additions) {
+function calculateCompositionEstimate(baseCents, additions, baseLabel = 'Display · base') {
   const validPrice = value => Number.isSafeInteger(Number(value)) && Number(value) > 0;
   let knownCents = validPrice(baseCents) ? Number(baseCents) : 0;
   const pending = validPrice(baseCents) ? [] : ['Base display'];
-  const rows = [{ label: 'Display · base', priceCents: validPrice(baseCents) ? Number(baseCents) : null }];
+  const rows = [{ label: baseLabel, priceCents: validPrice(baseCents) ? Number(baseCents) : null }];
   additions.forEach(({ label, priceCents, quantity = 1, included = false }) => {
     if (included) {
       rows.push({ label, priceCents: 0, included: true });
@@ -337,6 +337,14 @@ function calculateCompositionEstimate(baseCents, additions) {
   return { knownCents, pending, rows };
 }
 
+function resolveBaseEstimateCents(variantPrice, draftEstimateCents, isComposer) {
+  if (Number.isSafeInteger(Number(variantPrice)) && Number(variantPrice) > 0) return Number(variantPrice);
+  if (isComposer && Number.isSafeInteger(Number(draftEstimateCents)) && Number(draftEstimateCents) > 0) {
+    return Number(draftEstimateCents);
+  }
+  return null;
+}
+
 function setupProductEstimate(form) {
   if (form.dataset.estimateBound === 'true') return;
   form.dataset.estimateBound = 'true';
@@ -346,6 +354,9 @@ function setupProductEstimate(form) {
   const moneyFormat = window.shopMoneyFormat || '${{amount}}';
   const update = () => {
     const selectedVariant = form.querySelector('select[name="id"]')?.selectedOptions?.[0];
+    const selectedScaleName = form.dataset.selectedScaleName;
+    const isComposer = !!form.closest('[data-package-browser]');
+    const basePrice = resolveBaseEstimateCents(selectedVariant?.dataset.price, form.dataset.baseEstimateCents, isComposer);
     const additions = [];
     if (form.querySelector('[data-service]:checked')) {
       const label = form.querySelector('[data-service]:checked')?.value === 'Custom installation'
@@ -375,7 +386,7 @@ function setupProductEstimate(form) {
     if (form.querySelector('[data-custom-request]:checked')) {
       additions.push({ label: 'Further customization', priceCents: 0 });
     }
-    const result = calculateCompositionEstimate(selectedVariant?.dataset.price, additions);
+    const result = calculateCompositionEstimate(basePrice, additions, selectedScaleName ? `${selectedScaleName} · base` : 'Display · base');
     const rows = estimate.querySelector('[data-estimate-rows]');
     rows.replaceChildren(...result.rows.map(row => {
       const line = document.createElement('div');
@@ -387,10 +398,11 @@ function setupProductEstimate(form) {
       line.append(title, amount);
       return line;
     }));
-    estimate.querySelector('[data-estimate-total]').textContent = formatMoney(result.knownCents, moneyFormat);
+    estimate.querySelector('[data-estimate-total]').textContent = result.pending.includes('Base display') && result.knownCents === 0
+      ? 'Rate pending' : formatMoney(result.knownCents, moneyFormat);
     estimate.querySelector('[data-estimate-note]').textContent = result.pending.length
-      ? `${result.pending.join(', ')} ${result.pending.length === 1 ? 'is' : 'are'} not included in this subtotal. Taxes and any other Shopify checkout charges are shown before payment.`
-      : 'Delivery is charged for both fulfillment choices. Removal is a separate size-based charge. Taxes and any other Shopify checkout charges are shown before payment.';
+      ? `${result.pending.join(', ')} ${result.pending.length === 1 ? 'is' : 'are'} not included in this subtotal. ${isComposer ? 'Draft display prices are estimates until a matching palette variant is available. ' : ''}Taxes and any other Shopify checkout charges are shown before payment.`
+      : `${isComposer ? 'Draft display prices are estimates until a matching palette variant is available. ' : ''}Delivery is charged for both fulfillment choices; removal is separate. Taxes and any other Shopify checkout charges are shown before payment.`;
   };
   form.addEventListener('input', update);
   form.addEventListener('change', update);
