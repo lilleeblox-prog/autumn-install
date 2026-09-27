@@ -240,13 +240,19 @@
   #PackageBrowser-{{ section.id }} .package-room,
   #PackageBrowser-{{ section.id }} .package-status { color: var(--pb-muted); }
   #PackageBrowser-{{ section.id }} .package-status { margin-top: auto; padding-top: 18px; }
-  #PackageBrowser-{{ section.id }} .package-card__disclosure {
-    display: block;
-    margin-top: 18px;
+  #PackageBrowser-{{ section.id }} .package-card__hint {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    margin-top: auto;
+    padding-top: 15px;
+    border-top: 1px solid var(--pb-line);
     color: var(--pb-accent);
     font-size: .7rem;
     font-weight: 700;
-    letter-spacing: .06em;
+    letter-spacing: .08em;
+    text-transform: uppercase;
   }
   #PackageBrowser-{{ section.id }} .package-card-details {
     padding: 20px 23px 24px;
@@ -490,7 +496,7 @@
     background: #ded2c3;
     box-shadow: inset 0 0 0 1px var(--composer-oxide);
   }
-  #PackageBrowser-{{ section.id }} .package-card { position: relative; align-items: flex-start; padding: 25px 20px 20px; gap: 8px; }
+  #PackageBrowser-{{ section.id }} .package-card { position: relative; align-items: flex-start; padding: 48px 20px 24px; gap: 8px; }
   #PackageBrowser-{{ section.id }} .package-title { font-size: clamp(25px, 2.3vw, 34px); letter-spacing: -.035em; }
   #PackageBrowser-{{ section.id }} .package-price { font-size: 1rem; }
   #PackageBrowser-{{ section.id }} .package-room { min-height: 36px; color: var(--composer-muted); font-size: 12px; line-height: 1.5; }
@@ -507,25 +513,29 @@
     letter-spacing: .11em;
     text-transform: uppercase;
   }
-  #PackageBrowser-{{ section.id }} .package-card__disclosure {
+  #PackageBrowser-{{ section.id }} .package-card__hint {
     display: flex;
     align-items: center;
     justify-content: space-between;
     width: 100%;
-    padding: 11px 14px;
-    border: 1px solid rgba(62, 53, 43, .20);
-    border-top: 0;
-    background: #e7ded1;
-    color: var(--composer-ink);
+    margin-top: auto;
+    padding: 15px 0 0;
+    border: 0;
+    border-top: 1px solid var(--composer-line);
+    background: transparent;
+    color: var(--composer-oxide);
     font-size: 10px;
     font-weight: 700;
     letter-spacing: .08em;
     text-align: left;
     text-transform: uppercase;
-    cursor: pointer;
   }
-  #PackageBrowser-{{ section.id }} .package-card__disclosure[aria-expanded="true"] span { transform: rotate(90deg); }
+  #PackageBrowser-{{ section.id }} .package-card__hint-arrow { display: inline-block; font-size: 17px; line-height: 1; transition: transform .2s ease; }
+  #PackageBrowser-{{ section.id }} .package-card[aria-expanded="true"] .package-card__hint-arrow { transform: rotate(90deg); }
   #PackageBrowser-{{ section.id }} .package-card-details { padding: 18px 20px 20px; }
+  #PackageBrowser-{{ section.id }} .package-card-details__availability { margin-top: 18px; padding-top: 15px; border-top: 1px solid var(--composer-line); }
+  #PackageBrowser-{{ section.id }} .package-card-details__availability .package-price { display: block; margin: 0 0 5px; font-size: 17px; }
+  #PackageBrowser-{{ section.id }} .package-card-details__availability [data-scale-status] { display: block; color: var(--composer-muted); font-size: 11px; line-height: 1.55; }
   #PackageBrowser-{{ section.id }} .package-browser__preview-intro { margin-bottom: 0; }
   #PackageBrowser-{{ section.id }} .palette-composer__preview { background: var(--composer-stone); }
   #PackageBrowser-{{ section.id }} .palette-composer__preview-intro {
@@ -932,18 +942,20 @@
                 {% when 'large' %}{% assign delivery = section.settings.delivery_large_product %}{% assign removal = section.settings.removal_large_product %}{% assign expected_service_fee = 8500 %}
               {% endcase %}
               <div class="package-card-shell">
-                <button type="button" class="package-card" data-composer-scale data-scale-name="{{ block.settings.scale_name | escape }}" data-display-size="{{ display_size }}" data-expected-service-fee="{{ expected_service_fee }}" data-product-id="{% if prod != blank %}{{ prod.id }}{% endif %}" data-product-title="{% if prod != blank %}{{ prod.title | escape }}{% else %}{{ block.settings.scale_name | escape }}{% endif %}" data-product-available="{% if prod != blank and prod.available and prod.published_at != blank %}true{% else %}false{% endif %}" data-palette-index="{{ option_index }}" data-variants="{% if prod != blank %}{{ prod.variants | json | escape }}{% endif %}" data-delivery-id="{% if delivery != blank and delivery.available and delivery.published_at != blank and delivery.selected_or_first_available_variant.price > 0 %}{{ delivery.selected_or_first_available_variant.id }}{% endif %}" data-delivery-price="{{ delivery.selected_or_first_available_variant.price | default: 0 }}" data-removal-id="{% if removal != blank and removal.available and removal.published_at != blank and removal.selected_or_first_available_variant.price > 0 %}{{ removal.selected_or_first_available_variant.id }}{% endif %}" data-removal-price="{{ removal.selected_or_first_available_variant.price | default: 0 }}" aria-pressed="{% if block.settings.default_selected %}true{% else %}false{% endif %}" {{ block.shopify_attributes }}>
+                <button type="button" class="package-card" data-composer-scale data-scale-name="{{ block.settings.scale_name | escape }}" data-display-size="{{ display_size }}" data-expected-service-fee="{{ expected_service_fee }}" data-product-id="{% if prod != blank %}{{ prod.id }}{% endif %}" data-product-title="{% if prod != blank %}{{ prod.title | escape }}{% else %}{{ block.settings.scale_name | escape }}{% endif %}" data-product-available="{% if prod != blank and prod.available and prod.published_at != blank %}true{% else %}false{% endif %}" data-palette-index="{{ option_index }}" data-variants="{% if prod != blank %}{{ prod.variants | json | escape }}{% endif %}" data-delivery-id="{% if delivery != blank and delivery.available and delivery.published_at != blank and delivery.selected_or_first_available_variant.price > 0 %}{{ delivery.selected_or_first_available_variant.id }}{% endif %}" data-delivery-price="{{ delivery.selected_or_first_available_variant.price | default: 0 }}" data-removal-id="{% if removal != blank and removal.available and removal.published_at != blank and removal.selected_or_first_available_variant.price > 0 %}{{ removal.selected_or_first_available_variant.id }}{% endif %}" data-removal-price="{{ removal.selected_or_first_available_variant.price | default: 0 }}" aria-pressed="{% if block.settings.default_selected %}true{% else %}false{% endif %}" aria-expanded="false" aria-controls="package-includes-{{ block.id }}" {{ block.shopify_attributes }}>
                   {% if block.settings.most_popular %}<small class="package-card__popular">Most popular</small>{% endif %}
                   <span class="package-title">{{ block.settings.scale_name | escape }}</span>
-                  <span class="package-price">{% if prod != blank and prod.published_at != blank and prod.available and prod.price > 0 %}{{ prod.price | money }}{% else %}Pricing pending{% endif %}</span>
                   <span class="package-room">{{ block.settings.room_fallback | default: block.settings.subtitle_fallback | escape }}</span>
-                  <small data-scale-status>{% if prod == blank %}Preview only · product not configured{% elsif prod.available == false or prod.published_at == blank %}Preview only · product not available{% elsif prod.price <= 0 %}Preview only · price pending{% elsif option_index < 0 %}Cannot order · palette variant required{% else %}Choose this scale{% endif %}</small>
+                  <span class="package-card__hint"><span data-scale-disclosure-label>See what’s included</span><span class="package-card__hint-arrow" aria-hidden="true">›</span></span>
                 </button>
-                <button type="button" class="package-card__disclosure" aria-expanded="false" aria-controls="package-includes-{{ block.id }}">See what’s included <span aria-hidden="true">›</span></button>
-                <div class="package-card-details" id="package-includes-{{ block.id }}" hidden>
-                  <p>Included in {{ block.settings.scale_name | escape }}</p>
+                <div class="package-card-details" id="package-includes-{{ block.id }}" aria-labelledby="package-includes-title-{{ block.id }}" hidden>
+                  <p id="package-includes-title-{{ block.id }}">Included in {{ block.settings.scale_name | escape }}</p>
                   {% assign included_items = block.settings.included_items | newline_to_br | split: '<br />' %}
                   <ul>{% for item in included_items %}{% assign line = item | strip %}{% if line != blank %}<li>{{ line | escape }}</li>{% endif %}{% endfor %}</ul>
+                  <div class="package-card-details__availability">
+                    <strong class="package-price" data-scale-price>{% if prod == blank or prod.available == false or prod.published_at == blank or option_index < 0 %}Pricing unavailable{% else %}Select a palette to see price{% endif %}</strong>
+                    <small data-scale-status role="status" aria-live="polite">{% if prod == blank %}Preview only · product not configured{% elsif prod.available == false or prod.published_at == blank %}Preview only · product not available{% elsif option_index < 0 %}Cannot order · a palette variant is required{% else %}Choose a palette to check ordering availability.{% endif %}</small>
+                  </div>
                 </div>
               </div>
             {% endif %}
@@ -1139,6 +1151,29 @@
         ) || null;
       } catch { return null; }
     };
+    const updateScaleAvailability = (card, palette) => {
+      const details = card.closest('.package-card-shell');
+      const status = details?.querySelector('[data-scale-status]');
+      const price = details?.querySelector('[data-scale-price]');
+      const variant = chosenVariant(card, palette);
+      if (price) {
+        if (variant) price.textContent = formatMoney(variant.price, window.shopMoneyFormat);
+        else if (!card.dataset.productId || card.dataset.productAvailable !== 'true' || Number(card.dataset.paletteIndex) < 0) {
+          price.textContent = 'Pricing unavailable';
+        } else if (!palette) {
+          price.textContent = 'Select a palette to see price';
+        } else {
+          price.textContent = 'No priced variant';
+        }
+      }
+      if (!status) return;
+      if (!card.dataset.productId) status.textContent = 'Preview only · product not configured';
+      else if (card.dataset.productAvailable !== 'true') status.textContent = 'Preview only · product not available';
+      else if (Number(card.dataset.paletteIndex) < 0) status.textContent = 'Cannot order · a palette variant is required';
+      else if (!palette) status.textContent = 'Choose a palette to check ordering availability.';
+      else if (!variant) status.textContent = 'Preview only · no available, priced variant for this palette.';
+      else status.textContent = 'Available · select this scale to continue.';
+    };
     const updatePalette = (palette) => {
       let imageCount = 0;
       paletteImages.forEach((image) => {
@@ -1160,13 +1195,7 @@
       }
       if (selectedPalette) selectedPalette.textContent = palette;
       if (selectedDescription && paletteIndex >= 0) selectedDescription.textContent = paletteDescriptions[paletteIndex];
-      cards.forEach((card) => {
-        const status = card.querySelector('[data-scale-status]');
-        const variant = chosenVariant(card, palette);
-        if (status && card.dataset.productId && card.dataset.productAvailable === 'true' && Number(card.dataset.paletteIndex) >= 0) {
-          status.textContent = variant ? 'Available · select to configure' : 'Preview only · palette variant unavailable';
-        }
-      });
+      cards.forEach(card => updateScaleAvailability(card, palette));
       selectScale(activeScale || cards.find(card => card.getAttribute('aria-pressed') === 'true') || cards[0]);
     };
     const selectScale = card => {
@@ -1176,6 +1205,7 @@
       if (selectedScale) selectedScale.textContent = card.dataset.scaleName;
       const palette = root.querySelector('[data-composer-palette]:checked')?.value;
       const variant = chosenVariant(card, palette);
+      updateScaleAvailability(card, palette);
       variantSelect.replaceChildren(new Option('Choose a priced package', '', true, !variant));
       cards.forEach(item => {
         try {
@@ -1203,15 +1233,6 @@
       services.dataset.removalId = card.dataset.removalId || '';
       services.dataset.removalPrice = card.dataset.removalPrice || '0';
       hayProperty.value = ['medium', 'large'].includes(card.dataset.displaySize) ? 'Yes' : 'No';
-      const status = card.querySelector('[data-scale-status]');
-      const scalePrice = card.querySelector('.package-price');
-      if (scalePrice) scalePrice.textContent = variant
-        ? formatMoney(variant.price, window.shopMoneyFormat)
-        : 'Pricing pending';
-      if (!card.dataset.productId) status.textContent = 'Preview only · product not configured';
-      else if (card.dataset.productAvailable !== 'true') status.textContent = 'Preview only · product not available';
-      else if (!variant) status.textContent = 'Preview only · selected palette is not purchasable';
-      else status.textContent = 'Available · configure the rest of your design';
       const selected = variantSelect.selectedOptions[0];
       const price = form.querySelector('[data-price-container]');
       if (price) price.textContent = selected && Number(selected.dataset.price) > 0
@@ -1261,13 +1282,19 @@
         : 'Requested delivery & installation week';
       rememberSelection();
     };
-    cards.forEach(card => card.addEventListener('click', () => selectScale(card)));
-    root.querySelectorAll('.package-card__disclosure').forEach(button => button.addEventListener('click', () => {
-      const expanded = button.getAttribute('aria-expanded') === 'true';
-      button.setAttribute('aria-expanded', expanded ? 'false' : 'true');
-      const details = root.querySelector(`#${CSS.escape(button.getAttribute('aria-controls'))}`);
-      if (details) details.hidden = expanded;
-      button.firstChild.textContent = expanded ? 'See what’s included ' : 'Hide what’s included ';
+    const nextExpandedScale = (current, clicked) => current === clicked ? null : clicked;
+    let expandedScale = null;
+    cards.forEach(card => card.addEventListener('click', () => {
+      expandedScale = nextExpandedScale(expandedScale, card);
+      selectScale(card);
+      cards.forEach(item => {
+        const expanded = item === expandedScale;
+        item.setAttribute('aria-expanded', expanded ? 'true' : 'false');
+        const details = root.querySelector(`#${CSS.escape(item.getAttribute('aria-controls'))}`);
+        if (details) details.hidden = !expanded;
+        const label = item.querySelector('[data-scale-disclosure-label]');
+        if (label) label.textContent = expanded ? 'Hide what’s included' : 'See what’s included';
+      });
     }));
     paletteRadios.forEach(radio => radio.addEventListener('change', () => {
       updatePalette(radio.value);
