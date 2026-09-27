@@ -469,6 +469,17 @@ function designSignature(form) {
 
 const CART_PREVIEW_KEY = 'palette-install-cart-preview-v1';
 
+function cartPreviewUrl(cartUrl, currentUrl) {
+  const destination = new URL(cartUrl, currentUrl);
+  const current = new URL(currentUrl);
+  const previewThemeId = current.searchParams.get('preview_theme_id');
+  if (previewThemeId && /^\d+$/.test(previewThemeId)) {
+    destination.searchParams.set('preview_theme_id', previewThemeId);
+  }
+  destination.searchParams.set('design_preview', '1');
+  return `${destination.pathname}${destination.search}`;
+}
+
 function previewCartDesign(form) {
   if (!form.checkValidity()) {
     const missingField = focusFirstInvalidComposerField(form);
@@ -525,7 +536,7 @@ function previewCartDesign(form) {
     throw new Error('Your browser could not save this preview. Please allow session storage and try again.');
   }
   const cartUrl = window.cartUrl || '/cart';
-  window.location.href = `${cartUrl}${cartUrl.includes('?') ? '&' : '?'}design_preview=1`;
+  window.location.href = cartPreviewUrl(cartUrl, window.location.href);
 }
 
 function configuredCartItems(form) {

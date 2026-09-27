@@ -218,6 +218,15 @@
     if (!live || !preview) return;
     live.hidden = true;
     preview.hidden = false;
+    const previewThemeId = new URLSearchParams(window.location.search).get('preview_theme_id');
+    if (previewThemeId && /^\d+$/.test(previewThemeId)) {
+      preview.querySelectorAll('a[href]').forEach(link => {
+        const destination = new URL(link.href);
+        if (destination.origin !== window.location.origin) return;
+        destination.searchParams.set('preview_theme_id', previewThemeId);
+        link.href = destination.toString();
+      });
+    }
     let design;
     try {
       design = JSON.parse(sessionStorage.getItem('palette-install-cart-preview-v1') || 'null');
