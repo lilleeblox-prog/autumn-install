@@ -580,6 +580,21 @@
   }
   #PackageBrowser-{{ section.id }} [data-approve-design]:hover,
   #PackageBrowser-{{ section.id }} [data-cart-submit]:hover { background: #d6b59d; }
+  #PackageBrowser-{{ section.id }} .composer-editor-approval {
+    max-width: 760px;
+    margin: 0 auto 48px;
+  }
+  #PackageBrowser-{{ section.id }} .composer-editor-approval p {
+    color: var(--composer-muted);
+    font-size: 12px;
+    line-height: 1.6;
+  }
+  #PackageBrowser-{{ section.id }} .composer-editor-approval [data-approve-design] {
+    padding: 20px;
+    background: var(--composer-ink);
+    color: var(--composer-paper);
+  }
+  #PackageBrowser-{{ section.id }} .composer-editor-approval [data-approve-design]:hover { background: var(--composer-oxide); }
   #PackageBrowser-{{ section.id }} .product-approval { border-color: rgba(255,255,255,.25); }
   #PackageBrowser-{{ section.id }} .composer-choice {
     gap: 10px;
@@ -949,6 +964,10 @@
       </div>
       <p class="package-browser__transfer-error" role="alert" data-consultation-transfer-error hidden>Choices could not be saved for consultation. Please enter them in the form yourself.</p>
       <div id="product-form-error" class="hidden" role="alert" aria-live="assertive" aria-atomic="true"></div>
+      <div class="composer-editor-approval">
+        <p>{{ section.settings.continue_disclosure | escape }} Preferred weeks require confirmation.</p>
+        <button type="button" data-approve-design disabled>{{ section.settings.continue_label | escape }}</button>
+      </div>
     </div>
     <aside class="palette-composer__preview" data-composer-pane="preview" aria-label="Live design review">
       <div class="palette-composer__preview-intro">
@@ -1145,7 +1164,7 @@
       if (price) price.textContent = selected && Number(selected.dataset.price) > 0
         ? formatMoney(selected.dataset.price, window.shopMoneyFormat)
         : 'Pricing to be confirmed';
-      form.querySelector('[data-approve-design]').disabled = !variant;
+      form.querySelectorAll('[data-approve-design]').forEach(button => { button.disabled = !variant; });
       const sizeLabel = card.dataset.scaleName || '';
       root.dataset.productTitle = card.dataset.productTitle || sizeLabel;
       variantSelect.dispatchEvent(new Event('change', { bubbles: true }));

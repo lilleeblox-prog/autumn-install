@@ -734,8 +734,9 @@ async function loadEditingComposition(form) {
   week.dispatchEvent(new Event('change', { bubbles: true }));
   const extras = group.filter(item => item.properties['_Service Kind'] === 'extra').map(item => String(item.variant_id));
   form.querySelectorAll('[name="addons[]"]').forEach(addon => { addon.checked = extras.includes(addon.value); });
-  const approve = form.querySelector('[data-approve-design]');
-  if (!approve.disabled) approve.textContent = 'Approve changes';
+  form.querySelectorAll('[data-approve-design]').forEach(approve => {
+    if (!approve.disabled) approve.textContent = 'Approve changes';
+  });
   productFormError(form, '');
 }
 
@@ -1003,7 +1004,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const bindApproval = (productForm) => {
     if (productForm.dataset.approvalBound === 'true') return;
     productForm.dataset.approvalBound = 'true';
-    const approve = productForm.querySelector('[data-approve-design]');
+    const approveButtons = Array.from(productForm.querySelectorAll('[data-approve-design]'));
     const submit = productForm.querySelector('[data-cart-submit]');
     const approvalStatus = productForm.querySelector('[data-approval-status]');
     const resetApproval = () => {
@@ -1014,25 +1015,26 @@ document.addEventListener('DOMContentLoaded', () => {
       productForm.dataset.approvedSignature = '';
       approvalStatus.hidden = true;
       submit.hidden = true;
-      approve.hidden = false;
+      approveButtons.forEach(button => { button.hidden = false; });
       productFormError(productForm, '');
     };
     productForm.addEventListener('input', resetApproval);
     productForm.addEventListener('change', resetApproval);
-    approve.addEventListener('click', () => {
+    const approveDesign = () => {
       try {
         configuredCartItems(productForm);
         productForm.dataset.approvedSignature = designSignature(productForm);
         approvalStatus.hidden = false;
         submit.hidden = false;
-        approve.hidden = true;
+        approveButtons.forEach(button => { button.hidden = true; });
         productFormError(productForm, '');
         // A valid approval goes straight through the existing cart flow.
         productForm.requestSubmit(submit);
       } catch (error) {
         productFormError(productForm, error.message);
       }
-    });
+    };
+    approveButtons.forEach(button => button.addEventListener('click', approveDesign));
     productForm.addEventListener('submit', async (event) => {
       event.preventDefault();
       if (!productForm.dataset.approvedSignature || productForm.dataset.approvedSignature !== designSignature(productForm)) {
@@ -1053,7 +1055,7 @@ document.addEventListener('DOMContentLoaded', () => {
       const cartUrl = window.cartUrl || '/cart';
       const requireCartReview = (message) => {
         productForm.dataset.cartNeedsReview = 'true';
-        approve.disabled = true;
+        approveButtons.forEach(button => { button.disabled = true; });
         approvalStatus.hidden = true;
         productFormError(productForm, message);
         submit.textContent = 'Review your composition';
@@ -1092,7 +1094,7 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     });
     loadEditingComposition(productForm).catch(error => {
-      approve.disabled = true;
+      approveButtons.forEach(button => { button.disabled = true; });
       productFormError(productForm, error.message);
     });
   };
