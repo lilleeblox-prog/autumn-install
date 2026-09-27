@@ -590,6 +590,16 @@
     background: var(--composer-paper);
     color: var(--composer-muted);
   }
+  #PackageBrowser-{{ section.id }} .palette-study__empty .palette-choice__swatches {
+    justify-content: center;
+    gap: 7px;
+    margin-inline: auto;
+  }
+  #PackageBrowser-{{ section.id }} .palette-study__empty .palette-choice__swatches i {
+    width: 23px;
+    height: 23px;
+    border-radius: 50%;
+  }
   #PackageBrowser-{{ section.id }} .palette-study__empty strong {
     display: block;
     margin: 12px auto 6px;
@@ -966,7 +976,7 @@
         <p class="palette-study__caption">Palette studies show color direction, not a rendering of your finished installation.</p>
       </div>
       <div class="composition-summary">
-        <div class="eyebrow">The details, together</div><h2>Review your design</h2>
+        <div class="eyebrow">The design you've made</div><h2>Review your design</h2>
         <div class="composition-summary__row"><span>Palette</span><strong data-selected-palette>Yours to choose</strong></div>
         <div class="composition-summary__row"><span>Color story</span><strong data-selected-palette-description>Choose a color story</strong></div>
         <div class="composition-summary__row"><span>Scale</span><strong data-selected-scale>{{ initial_scale | escape }}</strong></div>
@@ -976,7 +986,6 @@
         <div class="composition-summary__row"><span>Removal</span><strong data-brief-removal>Choose yes or no</strong></div>
         <div class="composition-summary__row"><span>Artwork details</span><strong data-brief-artwork>—</strong></div>
         <div class="composition-summary__row"><span>Notes</span><strong data-brief-notes>No notes yet</strong></div>
-        <p class="composition-summary__disclosure">{{ section.settings.summary_disclosure | escape }} Approval adds your selection to cart for review; it does not place an order or reserve a date.</p>
         <p class="product-approval-note">{{ section.settings.continue_disclosure | escape }} Preferred weeks require confirmation.</p>
         <button type="button" data-approve-design disabled>{{ section.settings.continue_label | escape }}</button>
         <div class="product-approval" data-approval-status hidden role="status"><strong>Design approved</strong><p>Review every composition line in your cart before checkout.</p></div>
