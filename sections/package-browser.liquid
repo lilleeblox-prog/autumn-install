@@ -601,12 +601,12 @@
   }
   #PackageBrowser-{{ section.id }} .composer-choice label:has(input:checked) small { color: #c6bfb5; }
   #PackageBrowser-{{ section.id }} .composer-choice small { margin: 5px 0 0 24px; font-size: 12px; }
-  #PackageBrowser-{{ section.id }} .composer-choice--service label { position: relative; }
-  #PackageBrowser-{{ section.id }} .composer-choice--service label:focus-within {
+  #PackageBrowser-{{ section.id }} .composer-choice--full-card label { position: relative; }
+  #PackageBrowser-{{ section.id }} .composer-choice--full-card label:focus-within {
     outline: 2px solid var(--composer-oxide);
     outline-offset: 2px;
   }
-  #PackageBrowser-{{ section.id }} .composer-choice--service small { margin-left: 0; }
+  #PackageBrowser-{{ section.id }} .composer-choice--full-card small { margin-left: 0; }
   #PackageBrowser-{{ section.id }} .composer-field { margin: 22px 0; }
   #PackageBrowser-{{ section.id }} .composer-field input,
   #PackageBrowser-{{ section.id }} .composer-field select,
@@ -895,9 +895,9 @@
       <div class="palette-composer__step">
         <span class="eyebrow">03 / The details</span><h2>Put your signature on it.</h2>
         <p>Upload your own artwork and we’ll wrap it in vinyl on a pumpkin. Choose the pumpkin and vinyl colors that bring your design to life.</p>
-        <fieldset class="composer-choice"><legend>Add a vinyl-wrapped artwork pumpkin?</legend>
-          <label><input type="radio" name="properties[Vinyl Artwork]" value="Yes" data-monogram-choice="yes" required> Yes, add my artwork{% if monogram_product != blank and monogram_product.available and monogram_product.published_at != blank and monogram_product.selected_or_first_available_variant.price > 0 %} (+{{ monogram_product.selected_or_first_available_variant.price | money }} per pumpkin){% else %} (preview only · price or product pending){% endif %}<small>Wrap my uploaded design in vinyl on a pumpkin.</small></label>
-          <label><input type="radio" name="properties[Vinyl Artwork]" value="No" data-monogram-choice="no" required> No thanks <small>No custom vinyl artwork.</small></label>
+        <fieldset class="composer-choice composer-choice--artwork composer-choice--full-card"><legend>Add a vinyl-wrapped artwork pumpkin?</legend>
+          <label><input class="composer-hidden" type="radio" name="properties[Vinyl Artwork]" value="Yes" data-monogram-choice="yes" required><span>Yes, add my artwork{% if monogram_product != blank and monogram_product.available and monogram_product.published_at != blank and monogram_product.selected_or_first_available_variant.price > 0 %} (+{{ monogram_product.selected_or_first_available_variant.price | money }} per pumpkin){% else %} (preview only · price or product pending){% endif %}</span><small>Wrap my uploaded design in vinyl on a pumpkin.</small></label>
+          <label><input class="composer-hidden" type="radio" name="properties[Vinyl Artwork]" value="No" data-monogram-choice="no" required><span>No thanks</span><small>No custom vinyl artwork.</small></label>
         </fieldset>
         <div data-monogram-fields hidden>
           <label>Upload your artwork (PNG or PDF)<input type="file" name="properties[Artwork File]" accept=".png,.pdf,image/png,application/pdf" data-artwork-file></label>
@@ -919,7 +919,7 @@
           <h2>Bring it to life.</h2>
           <p>Tell us how you’d like the composition to arrive, and when you hope to welcome it.</p>
         </div>
-        <fieldset class="composer-choice composer-choice--service"><legend>Fulfillment method</legend>
+        <fieldset class="composer-choice composer-choice--service composer-choice--full-card"><legend>Fulfillment method</legend>
           <label><input class="composer-hidden" type="radio" name="properties[Service]" value="Custom installation" data-service="install" required><span>Custom installation</span><small>Our team sets up your display.</small></label>
           <label><input class="composer-hidden" type="radio" name="properties[Service]" value="Delivery only" data-service="delivery" required><span>Delivery only</span><small>Curated drop-off for you to arrange.</small></label>
         </fieldset>
