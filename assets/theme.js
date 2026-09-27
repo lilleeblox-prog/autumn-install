@@ -453,6 +453,66 @@ function designSignature(form) {
       ? [value.name, value.size, value.type, value.lastModified] : value]));
 }
 
+const CART_PREVIEW_KEY = 'palette-install-cart-preview-v1';
+
+function previewCartDesign(form) {
+  if (!form.checkValidity()) {
+    const missingField = focusFirstInvalidComposerField(form);
+    throw new Error(`Please complete ${missingField || 'the highlighted choices'} before previewing your cart.`);
+  }
+  if (form.querySelector('[data-custom-request]')?.checked) {
+    throw new Error('A special request needs a consultation before it can be included in a cart preview.');
+  }
+  const data = new FormData(form);
+  const artwork = form.querySelector('[data-artwork-file]')?.files?.[0];
+  const vinylArtwork = String(data.get('properties[Vinyl Artwork]') || '');
+  if (vinylArtwork === 'Yes') {
+    const expectedMime = /\.png$/i.test(artwork?.name || '') ? 'image/png'
+      : /\.pdf$/i.test(artwork?.name || '') ? 'application/pdf' : '';
+    if (!artwork || !expectedMime || (artwork.type && artwork.type !== expectedMime) ||
+        artwork.size < 1 || artwork.size > MAX_ARTWORK_SIZE) {
+      throw new Error('Choose a PNG or PDF artwork file 20 MB or smaller before previewing.');
+    }
+    if (!Number.isInteger(Number(data.get('properties[Vinyl-wrapped Pumpkins]'))) ||
+        Number(data.get('properties[Vinyl-wrapped Pumpkins]')) < 1 ||
+        !['White', 'Orange'].includes(data.get('properties[Pumpkin Color Preference]')) ||
+        !['White', 'Black', 'Gold'].includes(data.get('properties[Vinyl Color Preference]'))) {
+      throw new Error('Choose the artwork quantity, pumpkin color, and vinyl color before previewing.');
+    }
+  }
+  const root = form.closest('[data-package-browser]');
+  const card = root?.querySelector('[data-composer-scale][aria-pressed="true"]');
+  const palette = String(data.get('properties[Palette]') || '');
+  if (!card || !palette || !['small', 'medium', 'large'].includes(card.dataset.displaySize)) {
+    throw new Error('Choose a palette and display size before previewing.');
+  }
+  const services = form.querySelector('[data-service-products]');
+  const preview = {
+    scale: card.dataset.scaleName,
+    palette,
+    service: String(data.get('properties[Service]') || ''),
+    week: String(data.get('properties[Requested Week]') || ''),
+    artwork: vinylArtwork,
+    artworkQuantity: vinylArtwork === 'Yes' ? Number(data.get('properties[Vinyl-wrapped Pumpkins]')) : 0,
+    artworkFile: vinylArtwork === 'Yes' ? artwork.name : '',
+    pumpkinColor: vinylArtwork === 'Yes' ? String(data.get('properties[Pumpkin Color Preference]')) : '',
+    vinylColor: vinylArtwork === 'Yes' ? String(data.get('properties[Vinyl Color Preference]')) : '',
+    removal: String(data.get('properties[Removal]') || ''),
+    notes: String(data.get('properties[General Notes]') || '').trim(),
+    baseEstimateCents: Number(form.querySelector('[data-base-variant]')?.selectedOptions[0]?.dataset.price) > 0
+      ? Number(form.querySelector('[data-base-variant]').selectedOptions[0].dataset.price)
+      : Number(card.dataset.baseEstimateCents) || 0,
+    deliveryEstimateCents: Number(services?.dataset.expectedServiceFee) || 0
+  };
+  try {
+    sessionStorage.setItem(CART_PREVIEW_KEY, JSON.stringify(preview));
+  } catch {
+    throw new Error('Your browser could not save this preview. Please allow session storage and try again.');
+  }
+  const cartUrl = window.cartUrl || '/cart';
+  window.location.href = `${cartUrl}${cartUrl.includes('?') ? '&' : '?'}design_preview=1`;
+}
+
 function configuredCartItems(form) {
   if (!form.checkValidity()) {
     const missingField = focusFirstInvalidComposerField(form);
@@ -1022,6 +1082,10 @@ document.addEventListener('DOMContentLoaded', () => {
     productForm.addEventListener('change', resetApproval);
     const approveDesign = () => {
       try {
+        if (productForm.closest('[data-package-browser]')?.dataset.cartPreviewOnly === 'true') {
+          previewCartDesign(productForm);
+          return;
+        }
         configuredCartItems(productForm);
         productForm.dataset.approvedSignature = designSignature(productForm);
         approvalStatus.hidden = false;

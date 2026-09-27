@@ -41,6 +41,12 @@
 .cart-empty .eyebrow { margin-bottom: 25px; }
 .cart-empty h2 { font-size: clamp(3.4rem, 7vw, 6.5rem); line-height: .92; letter-spacing: -.045em; margin: 0 auto 22px; max-width: 760px; }
 .cart-empty p { color: var(--color-muted); line-height: 1.8; margin: 0 auto 32px; max-width: 440px; }
+.cart-preview__notice { border: 1px solid var(--color-border); background: var(--color-panel); padding: 18px 22px; margin-bottom: 32px; line-height: 1.6; }
+.cart-preview__notice strong { display: block; margin-bottom: 4px; }
+.cart-preview__image { display: flex; align-items: center; justify-content: center; min-height: 160px; aspect-ratio: 4/5; color: var(--color-accent); font-family: var(--font-serif); font-size: 1.2rem; text-align: center; }
+.cart-preview__item .cart-item__totals { font-size: .73rem; color: var(--color-muted); }
+.cart-preview__item[hidden] { display: none; }
+.cart-preview__footer .cart-buttons { margin-top: 22px; }
 
 @media (max-width: 700px) {
   .cart-page { padding-top: 72px; }
@@ -62,7 +68,7 @@
 }
 </style>
 
-<div class="container cart-page">
+<div class="container cart-page" data-live-cart>
   <div class="cart-header">
     <div>
        <span class="eyebrow">A moment before the next step</span>
@@ -168,6 +174,118 @@
     </div>
   {% endif %}
 </div>
+
+<div class="container cart-page" data-design-cart-preview hidden>
+  <div class="cart-header">
+    <div>
+      <span class="eyebrow">A private look / Cart layout preview</span>
+      <h1>Your design, gathered.</h1>
+      <p>See how your choices could sit together in the cart before the offers are ready to order.</p>
+    </div>
+    <a href="{{ routes.root_url }}#compose" class="cart-continue">Return to your design &rarr;</a>
+  </div>
+  <div class="cart-preview__notice" role="status">
+    <strong>Preview only — this is not your Shopify cart.</strong>
+    <span data-preview-notice>No items have been added. Reference estimates may change; prices, availability, and your preferred week must be confirmed before ordering.</span>
+  </div>
+  <div class="cart-items" data-preview-items>
+    <div class="cart-item cart-preview__item" data-preview-base hidden>
+      <div class="cart-item__image cart-preview__image" aria-label="No finished display photograph">Palette<br>Install</div>
+      <div class="cart-item__info">
+        <h3 data-preview-scale></h3>
+        <div class="cart-item__variant" data-preview-palette></div>
+        <div class="cart-item__properties"><dl data-preview-properties></dl></div>
+        <div class="cart-item__price" data-preview-base-price></div>
+      </div>
+      <div class="cart-item__totals">1 display</div>
+    </div>
+  </div>
+  <div class="cart-footer cart-preview__footer" data-preview-footer hidden>
+    <div class="cart-subtotal"><span>Known reference estimate</span><span data-preview-total></span></div>
+    <p class="cart-note">Draft display and service estimates are for review only. Unpriced artwork is excluded from this estimate. Taxes and any shipping are not included. This preview cannot place an order or reserve a week.</p>
+    <div class="cart-buttons">
+      <a class="button button--secondary" href="{{ routes.cart_url }}">View actual cart</a>
+      <a class="button button--accent" href="{{ routes.root_url }}#compose">Refine your design</a>
+    </div>
+  </div>
+</div>
+
+<script>
+  (() => {
+    if (new URLSearchParams(window.location.search).get('design_preview') !== '1') return;
+    const live = document.querySelector('[data-live-cart]');
+    const preview = document.querySelector('[data-design-cart-preview]');
+    if (!live || !preview) return;
+    live.hidden = true;
+    preview.hidden = false;
+    let design;
+    try {
+      design = JSON.parse(sessionStorage.getItem('palette-install-cart-preview-v1') || 'null');
+    } catch { /* Missing browser storage is handled below. */ }
+    if (!design || !design.scale || !design.palette || !design.week) {
+      preview.querySelector('[data-preview-notice]').textContent =
+        'This preview is no longer available in this browser session. Return to the builder to choose your design again. Your actual cart has not been changed.';
+      return;
+    }
+    const put = (selector, value) => { preview.querySelector(selector).textContent = value; };
+    const formatter = new Intl.NumberFormat({{ request.locale.iso_code | json }}, {
+      style: 'currency', currency: {{ cart.currency.iso_code | default: shop.currency | json }}
+    });
+    const money = cents => Number.isSafeInteger(cents) && cents > 0
+      ? formatter.format(cents / 100) : 'Price to be confirmed';
+    put('[data-preview-scale]', design.scale);
+    put('[data-preview-palette]', design.palette);
+    put('[data-preview-base-price]', money(design.baseEstimateCents));
+    const properties = preview.querySelector('[data-preview-properties]');
+    const addProperty = (label, value) => {
+      const line = document.createElement('div');
+      line.className = 'property-line';
+      const term = document.createElement('dt');
+      term.textContent = `${label}:`;
+      const detail = document.createElement('dd');
+      detail.textContent = value;
+      line.append(term, detail);
+      properties.append(line);
+    };
+    addProperty('Service', design.service);
+    addProperty('Requested week', `${design.week} (not reserved)`);
+    addProperty('Vinyl artwork', design.artwork === 'Yes'
+      ? `${design.artworkQuantity} pumpkin${design.artworkQuantity === 1 ? '' : 's'} · ${design.pumpkinColor} pumpkin · ${design.vinylColor} vinyl · ${design.artworkFile} (not uploaded)`
+      : 'No');
+    addProperty('Removal', design.removal === 'Yes' ? 'Requested' : 'Not requested');
+    if (design.notes) addProperty('Notes', design.notes);
+    preview.querySelector('[data-preview-base]').hidden = false;
+    const items = preview.querySelector('[data-preview-items]');
+    const addService = (name, detail, amount) => {
+      const row = document.createElement('div');
+      row.className = 'cart-item cart-preview__item';
+      const image = document.createElement('div');
+      image.className = 'cart-item__image cart-preview__image';
+      image.textContent = 'Service';
+      const info = document.createElement('div');
+      info.className = 'cart-item__info';
+      const title = document.createElement('h3');
+      title.textContent = name;
+      const description = document.createElement('div');
+      description.className = 'cart-item__variant';
+      description.textContent = detail;
+      const price = document.createElement('div');
+      price.className = 'cart-item__price';
+      price.textContent = money(amount);
+      info.append(title, description, price);
+      row.append(image, info);
+      items.append(row);
+    };
+    addService('Delivery', design.service === 'Custom installation'
+      ? 'Delivery with styling at your entry' : 'Delivery for you to arrange', design.deliveryEstimateCents);
+    if (design.artwork === 'Yes') addService('Vinyl artwork', 'Artwork price pending · file not uploaded', 0);
+    if (design.removal === 'Yes') addService('Post-season removal', 'Requested service', design.deliveryEstimateCents);
+    const knownTotal = Number(design.baseEstimateCents) + Number(design.deliveryEstimateCents) *
+      (design.removal === 'Yes' ? 2 : 1);
+    put('[data-preview-total]', money(knownTotal));
+    preview.querySelector('[data-preview-footer]').hidden = false;
+  })();
+</script>
 
 {% schema %}
 {

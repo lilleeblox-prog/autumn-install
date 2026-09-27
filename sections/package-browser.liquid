@@ -965,7 +965,7 @@
       <p class="package-browser__transfer-error" role="alert" data-consultation-transfer-error hidden>Choices could not be saved for consultation. Please enter them in the form yourself.</p>
       <div id="product-form-error" class="hidden" role="alert" aria-live="assertive" aria-atomic="true"></div>
       <div class="composer-editor-approval">
-        <p>{{ section.settings.continue_disclosure | escape }} Preferred weeks require confirmation.</p>
+        <p data-approval-disclosure>{{ section.settings.continue_disclosure | escape }} Preferred weeks require confirmation.</p>
         <button type="button" data-approve-design disabled>{{ section.settings.continue_label | escape }}</button>
       </div>
     </div>
@@ -997,7 +997,7 @@
         <div class="composition-summary__row" hidden><span>Removal</span><strong data-brief-removal></strong></div>
         <div class="composition-summary__row" hidden><span>Artwork details</span><strong data-brief-artwork></strong></div>
         <div class="composition-summary__row" hidden><span>Notes</span><strong data-brief-notes></strong></div>
-        <p class="product-approval-note">{{ section.settings.continue_disclosure | escape }} Preferred weeks require confirmation.</p>
+        <p class="product-approval-note" data-approval-disclosure>{{ section.settings.continue_disclosure | escape }} Preferred weeks require confirmation.</p>
         <button type="button" data-approve-design disabled>{{ section.settings.continue_label | escape }}</button>
         <div class="product-approval" data-approval-status hidden role="status"><strong>Your design is ready to review</strong><p>Take a closer look at each part of your composition in the cart before checkout.</p></div>
         <button type="submit" data-cart-submit hidden>Review your composition</button>
@@ -1036,7 +1036,7 @@
     const cards = Array.from(root.querySelectorAll('[data-composer-scale]'));
     const form = root.querySelector('[data-product-form]');
     const variantSelect = form.querySelector('[data-base-variant]');
-    const services = form.querySelector('[data-service-products]');
+      const services = form.querySelector('[data-service-products]');
     const hayProperty = form.querySelector('[data-hay-property]');
     const paletteProperty = form.querySelector('[data-chosen-palette]');
     const radios = selector => form.querySelector(selector + ':checked');
@@ -1164,7 +1164,20 @@
       if (price) price.textContent = selected && Number(selected.dataset.price) > 0
         ? formatMoney(selected.dataset.price, window.shopMoneyFormat)
         : 'Pricing to be confirmed';
-      form.querySelectorAll('[data-approve-design]').forEach(button => { button.disabled = !variant; });
+      const availableToOrder = !!variant && !!services.dataset.deliveryId &&
+        (text('Vinyl Artwork') !== 'Yes' || !!services.dataset.monogramId) &&
+        (text('Removal') !== 'Yes' || !!services.dataset.removalId) &&
+        Number(services.dataset.deliveryPrice) === Number(services.dataset.expectedServiceFee);
+      root.dataset.cartPreviewOnly = availableToOrder ? 'false' : 'true';
+      form.querySelectorAll('[data-approve-design]').forEach(button => {
+        button.disabled = !palette;
+        button.textContent = availableToOrder ? {{ section.settings.continue_label | json }} : 'Preview cart layout';
+      });
+      form.querySelectorAll('[data-approval-disclosure]').forEach(note => {
+        note.textContent = availableToOrder
+          ? {{ section.settings.continue_disclosure | append: ' Preferred weeks require confirmation.' | json }}
+          : 'Preview how your choices would appear in the cart. No products will be added, no order will be placed, and your requested week is not reserved.';
+      });
       const sizeLabel = card.dataset.scaleName || '';
       root.dataset.productTitle = card.dataset.productTitle || sizeLabel;
       variantSelect.dispatchEvent(new Event('change', { bubbles: true }));
@@ -1217,7 +1230,12 @@
       updateBrief();
     }));
     form.addEventListener('input', updateBrief);
-    form.addEventListener('change', updateBrief);
+    form.addEventListener('change', event => {
+      updateBrief();
+      if (event.target.matches('[data-service], [data-monogram-choice], input[name="properties[Removal]"]')) {
+        selectScale(activeScale);
+      }
+    });
     root.querySelectorAll('[data-pane-tab]').forEach(button => button.addEventListener('click', () => {
       root.dataset.mobilePane = button.dataset.paneTab;
       root.querySelectorAll('[data-pane-tab]').forEach(tab => tab.setAttribute('aria-pressed', tab === button ? 'true' : 'false'));
