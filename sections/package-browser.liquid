@@ -674,6 +674,12 @@
   }
   #PackageBrowser-{{ section.id }} .composer-choice label:has(input:checked) small { color: #c6bfb5; }
   #PackageBrowser-{{ section.id }} .composer-choice small { margin: 5px 0 0 24px; font-size: 12px; }
+  #PackageBrowser-{{ section.id }} .composer-choice--service label { position: relative; }
+  #PackageBrowser-{{ section.id }} .composer-choice--service label:focus-within {
+    outline: 2px solid var(--composer-oxide);
+    outline-offset: 2px;
+  }
+  #PackageBrowser-{{ section.id }} .composer-choice--service small { margin-left: 0; }
   #PackageBrowser-{{ section.id }} .composer-field { margin: 22px 0; }
   #PackageBrowser-{{ section.id }} .composer-field input,
   #PackageBrowser-{{ section.id }} .composer-field select,
@@ -997,9 +1003,9 @@
           <h2>Bring it to life.</h2>
           <p>Tell us how you’d like the composition to arrive, and when you hope to welcome it.</p>
         </div>
-        <fieldset class="composer-choice"><legend>Fulfillment method</legend>
-          <label><input type="radio" name="properties[Service]" value="Custom installation" data-service="install" required> Custom installation <small>Our team sets up your display.</small></label>
-          <label><input type="radio" name="properties[Service]" value="Delivery only" data-service="delivery" required> Delivery only <small>Curated drop-off for you to arrange.</small></label>
+        <fieldset class="composer-choice composer-choice--service"><legend>Fulfillment method</legend>
+          <label><input class="composer-hidden" type="radio" name="properties[Service]" value="Custom installation" data-service="install" required><span>Custom installation</span><small>Our team sets up your display.</small></label>
+          <label><input class="composer-hidden" type="radio" name="properties[Service]" value="Delivery only" data-service="delivery" required><span>Delivery only</span><small>Curated drop-off for you to arrange.</small></label>
         </fieldset>
         <fieldset class="composer-week-choice">
           <legend data-requested-week-label>Requested delivery &amp; installation week</legend>
