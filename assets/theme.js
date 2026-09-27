@@ -345,6 +345,11 @@ function resolveBaseEstimateCents(variantPrice, draftEstimateCents, isComposer) 
   return null;
 }
 
+function resolveServiceEstimateCents(availableId, livePrice, referencePrice) {
+  const price = availableId ? Number(livePrice) : Number(referencePrice);
+  return Number.isSafeInteger(price) && price > 0 ? price : null;
+}
+
 function setupProductEstimate(form) {
   if (form.dataset.estimateBound === 'true') return;
   form.dataset.estimateBound = 'true';
@@ -358,11 +363,15 @@ function setupProductEstimate(form) {
     const isComposer = !!form.closest('[data-package-browser]');
     const basePrice = resolveBaseEstimateCents(selectedVariant?.dataset.price, form.dataset.baseEstimateCents, isComposer);
     const additions = [];
+    const deliveryEstimate = resolveServiceEstimateCents(
+      products.dataset.deliveryId, products.dataset.deliveryPrice, products.dataset.expectedServiceFee);
+    const removalEstimate = resolveServiceEstimateCents(
+      products.dataset.removalId, products.dataset.removalPrice, products.dataset.expectedServiceFee);
     if (form.querySelector('[data-service]:checked')) {
       const label = form.querySelector('[data-service]:checked')?.value === 'Custom installation'
         ? 'Delivery & installation service'
         : 'Delivery service';
-      additions.push({ label, priceCents: products.dataset.deliveryPrice });
+      additions.push({ label: products.dataset.deliveryId ? label : `${label} · estimate`, priceCents: deliveryEstimate });
     }
     if (form.querySelector('[data-service="install"]:checked')) {
       additions.push({ label: 'Custom installation · setup', included: true });
@@ -372,13 +381,13 @@ function setupProductEstimate(form) {
     }
     if (form.querySelector('[data-monogram-choice="yes"]:checked')) {
       additions.push({
-        label: 'Vinyl-wrapped pumpkin',
+        label: products.dataset.monogramId ? 'Vinyl-wrapped pumpkin' : 'Vinyl-wrapped pumpkin · estimate',
         priceCents: products.dataset.monogramEstimateCents,
         quantity: form.querySelector('[data-monogram-quantity]')?.value,
       });
     }
     if (form.querySelector('input[name="properties[Removal]"][value="Yes"]:checked')) {
-      additions.push({ label: 'Removal · not included', priceCents: products.dataset.removalPrice });
+      additions.push({ label: products.dataset.removalId ? 'Removal · not included' : 'Removal · estimate', priceCents: removalEstimate });
     }
     form.querySelectorAll('input[name="addons[]"]:checked').forEach(input => {
       additions.push({ label: input.closest('.addon-option')?.querySelector('strong')?.textContent || 'Finishing touch', priceCents: input.dataset.addonPrice });
@@ -402,7 +411,9 @@ function setupProductEstimate(form) {
       ? 'Rate pending' : formatMoney(result.knownCents, moneyFormat);
     const vinylIsReference = !!form.querySelector('[data-monogram-choice="yes"]:checked') &&
       !products.dataset.monogramId && Number(products.dataset.monogramEstimateCents) > 0;
-    const referenceNote = `${isComposer ? 'Draft display prices are estimates until a matching palette variant is available. ' : ''}${vinylIsReference ? 'Vinyl artwork is a reference estimate per pumpkin; it cannot be ordered until the add-on is available. ' : ''}`;
+    const serviceIsReference = (!products.dataset.deliveryId && !!form.querySelector('[data-service]:checked') && deliveryEstimate !== null) ||
+      (!products.dataset.removalId && !!form.querySelector('input[name="properties[Removal]"][value="Yes"]:checked') && removalEstimate !== null);
+    const referenceNote = `${isComposer ? 'Draft display prices are estimates until a matching palette variant is available. ' : ''}${serviceIsReference ? 'Delivery and selected removal rates are reference estimates until their services are available. ' : ''}${vinylIsReference ? 'Vinyl artwork is a reference estimate per pumpkin; it cannot be ordered until the add-on is available. ' : ''}`;
     estimate.querySelector('[data-estimate-note]').textContent = result.pending.length
       ? `${result.pending.join(', ')} ${result.pending.length === 1 ? 'is' : 'are'} not included in this subtotal. ${referenceNote}Taxes and any other Shopify checkout charges are shown before payment.`
       : `${referenceNote}Delivery is charged for both fulfillment choices; removal is separate. Taxes and any other Shopify checkout charges are shown before payment.`;

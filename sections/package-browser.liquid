@@ -935,8 +935,8 @@
           <p>How would you like your display to arrive? Tell us the week you have in mind, and we’ll discuss the details with you.</p>
         </div>
         <fieldset class="composer-choice composer-choice--service composer-choice--full-card"><legend>Fulfillment method</legend>
-          <label><input class="composer-hidden" type="radio" name="properties[Service]" value="Custom installation" data-service="install" required><span>Custom installation</span><small>We style the display at your entry.</small></label>
-          <label><input class="composer-hidden" type="radio" name="properties[Service]" value="Delivery only" data-service="delivery" required><span>Delivery only</span><small>The pieces arrive for you to arrange.</small></label>
+          <label><input class="composer-hidden" type="radio" name="properties[Service]" value="Custom installation" data-service="install" required><span>Custom installation</span><small>We style the display at your entry. <span data-delivery-fee></span></small></label>
+          <label><input class="composer-hidden" type="radio" name="properties[Service]" value="Delivery only" data-service="delivery" required><span>Delivery only</span><small>The pieces arrive for you to arrange. <span data-delivery-fee></span></small></label>
         </fieldset>
         <fieldset class="composer-week-choice">
           <legend data-requested-week-label>Requested delivery &amp; installation week</legend>
@@ -953,7 +953,7 @@
           <small class="composer-field__hint">Choose the week you have in mind. This is a request, not a reservation; we’ll confirm the date and time with you. Have an event date? Add it to your notes above.</small>
         </fieldset>
         <fieldset class="composer-choice composer-choice--full-card"><legend>Removal service</legend>
-          <label><input class="composer-hidden" type="radio" name="properties[Removal]" value="Yes" required><span>Please arrange removal</span><small>We’ll collect the display after the season.</small></label>
+          <label><input class="composer-hidden" type="radio" name="properties[Removal]" value="Yes" required><span>Please arrange removal</span><small>We’ll collect the display after the season. <span data-removal-fee></span></small></label>
           <label><input class="composer-hidden" type="radio" name="properties[Removal]" value="No" required><span>I’ll handle it</span><small>Leave the end-of-season details to me.</small></label>
         </fieldset>
         <div class="composer-hidden" aria-hidden="true">
@@ -1158,6 +1158,19 @@
       services.dataset.deliveryPrice = card.dataset.deliveryPrice || '0';
       services.dataset.removalId = card.dataset.removalId || '';
       services.dataset.removalPrice = card.dataset.removalPrice || '0';
+      const expectedFee = Number(services.dataset.expectedServiceFee);
+      root.querySelectorAll('[data-delivery-fee]').forEach(note => {
+        const price = services.dataset.deliveryId ? Number(services.dataset.deliveryPrice) : expectedFee;
+        note.textContent = price > 0
+          ? `Delivery fee: ${formatMoney(price, window.shopMoneyFormat)}${services.dataset.deliveryId ? '' : ' estimate'}`
+          : 'Delivery price to be confirmed';
+      });
+      root.querySelectorAll('[data-removal-fee]').forEach(note => {
+        const price = services.dataset.removalId ? Number(services.dataset.removalPrice) : expectedFee;
+        note.textContent = price > 0
+          ? `+${formatMoney(price, window.shopMoneyFormat)}${services.dataset.removalId ? '' : ' estimate'}`
+          : 'Removal price to be confirmed';
+      });
       hayProperty.value = ['medium', 'large'].includes(card.dataset.displaySize) ? 'Yes' : 'No';
       const selected = variantSelect.selectedOptions[0];
       const price = form.querySelector('[data-price-container]');
