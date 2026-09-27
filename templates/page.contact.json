@@ -3,11 +3,11 @@
     "contact": {
       "type": "contact-form",
       "settings": {
-        "eyebrow": "The conversation / Begin here",
-        "title": "Tell us about the space.",
-        "text": "The doorway, the occasion, the feeling you want guests to have. The best compositions begin with a conversation.",
-        "form_heading": "Let’s talk about your idea.",
-        "form_intro": "Need a different scale, a particular palette, or a design for a unique space? A consultation lets us discuss what’s possible before confirming scope, pricing, or a date.",
+        "eyebrow": "A conversation / Begin here",
+        "title": "Share a little about your setting.",
+        "text": "Tell us about the entrance, the occasion, and the atmosphere you have in mind. A few thoughtful details are a lovely place to begin.",
+        "form_heading": "Tell us what you have in mind.",
+        "form_intro": "Considering a different scale, a particular palette, or a design for a distinctive space? A consultation is a chance to discuss what may be possible before scope, pricing, or a date is confirmed.",
         "submit_label": "Send an inquiry",
         "form_note": "A consultation request is not a confirmed booking, quote, or order."
       }

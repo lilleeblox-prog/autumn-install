@@ -4,12 +4,12 @@
       "type": "gallery",
       "settings": {
         "eyebrow": "The palettes / 01—03",
-        "title": "Color stories, gathered.",
-        "intro": "Close-up photographs of the pumpkins and gourds in each color story. These are palette studies, not finished entry installations.",
-        "outro": "<p>Explore these three color directions in the builder. Scale photographs are separate references for proportion, not renderings of a finished display.</p>",
+        "title": "A study in seasonal color.",
+        "intro": "A closer look at the pumpkins and gourds within each palette. These photographs show color and variety, rather than finished entry installations.",
+        "outro": "<p>Explore the three color directions in the builder. Separate scale photographs offer a guide to proportion; they are not renderings of a finished display.</p>",
         "button_label": "Explore the palettes",
         "filter_by_palette": false,
-        "empty_message": "The studio portfolio is being prepared. Please return soon."
+        "empty_message": "There are no photographs to show just now. Please visit again soon."
       },
       "blocks": {
         "countryside": {
@@ -17,7 +17,7 @@
           "settings": {
             "palette": "Autumn in the Countryside",
             "reference_asset": "palette-countryside",
-            "caption": "Autumn in the Countryside / Palette photograph"
+            "caption": "Autumn in the Countryside / A palette study"
           }
         },
         "classic-harvest": {
@@ -25,7 +25,7 @@
           "settings": {
             "palette": "Classic Harvest",
             "reference_asset": "palette-classic-harvest",
-            "caption": "Classic Harvest / Palette photograph"
+            "caption": "Classic Harvest / A palette study"
           }
         },
         "coastal-cowgirl": {
@@ -33,7 +33,7 @@
           "settings": {
             "palette": "Coastal Cowgirl",
             "reference_asset": "palette-coastal-cowgirl",
-            "caption": "Coastal Cowgirl / Palette photograph"
+            "caption": "Coastal Cowgirl / A palette study"
           }
         }
       },

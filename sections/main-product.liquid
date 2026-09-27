@@ -273,14 +273,14 @@
           {% assign includes_hay_bales = true %}
         {% endif %}
         <input type="hidden" name="properties[Hay Bales]" value="{% if includes_hay_bales %}Yes{% else %}No{% endif %}">
-         <p class="field-hint">The Porch and The Estate include two hay bales automatically. Select how your display arrives, then review the live estimate.</p>
+          <p class="field-hint">The Porch and The Estate each include two hay bales. Now choose how you’d like your display to arrive.</p>
        <div class="journey-step" data-journey>
          <div class="journey-step__title">01 / Delivery or installation</div>
          <fieldset>
            <legend class="visually-hidden">Choose service</legend>
            <div class="choice-list">
-              <label class="choice-option"><input type="radio" name="properties[Service]" value="Custom installation" required data-service="install"> <span><strong>Custom installation</strong><br><small>Our team sets up your display.</small></span></label>
-             <label class="choice-option"><input type="radio" name="properties[Service]" value="Delivery only" required data-service="delivery"> <span><strong>Delivery only</strong><br><small>Your display arrives ready for placement.{% if delivery_product != blank and delivery_product.available == false %} Not yet available.{% endif %}</small></span></label>
+               <label class="choice-option"><input type="radio" name="properties[Service]" value="Custom installation" required data-service="install"> <span><strong>Custom installation</strong><br><small>We style the display at your entry.</small></span></label>
+              <label class="choice-option"><input type="radio" name="properties[Service]" value="Delivery only" required data-service="delivery"> <span><strong>Delivery only</strong><br><small>The pieces arrive for you to arrange.{% if delivery_product != blank and delivery_product.available == false %} Not yet available.{% endif %}</small></span></label>
            </div>
          </fieldset>
        </div>
@@ -321,7 +321,7 @@
                 <option value="Gold">Gold</option>
               </select>
            </div>
-            <p class="field-hint">Choose a white or orange pumpkin and white, black, or gold vinyl. We’ll confirm the artwork and materials with you before production.</p>
+             <p class="field-hint">White or orange pumpkin; white, black, or gold vinyl. We’ll confirm your artwork and materials together before production.</p>
          </div>
        </div>
 
@@ -330,7 +330,7 @@
           <select id="RequestedWeek-{{ section.id }}" name="properties[Requested Week]" class="form-input" data-requested-week required>
             <option value="">Select a week</option>
           </select>
-           <p class="field-hint">We’ll confirm your delivery or installation date and time as your requested week approaches. If you need a specific date for an event, please let us know in the design notes below.</p>
+            <p class="field-hint">Choose the week you have in mind. It’s a request, not a reservation; we’ll confirm the date and time with you. Have an event date? Add it to your notes.</p>
       </div>
 
        <div class="journey-step">
@@ -344,8 +344,8 @@
          </fieldset>
        </div>
        <div class="journey-field">
-         <label for="GeneralNotes-{{ section.id }}">General notes (optional)</label>
-          <textarea id="GeneralNotes-{{ section.id }}" name="properties[General Notes]" class="form-input" rows="3" placeholder="Event or party date, specific requests, access details..."></textarea>
+          <label for="GeneralNotes-{{ section.id }}">A note for the studio (optional)</label>
+           <textarea id="GeneralNotes-{{ section.id }}" name="properties[General Notes]" class="form-input" rows="3" placeholder="Tell us about the space, an event date, or a detail you’d love included..."></textarea>
       </div>
        <div class="journey-step">
          <label class="choice-option"><input type="checkbox" data-custom-request> I’d like further customization beyond these choices</label>
@@ -396,8 +396,8 @@
       </div>
 
        <section class="composition-brief" data-composition-brief aria-labelledby="composition-brief-title">
-         <div class="eyebrow">Your composition / Live study</div>
-         <h2 id="composition-brief-title">The details, together.</h2>
+          <div class="eyebrow">Your entrance / In the making</div>
+          <h2 id="composition-brief-title">A welcome taking shape.</h2>
          <dl class="composition-brief__details">
            <div><dt>Palette</dt><dd data-brief-palette>Choose a palette</dd></div>
            <div><dt>Scale</dt><dd>{{ product.title | escape }}</dd></div>
@@ -406,10 +406,10 @@
            <div><dt>Preferred week</dt><dd data-brief-week>Yours to choose</dd></div>
            <div><dt>Removal</dt><dd data-brief-removal>Yours to choose</dd></div>
          </dl>
-         <p class="composition-brief__note">A design study, not a rendering or a confirmed booking. Every element can be reviewed in your cart.</p>
+          <p class="composition-brief__note">This is a study of your choices, not a rendering of the finished display or a confirmed date. You can review every detail in the cart.</p>
        </section>
         <section class="composition-price-estimate" data-composition-estimate aria-label="Live price breakdown">
-          <span class="eyebrow">Your custom design</span>
+          <span class="eyebrow">The details of your design</span>
           <div data-estimate-rows></div>
           <div class="composition-price-estimate__total"><span>Known subtotal</span><strong data-estimate-total aria-live="polite"></strong></div>
           <p class="composition-price-estimate__note" data-estimate-note>Selected services with unconfirmed rates are not included. Shipping and taxes are calculated at checkout.</p>
@@ -417,7 +417,7 @@
        <div id="product-form-error" class="hidden" role="alert" aria-live="polite" style="color: var(--color-accent); margin: 1rem 0; font-size: 0.875rem;"></div>
 
       <div class="product-form__buttons">
-         <p class="product-approval-note">Approving adds your selection to the cart for review; it does not place an order or reserve your preferred week.</p>
+          <p class="product-approval-note">Take a moment with your choices. Approval adds your design to the cart for review; it does not place an order or reserve a week.</p>
          <button type="button" class="button button--accent button--full" data-approve-design {% if product.available == false or product.selected_or_first_available_variant.price <= 0 %}disabled{% endif %}>
            {% if product.available == false %}
              Sold out
@@ -428,8 +428,8 @@
           {% endif %}
         </button>
          <div class="product-approval" data-approval-status hidden role="status">
-           <strong>Design approved</strong>
-           <p>Review every element of your composition and refine the details before checkout. Your preferred week is subject to confirmation.</p>
+            <strong>Your design is ready to review</strong>
+            <p>Take a closer look at every detail before checkout. We’ll confirm timing separately.</p>
          </div>
          <button type="submit" class="button button--accent button--full" data-cart-submit hidden>Review your composition</button>
       </div>

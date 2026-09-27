@@ -65,9 +65,9 @@
 <div class="container cart-page">
   <div class="cart-header">
     <div>
-      <span class="eyebrow">The final details</span>
-      <h1>Your composition</h1>
-      <p>Take a moment with your design. Every element can be reviewed before you proceed.</p>
+       <span class="eyebrow">A moment before the next step</span>
+       <h1>Your design, gathered.</h1>
+       <p>Take one more look at the colors, details, and services you’ve chosen. This is your space to make them just right.</p>
     </div>
     <a href="{{ routes.root_url }}#compose" class="cart-continue">Explore more designs &rarr;</a>
   </div>
@@ -152,7 +152,7 @@
           <span>Estimated Total</span>
           <span>{{ cart.total_price | money }}</span>
         </div>
-         <p class="cart-note">Your display and selected services are shown separately. To refine the design, select “Edit design” above. Your preferred week is subject to confirmation; taxes and delivery details are calculated at checkout.</p>
+          <p class="cart-note">Your display and services appear as separate lines. To change a detail, choose “Edit design” above. Your preferred week still needs confirmation; taxes and any shipping are calculated at checkout.</p>
         <div class="cart-buttons">
           <button type="submit" name="update" class="button button--secondary">Update selection</button>
           <button type="submit" name="checkout" class="button button--accent">Proceed to checkout</button>
@@ -161,10 +161,10 @@
     </form>
   {% else %}
     <div class="cart-empty">
-      <span class="eyebrow">A beginning</span>
-      <h2>Your design begins here.</h2>
-      <p>Explore our considered displays and create a welcome of your own.</p>
-      <a href="{{ routes.root_url }}" class="button button--accent">Explore the collection</a>
+       <span class="eyebrow">An invitation</span>
+       <h2>Something lovely starts at the door.</h2>
+       <p>Find a color story, consider the proportions, and make the season feel like yours.</p>
+       <a href="{{ routes.root_url }}#compose" class="button button--accent">Create your welcome</a>
     </div>
   {% endif %}
 </div>

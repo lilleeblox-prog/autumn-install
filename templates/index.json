@@ -4,10 +4,10 @@
       "type": "hero",
       "disabled": true,
       "settings": {
-        "eyebrow": "A premium pumpkin display, designed for your entry",
-        "heading": "Curate your\n<em>arrival.</em>",
-        "text": "A bespoke pumpkin and gourd installation designed for your stoop, porch, or storefront. Choose your palette and scale. We handle the delivery and styling.",
-        "button_label": "Start composing",
+        "eyebrow": "Seasonal styling for the spaces that welcome us",
+        "heading": "A beautiful welcome\n<em>begins here.</em>",
+        "text": "Let your entrance feel as considered as the rooms beyond it. Choose a color story and a scale that belong to your space; we'll help you make it your own.",
+        "button_label": "Create your welcome",
         "button_link": "#compose",
         "secondary_label": "See the displays",
         "secondary_link": "",
@@ -17,31 +17,31 @@
     "process": {
       "type": "process-steps",
       "settings": {
-        "title": "Compose your entry in three steps.",
-        "text": "Build your complete seasonal composition here. Review every choice and the live estimate before approving your design.",
-        "button_label": "Explore packages",
+        "title": "Made for the way you welcome.",
+        "text": "An entrance can set the mood for the whole season. Start with a palette, find the right proportions, then gather the details into a design that feels distinctly yours.",
+        "button_label": "Begin your design",
         "button_link": "#compose"
       },
       "blocks": {
         "step1": {
           "type": "step",
           "settings": {
-            "title": "01 / Find your palette",
-            "text": "Choose the color direction that suits your entry. Matching studies appear only when photography is available."
+            "title": "01 / Find your color story",
+            "text": "Warm and familiar, quietly classic, or a little unexpected. Choose the colors you would love to come home to."
           }
         },
         "step2": {
           "type": "step",
           "settings": {
-            "title": "02 / Set the scale",
-            "text": "Compare The Stoop, The Porch, and The Estate alongside the live design review."
+            "title": "02 / Consider the proportions",
+            "text": "A small stoop and a generous staircase call for different gestures. Find the composition that gives your entry room to shine."
           }
         },
         "step3": {
           "type": "step",
           "settings": {
-            "title": "03 / Complete and review",
-            "text": "Choose delivery or installation, timing, artwork and removal. Approve your composition, then review every detail before checkout."
+            "title": "03 / Make it yours",
+            "text": "Choose how it arrives, add any personal touches, and take one last look at your design and estimate before approving it for cart review."
           }
         }
       },
@@ -50,17 +50,17 @@
     "packages": {
       "type": "package-browser",
       "settings": {
-        "eyebrow": "Palette Install / Design Studio",
+        "eyebrow": "Palette Install / Seasonal interiors",
         "section_id": "compose",
-        "title": "An entrance|to remember.",
-        "text": "Compose a seasonal welcome with the care you would give any other room. Begin with a color story; we’ll take it from there.",
+        "title": "A welcome|all your own.",
+        "text": "Your doorway is the first room anyone sees. Let’s give it the same warmth, color, and attention as everything within.",
         "palette_heading": "01 / The palette",
-        "summary_heading": "The view from here.",
-        "summary_disclosure": "Your choices appear here as you make them. Photographs show palette or scale inspiration, not a rendering of your finished display.",
+        "summary_heading": "Coming together beautifully.",
+        "summary_disclosure": "See your choices take shape as you go. Photographs are palette or scale studies, not a rendering of your finished entry.",
         "scale_eyebrow": "02 / The proportion",
         "scale_heading": "Find your scale.",
         "continue_label": "Approve design",
-        "continue_disclosure": "Approval adds your composition to cart for review and does not place an order or reserve a week.",
+        "continue_disclosure": "Take a moment with your design. Approval adds it to the cart for review; it does not place an order or reserve a week.",
         "delivery_small_product": "small-display-delivery",
         "delivery_medium_product": "medium-display-delivery",
         "delivery_large_product": "large-display-delivery",
@@ -78,8 +78,8 @@
             "scale_name": "The Stoop",
             "draft_estimate_cents": 42500,
             "included_items": "6 Large Pumpkins\n6 Medium Pumpkins\n6 White Pumpkins\nAssortment of Specialty Pumpkins\nAssortment of Pie Pumpkins",
-            "subtitle_fallback": "Compact entry",
-            "room_fallback": "Perfect for a single door or narrow stoop"
+            "subtitle_fallback": "An intimate welcome",
+            "room_fallback": "A lovely fit for a single door or narrow stoop"
           }
         },
         "medium": {
@@ -92,8 +92,8 @@
             "included_items": "8 Large Pumpkins\n8 Medium Pumpkins\n8 White Pumpkins\nAssortment of Specialty Pumpkins\nAssortment of Pie Pumpkins\n2 Hay Bales",
             "default_selected": true,
             "most_popular": true,
-            "subtitle_fallback": "Full entry",
-            "room_fallback": "Substantial symmetric or asymmetrical entry"
+            "subtitle_fallback": "A generous welcome",
+            "room_fallback": "For a porch or a pair of welcoming steps"
           }
         },
         "large": {
@@ -104,8 +104,8 @@
             "scale_name": "The Estate",
             "draft_estimate_cents": 125000,
             "included_items": "2 Grand Prize Pumpkins\n10 Large Pumpkins\n8 Medium Pumpkins\n8 White Pumpkins\n16 Specialty Pumpkins\n2 Hay Bales\nassortment of minis\nOrnamental Gourds\nAssortment of Pie Pumpkins",
-            "subtitle_fallback": "Expansive entry",
-            "room_fallback": "Expansive installation for wide steps or commercial facades"
+            "subtitle_fallback": "A grand welcome",
+            "room_fallback": "For wide steps or a spacious storefront"
           }
         },
         "palette-countryside": {
@@ -155,30 +155,30 @@
     "studio-about": {
       "type": "image-with-text",
       "settings": {
-        "eyebrow": "Our Studio",
-        "title": "Architectural styling for the season.",
-        "text": "<p>Palette Install approaches the seasonal entry as an extension of the spaces within. Select a considered display for a residential porch, stoop, or storefront.</p>",
+        "eyebrow": "A note from the studio",
+        "title": "The feeling begins at the door.",
+        "text": "<p>We believe the entrance deserves as much thought as the room beyond it. Color, proportion, and the character of your space all have a part to play in a welcome that feels like yours.</p>",
         "layout": "left"
       }
     },
     "faq": {
       "type": "faq",
       "settings": {
-        "title": "Frequently Asked Questions"
+        "title": "The little things worth knowing"
       },
       "blocks": {
         "q1": {
           "type": "qa",
           "settings": {
             "question": "How long do the pumpkins last?",
-            "answer": "<p>Longevity varies with weather and exposure. Contact us for guidance on caring for your display.</p>"
+            "answer": "<p>Each pumpkin is its own little piece of the harvest. How long it lasts depends on weather and exposure; get in touch if you’d like care advice for your entry.</p>"
           }
         },
         "q2": {
           "type": "qa",
           "settings": {
             "question": "Do I need to be home for the installation?",
-            "answer": "<p>We will confirm access and installation details with you before the visit.</p>"
+            "answer": "<p>We’ll discuss access and placement with you before any installation date is confirmed.</p>"
           }
         }
       },

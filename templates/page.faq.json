@@ -3,51 +3,51 @@
     "faq": {
       "type": "faq",
       "settings": {
-        "eyebrow": "The particulars / Good to know",
-        "title": "A few good questions.",
-        "intro": "Everything you may want to know about materials, timing, installation and what it means to approve a design."
+        "eyebrow": "A few details / Good to know",
+        "title": "The details, thoughtfully answered.",
+        "intro": "A little more on the palettes, timing, installation, and the steps between reviewing a design and moving forward."
       },
       "blocks": {
         "q1": {
           "type": "qa",
           "settings": {
             "question": "Does the photo show my exact finished display?",
-            "answer": "<p>Package photos are scale references. Your chosen palette sets the color direction; individual heirloom varieties may vary with the harvest.</p>"
+            "answer": "<p>Package photos are references for scale, not exact finished displays. Your chosen palette guides the color story, while individual heirloom varieties may vary with the harvest.</p>"
           }
         },
         "q2": {
           "type": "qa",
           "settings": {
             "question": "What is the difference between delivery and installation?",
-            "answer": "<p>With custom installation, the display is styled at your entry. With delivery only, the curated pumpkins and gourds are dropped off for you to arrange. You may choose either option when shaping your design.</p>"
+            "answer": "<p>With custom installation, the display is styled at your entry. With delivery only, the pumpkins and gourds are delivered for you to arrange. You may choose either option while shaping your design.</p>"
           }
         },
         "q3": {
           "type": "qa",
           "settings": {
             "question": "Is my requested week a confirmed booking?",
-            "answer": "<p>No. The week is a preference for your brief, not a reserved date. Scheduling and availability will be confirmed separately; add a specific event date to your notes if one matters.</p>"
+            "answer": "<p>No. Your selected week is a request, not a reserved date. Availability and scheduling are confirmed separately. If you are planning around an event, please include its date in your notes.</p>"
           }
         },
         "q4": {
           "type": "qa",
           "settings": {
             "question": "Can I add custom vinyl artwork or arrange removal?",
-            "answer": "<p>Yes. Upload your artwork as a PNG or PDF, choose how many pumpkins to wrap, then select a white or orange pumpkin and white, black, or gold vinyl. We’ll confirm the artwork before production. You can also request post-season removal.</p>"
+            "answer": "<p>Yes. Upload a PNG or PDF, choose how many pumpkins to wrap, then select a white or orange pumpkin and white, black, or gold vinyl. We’ll confirm the artwork before production. You may also request post-season removal.</p>"
           }
         },
         "q5": {
           "type": "qa",
           "settings": {
             "question": "How long do the pumpkins last?",
-            "answer": "<p>Longevity varies with weather, sun exposure, and the pumpkins themselves. Keep your display out of prolonged standing water where possible, and check individual pieces regularly for softness or damage.</p>"
+            "answer": "<p>Longevity depends on the weather, sun exposure, and each pumpkin. Where possible, keep the display out of prolonged standing water, and check the pieces regularly for softness or damage.</p>"
           }
         },
         "q6": {
           "type": "qa",
           "settings": {
             "question": "Do I need to be home for the installation?",
-            "answer": "<p>Access and placement details would be confirmed with you before an installation. You can add entry instructions or an event date to the notes in your brief.</p>"
+            "answer": "<p>We’ll confirm access and placement details with you before an installation. You may include entry instructions or a requested event date in the notes in your brief.</p>"
           }
         }
       },

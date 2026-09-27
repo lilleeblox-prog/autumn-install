@@ -3,34 +3,34 @@
     "process": {
       "type": "process-steps",
       "settings": {
-        "eyebrow": "Our approach / From idea to entrance",
-        "title": "A considered way in.",
-        "text": "Every memorable entrance begins with a point of view. Here is how a composition takes shape, and what happens after you approve yours.",
+        "eyebrow": "Our approach / From first thought to entry",
+        "title": "From first thought to front door.",
+        "text": "A beautiful entrance begins with the feeling you want people to have when they arrive. The rest is a series of thoughtful choices, made together.",
         "button_label": "Create your design"
       },
       "blocks": {
         "s1": {
           "type": "step",
           "settings": {
-            "kicker": "Review",
-            "title": "Approve your design.",
-            "text": "Review your palette, scale, services, and notes before approving. If you change a choice afterward, you will need to approve the updated design again. Approval is not an order or a reservation; the final review and checkout become available only when the offers are ready."
+            "kicker": "Your design",
+            "title": "See it all together.",
+            "text": "Gather your palette, scale, and finishing details in one place. When it feels like yours, approve the design for cart review. You can still revise it and approve again. This step is not an order or a date reservation; checkout is available only when the offers are ready."
           }
         },
         "s2": {
           "type": "step",
           "settings": {
-            "kicker": "When confirmed",
-            "title": "Plan the timing.",
-            "text": "Your selected week is a preference, not a booked date. Add an event date in your notes if timing matters. Availability and scheduling will need confirmation before an installation or delivery."
+            "kicker": "Timing",
+            "title": "Tell us when it matters.",
+            "text": "Have a gathering in mind? Share the week you’re hoping for, and include an event date in your notes. It’s a request rather than a booking; we’ll confirm availability and timing separately."
           }
         },
         "s3": {
           "type": "step",
           "settings": {
             "kicker": "At your entry",
-            "title": "Choose how it arrives.",
-            "text": "Custom installation means the display is styled at your entry. Delivery only leaves the arrangement to you. You can also upload a PNG or PDF for vinyl-wrapped artwork on a white or orange pumpkin, choosing white, black, or gold vinyl, or request post-season removal. Once details and pricing are confirmed, you can review your selection before secure checkout."
+            "title": "Make the welcome yours.",
+            "text": "Choose installation to have the display styled at your entry, or delivery if you’d rather arrange it yourself. Add your PNG or PDF artwork to a white or orange pumpkin with white, black, or gold vinyl, or request post-season removal. We’ll confirm the details and pricing before checkout."
           }
         }
       },

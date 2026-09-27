@@ -19,19 +19,19 @@
 
   <div class="contact-form-content">
     <section aria-labelledby="consultation-form-title">
-      <span class="eyebrow">Further customization / Consultation required</span>
+       <span class="eyebrow">A conversation with the studio</span>
       <h3 id="consultation-form-title">{{ section.settings.form_heading | escape }}</h3>
       <p>{{ section.settings.form_intro | escape }}</p>
 
   {% form 'contact' %}
     {% if form.posted_successfully? %}
        <div class="contact-form__success" data-contact-success>
-        Thank you for sharing your idea. Your inquiry has been received; we will be in touch to discuss what may be possible.
+         Thank you for telling us what you have in mind. Your inquiry has reached the studio; we’ll be in touch to explore what might be possible.
       </div>
     {% endif %}
 
     {{ form.errors | default_errors }}
-    <p class="contact-form__prefill" data-consultation-prefill-notice hidden>Your choices have been added below. Please review them and add your contact details; an inquiry is not a booking or quote.</p>
+     <p class="contact-form__prefill" data-consultation-prefill-notice hidden>We’ve carried your design notes into this conversation. Add your contact details and take a look before sending; an inquiry is not a booking or quote.</p>
 
     <div class="form-field">
       <label class="form-label" for="ContactFormName-{{ section.id }}">Name</label>

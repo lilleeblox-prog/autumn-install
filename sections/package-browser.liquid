@@ -854,8 +854,8 @@
         <p>{{ section.settings.text | escape }}</p>
       </header>
       <div class="palette-composer__step">
-        <span class="eyebrow">{{ section.settings.palette_heading | escape }}</span><h2>Set the tone.</h2>
-        <p>Every entry has its own atmosphere. Choose the color story that feels at home in yours.</p>
+        <span class="eyebrow">{{ section.settings.palette_heading | escape }}</span><h2>Begin with color.</h2>
+        <p>From the warmth of harvest to a softer coastal note, find the shades you would love to come home to.</p>
         <fieldset class="palette-choices"><legend class="visually-hidden">Choose a color palette</legend>
           {% for palette in palette_names %}
             {% assign palette_index = forloop.index0 %}
@@ -870,7 +870,7 @@
       </div>
       <div class="palette-composer__step">
         <span class="eyebrow">{{ section.settings.scale_eyebrow | escape }}</span><h2>{{ section.settings.scale_heading | escape }}</h2>
-        <p>Consider the architecture of your entrance and choose the scale that suits your space.</p>
+        <p>A narrow stoop, generous porch, or sweeping staircase—let the proportions of your home lead the way.</p>
         <div class="package-browser__grid">
           {% for block in section.blocks %}
             {% if block.type == 'package' %}
@@ -908,35 +908,35 @@
         </div>
       </div>
       <div class="palette-composer__step">
-        <span class="eyebrow">03 / The details</span><h2>Put your signature on it.</h2>
-        <p>Upload your own artwork and we’ll wrap it in vinyl on a pumpkin. Choose the pumpkin and vinyl colors that bring your design to life.</p>
+        <span class="eyebrow">03 / The details</span><h2>A detail that’s yours.</h2>
+        <p>A personal motif can make the welcome feel even more like home. Add your artwork in vinyl to a pumpkin, then choose its colors.</p>
         <fieldset class="composer-choice composer-choice--artwork composer-choice--full-card"><legend>Add a vinyl-wrapped artwork pumpkin?</legend>
-          <label><input class="composer-hidden" type="radio" name="properties[Vinyl Artwork]" value="Yes" data-monogram-choice="yes" required><span>Yes, add my artwork{% if monogram_product != blank and monogram_product.available and monogram_product.published_at != blank and monogram_product.selected_or_first_available_variant.price > 0 %} (+{{ monogram_product.selected_or_first_available_variant.price | money }} per pumpkin){% else %} (preview only · price or product pending){% endif %}</span><small>Wrap my uploaded design in vinyl on a pumpkin.</small></label>
-          <label><input class="composer-hidden" type="radio" name="properties[Vinyl Artwork]" value="No" data-monogram-choice="no" required><span>No thanks</span><small>No custom vinyl artwork.</small></label>
+          <label><input class="composer-hidden" type="radio" name="properties[Vinyl Artwork]" value="Yes" data-monogram-choice="yes" required><span>Yes, add my artwork{% if monogram_product != blank and monogram_product.available and monogram_product.published_at != blank and monogram_product.selected_or_first_available_variant.price > 0 %} (+{{ monogram_product.selected_or_first_available_variant.price | money }} per pumpkin){% endif %}</span><small>{% if monogram_product != blank and monogram_product.available and monogram_product.published_at != blank and monogram_product.selected_or_first_available_variant.price > 0 %}Your design, wrapped in vinyl on a pumpkin.{% else %}A preview for now; price and availability must be confirmed before ordering.{% endif %}</small></label>
+          <label><input class="composer-hidden" type="radio" name="properties[Vinyl Artwork]" value="No" data-monogram-choice="no" required><span>No thanks</span><small>Keep the palette just as it is.</small></label>
         </fieldset>
         <div data-monogram-fields hidden>
           <label>Upload your artwork (PNG or PDF)<input type="file" name="properties[Artwork File]" accept=".png,.pdf,image/png,application/pdf" data-artwork-file></label>
           <label>How many pumpkins?<input type="number" name="properties[Vinyl-wrapped Pumpkins]" min="1" step="1" value="1" data-monogram-quantity></label>
           <label>Pumpkin color<select name="properties[Pumpkin Color Preference]" data-monogram-detail><option value="">Choose a pumpkin color</option><option>White</option><option>Orange</option></select></label>
           <label>Vinyl color<select name="properties[Vinyl Color Preference]" data-monogram-detail><option value="">Choose a vinyl color</option><option>White</option><option>Black</option><option>Gold</option></select></label>
-          <p>Choose a PNG or PDF no larger than 20 MB. We confirm artwork and materials before production.</p>
+          <p>One PNG or PDF, up to 20 MB. We’ll confirm your artwork and materials before production.</p>
         </div>
         <label class="composer-field">Your vision (optional)<textarea name="properties[General Notes]" rows="3" placeholder="The feeling, colors, event, or little details you're imagining..."></textarea></label>
         <div class="composer-consultation">
           <span class="eyebrow">Beyond the builder</span>
-          <h3>Have something more in mind?</h3>
-          <p>For a different scale, setting, or one-of-a-kind detail, further customization starts with a consultation. Scope and pricing are discussed before anything is confirmed.</p>
-          <label class="composer-custom"><input type="checkbox" data-custom-request> I’d like something further customized</label>
+          <h3>Something only you could imagine?</h3>
+          <p>A different scale, a distinctive doorway, a detail that makes it yours—tell us what you have in mind. We can explore the possibilities together before confirming scope, price, or timing.</p>
+          <label class="composer-custom"><input type="checkbox" data-custom-request> I have a special request</label>
           <p data-custom-request-note hidden>A consultation is required for this request. Add details in “Your vision”; your chosen details will appear in the consultation draft. {% if pages.contact != blank %}<a href="{{ pages.contact.url }}#consultation-form" data-consultation-link>Continue to consultation draft →</a>{% else %}Please contact the studio before ordering.{% endif %}</p>
         </div>
         <div class="palette-composer__arrival">
           <span class="eyebrow">04 / The arrival</span>
-          <h2>Bring it to life.</h2>
-          <p>Tell us how you’d like the composition to arrive, and when you hope to welcome it.</p>
+          <h2>Make an entrance.</h2>
+          <p>How would you like your display to arrive? Tell us the week you have in mind, and we’ll discuss the details with you.</p>
         </div>
         <fieldset class="composer-choice composer-choice--service composer-choice--full-card"><legend>Fulfillment method</legend>
-          <label><input class="composer-hidden" type="radio" name="properties[Service]" value="Custom installation" data-service="install" required><span>Custom installation</span><small>Our team sets up your display.</small></label>
-          <label><input class="composer-hidden" type="radio" name="properties[Service]" value="Delivery only" data-service="delivery" required><span>Delivery only</span><small>Curated drop-off for you to arrange.</small></label>
+          <label><input class="composer-hidden" type="radio" name="properties[Service]" value="Custom installation" data-service="install" required><span>Custom installation</span><small>We style the display at your entry.</small></label>
+          <label><input class="composer-hidden" type="radio" name="properties[Service]" value="Delivery only" data-service="delivery" required><span>Delivery only</span><small>The pieces arrive for you to arrange.</small></label>
         </fieldset>
         <fieldset class="composer-week-choice">
           <legend data-requested-week-label>Requested delivery &amp; installation week</legend>
@@ -950,11 +950,11 @@
               {% endif %}
             {% endfor %}
           </div>
-          <small class="composer-field__hint">These are requested weeks, not reserved dates. We’ll confirm your delivery or installation date and time as your requested week approaches. If you need a specific date for an event, please let us know in your design notes above.</small>
+          <small class="composer-field__hint">Choose the week you have in mind. This is a request, not a reservation; we’ll confirm the date and time with you. Have an event date? Add it to your notes above.</small>
         </fieldset>
         <fieldset class="composer-choice composer-choice--full-card"><legend>Removal service</legend>
-          <label><input class="composer-hidden" type="radio" name="properties[Removal]" value="Yes" required><span>Schedule Removal</span><small>We clear everything post-season.</small></label>
-          <label><input class="composer-hidden" type="radio" name="properties[Removal]" value="No" required><span>I’ll Handle It</span><small>No removal service needed.</small></label>
+          <label><input class="composer-hidden" type="radio" name="properties[Removal]" value="Yes" required><span>Please arrange removal</span><small>We’ll collect the display after the season.</small></label>
+          <label><input class="composer-hidden" type="radio" name="properties[Removal]" value="No" required><span>I’ll handle it</span><small>Leave the end-of-season details to me.</small></label>
         </fieldset>
         <div class="composer-hidden" aria-hidden="true">
           <select name="id" data-base-variant><option value="" data-price="0">Choose a priced package</option></select>
@@ -971,7 +971,7 @@
     </div>
     <aside class="palette-composer__preview" data-composer-pane="preview" aria-label="Live design review">
       <div class="palette-composer__preview-intro">
-        <span class="eyebrow">Your composition / Live study</span>
+        <span class="eyebrow">Your entrance / In the making</span>
         <h2>{{ section.settings.summary_heading | escape }}</h2>
         <p>{{ section.settings.summary_disclosure | escape }}</p>
       </div>
@@ -999,7 +999,7 @@
         <div class="composition-summary__row" hidden><span>Notes</span><strong data-brief-notes></strong></div>
         <p class="product-approval-note">{{ section.settings.continue_disclosure | escape }} Preferred weeks require confirmation.</p>
         <button type="button" data-approve-design disabled>{{ section.settings.continue_label | escape }}</button>
-        <div class="product-approval" data-approval-status hidden role="status"><strong>Design approved</strong><p>Review every composition line in your cart before checkout.</p></div>
+        <div class="product-approval" data-approval-status hidden role="status"><strong>Your design is ready to review</strong><p>Take a closer look at each part of your composition in the cart before checkout.</p></div>
         <button type="submit" data-cart-submit hidden>Review your composition</button>
         <section class="composition-price-estimate" data-composition-estimate aria-label="Live price breakdown">
           <span class="eyebrow">Live estimate</span><div data-estimate-rows></div>
