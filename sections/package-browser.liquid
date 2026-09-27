@@ -207,11 +207,6 @@
     font-size: 1.45rem;
     font-weight: 400;
   }
-  #PackageBrowser-{{ section.id }} .package-price {
-    flex-shrink: 0;
-    font-family: var(--font-serif);
-    font-size: 1.15rem;
-  }
   #PackageBrowser-{{ section.id }} .package-dimensions,
   #PackageBrowser-{{ section.id }} .package-room,
   #PackageBrowser-{{ section.id }} .package-status {
@@ -323,7 +318,6 @@
   #PackageBrowser-{{ section.id }} .package-browser__grid { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:10px; }
   #PackageBrowser-{{ section.id }} .package-card { width:100%; display:flex; flex-direction:column; text-align:left; gap:8px; min-height:180px; padding:15px; border:1px solid var(--composer-line); color:inherit; background:transparent; cursor:pointer; }
   #PackageBrowser-{{ section.id }} .package-title { font:400 1.25rem var(--font-serif); }
-  #PackageBrowser-{{ section.id }} .package-price { font:400 1.1rem var(--font-serif); }
   #PackageBrowser-{{ section.id }} [data-scale-status], #PackageBrowser-{{ section.id }} .package-includes { color:var(--color-muted);font-size:.72rem;line-height:1.5; }
   #PackageBrowser-{{ section.id }} .package-includes { margin-top:auto; }
   #PackageBrowser-{{ section.id }} .composer-choice { border:0;padding:0;margin:20px 0;display:grid;gap:8px; }
@@ -481,7 +475,6 @@
   }
   #PackageBrowser-{{ section.id }} .package-card { position: relative; align-items: flex-start; padding: 48px 20px 24px; gap: 8px; }
   #PackageBrowser-{{ section.id }} .package-title { font-size: clamp(25px, 2.3vw, 34px); letter-spacing: -.035em; }
-  #PackageBrowser-{{ section.id }} .package-price { font-size: 1rem; }
   #PackageBrowser-{{ section.id }} .package-room { min-height: 36px; color: var(--composer-muted); font-size: 12px; line-height: 1.5; }
   #PackageBrowser-{{ section.id }} [data-scale-status] { margin-top: auto; color: var(--composer-oxide); font-size: 10px; line-height: 1.4; }
   #PackageBrowser-{{ section.id }} .package-card__popular {
@@ -517,7 +510,6 @@
   #PackageBrowser-{{ section.id }} .package-card[aria-expanded="true"] .package-card__hint-arrow { transform: rotate(90deg); }
   #PackageBrowser-{{ section.id }} .package-card-details { padding: 18px 20px 20px; }
   #PackageBrowser-{{ section.id }} .package-card-details__availability { margin-top: 18px; padding-top: 15px; border-top: 1px solid var(--composer-line); }
-  #PackageBrowser-{{ section.id }} .package-card-details__availability .package-price { display: block; margin: 0 0 5px; font-size: 17px; }
   #PackageBrowser-{{ section.id }} .package-card-details__availability [data-scale-status] { display: block; color: var(--composer-muted); font-size: 11px; line-height: 1.55; }
   #PackageBrowser-{{ section.id }} .package-browser__preview-intro { margin-bottom: 0; }
   #PackageBrowser-{{ section.id }} .palette-composer__preview { background: var(--composer-stone); }
@@ -898,7 +890,6 @@
                   {% assign included_items = block.settings.included_items | newline_to_br | split: '<br />' %}
                   <ul>{% for item in included_items %}{% assign line = item | strip %}{% if line != blank %}<li>{{ line | escape }}</li>{% endif %}{% endfor %}</ul>
                   <div class="package-card-details__availability">
-                    <strong class="package-price" data-scale-price>{% if prod == blank or prod.available == false or prod.published_at == blank or option_index < 0 %}Pricing unavailable{% else %}Select a palette to see price{% endif %}</strong>
                     <small data-scale-status role="status" aria-live="polite">{% if prod == blank %}Preview only · product not configured{% elsif prod.available == false or prod.published_at == blank %}Preview only · product not available{% elsif option_index < 0 %}Cannot order · a palette variant is required{% else %}Choose a palette to check ordering availability.{% endif %}</small>
                   </div>
                 </div>
@@ -911,7 +902,7 @@
         <span class="eyebrow">03 / The details</span><h2>A detail that’s yours.</h2>
         <p>A personal motif can make the welcome feel even more like home. Add your artwork in vinyl to a pumpkin, then choose its colors.</p>
         <fieldset class="composer-choice composer-choice--artwork composer-choice--full-card"><legend>Add a vinyl-wrapped artwork pumpkin?</legend>
-          <label><input class="composer-hidden" type="radio" name="properties[Vinyl Artwork]" value="Yes" data-monogram-choice="yes" required><span>Yes, add my artwork{% if monogram_product != blank and monogram_product.available and monogram_product.published_at != blank and monogram_product.selected_or_first_available_variant.price > 0 %} (+{{ monogram_product.selected_or_first_available_variant.price | money }} per pumpkin){% elsif section.settings.vinyl_estimate_cents > 0 %} (+{{ section.settings.vinyl_estimate_cents | money }} per pumpkin · estimate){% endif %}</span><small>{% if monogram_product != blank and monogram_product.available and monogram_product.published_at != blank and monogram_product.selected_or_first_available_variant.price > 0 %}Your design, wrapped in vinyl on a pumpkin.{% else %}A preview for now; availability must be confirmed before ordering.{% endif %}</small></label>
+          <label><input class="composer-hidden" type="radio" name="properties[Vinyl Artwork]" value="Yes" data-monogram-choice="yes" required><span>Yes, add my artwork</span><small>{% if monogram_product != blank and monogram_product.available and monogram_product.published_at != blank and monogram_product.selected_or_first_available_variant.price > 0 %}Your design, wrapped in vinyl on a pumpkin.{% else %}A preview for now; availability must be confirmed before ordering.{% endif %}</small></label>
           <label><input class="composer-hidden" type="radio" name="properties[Vinyl Artwork]" value="No" data-monogram-choice="no" required><span>No thanks</span><small>Keep the palette just as it is.</small></label>
         </fieldset>
         <div data-monogram-fields hidden>
@@ -935,8 +926,8 @@
           <p>How would you like your display to arrive? Tell us the week you have in mind, and we’ll discuss the details with you.</p>
         </div>
         <fieldset class="composer-choice composer-choice--service composer-choice--full-card"><legend>Fulfillment method</legend>
-          <label><input class="composer-hidden" type="radio" name="properties[Service]" value="Custom installation" data-service="install" required><span>Custom installation</span><small>We style the display at your entry. <span data-delivery-fee></span></small></label>
-          <label><input class="composer-hidden" type="radio" name="properties[Service]" value="Delivery only" data-service="delivery" required><span>Delivery only</span><small>The pieces arrive for you to arrange. <span data-delivery-fee></span></small></label>
+          <label><input class="composer-hidden" type="radio" name="properties[Service]" value="Custom installation" data-service="install" required><span>Custom installation</span><small>We style the display at your entry.</small></label>
+          <label><input class="composer-hidden" type="radio" name="properties[Service]" value="Delivery only" data-service="delivery" required><span>Delivery only</span><small>The pieces arrive for you to arrange.</small></label>
         </fieldset>
         <fieldset class="composer-week-choice">
           <legend data-requested-week-label>Requested delivery &amp; installation week</legend>
@@ -953,7 +944,7 @@
           <small class="composer-field__hint">Choose the week you have in mind. This is a request, not a reservation; we’ll confirm the date and time with you. Have an event date? Add it to your notes above.</small>
         </fieldset>
         <fieldset class="composer-choice composer-choice--full-card"><legend>Removal service</legend>
-          <label><input class="composer-hidden" type="radio" name="properties[Removal]" value="Yes" required><span>Please arrange removal</span><small>We’ll collect the display after the season. <span data-removal-fee></span></small></label>
+          <label><input class="composer-hidden" type="radio" name="properties[Removal]" value="Yes" required><span>Please arrange removal</span><small>We’ll collect the display after the season.</small></label>
           <label><input class="composer-hidden" type="radio" name="properties[Removal]" value="No" required><span>I’ll handle it</span><small>Leave the end-of-season details to me.</small></label>
         </fieldset>
         <div class="composer-hidden" aria-hidden="true">
@@ -1088,21 +1079,7 @@
     const updateScaleAvailability = (card, palette) => {
       const details = card.closest('.package-card-shell');
       const status = details?.querySelector('[data-scale-status]');
-      const price = details?.querySelector('[data-scale-price]');
       const variant = chosenVariant(card, palette);
-      if (price) {
-        if (variant) price.textContent = formatMoney(variant.price, window.shopMoneyFormat);
-        else if (Number(card.dataset.baseEstimateCents) > 0) {
-          price.textContent = `Draft estimate · ${formatMoney(card.dataset.baseEstimateCents, window.shopMoneyFormat)}`;
-        }
-        else if (!card.dataset.productId || card.dataset.productAvailable !== 'true' || Number(card.dataset.paletteIndex) < 0) {
-          price.textContent = 'Pricing unavailable';
-        } else if (!palette) {
-          price.textContent = 'Select a palette to see price';
-        } else {
-          price.textContent = 'No priced variant';
-        }
-      }
       if (!status) return;
       if (!card.dataset.productId) status.textContent = 'Preview only · product not configured';
       else if (card.dataset.productAvailable !== 'true') status.textContent = 'Preview only · product not available';
@@ -1158,19 +1135,6 @@
       services.dataset.deliveryPrice = card.dataset.deliveryPrice || '0';
       services.dataset.removalId = card.dataset.removalId || '';
       services.dataset.removalPrice = card.dataset.removalPrice || '0';
-      const expectedFee = Number(services.dataset.expectedServiceFee);
-      root.querySelectorAll('[data-delivery-fee]').forEach(note => {
-        const price = services.dataset.deliveryId ? Number(services.dataset.deliveryPrice) : expectedFee;
-        note.textContent = price > 0
-          ? `Delivery fee: ${formatMoney(price, window.shopMoneyFormat)}${services.dataset.deliveryId ? '' : ' estimate'}`
-          : 'Delivery price to be confirmed';
-      });
-      root.querySelectorAll('[data-removal-fee]').forEach(note => {
-        const price = services.dataset.removalId ? Number(services.dataset.removalPrice) : expectedFee;
-        note.textContent = price > 0
-          ? `+${formatMoney(price, window.shopMoneyFormat)}${services.dataset.removalId ? '' : ' estimate'}`
-          : 'Removal price to be confirmed';
-      });
       hayProperty.value = ['medium', 'large'].includes(card.dataset.displaySize) ? 'Yes' : 'No';
       const selected = variantSelect.selectedOptions[0];
       const price = form.querySelector('[data-price-container]');

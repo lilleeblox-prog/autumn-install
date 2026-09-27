@@ -279,8 +279,8 @@
          <fieldset>
            <legend class="visually-hidden">Choose service</legend>
            <div class="choice-list">
-               <label class="choice-option"><input type="radio" name="properties[Service]" value="Custom installation" required data-service="install"> <span><strong>Custom installation</strong><br><small>We style the display at your entry.{% if expected_service_fee > 0 %} Delivery fee: {{ expected_service_fee | money }}{% unless delivery_product.available and delivery_product.published_at != blank %} estimate · not ready to order{% endunless %}.{% endif %}</small></span></label>
-              <label class="choice-option"><input type="radio" name="properties[Service]" value="Delivery only" required data-service="delivery"> <span><strong>Delivery only</strong><br><small>The pieces arrive for you to arrange.{% if expected_service_fee > 0 %} Delivery fee: {{ expected_service_fee | money }}{% unless delivery_product.available and delivery_product.published_at != blank %} estimate · not ready to order{% endunless %}.{% endif %}</small></span></label>
+               <label class="choice-option"><input type="radio" name="properties[Service]" value="Custom installation" required data-service="install"> <span><strong>Custom installation</strong><br><small>We style the display at your entry.</small></span></label>
+              <label class="choice-option"><input type="radio" name="properties[Service]" value="Delivery only" required data-service="delivery"> <span><strong>Delivery only</strong><br><small>The pieces arrive for you to arrange.</small></span></label>
            </div>
          </fieldset>
        </div>
@@ -290,7 +290,7 @@
          <fieldset>
             <legend class="visually-hidden">Add vinyl-wrapped artwork to a pumpkin</legend>
            <div class="choice-list">
-                <label class="choice-option"><input type="radio" name="properties[Vinyl Artwork]" value="Yes" required data-monogram-choice="yes"> Yes, wrap my artwork in vinyl on a pumpkin {% if monogram_product != blank and monogram_product.published_at != blank and monogram_product.selected_or_first_available_variant.price > 0 %}(+{{ monogram_product.selected_or_first_available_variant.price | money }} per pumpkin{% unless monogram_product.available %} · not yet available{% endunless %}){% elsif section.settings.vinyl_estimate_cents > 0 %}(+{{ section.settings.vinyl_estimate_cents | money }} per pumpkin · estimate, not ready to order){% else %}(not ready to order · price pending){% endif %}</label>
+                 <label class="choice-option"><input type="radio" name="properties[Vinyl Artwork]" value="Yes" required data-monogram-choice="yes"> Yes, wrap my artwork in vinyl on a pumpkin</label>
               <label class="choice-option"><input type="radio" name="properties[Vinyl Artwork]" value="No" required data-monogram-choice="no"> No vinyl artwork</label>
            </div>
          </fieldset>
@@ -338,7 +338,7 @@
          <fieldset>
            <legend class="visually-hidden">Would you like removal?</legend>
            <div class="choice-list">
-              <label class="choice-option"><input type="radio" name="properties[Removal]" value="Yes" required> Yes, arrange removal {% if removal_product != blank and removal_product.published_at != blank and removal_product.selected_or_first_available_variant.price > 0 %}(+{{ removal_product.selected_or_first_available_variant.price | money }}{% unless removal_product.available %} · not yet available{% endunless %}){% elsif expected_service_fee > 0 %}(+{{ expected_service_fee | money }} · estimate, not ready to order){% else %}(price pending · not ready to order){% endif %}</label>
+               <label class="choice-option"><input type="radio" name="properties[Removal]" value="Yes" required> Yes, arrange removal</label>
              <label class="choice-option"><input type="radio" name="properties[Removal]" value="No" required> No removal</label>
            </div>
          </fieldset>
@@ -375,7 +375,7 @@
                 <label class="addon-option">
                    <input type="checkbox" name="addons[]" value="{{ addon_prod.selected_or_first_available_variant.id }}" data-addon-price="{{ addon_prod.selected_or_first_available_variant.price }}">
                   <div class="addon-info">
-                     <strong>{{ addon_prod.title }}</strong> (+{{ addon_prod.selected_or_first_available_variant.price | money }})
+                      <strong>{{ addon_prod.title }}</strong>
                     {% if block.settings.description != blank %}
                       <span style="display:block; font-size:0.75rem; color:var(--color-muted); margin-top:0.25rem;">{{ block.settings.description }}</span>
                     {% endif %}
