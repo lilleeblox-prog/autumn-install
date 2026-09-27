@@ -482,10 +482,11 @@
   #PackageBrowser-{{ section.id }} .palette-choice__swatches i { width: 17px; height: 17px; border-radius: 0; }
   #PackageBrowser-{{ section.id }} .palette-choice strong { font: 400 25px/1.05 var(--font-serif); }
   #PackageBrowser-{{ section.id }} .palette-choice small { color: var(--composer-muted); font-size: 11px; line-height: 1.5; }
-  #PackageBrowser-{{ section.id }} .package-browser__grid { gap: 12px; }
+  #PackageBrowser-{{ section.id }} .package-browser__grid { gap: 12px; align-items: start; }
   #PackageBrowser-{{ section.id }} .package-card-shell { min-width: 0; }
   #PackageBrowser-{{ section.id }} .package-card {
-    min-height: 180px;
+    height: 280px;
+    box-sizing: border-box;
     padding: 0;
     border: 1px solid transparent;
     background: var(--composer-card);
@@ -826,6 +827,7 @@
     #PackageBrowser-{{ section.id }} .palette-composer__intro h1 { font-size: clamp(62px, 13vw, 85px); }
     #PackageBrowser-{{ section.id }} .palette-choices { grid-template-columns: 1fr; }
     #PackageBrowser-{{ section.id }} .package-browser__grid { grid-template-columns: 1fr; }
+    #PackageBrowser-{{ section.id }} .package-card { height: auto; min-height: 180px; }
     #PackageBrowser-{{ section.id }} .composition-live-line { grid-template-columns: repeat(2, minmax(0,1fr)); }
     #PackageBrowser-{{ section.id }} .composition-live-line > div:last-child { grid-column: 1 / -1; }
     #PackageBrowser-{{ section.id }} .palette-study-heading h3 { font-size: 32px; }
