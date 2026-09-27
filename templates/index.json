@@ -2,6 +2,7 @@
   "sections": {
     "hero": {
       "type": "hero",
+      "disabled": true,
       "settings": {
         "eyebrow": "A premium pumpkin display, designed for your entry",
         "heading": "Curate your\n<em>arrival.</em>",
@@ -49,13 +50,13 @@
     "packages": {
       "type": "package-browser",
       "settings": {
-        "eyebrow": "Palette Install / Seasonal composition",
+        "eyebrow": "Palette Install / Design Studio",
         "section_id": "compose",
-        "title": "An entrance to remember.",
-        "text": "Compose a seasonal welcome with the care you would give any other room. Begin with a considered color story, then find a scale suited to your architecture.",
+        "title": "An entrance|to remember.",
+        "text": "Compose a seasonal welcome with the care you would give any other room. Begin with a color story; we’ll take it from there.",
         "palette_heading": "01 / The palette",
         "summary_heading": "The view from here.",
-        "summary_disclosure": "Your choices appear here as you make them. Palette photographs show color direction, not a rendering of the finished display.",
+        "summary_disclosure": "Your choices appear here as you make them. Photographs show palette or scale inspiration, not a rendering of your finished display.",
         "scale_eyebrow": "02 / The proportion",
         "scale_heading": "Find your scale.",
         "continue_label": "Approve design",

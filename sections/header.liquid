@@ -1,4 +1,25 @@
 <header class="site-header">
+  {% capture canonical_navigation %}
+    {% assign process_href = routes.root_url | append: '#process' %}
+    {% if pages.process != blank %}{% assign process_href = pages.process.url %}{% endif %}
+    <a href="{{ process_href }}" class="site-header__nav-link"{% if pages.process != blank and request.path == pages.process.url %} aria-current="page"{% endif %}>Process</a>
+    <a href="{{ routes.root_url }}#compose" class="site-header__nav-link">Compose</a>
+    {% if pages.gallery != blank %}
+      <a href="{{ pages.gallery.url }}" class="site-header__nav-link"{% if request.path == pages.gallery.url %} aria-current="page"{% endif %}>Gallery</a>
+    {% else %}
+      <a href="{{ routes.root_url }}#gallery" class="site-header__nav-link">Gallery</a>
+    {% endif %}
+    {% if pages.faq != blank %}
+      <a href="{{ pages.faq.url }}" class="site-header__nav-link"{% if request.path == pages.faq.url %} aria-current="page"{% endif %}>FAQ</a>
+    {% else %}
+      <a href="{{ routes.root_url }}#faq" class="site-header__nav-link">FAQ</a>
+    {% endif %}
+    {% if pages.contact != blank %}
+      <a href="{{ pages.contact.url }}" class="site-header__nav-link"{% if request.path == pages.contact.url %} aria-current="page"{% endif %}>Contact</a>
+    {% else %}
+      <a href="{{ routes.root_url }}#consultation-form" class="site-header__nav-link">Contact</a>
+    {% endif %}
+  {% endcapture %}
   <div class="container site-header__inner">
     <a href="{{ routes.root_url }}" class="site-header__logo" aria-label="Palette Install home">
       {{ section.settings.wordmark }}
@@ -9,29 +30,10 @@
     </button>
 
     <nav class="site-header__nav" aria-label="Main navigation">
-      {% if linklists[section.settings.menu].links.size > 0 %}
-        {% for link in linklists[section.settings.menu].links %}
-          <a href="{{ link.url }}" class="site-header__nav-link"{% if link.current %} aria-current="page"{% endif %}>{{ link.title }}</a>
-        {% endfor %}
-      {% else %}
-        {% if pages.process != blank %}
-          <a href="{{ pages.process.url }}" class="site-header__nav-link"{% if request.path == pages.process.url %} aria-current="page"{% endif %}>Process</a>
-        {% endif %}
-        <a href="{{ routes.root_url }}#compose" class="site-header__nav-link">Compose</a>
-        {% if pages.gallery != blank %}
-          <a href="{{ pages.gallery.url }}" class="site-header__nav-link"{% if request.path == pages.gallery.url %} aria-current="page"{% endif %}>Gallery</a>
-        {% endif %}
-        {% if pages.faq != blank %}
-          <a href="{{ pages.faq.url }}" class="site-header__nav-link"{% if request.path == pages.faq.url %} aria-current="page"{% endif %}>FAQ</a>
-        {% endif %}
-        {% if pages.contact != blank %}
-          <a href="{{ pages.contact.url }}" class="site-header__nav-link"{% if request.path == pages.contact.url %} aria-current="page"{% endif %}>Contact</a>
-        {% endif %}
-      {% endif %}
+      {{ canonical_navigation }}
     </nav>
     
     <div class="site-header__icons">
-      <span class="site-header__studio-note"><span class="status-dot" aria-hidden="true"></span>The autumn studio</span>
       <a href="{{ routes.cart_url }}" class="site-header__cart" id="cart-icon-bubble" aria-label="Your design{% if cart.item_count > 0 %}, {{ cart.item_count }} items{% else %}, empty{% endif %}">
         Your design
         {% if cart.item_count > 0 %}
@@ -42,27 +44,27 @@
   </div>
 
   <nav id="MobileNav" class="container mobile-nav hidden" data-mobile-nav aria-label="Mobile navigation">
-    {% if linklists[section.settings.menu].links.size > 0 %}
-      {% for link in linklists[section.settings.menu].links %}
-        <a href="{{ link.url }}" class="site-header__nav-link"{% if link.current %} aria-current="page"{% endif %}>{{ link.title }}</a>
-      {% endfor %}
-    {% else %}
-      {% if pages.process != blank %}
-        <a href="{{ pages.process.url }}" class="site-header__nav-link"{% if request.path == pages.process.url %} aria-current="page"{% endif %}>Process</a>
-      {% endif %}
-      <a href="{{ routes.root_url }}#compose" class="site-header__nav-link">Compose</a>
-      {% if pages.gallery != blank %}
-        <a href="{{ pages.gallery.url }}" class="site-header__nav-link"{% if request.path == pages.gallery.url %} aria-current="page"{% endif %}>Gallery</a>
-      {% endif %}
-      {% if pages.faq != blank %}
-        <a href="{{ pages.faq.url }}" class="site-header__nav-link"{% if request.path == pages.faq.url %} aria-current="page"{% endif %}>FAQ</a>
-      {% endif %}
-      {% if pages.contact != blank %}
-        <a href="{{ pages.contact.url }}" class="site-header__nav-link"{% if request.path == pages.contact.url %} aria-current="page"{% endif %}>Contact</a>
-      {% endif %}
-    {% endif %}
+    {{ canonical_navigation }}
   </nav>
 </header>
+
+<script>
+  (() => {
+    const bindFaqAnchor = () => {
+      const faqSection = document.querySelector('.faq-section');
+      if (!faqSection) return;
+      faqSection.id = 'faq';
+      if (window.location.hash === '#faq') {
+        requestAnimationFrame(() => faqSection.scrollIntoView({ behavior: 'smooth', block: 'start' }));
+      }
+    };
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', bindFaqAnchor, { once: true });
+    } else {
+      bindFaqAnchor();
+    }
+  })();
+</script>
 
 {% schema %}
 {
