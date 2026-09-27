@@ -467,17 +467,56 @@ function designSignature(form) {
       ? [value.name, value.size, value.type, value.lastModified] : value]));
 }
 
-const CART_PREVIEW_KEY = 'palette-install-cart-preview-v1';
-
-function cartPreviewUrl(cartUrl, currentUrl) {
-  const destination = new URL(cartUrl, currentUrl);
-  const current = new URL(currentUrl);
-  const previewThemeId = current.searchParams.get('preview_theme_id');
-  if (previewThemeId && /^\d+$/.test(previewThemeId)) {
-    destination.searchParams.set('preview_theme_id', previewThemeId);
+function showDraftCartPreview(form, design) {
+  const dialog = form.closest('[data-package-browser]')?.querySelector('[data-cart-layout-dialog]');
+  if (!dialog || typeof dialog.showModal !== 'function') {
+    throw new Error('The cart layout preview is unavailable in this browser. Please try a current browser.');
   }
-  destination.searchParams.set('design_preview', '1');
-  return `${destination.pathname}${destination.search}`;
+  if (dialog.dataset.closeBound !== 'true') {
+    dialog.dataset.closeBound = 'true';
+    dialog.querySelectorAll('[data-cart-layout-close]').forEach(button =>
+      button.addEventListener('click', () => dialog.close()));
+  }
+  const put = (selector, value) => { dialog.querySelector(selector).textContent = value; };
+  const money = cents => Number.isSafeInteger(Number(cents)) && Number(cents) > 0
+    ? formatMoney(Number(cents), window.shopMoneyFormat || '${{amount}}') : 'Rate pending';
+  put('[data-draft-cart-scale]', design.scale);
+  put('[data-draft-cart-palette]', design.palette);
+  put('[data-draft-cart-service]', design.service);
+  put('[data-draft-cart-week]', `${design.week} · not reserved`);
+  put('[data-draft-cart-artwork]', design.artwork === 'Yes'
+    ? `${design.artworkQuantity} pumpkin${design.artworkQuantity === 1 ? '' : 's'} · ${design.pumpkinColor} pumpkin · ${design.vinylColor} vinyl · ${design.artworkFile} (not uploaded)`
+    : 'No vinyl artwork');
+  put('[data-draft-cart-removal]', design.removal === 'Yes' ? 'Requested' : 'Not requested');
+  put('[data-draft-cart-notes]', design.notes || 'No additional notes');
+  const additions = [
+    { label: design.service === 'Custom installation' ? 'Delivery & installation service · estimate' : 'Delivery service · estimate',
+      priceCents: design.deliveryEstimateCents }
+  ];
+  if (design.artwork === 'Yes') additions.push({
+    label: 'Vinyl-wrapped pumpkin · estimate', priceCents: design.vinylEstimateCents,
+    quantity: design.artworkQuantity
+  });
+  if (design.removal === 'Yes') additions.push({
+    label: 'Removal · estimate', priceCents: design.deliveryEstimateCents
+  });
+  const estimate = calculateCompositionEstimate(design.baseEstimateCents, additions, `${design.scale} · base`);
+  const lines = dialog.querySelector('[data-draft-cart-lines]');
+  lines.replaceChildren(...estimate.rows.map(row => {
+    const line = document.createElement('div');
+    line.className = 'cart-layout-dialog__line';
+    const label = document.createElement('span');
+    label.textContent = row.label;
+    const price = document.createElement('strong');
+    price.textContent = row.priceCents === null ? 'Rate pending' : money(row.priceCents);
+    line.append(label, price);
+    return line;
+  }));
+  put('[data-draft-cart-total]', estimate.knownCents > 0 ? money(estimate.knownCents) : 'Rate pending');
+  put('[data-draft-cart-note]', estimate.pending.length
+    ? `${estimate.pending.join(', ')} ${estimate.pending.length === 1 ? 'is' : 'are'} excluded until priced. This is a reference estimate, not an order. Nothing was added to the Shopify cart.`
+    : 'Reference estimates may change. Taxes and any shipping are not included. Nothing was added to the Shopify cart; this preview cannot place an order or reserve a week.');
+  if (!dialog.open) dialog.showModal();
 }
 
 function previewCartDesign(form) {
@@ -530,13 +569,7 @@ function previewCartDesign(form) {
     deliveryEstimateCents: Number(services?.dataset.expectedServiceFee) || 0,
     vinylEstimateCents: Number(services?.dataset.monogramEstimateCents) || 0
   };
-  try {
-    sessionStorage.setItem(CART_PREVIEW_KEY, JSON.stringify(preview));
-  } catch {
-    throw new Error('Your browser could not save this preview. Please allow session storage and try again.');
-  }
-  const cartUrl = window.cartUrl || '/cart';
-  window.location.href = cartPreviewUrl(cartUrl, window.location.href);
+  showDraftCartPreview(form, preview);
 }
 
 function configuredCartItems(form) {
