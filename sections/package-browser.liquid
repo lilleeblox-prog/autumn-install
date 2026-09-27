@@ -726,9 +726,12 @@
   }
   #PackageBrowser-{{ section.id }} .composer-week-card input {
     position: absolute;
-    width: 1px;
-    height: 1px;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    margin: 0;
     opacity: 0;
+    cursor: pointer;
   }
   #PackageBrowser-{{ section.id }} .composer-week-card strong {
     font: 400 26px/1.15 var(--font-serif);
@@ -813,8 +816,14 @@
   #PackageBrowser-{{ section.id }}[data-review-stage=final] .palette-composer__preview { width:100%;height:100%; }
   #PackageBrowser-{{ section.id }}[data-review-stage=final] .palette-composer__preview-intro,
   #PackageBrowser-{{ section.id }}[data-review-stage=final] .composition-summary { max-width:980px; }
-  #PackageBrowser-{{ section.id }} [data-edit-design] { display:block;width:max-content;margin:0 0 26px;border:0;border-bottom:1px solid currentColor;background:transparent;color:inherit;padding:0 0 4px;cursor:pointer;font-size:.7rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase; }
+  #PackageBrowser-{{ section.id }} [data-edit-design] { cursor:pointer;font-size:.75rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase; }
+  #PackageBrowser-{{ section.id }} .palette-composer__preview-intro [data-edit-design] { display:block;width:max-content;margin:0 0 26px;padding:12px 18px;border:1px solid var(--composer-oxide);background:transparent;color:var(--composer-ink); }
+  #PackageBrowser-{{ section.id }} .palette-composer__preview-intro [data-edit-design]:hover { background:var(--composer-ink);color:var(--composer-paper); }
   #PackageBrowser-{{ section.id }} .composer-final-approval { margin-top:28px; }
+  #PackageBrowser-{{ section.id }} .composer-review-actions { display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;align-items:stretch; }
+  #PackageBrowser-{{ section.id }} .composer-review-actions button { width:100%;min-height:54px;margin:0; }
+  #PackageBrowser-{{ section.id }} .composer-review-actions [data-edit-design] { border:1px solid var(--composer-paper);background:transparent;color:var(--composer-paper); }
+  #PackageBrowser-{{ section.id }} .composer-review-actions [data-edit-design]:hover { background:var(--composer-paper);color:var(--composer-ink); }
   #PackageBrowser-{{ section.id }} .composer-review-error { margin:14px 0;color:#ffd7c5;line-height:1.5; }
   @media(max-width:900px) {
     #PackageBrowser-{{ section.id }}[data-review-stage=final] .palette-composer__form { height:auto;min-height:calc(100vh - 84px); }
@@ -1005,7 +1014,7 @@
     </div>
     <aside class="palette-composer__preview" data-composer-pane="preview" aria-label="Live design review">
       <div class="palette-composer__preview-intro">
-        <button type="button" data-edit-design>Edit design &larr;</button>
+        <button type="button" data-edit-design>&larr; Edit design</button>
         <span class="eyebrow">Your entrance / In the making</span>
         <h2>{{ section.settings.summary_heading | escape }}</h2>
         <p>{{ section.settings.summary_disclosure | escape }}</p>
@@ -1040,7 +1049,10 @@
         <div class="composer-final-approval">
           <p class="product-approval-note" data-approval-disclosure>{{ section.settings.continue_disclosure | escape }} Preferred weeks require confirmation.</p>
           <p class="composer-review-error hidden" data-review-error role="alert" aria-live="assertive"></p>
-          <button type="button" data-approve-design disabled>Approve</button>
+          <div class="composer-review-actions">
+            <button type="button" data-edit-design>Edit design</button>
+            <button type="button" data-approve-design disabled>Approve</button>
+          </div>
           <div class="product-approval" data-approval-status hidden role="status"><strong>Your design is ready to review</strong><p>Take a closer look at each part of your composition in the cart before checkout.</p></div>
           <button type="submit" data-cart-submit hidden>Review your composition</button>
         </div>
@@ -1278,13 +1290,13 @@
       root.scrollIntoView({ block: 'start', behavior: 'smooth' });
       root.querySelector('[data-edit-design]')?.focus({ preventScroll: true });
     });
-    root.querySelector('[data-edit-design]')?.addEventListener('click', () => {
+    root.querySelectorAll('[data-edit-design]').forEach(button => button.addEventListener('click', () => {
       root.dataset.reviewStage = 'build';
       root.dataset.mobilePane = 'build';
       root.querySelectorAll('[data-pane-tab]').forEach(tab =>
         tab.setAttribute('aria-pressed', String(tab.dataset.paneTab === 'build')));
       root.scrollIntoView({ block: 'start', behavior: 'smooth' });
-    });
+    }));
     cards.forEach(card => card.addEventListener('click', () => {
       const shouldExpand = card.getAttribute('aria-expanded') !== 'true';
       cards.forEach(item => {
