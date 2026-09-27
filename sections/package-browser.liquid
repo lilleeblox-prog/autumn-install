@@ -730,6 +730,59 @@
     line-height: 1.55;
     text-transform: none;
   }
+  #PackageBrowser-{{ section.id }} .composer-week-choice {
+    margin: 22px 0;
+    padding: 0;
+    border: 0;
+  }
+  #PackageBrowser-{{ section.id }} .composer-week-choice legend {
+    margin-bottom: 16px;
+    color: var(--composer-oxide);
+    font-family: var(--font-sans);
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: .18em;
+    line-height: 1.6;
+    text-transform: uppercase;
+  }
+  #PackageBrowser-{{ section.id }} .composer-week-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+  }
+  #PackageBrowser-{{ section.id }} .composer-week-card {
+    position: relative;
+    display: block;
+    min-width: 0;
+    padding: 16px 20px;
+    border: 1px solid rgba(62, 53, 43, .20);
+    background: var(--composer-card);
+    cursor: pointer;
+    transition: background-color .2s ease, border-color .2s ease;
+  }
+  #PackageBrowser-{{ section.id }} .composer-week-card:hover {
+    border-color: var(--composer-oxide);
+    background: var(--composer-paper);
+  }
+  #PackageBrowser-{{ section.id }} .composer-week-card:has(input:checked) {
+    border-color: var(--composer-oxide);
+    background: var(--composer-ink);
+    color: var(--composer-paper);
+  }
+  #PackageBrowser-{{ section.id }} .composer-week-card:has(input:focus-visible) {
+    outline: 2px solid var(--composer-oxide);
+    outline-offset: 3px;
+  }
+  #PackageBrowser-{{ section.id }} .composer-week-card input {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    opacity: 0;
+  }
+  #PackageBrowser-{{ section.id }} .composer-week-card strong {
+    font: 400 26px/1.15 var(--font-serif);
+  }
+  #PackageBrowser-{{ section.id }} .composer-week-choice .composer-field__hint { margin-top: 14px; }
   #PackageBrowser-{{ section.id }} .composer-consultation {
     margin: 30px 0 0;
     padding: 25px;
@@ -928,7 +981,20 @@
           <label><input type="radio" name="properties[Service]" value="Custom installation" data-service="install" required> Custom installation <small>Our team sets up your display.</small></label>
           <label><input type="radio" name="properties[Service]" value="Delivery only" data-service="delivery" required> Delivery only <small>Curated drop-off for you to arrange.</small></label>
         </fieldset>
-        <label class="composer-field"><span data-requested-week-label>Requested delivery &amp; installation week</span><select name="properties[Requested Week]" data-requested-week required><option value="">Select a week</option></select><small class="composer-field__hint">We’ll confirm your delivery or installation date and time as your requested week approaches. If you need a specific date for an event, please let us know in your design notes above.</small></label>
+        <fieldset class="composer-week-choice">
+          <legend data-requested-week-label>Requested delivery &amp; installation week</legend>
+          <div class="composer-week-grid">
+            {% for block in section.blocks %}
+              {% if block.type == 'requested_week' and block.settings.week_label != blank and block.settings.week_value != blank %}
+                <label class="composer-week-card" {{ block.shopify_attributes }}>
+                  <input type="radio" name="properties[Requested Week]" value="{{ block.settings.week_value | escape }}" data-requested-week required>
+                  <strong>{{ block.settings.week_label | escape }}</strong>
+                </label>
+              {% endif %}
+            {% endfor %}
+          </div>
+          <small class="composer-field__hint">These are requested weeks, not reserved dates. We’ll confirm your delivery or installation date and time as your requested week approaches. If you need a specific date for an event, please let us know in your design notes above.</small>
+        </fieldset>
         <fieldset class="composer-choice"><legend>Removal service</legend>
           <label><input type="radio" name="properties[Removal]" value="Yes" required> Schedule Removal <small>We clear everything post-season.</small></label>
           <label><input type="radio" name="properties[Removal]" value="No" required> I’ll Handle It <small>No removal service needed.</small></label>
@@ -1380,6 +1446,14 @@
           "label": "Recommended setting fallback",
           "default": "A considered seasonal welcome for your entry"
         }
+      ]
+    },
+    {
+      "type": "requested_week",
+      "name": "Requested week",
+      "settings": [
+        { "type": "text", "id": "week_label", "label": "Date shown on card", "default": "Oct 5" },
+        { "type": "text", "id": "week_value", "label": "Requested week saved with order", "default": "Week of Oct 5, 2026", "info": "This is a request, not a reservation. Keep this value unique for each date card and update the dates for future seasons." }
       ]
     },
     {

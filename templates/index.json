@@ -125,9 +125,29 @@
             "palette": "Coastal Cowgirl",
             "reference_asset": "palette-coastal-cowgirl-landscape"
           }
+        },
+        "week-sep-28": {
+          "type": "requested_week",
+          "settings": { "week_label": "Sep 28", "week_value": "Week of Sep 28, 2026" }
+        },
+        "week-oct-5": {
+          "type": "requested_week",
+          "settings": { "week_label": "Oct 5", "week_value": "Week of Oct 5, 2026" }
+        },
+        "week-oct-12": {
+          "type": "requested_week",
+          "settings": { "week_label": "Oct 12", "week_value": "Week of Oct 12, 2026" }
+        },
+        "week-oct-19": {
+          "type": "requested_week",
+          "settings": { "week_label": "Oct 19", "week_value": "Week of Oct 19, 2026" }
+        },
+        "week-oct-26": {
+          "type": "requested_week",
+          "settings": { "week_label": "Oct 26", "week_value": "Week of Oct 26, 2026" }
         }
       },
-      "block_order": ["palette-countryside", "palette-classic-harvest", "palette-coastal-cowgirl", "small", "medium", "large"]
+      "block_order": ["palette-countryside", "palette-classic-harvest", "palette-coastal-cowgirl", "small", "medium", "large", "week-sep-28", "week-oct-5", "week-oct-12", "week-oct-19", "week-oct-26"]
     },
     "studio-about": {
       "type": "image-with-text",

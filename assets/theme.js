@@ -245,7 +245,7 @@ function setupProductJourney(form) {
   const monogramInputs = monogramFields ? monogramFields.querySelectorAll('input, select') : [];
    const dateLabel = form.querySelector('[data-date-label]');
    const weekSelect = form.querySelector('[data-requested-week]');
-   if (weekSelect && weekSelect.options.length === 1) {
+   if (weekSelect?.tagName === 'SELECT' && weekSelect.options.length === 1) {
      const today = new Date();
      const monday = new Date(today.getFullYear(), today.getMonth(), today.getDate() - ((today.getDay() + 6) % 7));
      const format = new Intl.DateTimeFormat('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
@@ -456,8 +456,12 @@ function configuredCartItems(form) {
     throw new Error('This package is not priced and available yet. Please choose an available package.');
   }
   const requestedWeek = String(data.get('properties[Requested Week]') || '').trim();
-  const weekSelect = form.querySelector('[data-requested-week]');
-  if (!requestedWeek || !weekSelect || !Array.from(weekSelect.options).some(option => option.value === requestedWeek && option.value)) {
+  const weekControl = form.querySelector('[data-requested-week]');
+  const validWeek = weekControl?.options
+    ? Array.from(weekControl.options).some(option => option.value === requestedWeek && option.value)
+    : Array.from(form.querySelectorAll('[data-requested-week]')).some(input =>
+        input.type === 'radio' && input.checked && !input.disabled && input.value === requestedWeek);
+  if (!requestedWeek || !validWeek) {
     throw new Error('Please select an upcoming week.');
   }
   const service = data.get('properties[Service]');
