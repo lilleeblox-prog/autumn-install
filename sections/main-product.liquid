@@ -242,17 +242,28 @@
          {% endif %}
        </section>
 
-       {% assign display_size = product.handle | split: '-' | first %}
+        {% assign display_size = blank %}
+        {% if section.settings.small_package_product != blank and product.id == section.settings.small_package_product.id %}
+          {% assign display_size = 'small' %}
+        {% elsif section.settings.medium_package_product != blank and product.id == section.settings.medium_package_product.id %}
+          {% assign display_size = 'medium' %}
+        {% elsif section.settings.large_package_product != blank and product.id == section.settings.large_package_product.id %}
+          {% assign display_size = 'large' %}
+        {% endif %}
+        {% assign expected_service_fee = 0 %}
        {% case display_size %}
          {% when 'small' %}
            {% assign delivery_product = section.settings.delivery_small_product %}
            {% assign removal_product = section.settings.removal_small_product %}
+            {% assign expected_service_fee = 2500 %}
          {% when 'medium' %}
            {% assign delivery_product = section.settings.delivery_medium_product %}
            {% assign removal_product = section.settings.removal_medium_product %}
+            {% assign expected_service_fee = 5000 %}
          {% when 'large' %}
            {% assign delivery_product = section.settings.delivery_large_product %}
            {% assign removal_product = section.settings.removal_large_product %}
+            {% assign expected_service_fee = 8500 %}
        {% endcase %}
        {% assign monogram_product = section.settings.monogram_product %}
         {% assign includes_hay_bales = false %}
@@ -277,7 +288,7 @@
          <fieldset>
             <legend class="visually-hidden">Add vinyl-wrapped artwork to a pumpkin</legend>
            <div class="choice-list">
-              <label class="choice-option"><input type="radio" name="properties[Vinyl Artwork]" value="Yes" required data-monogram-choice="yes"> Yes, wrap my artwork in vinyl on a pumpkin {% if monogram_product != blank and monogram_product.selected_or_first_available_variant.price > 0 %}(+{{ monogram_product.selected_or_first_available_variant.price | money }} per pumpkin{% unless monogram_product.available %} · not yet available{% endunless %}){% else %}(not ready to order · price pending){% endif %}</label>
+               <label class="choice-option"><input type="radio" name="properties[Vinyl Artwork]" value="Yes" required data-monogram-choice="yes"> Yes, wrap my artwork in vinyl on a pumpkin {% if monogram_product != blank and monogram_product.published_at != blank and monogram_product.selected_or_first_available_variant.price > 0 %}(+{{ monogram_product.selected_or_first_available_variant.price | money }} per pumpkin{% unless monogram_product.available %} · not yet available{% endunless %}){% else %}(not ready to order · price pending){% endif %}</label>
               <label class="choice-option"><input type="radio" name="properties[Vinyl Artwork]" value="No" required data-monogram-choice="no"> No vinyl artwork</label>
            </div>
          </fieldset>
@@ -325,7 +336,7 @@
          <fieldset>
            <legend class="visually-hidden">Would you like removal?</legend>
            <div class="choice-list">
-              <label class="choice-option"><input type="radio" name="properties[Removal]" value="Yes" required> Yes, arrange removal {% if removal_product != blank and removal_product.selected_or_first_available_variant.price > 0 %}(+{{ removal_product.selected_or_first_available_variant.price | money }}{% unless removal_product.available %} · not yet available{% endunless %}){% else %}(price pending · not ready to order){% endif %}</label>
+              <label class="choice-option"><input type="radio" name="properties[Removal]" value="Yes" required> Yes, arrange removal {% if removal_product != blank and removal_product.published_at != blank and removal_product.selected_or_first_available_variant.price > 0 %}(+{{ removal_product.selected_or_first_available_variant.price | money }}{% unless removal_product.available %} · not yet available{% endunless %}){% else %}(price pending · not ready to order){% endif %}</label>
              <label class="choice-option"><input type="radio" name="properties[Removal]" value="No" required> No removal</label>
            </div>
          </fieldset>
@@ -342,12 +353,12 @@
          </p>
        </div>
 
-       <div data-service-products data-display-size="{{ display_size }}"
-           data-delivery-id="{% if delivery_product != blank and delivery_product.available and delivery_product.selected_or_first_available_variant.price > 0 %}{{ delivery_product.selected_or_first_available_variant.id }}{% endif %}"
+        <div data-service-products data-display-size="{{ display_size }}" data-expected-service-fee="{{ expected_service_fee }}"
+            data-delivery-id="{% if delivery_product != blank and delivery_product.available and delivery_product.published_at != blank and delivery_product.selected_or_first_available_variant.price > 0 %}{{ delivery_product.selected_or_first_available_variant.id }}{% endif %}"
            data-delivery-price="{{ delivery_product.selected_or_first_available_variant.price | default: 0 }}"
-          data-monogram-id="{% if monogram_product != blank and monogram_product.available and monogram_product.selected_or_first_available_variant.price > 0 %}{{ monogram_product.selected_or_first_available_variant.id }}{% endif %}"
+           data-monogram-id="{% if monogram_product != blank and monogram_product.available and monogram_product.published_at != blank and monogram_product.selected_or_first_available_variant.price > 0 %}{{ monogram_product.selected_or_first_available_variant.id }}{% endif %}"
            data-monogram-price="{{ monogram_product.selected_or_first_available_variant.price | default: 0 }}"
-           data-removal-id="{% if removal_product != blank and removal_product.available and removal_product.selected_or_first_available_variant.price > 0 %}{{ removal_product.selected_or_first_available_variant.id }}{% endif %}"
+            data-removal-id="{% if removal_product != blank and removal_product.available and removal_product.published_at != blank and removal_product.selected_or_first_available_variant.price > 0 %}{{ removal_product.selected_or_first_available_variant.id }}{% endif %}"
            data-removal-price="{{ removal_product.selected_or_first_available_variant.price | default: 0 }}">
        </div>
 
@@ -446,18 +457,21 @@
       "label": "Fallback product image",
       "info": "Used only when this product has no media."
     },
-    { "type": "product", "id": "delivery_small_product", "label": "The Stoop delivery · $25" },
-    { "type": "product", "id": "delivery_medium_product", "label": "The Porch delivery · $50" },
-    { "type": "product", "id": "delivery_large_product", "label": "The Estate delivery · $85" },
+    { "type": "product", "id": "delivery_small_product", "label": "The Stoop delivery service product" },
+    { "type": "product", "id": "delivery_medium_product", "label": "The Porch delivery service product" },
+    { "type": "product", "id": "delivery_large_product", "label": "The Estate delivery service product" },
     {
       "type": "product",
       "id": "monogram_product",
       "label": "Vinyl artwork per-pumpkin add-on",
       "info": "Optional paid product charged per vinyl-wrapped pumpkin. Artwork orders are blocked until this is configured and available."
     },
-    { "type": "product", "id": "removal_small_product", "label": "The Stoop removal · $25" },
-    { "type": "product", "id": "removal_medium_product", "label": "The Porch removal · $50" },
-    { "type": "product", "id": "removal_large_product", "label": "The Estate removal · $85" }
+    { "type": "product", "id": "removal_small_product", "label": "The Stoop removal service product" },
+    { "type": "product", "id": "removal_medium_product", "label": "The Porch removal service product" },
+    { "type": "product", "id": "removal_large_product", "label": "The Estate removal service product" },
+    { "type": "product", "id": "small_package_product", "label": "The Stoop package product (identity)" },
+    { "type": "product", "id": "medium_package_product", "label": "The Porch package product (identity)" },
+    { "type": "product", "id": "large_package_product", "label": "The Estate package product (identity)" }
   ],
   "blocks": [
     {

@@ -1,14 +1,14 @@
 {
   "current": {
-    "color_background": "#f7f3ed",
-    "color_foreground": "#312e29",
-    "color_accent": "#8f4f3d"
+    "color_background": "#f4f0e8",
+    "color_foreground": "#302d28",
+    "color_accent": "#955c42"
   },
   "presets": {
     "Default": {
-      "color_background": "#f7f3ed",
-      "color_foreground": "#312e29",
-      "color_accent": "#8f4f3d"
+      "color_background": "#f4f0e8",
+      "color_foreground": "#302d28",
+      "color_accent": "#955c42"
     }
   }
 }

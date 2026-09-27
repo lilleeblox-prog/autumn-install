@@ -17,7 +17,7 @@
       "type": "process-steps",
       "settings": {
         "title": "Compose your entry in three steps.",
-        "text": "Begin with a palette and a scale suited to your entry. The selected product page is where remaining details and approval options are reviewed.",
+        "text": "Build your complete seasonal composition here. Review every choice and the live estimate before approving your design.",
         "button_label": "Explore packages",
         "button_link": "#compose"
       },
@@ -33,14 +33,14 @@
           "type": "step",
           "settings": {
             "title": "02 / Set the scale",
-            "text": "Compare The Stoop, The Porch, and The Estate while keeping your chosen palette."
+            "text": "Compare The Stoop, The Porch, and The Estate alongside the live design review."
           }
         },
         "step3": {
           "type": "step",
           "settings": {
-            "title": "03 / Continue to your product",
-            "text": "Complete the finishing details on the next page, then approve your design and review every element before checkout."
+            "title": "03 / Complete and review",
+            "text": "Choose delivery or installation, timing, artwork and removal. Approve your composition, then review every detail before checkout."
           }
         }
       },
@@ -58,13 +58,22 @@
         "summary_disclosure": "Your choices appear here as you make them. Palette photographs show color direction, not a rendering of the finished display.",
         "scale_eyebrow": "02 / The proportion",
         "scale_heading": "Find your scale.",
-        "continue_label": "Continue designing",
-        "continue_disclosure": "Next, choose the finishing details, delivery, and your preferred week. You can approve and review the full composition before checkout."
+        "continue_label": "Approve design",
+        "continue_disclosure": "Approval adds your composition to cart for review and does not place an order or reserve a week.",
+        "delivery_small_product": "small-display-delivery",
+        "delivery_medium_product": "medium-display-delivery",
+        "delivery_large_product": "large-display-delivery",
+        "removal_small_product": "small-display-removal",
+        "removal_medium_product": "medium-display-removal",
+        "removal_large_product": "large-display-removal",
+        "monogram_product": "monogrammed-pumpkin"
       },
       "blocks": {
         "small": {
           "type": "package",
           "settings": {
+            "product": "small-pumpkin-display",
+            "service_fee_tier": "small",
             "scale_name": "The Stoop",
             "included_items": "6 Large Pumpkins\n6 Medium Pumpkins\n6 White Pumpkins\nAssortment of Specialty Pumpkins\nAssortment of Pie Pumpkins",
             "subtitle_fallback": "Compact entry",
@@ -74,6 +83,8 @@
         "medium": {
           "type": "package",
           "settings": {
+            "product": "medium-pumpkin-display",
+            "service_fee_tier": "medium",
             "scale_name": "The Porch",
             "included_items": "8 Large Pumpkins\n8 Medium Pumpkins\n8 White Pumpkins\nAssortment of Specialty Pumpkins\nAssortment of Pie Pumpkins\n2 Hay Bales",
             "default_selected": true,
@@ -85,6 +96,8 @@
         "large": {
           "type": "package",
           "settings": {
+            "product": "large-pumpkin-display",
+            "service_fee_tier": "large",
             "scale_name": "The Estate",
             "included_items": "2 Grand Prize Pumpkins\n10 Large Pumpkins\n8 Medium Pumpkins\n8 White Pumpkins\n16 Specialty Pumpkins\n2 Hay Bales\nassortment of minis\nOrnamental Gourds\nAssortment of Pie Pumpkins",
             "subtitle_fallback": "Expansive entry",

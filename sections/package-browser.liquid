@@ -292,6 +292,8 @@
   }
   #PackageBrowser-{{ section.id }} .package-browser__transfer-error { margin: 20px 0 0; color: var(--pb-accent); font-size: .8rem; }
   #PackageBrowser-{{ section.id }} .package-browser__transfer-error[hidden] { display: none; }
+  #PackageBrowser-{{ section.id }} #product-form-error { margin: 16px 0; padding: 12px; border: 1px solid var(--composer-accent); color: var(--composer-accent); font-size: .82rem; line-height: 1.5; }
+  #PackageBrowser-{{ section.id }} #product-form-error.hidden { display: none; }
   @media (max-width: 850px) {
     #PackageBrowser-{{ section.id }} .palette-choices { grid-template-columns: repeat(2, minmax(0, 1fr)); }
     #PackageBrowser-{{ section.id }} .package-browser__grid { grid-template-columns: 1fr; }
@@ -308,6 +310,80 @@
     #PackageBrowser-{{ section.id }} .palette-study__grid { grid-template-columns: 1fr; }
   }
 </style>
+<style>
+  #PackageBrowser-{{ section.id }} { --composer-line:var(--color-border,#d8d2c8); --composer-accent:var(--color-accent,#9b4c39); }
+  #PackageBrowser-{{ section.id }}.palette-composer { width:100%; max-width:none; padding:0; }
+  #PackageBrowser-{{ section.id }} .palette-composer__tabs { display:none; }
+  #PackageBrowser-{{ section.id }} .palette-composer__form { display:grid; grid-template-columns:minmax(0,1fr) minmax(0,1fr); height:calc(100vh - 84px); min-height:680px; overflow:hidden; }
+  #PackageBrowser-{{ section.id }} .palette-composer__editor, #PackageBrowser-{{ section.id }} .palette-composer__preview { min-width:0; overflow-y:auto; overscroll-behavior:contain; padding:clamp(24px,4vw,64px); }
+  #PackageBrowser-{{ section.id }} .palette-composer__editor { border-right:1px solid var(--composer-line); }
+  #PackageBrowser-{{ section.id }} .palette-composer__intro { max-width:650px; margin:0 auto 48px; }
+  #PackageBrowser-{{ section.id }} .palette-composer__intro h1 { font:400 clamp(2.6rem,5vw,5rem)/1 var(--font-serif); letter-spacing:-.04em; margin:14px 0; }
+  #PackageBrowser-{{ section.id }} .palette-composer__intro p { color:var(--color-muted); line-height:1.7; }
+  #PackageBrowser-{{ section.id }} .palette-composer__step { max-width:760px; margin:0 auto 48px; scroll-margin-top:24px; }
+  #PackageBrowser-{{ section.id }} .palette-composer__step h2 { font:400 clamp(1.8rem,3vw,2.7rem)/1.05 var(--font-serif); margin:8px 0 20px; }
+  #PackageBrowser-{{ section.id }} .palette-choices { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:10px; border:0; padding:0; margin:18px 0 0; }
+  #PackageBrowser-{{ section.id }} .palette-choice { min-height:145px; padding:14px; border:1px solid var(--composer-line); cursor:pointer; display:flex; flex-direction:column; gap:8px; }
+  #PackageBrowser-{{ section.id }} .palette-choice:has(input:checked), #PackageBrowser-{{ section.id }} .package-card[aria-pressed=true] { border-color:var(--composer-accent); background:color-mix(in srgb,var(--composer-accent) 6%,transparent); }
+  #PackageBrowser-{{ section.id }} .palette-choice input { width:1px;height:1px;position:absolute;clip:rect(0,0,0,0); }
+  #PackageBrowser-{{ section.id }} .palette-choice:focus-within, #PackageBrowser-{{ section.id }} button:focus-visible, #PackageBrowser-{{ section.id }} input:focus-visible, #PackageBrowser-{{ section.id }} select:focus-visible { outline:2px solid var(--composer-accent); outline-offset:2px; }
+  #PackageBrowser-{{ section.id }} .palette-choice__swatches { display:flex; gap:5px; margin-bottom:8px; }
+  #PackageBrowser-{{ section.id }} .palette-choice__swatches i { width:20px;height:20px;border-radius:50%;border:1px solid #0002; }
+  #PackageBrowser-{{ section.id }} .palette-choice strong { font:400 1rem var(--font-serif); }
+  #PackageBrowser-{{ section.id }} .palette-choice small { color:var(--color-muted); line-height:1.4; }
+  #PackageBrowser-{{ section.id }} .package-browser__grid { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:10px; }
+  #PackageBrowser-{{ section.id }} .package-card { width:100%; display:flex; flex-direction:column; text-align:left; gap:8px; min-height:180px; padding:15px; border:1px solid var(--composer-line); color:inherit; background:transparent; cursor:pointer; }
+  #PackageBrowser-{{ section.id }} .package-title { font:400 1.25rem var(--font-serif); }
+  #PackageBrowser-{{ section.id }} .package-price { font:400 1.1rem var(--font-serif); }
+  #PackageBrowser-{{ section.id }} [data-scale-status], #PackageBrowser-{{ section.id }} .package-includes { color:var(--color-muted);font-size:.72rem;line-height:1.5; }
+  #PackageBrowser-{{ section.id }} .package-includes { margin-top:auto; }
+  #PackageBrowser-{{ section.id }} .composer-choice { border:0;padding:0;margin:20px 0;display:grid;gap:8px; }
+  #PackageBrowser-{{ section.id }} .composer-choice legend { font:400 1.2rem var(--font-serif); margin-bottom:10px; }
+  #PackageBrowser-{{ section.id }} .composer-choice label, #PackageBrowser-{{ section.id }} .composer-custom { display:block; padding:12px;border:1px solid var(--composer-line);cursor:pointer;line-height:1.5; }
+  #PackageBrowser-{{ section.id }} .composer-choice small { display:block;color:var(--color-muted);margin-left:24px; }
+  #PackageBrowser-{{ section.id }} .composer-field, #PackageBrowser-{{ section.id }} [data-monogram-fields] label { display:block; margin:16px 0; font-size:.82rem; }
+  #PackageBrowser-{{ section.id }} .composer-field input, #PackageBrowser-{{ section.id }} .composer-field select, #PackageBrowser-{{ section.id }} .composer-field textarea, #PackageBrowser-{{ section.id }} [data-monogram-fields] input, #PackageBrowser-{{ section.id }} [data-monogram-fields] select { display:block;width:100%;margin-top:6px;padding:12px;border:1px solid var(--composer-line);background:transparent;color:inherit; }
+  #PackageBrowser-{{ section.id }} [data-monogram-fields] p, #PackageBrowser-{{ section.id }} [data-custom-request-note] { font-size:.78rem;color:var(--color-muted);line-height:1.5; }
+  #PackageBrowser-{{ section.id }} [hidden] { display:none !important; }
+  #PackageBrowser-{{ section.id }} .hidden { display:none !important; }
+  #PackageBrowser-{{ section.id }} .composer-hidden { position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0); }
+  #PackageBrowser-{{ section.id }} .palette-composer__preview { background:var(--color-panel,#e9e3d8); }
+  #PackageBrowser-{{ section.id }} .palette-composer__preview-intro { max-width:700px;margin:0 auto 28px; }
+  #PackageBrowser-{{ section.id }} .palette-composer__preview-intro h2 { font:400 clamp(2.5rem,4vw,4.4rem)/.98 var(--font-serif);letter-spacing:-.04em;margin:12px 0; }
+  #PackageBrowser-{{ section.id }} .palette-composer__preview-intro p { max-width:560px;color:var(--color-muted);font-size:.85rem;line-height:1.7; }
+  #PackageBrowser-{{ section.id }} .palette-study__item { aspect-ratio:3/2;overflow:hidden; }
+  #PackageBrowser-{{ section.id }} .palette-study__item img { width:100%;height:100%;object-fit:cover;object-position:var(--palette-x) var(--palette-y);transform:rotate(var(--palette-turn)) scale(var(--palette-zoom)); }
+  #PackageBrowser-{{ section.id }} .palette-study__empty { min-height:250px;display:grid;place-content:center;border:1px dashed var(--composer-line);text-align:center;padding:25px; }
+  #PackageBrowser-{{ section.id }} .palette-study__caption, #PackageBrowser-{{ section.id }} .composition-summary__disclosure { color:var(--color-muted);font-size:.75rem;line-height:1.6; }
+  #PackageBrowser-{{ section.id }} .composition-summary { max-width:700px;margin:32px auto;background:#343732;color:#f8f5ee;padding:clamp(28px,3vw,48px); }
+  #PackageBrowser-{{ section.id }} .composition-summary h2 { font:400 clamp(2rem,3vw,3rem)/1.1 var(--font-serif); }
+  #PackageBrowser-{{ section.id }} .composition-summary .eyebrow { color:#e0ae92; }
+  #PackageBrowser-{{ section.id }} .composition-summary__row { display:flex;justify-content:space-between;gap:16px;padding:12px 0;border-top:1px solid rgba(255,255,255,.2);font-size:.82rem; }
+  #PackageBrowser-{{ section.id }} .composition-summary__row span { color:#d8d2c8; }
+  #PackageBrowser-{{ section.id }} .composition-summary__row strong { text-align:right;font-weight:500; }
+  #PackageBrowser-{{ section.id }} .composition-summary__disclosure,#PackageBrowser-{{ section.id }} .composition-price-estimate__note { color:#d8d2c8; }
+  #PackageBrowser-{{ section.id }} .composition-price-estimate { border:0;border-top:1px solid rgba(255,255,255,.3);padding:24px 0 0;margin:28px 0 0;background:transparent;color:inherit; }
+  #PackageBrowser-{{ section.id }} .composition-price-estimate__row, #PackageBrowser-{{ section.id }} .composition-price-estimate__total { display:flex;justify-content:space-between;gap:10px;padding:8px 0;font-size:.8rem; }
+  #PackageBrowser-{{ section.id }} .composition-price-estimate__total { border-top:1px solid rgba(255,255,255,.3);padding-top:14px; }
+  #PackageBrowser-{{ section.id }} .composition-price-estimate__total strong { font:400 1.8rem var(--font-serif); }
+  #PackageBrowser-{{ section.id }} [data-approve-design], #PackageBrowser-{{ section.id }} [data-cart-submit] { width:100%;padding:15px;border:0;background:var(--composer-accent);color:white;cursor:pointer;margin-top:10px; }
+  #PackageBrowser-{{ section.id }} [data-approve-design]:disabled { opacity:.55;cursor:not-allowed; }
+  #PackageBrowser-{{ section.id }} .product-approval { border:1px solid var(--composer-line);padding:14px;margin:12px 0; }
+  @media(max-width:900px) {
+    #PackageBrowser-{{ section.id }} .palette-composer__tabs { position:sticky;top:0;z-index:4;display:grid;grid-template-columns:1fr 1fr;background:var(--color-background,#f7f4ed);border-bottom:1px solid var(--composer-line); }
+    #PackageBrowser-{{ section.id }} .palette-composer__tabs button { padding:14px;border:0;background:transparent;color:inherit; }
+    #PackageBrowser-{{ section.id }} .palette-composer__tabs button[aria-pressed=true] { border-bottom:2px solid var(--composer-accent); }
+    #PackageBrowser-{{ section.id }} .palette-composer__form { display:block;height:auto;min-height:0;overflow:visible; }
+    #PackageBrowser-{{ section.id }} .palette-composer__editor, #PackageBrowser-{{ section.id }} .palette-composer__preview { max-height:none;overflow:visible;padding:28px 20px; }
+    #PackageBrowser-{{ section.id }}[data-mobile-pane=build] [data-composer-pane=preview], #PackageBrowser-{{ section.id }}[data-mobile-pane=preview] [data-composer-pane=build] { display:none; }
+    #PackageBrowser-{{ section.id }} .palette-composer__editor { border-right:0; }
+  }
+  @media(max-width:600px) {
+    #PackageBrowser-{{ section.id }} .palette-choices { grid-template-columns:1fr 1fr; }
+    #PackageBrowser-{{ section.id }} .package-browser__grid { grid-template-columns:1fr; }
+    #PackageBrowser-{{ section.id }} .palette-choice { min-height:130px; }
+  }
+</style>
 
 {% assign palette_names = 'Autumn in the Countryside|Classic Harvest|Coastal Cowgirl' | split: '|' %}
 {% assign palette_descriptions = 'Burnt orange, soft white, and deep garden greens|Harvest orange, warm ivory, and golden gourds|Blush peach, ghost white, and sea-glass sage' | split: '|' %}
@@ -316,6 +392,7 @@
 {% assign initial_palette_count = 0 %}
 {% assign initial_scale = 'Choose a scale below' %}
 {% assign package_count = 0 %}
+{% assign monogram_product = section.settings.monogram_product %}
 {% for block in section.blocks %}
   {% if block.type == 'package' %}{% assign package_count = package_count | plus: 1 %}{% endif %}
   {% if block.type == 'package' and block.settings.default_selected and initial_scale == 'Choose a scale below' %}
@@ -327,152 +404,199 @@
 {% endfor %}
 
 <div id="{{ section.settings.section_id | default: 'compose' | escape }}" style="scroll-margin-top: 100px"></div>
-<section class="package-browser container" id="PackageBrowser-{{ section.id }}" data-package-browser="{{ section.id }}">
-  <div class="package-browser__header">
-    <div class="eyebrow">{{ section.settings.eyebrow | escape }}</div>
-    <h1>{{ section.settings.title | escape }}</h1>
-    <p>{{ section.settings.text | escape }}</p>
-  </div>
-
-  <div class="package-browser__step">{{ section.settings.palette_heading | escape }}</div>
-  <fieldset style="border:0;margin:0;padding:0">
-    <legend class="visually-hidden">Choose a color palette</legend>
-    <div class="palette-choices">
-      {% for palette in palette_names %}
-        {% assign palette_index = forloop.index0 %}
-        {% assign swatches = palette_colors[palette_index] | split: ',' %}
-        <label class="palette-choice">
-          <input type="radio" name="package-palette-{{ section.id }}" value="{{ palette | escape }}" {% if forloop.first %}checked{% endif %}>
-          <span class="palette-choice__swatches" aria-hidden="true">
-            {% for swatch in swatches %}<span class="palette-choice__swatch" style="background-color: {{ swatch }}"></span>{% endfor %}
-          </span>
-          <span class="palette-choice__name">{{ palette }}</span>
-          <span class="palette-choice__note">{{ palette_descriptions[palette_index] }}</span>
-        </label>
-      {% endfor %}
-    </div>
-  </fieldset>
-
-  <div class="package-browser__study">
-    <div class="palette-study" data-palette-browser-gallery aria-live="polite">
-      <div class="palette-study__grid">
-        {% for block in section.blocks %}
-          {% if block.type == 'palette_image' and block.settings.image != blank or block.type == 'palette_image' and block.settings.reference_asset != blank and block.settings.reference_asset != 'none' %}
-            {% assign palette_study_alt = block.settings.image.alt | default: block.settings.palette %}
-            <div class="palette-study__item{% unless block.settings.palette == initial_palette %} hidden{% endunless %}" data-palette="{{ block.settings.palette | escape }}" style="--palette-x: {{ block.settings.position_x | default: 50 }}%; --palette-y: {{ block.settings.position_y | default: 50 }}%; --palette-zoom: {{ block.settings.zoom | default: 100 | divided_by: 100.0 }}; --palette-turn: {% if block.settings.flip_180 %}180deg{% else %}0deg{% endif %};" {{ block.shopify_attributes }}>
-              {% if block.settings.image != blank %}
-                {{ block.settings.image | image_url: width: 1000 | image_tag: loading: 'lazy', alt: palette_study_alt, widths: '400, 700, 1000' }}
-              {% else %}
-                {% assign reference_image = block.settings.reference_asset | append: '.webp' %}
-                 <img src="{{ reference_image | asset_url }}" width="1000" height="667" loading="lazy" alt="{{ block.settings.palette | escape }} palette photograph">
-              {% endif %}
-            </div>
-          {% endif %}
-        {% endfor %}
+<section class="palette-composer" id="PackageBrowser-{{ section.id }}" data-package-browser="{{ section.id }}" data-mobile-pane="build">
+  <nav class="palette-composer__tabs" aria-label="Builder views">
+    <button type="button" aria-pressed="true" data-pane-tab="build">Create your look</button>
+    <button type="button" aria-pressed="false" data-pane-tab="preview">See your design</button>
+  </nav>
+  <form class="palette-composer__form" method="post" action="{{ routes.cart_add_url }}" enctype="multipart/form-data" data-product-form data-product-title="{{ section.settings.title | escape }}">
+    <input type="hidden" name="form_type" value="product">
+    <input type="hidden" name="quantity" value="1">
+    <input type="hidden" name="properties[_Composition ID]" value="" data-composition-id-input>
+    <input type="hidden" name="properties[Hay Bales]" value="No" data-hay-property>
+    <input type="hidden" name="properties[Palette]" value="" data-chosen-palette>
+    <div class="palette-composer__editor" data-composer-pane="build" aria-label="Create your display">
+      <header class="palette-composer__intro">
+        <div class="eyebrow">{{ section.settings.eyebrow | escape }}</div>
+        <h1>{{ section.settings.title | escape }}</h1>
+        <p>{{ section.settings.text | escape }}</p>
+      </header>
+      <div class="palette-composer__step">
+        <span class="eyebrow">01 / The palette</span><h2>Set the tone.</h2>
+        <fieldset class="palette-choices"><legend class="visually-hidden">Choose a color palette</legend>
+          {% for palette in palette_names %}
+            {% assign palette_index = forloop.index0 %}
+            {% assign swatches = palette_colors[palette_index] | split: ',' %}
+            <label class="palette-choice">
+              <input type="radio" name="composer-palette-{{ section.id }}" value="{{ palette | escape }}" data-composer-palette {% if forloop.first %}checked{% endif %}>
+              <span class="palette-choice__swatches">{% for swatch in swatches %}<i style="background:{{ swatch }}"></i>{% endfor %}</span>
+              <strong>{{ palette }}</strong><small>{{ palette_descriptions[palette_index] }}</small>
+            </label>
+          {% endfor %}
+        </fieldset>
       </div>
-      <p class="palette-study__empty" {% if initial_palette_count > 0 %}hidden{% endif %}>A matching study for this palette is being prepared. For now, the swatches above are your color reference.</p>
-      <p class="palette-study__caption">Palette photographs show color direction, not a finished installation.</p>
+      <div class="palette-composer__step">
+        <span class="eyebrow">02 / The proportion</span><h2>{{ section.settings.scale_heading | escape }}</h2>
+        <div class="package-browser__grid">
+          {% for block in section.blocks %}
+            {% if block.type == 'package' %}
+              {% assign prod = block.settings.product %}
+              {% assign option_index = -1 %}
+              {% if prod != blank %}{% for name in prod.options %}{% assign lower_name = name | downcase %}{% if lower_name contains 'palette' %}{% assign option_index = forloop.index0 %}{% endif %}{% endfor %}{% endif %}
+              {% assign display_size = block.settings.service_fee_tier %}
+              {% assign delivery = blank %}
+              {% assign removal = blank %}
+              {% assign expected_service_fee = 0 %}
+              {% case display_size %}
+                {% when 'small' %}{% assign delivery = section.settings.delivery_small_product %}{% assign removal = section.settings.removal_small_product %}{% assign expected_service_fee = 2500 %}
+                {% when 'medium' %}{% assign delivery = section.settings.delivery_medium_product %}{% assign removal = section.settings.removal_medium_product %}{% assign expected_service_fee = 5000 %}
+                {% when 'large' %}{% assign delivery = section.settings.delivery_large_product %}{% assign removal = section.settings.removal_large_product %}{% assign expected_service_fee = 8500 %}
+              {% endcase %}
+              <button type="button" class="package-card" data-composer-scale data-scale-name="{{ block.settings.scale_name | escape }}" data-display-size="{{ display_size }}" data-expected-service-fee="{{ expected_service_fee }}" data-product-id="{% if prod != blank %}{{ prod.id }}{% endif %}" data-product-title="{% if prod != blank %}{{ prod.title | escape }}{% else %}{{ block.settings.scale_name | escape }}{% endif %}" data-product-available="{% if prod != blank and prod.available and prod.published_at != blank %}true{% else %}false{% endif %}" data-palette-index="{{ option_index }}" data-variants="{% if prod != blank %}{{ prod.variants | json | escape }}{% endif %}" data-delivery-id="{% if delivery != blank and delivery.available and delivery.published_at != blank and delivery.selected_or_first_available_variant.price > 0 %}{{ delivery.selected_or_first_available_variant.id }}{% endif %}" data-delivery-price="{{ delivery.selected_or_first_available_variant.price | default: 0 }}" data-removal-id="{% if removal != blank and removal.available and removal.published_at != blank and removal.selected_or_first_available_variant.price > 0 %}{{ removal.selected_or_first_available_variant.id }}{% endif %}" data-removal-price="{{ removal.selected_or_first_available_variant.price | default: 0 }}" aria-pressed="{% if block.settings.default_selected %}true{% else %}false{% endif %}" {{ block.shopify_attributes }}>
+                {% if block.settings.most_popular %}<small class="package-card__popular">Most popular</small>{% endif %}
+                <span class="package-title">{% if prod != blank %}{{ prod.title | escape }}{% else %}{{ block.settings.scale_name | escape }}{% endif %}</span>
+                <span class="package-price">{% if prod != blank and prod.published_at != blank and prod.available and prod.price > 0 %}{{ prod.price | money }}{% else %}Pricing pending{% endif %}</span>
+                <span>{{ block.settings.subtitle_fallback | escape }}</span>
+                <small data-scale-status>{% if prod == blank %}Preview only · product not configured{% elsif prod.available == false or prod.published_at == blank %}Preview only · product not available{% elsif prod.price <= 0 %}Preview only · price pending{% elsif option_index < 0 %}Cannot order · palette variant required{% else %}Choose this scale{% endif %}</small>
+                {% assign included_items = block.settings.included_items | newline_to_br | split: '<br />' %}
+                <span class="package-includes">Includes: {% for item in included_items %}{% assign line = item | strip %}{% if line != blank %}{{ line | escape }}{% unless forloop.last %}; {% endunless %}{% endif %}{% endfor %}</span>
+              </button>
+            {% endif %}
+          {% endfor %}
+        </div>
+      </div>
+      <div class="palette-composer__step">
+        <span class="eyebrow">03 / The details</span><h2>Put your signature on it.</h2>
+        <fieldset class="composer-choice"><legend>Delivery or installation</legend>
+          <label><input type="radio" name="properties[Service]" value="Custom installation" data-service="install" required> Custom installation <small>Our team sets up your display.</small></label>
+          <label><input type="radio" name="properties[Service]" value="Delivery only" data-service="delivery" required> Delivery only <small>Curated drop-off for you to arrange.</small></label>
+        </fieldset>
+        <fieldset class="composer-choice"><legend>Vinyl artwork</legend>
+          <label><input type="radio" name="properties[Vinyl Artwork]" value="Yes" data-monogram-choice="yes" required> Yes, wrap my artwork in vinyl{% if monogram_product != blank and monogram_product.available and monogram_product.published_at != blank and monogram_product.selected_or_first_available_variant.price > 0 %} (+{{ monogram_product.selected_or_first_available_variant.price | money }} per pumpkin){% else %} (preview only · price or product pending){% endif %}</label>
+          <label><input type="radio" name="properties[Vinyl Artwork]" value="No" data-monogram-choice="no" required> No vinyl artwork</label>
+        </fieldset>
+        <div data-monogram-fields hidden>
+          <label>Artwork file (PNG or PDF, up to 20 MB)<input type="file" name="properties[Artwork File]" accept=".png,.pdf,image/png,application/pdf" data-artwork-file></label>
+          <label>Vinyl-wrapped pumpkin quantity<input type="number" name="properties[Vinyl-wrapped Pumpkins]" min="1" step="1" value="1" data-monogram-quantity></label>
+          <label>Pumpkin color<select name="properties[Pumpkin Color Preference]" data-monogram-detail><option value="">Choose color</option><option>White</option><option>Orange</option></select></label>
+          <label>Vinyl color<select name="properties[Vinyl Color Preference]" data-monogram-detail><option value="">Choose color</option><option>White</option><option>Black</option><option>Gold</option></select></label>
+          <p>Upload your print-ready art. We confirm artwork and materials before production.</p>
+        </div>
+        <label class="composer-field">Requested delivery / installation week<select name="properties[Requested Week]" data-requested-week required><option value="">Select a week</option></select></label>
+        <fieldset class="composer-choice"><legend>Removal</legend>
+          <label><input type="radio" name="properties[Removal]" value="Yes" required> Yes, arrange removal</label>
+          <label><input type="radio" name="properties[Removal]" value="No" required> No removal</label>
+        </fieldset>
+        <label class="composer-field">Your vision / notes<textarea name="properties[General Notes]" rows="3" placeholder="Event date, access details, or the feeling you have in mind"></textarea></label>
+        <label class="composer-custom"><input type="checkbox" data-custom-request> I’d like further customization beyond these choices</label>
+        <p data-custom-request-note hidden>Further customization requires a consultation before pricing or availability can be confirmed. {% if pages.contact != blank %}<a href="{{ pages.contact.url }}#consultation-form" data-consultation-link>Continue to consultation with your choices →</a>{% else %}Please contact the studio before ordering.{% endif %}</p>
+        <div class="composer-hidden" aria-hidden="true">
+          <select name="id" data-base-variant><option value="" data-price="0">Choose a priced package</option></select>
+        </div>
+        {% assign mono_variant = monogram_product.selected_or_first_available_variant %}
+        <div data-service-products data-display-size="" data-expected-service-fee="0" data-delivery-id="" data-delivery-price="0" data-monogram-id="{% if monogram_product.available and monogram_product.published_at != blank and mono_variant.price > 0 %}{{ mono_variant.id }}{% endif %}" data-monogram-price="{{ mono_variant.price | default: 0 }}" data-removal-id="" data-removal-price="0"></div>
+      </div>
+      <p class="package-browser__transfer-error" role="alert" data-consultation-transfer-error hidden>Choices could not be saved for consultation. Please enter them in the form yourself.</p>
+      <div id="product-form-error" class="hidden" role="alert" aria-live="assertive" aria-atomic="true"></div>
     </div>
-    <aside class="composition-summary" aria-label="Live composition summary" aria-live="polite">
-      <div class="eyebrow">Your composition / Live study</div>
-      <h2>{{ section.settings.summary_heading | escape }}</h2>
-      <div class="composition-summary__row"><span>Palette</span><strong data-selected-palette>{{ palette_names.first }}</strong></div>
-      <div class="composition-summary__row"><span>Color story</span><strong data-selected-palette-description>{{ palette_descriptions.first }}</strong></div>
-      <div class="composition-summary__row"><span>Scale</span><strong data-selected-scale>{{ initial_scale | escape }}</strong></div>
-      <p class="composition-summary__disclosure">{{ section.settings.summary_disclosure | escape }}</p>
+    <aside class="palette-composer__preview" data-composer-pane="preview" aria-label="Live design review">
+      <div class="palette-composer__preview-intro">
+        <span class="eyebrow">Your composition / Live study</span>
+        <h2>{{ section.settings.summary_heading | escape }}</h2>
+        <p>{{ section.settings.summary_disclosure | escape }}</p>
+      </div>
+      <div class="palette-study" data-palette-browser-gallery aria-live="polite">
+        <div class="palette-study__grid">
+          {% for block in section.blocks %}
+            {% if block.type == 'palette_image' and block.settings.image != blank or block.type == 'palette_image' and block.settings.reference_asset != blank and block.settings.reference_asset != 'none' %}
+              <div class="palette-study__item{% unless block.settings.palette == initial_palette %} hidden{% endunless %}" data-palette="{{ block.settings.palette | escape }}" style="--palette-x: {{ block.settings.position_x | default: 50 }}%;--palette-y:{{ block.settings.position_y | default: 50 }}%;--palette-zoom:{{ block.settings.zoom | default: 100 | divided_by: 100.0 }};--palette-turn:{% if block.settings.flip_180 %}180deg{% else %}0deg{% endif %}">
+                {% if block.settings.image != blank %}{{ block.settings.image | image_url: width: 1000 | image_tag: loading: 'lazy', alt: block.settings.image.alt, widths: '400, 700, 1000' }}{% else %}{% assign reference_image = block.settings.reference_asset | append: '.webp' %}<img src="{{ reference_image | asset_url }}" width="1000" height="667" loading="lazy" alt="{{ block.settings.palette | escape }} palette study">{% endif %}
+              </div>
+            {% endif %}
+          {% endfor %}
+        </div>
+        <p class="palette-study__empty" {% if initial_palette_count > 0 %}hidden{% endif %}>Matching palette photography is being prepared.</p>
+        <p class="palette-study__caption">Palette studies show color direction, not a rendering of your finished installation.</p>
+      </div>
+      <div class="composition-summary">
+        <div class="eyebrow">The details, together</div><h2>Review your design</h2>
+        <div class="composition-summary__row"><span>Palette</span><strong data-selected-palette>{{ palette_names.first }}</strong></div>
+        <div class="composition-summary__row"><span>Color story</span><strong data-selected-palette-description>{{ palette_descriptions.first }}</strong></div>
+        <div class="composition-summary__row"><span>Scale</span><strong data-selected-scale>{{ initial_scale | escape }}</strong></div>
+        <div class="composition-summary__row"><span>Fulfillment</span><strong data-brief-service>Choose a method</strong></div>
+        <div class="composition-summary__row"><span>Vinyl artwork</span><strong data-brief-monogram>Choose yes or no</strong></div>
+        <div class="composition-summary__row"><span>Requested week</span><strong data-brief-week>Choose a week</strong></div>
+        <div class="composition-summary__row"><span>Removal</span><strong data-brief-removal>Choose yes or no</strong></div>
+        <div class="composition-summary__row"><span>Artwork details</span><strong data-brief-artwork>—</strong></div>
+        <div class="composition-summary__row"><span>Notes</span><strong data-brief-notes>No notes yet</strong></div>
+        <p class="composition-summary__disclosure">{{ section.settings.summary_disclosure | escape }} Approval adds your selection to cart for review; it does not place an order or reserve a date.</p>
+        <section class="composition-price-estimate" data-composition-estimate aria-label="Live price breakdown">
+          <span class="eyebrow">Live estimate</span><div data-estimate-rows></div>
+          <div class="composition-price-estimate__total"><span>Known subtotal</span><strong data-estimate-total aria-live="polite"></strong></div>
+          <p class="composition-price-estimate__note" data-estimate-note>Unconfirmed service pricing is excluded. Taxes and shipping are calculated at checkout.</p>
+        </section>
+        <p class="product-approval-note">{{ section.settings.continue_disclosure | escape }} Preferred weeks require confirmation.</p>
+        <button type="button" data-approve-design disabled>{{ section.settings.continue_label | escape }}</button>
+        <div class="product-approval" data-approval-status hidden role="status"><strong>Design approved</strong><p>Review every composition line in your cart before checkout.</p></div>
+        <button type="submit" data-cart-submit hidden>Review your composition</button>
+      </div>
     </aside>
-  </div>
-
-  <div class="package-browser__step">{{ section.settings.scale_eyebrow | escape }}</div>
-  <h2 class="package-browser__scale-heading">{{ section.settings.scale_heading | escape }}</h2>
-  {% if package_count > 0 %}
-    <div class="package-browser__grid" role="group" aria-label="Choose a display scale">
-      {% for block in section.blocks %}
-        {% if block.type == 'package' %}
-          {% assign prod = block.settings.product %}
-          {% assign palette_option_index = blank %}
-          {% if prod != blank %}
-            {% for option_name in prod.options %}
-              {% assign option_name_downcase = option_name | downcase %}
-              {% if option_name_downcase contains 'palette' %}{% assign palette_option_index = forloop.index0 %}{% endif %}
-            {% endfor %}
-          {% endif %}
-          {% assign purchasable = false %}
-          {% if prod != blank and prod.published_at != blank and prod.available and prod.price > 0 and palette_option_index != blank %}
-            {% assign purchasable = true %}
-          {% endif %}
-          <div class="package-card-shell">
-          <button type="button" class="package-card" data-package-card data-scale-name="{{ block.settings.scale_name | default: block.settings.subtitle_fallback | escape }}" data-default-scale="{% if block.settings.default_selected %}true{% else %}false{% endif %}" {% if purchasable %}data-product-url="{{ prod.url | escape }}" data-palette-option-index="{{ palette_option_index }}" data-palette-variants="{{ prod.variants | json | escape }}"{% endif %} aria-pressed="{% if block.settings.default_selected %}true{% else %}false{% endif %}" aria-expanded="false" aria-controls="PackageContents-{{ section.id }}-{{ block.id }}" {{ block.shopify_attributes }}>
-            <span class="package-info">
-              {% if block.settings.most_popular %}<span class="package-card__popular">Most popular</span>{% endif %}
-              <span class="package-head">
-                <span class="package-title">{% if purchasable %}{{ prod.title | escape }}{% else %}{{ block.settings.scale_name | escape }}{% endif %}</span>
-                {% if purchasable %}<span class="package-price">{{ prod.price | money }}</span>{% endif %}
-              </span>
-              <span class="package-dimensions">{% if prod != blank and prod.metafields.custom.display_size.value != blank %}{{ prod.metafields.custom.display_size.value | escape }}{% else %}{{ block.settings.subtitle_fallback | escape }}{% endif %}</span>
-              <span class="package-room">{% if prod != blank and prod.metafields.custom.recommended_for.value != blank %}{{ prod.metafields.custom.recommended_for.value | escape }}{% else %}{{ block.settings.room_fallback | escape }}{% endif %}</span>
-              {% if prod == blank %}
-                <span class="package-status">This scale is being prepared.</span>
-              {% elsif prod.published_at == blank or prod.available == false %}
-                <span class="package-status">This scale is not available to order yet.</span>
-              {% elsif prod.price <= 0 %}
-                <span class="package-status">Pricing for this scale is being finalized.</span>
-              {% else %}
-                <span class="package-status" data-palette-availability>Select this scale to continue designing.</span>
-              {% endif %}
-               <span class="package-card__disclosure" data-package-disclosure>See what’s included ↓</span>
-            </span>
-          </button>
-           <div id="PackageContents-{{ section.id }}-{{ block.id }}" class="package-card-details" data-package-details hidden>
-             <p>Included in {{ block.settings.scale_name | escape }}</p>
-             {% assign included_items = block.settings.included_items | newline_to_br | split: '<br />' %}
-             <ul>
-               {% for item in included_items %}
-                 {% assign included_item = item | strip %}
-                 {% if included_item != blank %}<li>{{ included_item | escape }}</li>{% endif %}
-               {% endfor %}
-             </ul>
-           </div>
-          </div>
-        {% endif %}
-      {% endfor %}
-    </div>
-  {% else %}
-    <p class="package-study__empty">Scale options are being prepared. Please check back soon.</p>
-  {% endif %}
-
-  <p class="package-browser__transfer-error" role="alert" data-consultation-transfer-error hidden>Your choices could not be carried to the consultation form in this tab. Please enter them in the form yourself.</p>
-  <div class="package-browser__action">
-    <p>{{ section.settings.continue_disclosure | escape }}</p>
-    <a class="package-browser__continue" data-package-continue aria-disabled="true" tabindex="-1">{{ section.settings.continue_label | escape }}</a>
-  </div>
+  </form>
 </section>
 
 <script>
+  window.shopMoneyFormat = window.shopMoneyFormat || {{ shop.money_format | json }};
+  window.cartUrl = window.cartUrl || {{ routes.cart_url | json }};
+  window.cartAddUrl = window.cartAddUrl || {{ routes.cart_add_url | json }};
   (() => {
+    window.paletteInstallComposerInitializers = window.paletteInstallComposerInitializers || {};
+    const sectionKey = '{{ section.id }}';
+    if (window.paletteInstallComposerInitializers[sectionKey]) {
+      window.paletteInstallComposerInitializers[sectionKey]();
+      return;
+    }
+    const initialize = () => {
+    if (!window.paletteInstallThemeReady || typeof window.formatMoney !== 'function') return;
     const root = document.querySelector('[data-package-browser="{{ section.id }}"]');
     if (!root || root.dataset.initialized === 'true') return;
     root.dataset.initialized = 'true';
     const paletteNames = {{ palette_names | json }};
     const paletteDescriptions = {{ palette_descriptions | json }};
-    const paletteRadios = root.querySelectorAll('input[name="package-palette-{{ section.id }}"]');
+    const paletteRadios = root.querySelectorAll('[data-composer-palette]');
     const paletteImages = root.querySelectorAll('[data-palette-browser-gallery] [data-palette]');
     const emptyStudy = root.querySelector('.palette-study__empty');
     const selectedPalette = root.querySelector('[data-selected-palette]');
     const selectedDescription = root.querySelector('[data-selected-palette-description]');
     const selectedScale = root.querySelector('[data-selected-scale]');
-    const cards = root.querySelectorAll('[data-package-card]');
-    const continueLink = root.querySelector('[data-package-continue]');
+    const cards = Array.from(root.querySelectorAll('[data-composer-scale]'));
+    const form = root.querySelector('[data-product-form]');
+    const variantSelect = form.querySelector('[data-base-variant]');
+    const services = form.querySelector('[data-service-products]');
+    const hayProperty = form.querySelector('[data-hay-property]');
+    const paletteProperty = form.querySelector('[data-chosen-palette]');
+    const radios = selector => form.querySelector(selector + ':checked');
+    const text = name => new FormData(form).get(`properties[${name}]`) || '';
     let activeScale = null;
-
     const rememberSelection = () => {
-      const palette = root.querySelector('input[name="package-palette-{{ section.id }}"]:checked')?.value;
-      if (!activeScale || !palette) return;
+      const palette = root.querySelector('[data-composer-palette]:checked')?.value;
+      if (!palette) return;
+      const choices = {
+        display: activeScale?.dataset.scaleName || '',
+        displaySize: activeScale?.dataset.displaySize || '',
+        palette,
+        service: text('Service'),
+        artwork: text('Vinyl Artwork'),
+        artworkSelected: !!form.querySelector('[data-artwork-file]')?.files?.[0],
+        quantity: text('Vinyl-wrapped Pumpkins'),
+        pumpkinColor: text('Pumpkin Color Preference'),
+        vinylColor: text('Vinyl Color Preference'),
+        week: text('Requested Week'),
+        removal: text('Removal'),
+        notes: text('General Notes'),
+        custom: !!form.querySelector('[data-custom-request]')?.checked
+      };
       try {
-        sessionStorage.setItem('palette-install-consultation-v1', JSON.stringify({
-          savedAt: Date.now(),
-          choices: { display: activeScale.dataset.scaleName, palette }
-        }));
+        sessionStorage.setItem('palette-install-consultation-v1', JSON.stringify({ savedAt: Date.now(), choices }));
         document.dispatchEvent(new Event('palette-install:consultation-updated'));
         const notice = root.querySelector('[data-consultation-transfer-error]');
         if (notice) notice.hidden = true;
@@ -481,19 +605,14 @@
         if (notice) notice.hidden = false;
       }
     };
-
-    const hasAvailablePalette = (card, palette) => {
-      if (!card?.dataset.productUrl || !palette) return false;
-      const index = Number(card.dataset.paletteOptionIndex);
-      if (!Number.isInteger(index) || index < 0) return false;
+    const chosenVariant = (card, palette) => {
+      const index = Number(card?.dataset.paletteIndex);
+      if (!card || index < 0 || !palette) return null;
       try {
-        const variants = JSON.parse(card.dataset.paletteVariants);
-        return variants.some((variant) =>
+        return JSON.parse(card.dataset.variants || '[]').find(variant =>
           variant.options[index] === palette && variant.available && Number(variant.price) > 0
-        );
-      } catch {
-        return false;
-      }
+        ) || null;
+      } catch { return null; }
     };
     const updatePalette = (palette) => {
       let imageCount = 0;
@@ -507,57 +626,104 @@
       if (selectedPalette) selectedPalette.textContent = palette;
       if (selectedDescription && paletteIndex >= 0) selectedDescription.textContent = paletteDescriptions[paletteIndex];
       cards.forEach((card) => {
-        const status = card.querySelector('[data-palette-availability]');
-        if (status) status.textContent = hasAvailablePalette(card, palette)
-          ? 'Select this scale to continue designing.'
-          : 'This palette is not available in this scale yet.';
+        const status = card.querySelector('[data-scale-status]');
+        const variant = chosenVariant(card, palette);
+        if (status && card.dataset.productId && card.dataset.productAvailable === 'true' && Number(card.dataset.paletteIndex) >= 0) {
+          status.textContent = variant ? 'Available · select to configure' : 'Preview only · palette variant unavailable';
+        }
       });
-      updateContinue();
+      selectScale(activeScale || cards.find(card => card.getAttribute('aria-pressed') === 'true') || cards[0]);
     };
-
-    const updateContinue = () => {
-      const palette = root.querySelector('input[name="package-palette-{{ section.id }}"]:checked')?.value;
-      const productUrl = activeScale?.dataset.productUrl;
-      if (!productUrl || !palette || !hasAvailablePalette(activeScale, palette)) {
-        continueLink.removeAttribute('href');
-        continueLink.setAttribute('aria-disabled', 'true');
-        continueLink.setAttribute('tabindex', '-1');
-        if (selectedScale && !activeScale) selectedScale.textContent = 'Choose a scale below';
-        return;
-      }
-      const url = new URL(productUrl, window.location.origin);
-      url.searchParams.set('palette', palette);
-      continueLink.href = url.pathname + url.search + url.hash;
-      continueLink.setAttribute('aria-disabled', 'false');
-      continueLink.removeAttribute('tabindex');
-    };
-
-    paletteRadios.forEach((radio) => radio.addEventListener('change', () => {
-      updatePalette(radio.value);
-      rememberSelection();
-    }));
-    const selectScale = (card, toggleDetails = false) => {
-      if (toggleDetails) {
-        const willOpen = card.getAttribute('aria-expanded') !== 'true';
-        cards.forEach((item) => {
-          const opened = item === card && willOpen;
-          item.setAttribute('aria-expanded', opened ? 'true' : 'false');
-          const details = item.parentElement?.querySelector('[data-package-details]');
-          if (details) details.hidden = !opened;
-          const disclosure = item.querySelector('[data-package-disclosure]');
-          if (disclosure) disclosure.textContent = opened ? 'Hide what’s included ↑' : 'See what’s included ↓';
-        });
-      }
-      cards.forEach((item) => item.setAttribute('aria-pressed', item === card ? 'true' : 'false'));
+    const selectScale = card => {
+      if (!card) return;
       activeScale = card;
+      cards.forEach(item => item.setAttribute('aria-pressed', item === card ? 'true' : 'false'));
       if (selectedScale) selectedScale.textContent = card.dataset.scaleName;
-      updateContinue();
+      const palette = root.querySelector('[data-composer-palette]:checked')?.value;
+      const variant = chosenVariant(card, palette);
+      variantSelect.replaceChildren(new Option('Choose a priced package', '', true, !variant));
+      cards.forEach(item => {
+        try {
+          JSON.parse(item.dataset.variants || '[]').forEach(candidate => {
+            if (!variantSelect.querySelector(`option[value="${CSS.escape(String(candidate.id))}"]`)) {
+              const option = new Option(`${item.dataset.productTitle} · ${candidate.title}`, candidate.id);
+              option.dataset.price = candidate.price;
+              option.disabled = !candidate.available || Number(candidate.price) <= 0 ||
+                item.dataset.productAvailable !== 'true' || Number(item.dataset.paletteIndex) < 0;
+              option.dataset.productId = item.dataset.productId;
+              option.dataset.productTitle = item.dataset.productTitle;
+              variantSelect.add(option);
+            }
+          });
+        } catch { /* Unconfigured products remain preview-only. */ }
+      });
+      if (variant) {
+        variantSelect.value = String(variant.id);
+      }
+      form.dataset.productTitle = card.dataset.productTitle || card.dataset.scaleName || '';
+      services.dataset.displaySize = card.dataset.displaySize || '';
+      services.dataset.expectedServiceFee = card.dataset.expectedServiceFee || '0';
+      services.dataset.deliveryId = card.dataset.deliveryId || '';
+      services.dataset.deliveryPrice = card.dataset.deliveryPrice || '0';
+      services.dataset.removalId = card.dataset.removalId || '';
+      services.dataset.removalPrice = card.dataset.removalPrice || '0';
+      hayProperty.value = ['medium', 'large'].includes(card.dataset.displaySize) ? 'Yes' : 'No';
+      const status = card.querySelector('[data-scale-status]');
+      const scalePrice = card.querySelector('.package-price');
+      if (scalePrice) scalePrice.textContent = variant
+        ? formatMoney(variant.price, window.shopMoneyFormat)
+        : 'Pricing pending';
+      if (!card.dataset.productId) status.textContent = 'Preview only · product not configured';
+      else if (card.dataset.productAvailable !== 'true') status.textContent = 'Preview only · product not available';
+      else if (!variant) status.textContent = 'Preview only · selected palette is not purchasable';
+      else status.textContent = 'Available · configure the rest of your design';
+      const selected = variantSelect.selectedOptions[0];
+      const price = form.querySelector('[data-price-container]');
+      if (price) price.textContent = selected && Number(selected.dataset.price) > 0
+        ? formatMoney(selected.dataset.price, window.shopMoneyFormat)
+        : 'Pricing to be confirmed';
+      form.querySelector('[data-approve-design]').disabled = !variant;
+      const sizeLabel = card.dataset.scaleName || '';
+      root.dataset.productTitle = card.dataset.productTitle || sizeLabel;
+      variantSelect.dispatchEvent(new Event('change', { bubbles: true }));
+      updateBrief();
     };
-    cards.forEach((card) => card.addEventListener('click', () => {
-      selectScale(card, true);
+    const updateBrief = () => {
+      const palette = root.querySelector('[data-composer-palette]:checked')?.value || 'Choose a palette';
+      paletteProperty.value = palette;
+      const selectedService = radios('[data-service]');
+      const artwork = radios('[data-monogram-choice]');
+      const week = text('Requested Week');
+      const removal = radios('input[name="properties[Removal]"]');
+      root.querySelector('[data-selected-palette]').textContent = palette;
+      const index = paletteNames.indexOf(palette);
+      root.querySelector('[data-selected-palette-description]').textContent = paletteDescriptions[index] || '';
+      root.querySelector('[data-brief-service]').textContent = selectedService?.value || 'Choose a method';
+      root.querySelector('[data-brief-monogram]').textContent = artwork?.value === 'Yes' ? 'Vinyl artwork' : artwork?.value === 'No' ? 'No artwork' : 'Choose yes or no';
+      root.querySelector('[data-brief-week]').textContent = week || 'Choose a week';
+      root.querySelector('[data-brief-removal]').textContent = removal?.value === 'Yes' ? 'Requested' : removal?.value === 'No' ? 'Not requested' : 'Choose yes or no';
+      const file = form.querySelector('[data-artwork-file]')?.files?.[0];
+      const qty = form.querySelector('[data-monogram-quantity]')?.value;
+      const pumpkin = form.querySelector('[name="properties[Pumpkin Color Preference]"]')?.value;
+      const vinyl = form.querySelector('[name="properties[Vinyl Color Preference]"]')?.value;
+      root.querySelector('[data-brief-artwork]').textContent = artwork?.value === 'Yes'
+        ? `${qty || 1} pumpkin${Number(qty) === 1 ? '' : 's'} · ${pumpkin || 'color pending'} / ${vinyl || 'vinyl pending'}${file ? ` · ${file.name}` : ' · file pending'}`
+        : '—';
+      root.querySelector('[data-brief-notes]').textContent = text('General Notes').trim() || 'No notes yet';
       rememberSelection();
+    };
+    cards.forEach(card => card.addEventListener('click', () => selectScale(card)));
+    paletteRadios.forEach(radio => radio.addEventListener('change', () => {
+      updatePalette(radio.value);
+      updateBrief();
     }));
-    const defaultCard = root.querySelector('[data-package-card][data-default-scale="true"]') || cards[0];
+    form.addEventListener('input', updateBrief);
+    form.addEventListener('change', updateBrief);
+    root.querySelectorAll('[data-pane-tab]').forEach(button => button.addEventListener('click', () => {
+      root.dataset.mobilePane = button.dataset.paneTab;
+      root.querySelectorAll('[data-pane-tab]').forEach(tab => tab.setAttribute('aria-pressed', tab === button ? 'true' : 'false'));
+    }));
+    const defaultCard = cards.find(card => card.getAttribute('aria-pressed') === 'true') || cards[0];
     if (defaultCard) selectScale(defaultCard);
     const initialPalette = new URLSearchParams(window.location.search).get('palette');
     const initialRadio = Array.from(paletteRadios).find((radio) => radio.value === initialPalette) || paletteRadios[0];
@@ -565,6 +731,15 @@
       initialRadio.checked = true;
       updatePalette(initialRadio.value);
     }
+    };
+    document.addEventListener('palette-install:theme-ready', initialize);
+    document.addEventListener('shopify:section:load', initialize);
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', initialize, { once: true });
+    } else {
+      initialize();
+    }
+    window.paletteInstallComposerInitializers[sectionKey] = initialize;
   })();
 </script>
 
@@ -629,15 +804,22 @@
     {
       "type": "text",
       "id": "continue_label",
-      "label": "Continue button label",
-      "default": "Continue designing"
+      "label": "Approval button label",
+      "default": "Approve design"
     },
     {
       "type": "textarea",
       "id": "continue_disclosure",
-      "label": "Continue action disclosure",
-      "default": "Next, choose the finishing details, delivery, and your preferred week. You can approve and review the full composition before checkout."
-    }
+      "label": "Approval action disclosure",
+      "default": "Approval adds your selected composition to cart for review and does not place an order or reserve a week."
+    },
+    { "type": "product", "id": "delivery_small_product", "label": "The Stoop delivery service product" },
+    { "type": "product", "id": "delivery_medium_product", "label": "The Porch delivery service product" },
+    { "type": "product", "id": "delivery_large_product", "label": "The Estate delivery service product" },
+    { "type": "product", "id": "removal_small_product", "label": "The Stoop removal service product" },
+    { "type": "product", "id": "removal_medium_product", "label": "The Porch removal service product" },
+    { "type": "product", "id": "removal_large_product", "label": "The Estate removal service product" },
+    { "type": "product", "id": "monogram_product", "label": "Vinyl artwork per-pumpkin service product" }
   ],
   "blocks": [
     {
@@ -654,6 +836,18 @@
           "id": "scale_name",
           "label": "Scale name when product is unavailable",
           "default": "Display scale"
+        },
+        {
+          "type": "select",
+          "id": "service_fee_tier",
+          "label": "Package identity for service pricing",
+          "options": [
+            { "value": "small", "label": "The Stoop · small" },
+            { "value": "medium", "label": "The Porch · medium" },
+            { "value": "large", "label": "The Estate · large" }
+          ],
+          "default": "small",
+          "info": "Select the scale identity used to match its Shopify delivery and removal service products."
         },
         {
           "type": "textarea",

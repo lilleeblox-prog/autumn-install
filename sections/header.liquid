@@ -1,40 +1,41 @@
 <header class="site-header">
   <div class="container site-header__inner">
-    <a href="{{ routes.root_url }}" class="site-header__logo">
+    <a href="{{ routes.root_url }}" class="site-header__logo" aria-label="Palette Install home">
       {{ section.settings.wordmark }}
     </a>
     
-    <button class="site-header__menu-toggle" aria-expanded="false" aria-controls="MobileNav" data-menu-toggle>
+    <button class="site-header__menu-toggle" type="button" aria-expanded="false" aria-controls="MobileNav" aria-label="Open navigation menu" data-menu-toggle>
       Menu
     </button>
 
     <nav class="site-header__nav" aria-label="Main navigation">
       {% if linklists[section.settings.menu].links.size > 0 %}
         {% for link in linklists[section.settings.menu].links %}
-          <a href="{{ link.url }}" class="site-header__nav-link">{{ link.title }}</a>
+          <a href="{{ link.url }}" class="site-header__nav-link"{% if link.current %} aria-current="page"{% endif %}>{{ link.title }}</a>
         {% endfor %}
       {% else %}
         {% if pages.process != blank %}
-          <a href="{{ pages.process.url }}" class="site-header__nav-link">Process</a>
+          <a href="{{ pages.process.url }}" class="site-header__nav-link"{% if request.path == pages.process.url %} aria-current="page"{% endif %}>Process</a>
         {% endif %}
         <a href="{{ routes.root_url }}#compose" class="site-header__nav-link">Compose</a>
         {% if pages.gallery != blank %}
-          <a href="{{ pages.gallery.url }}" class="site-header__nav-link">Gallery</a>
+          <a href="{{ pages.gallery.url }}" class="site-header__nav-link"{% if request.path == pages.gallery.url %} aria-current="page"{% endif %}>Gallery</a>
         {% endif %}
         {% if pages.faq != blank %}
-          <a href="{{ pages.faq.url }}" class="site-header__nav-link">FAQ</a>
+          <a href="{{ pages.faq.url }}" class="site-header__nav-link"{% if request.path == pages.faq.url %} aria-current="page"{% endif %}>FAQ</a>
         {% endif %}
         {% if pages.contact != blank %}
-          <a href="{{ pages.contact.url }}" class="site-header__nav-link">Contact</a>
+          <a href="{{ pages.contact.url }}" class="site-header__nav-link"{% if request.path == pages.contact.url %} aria-current="page"{% endif %}>Contact</a>
         {% endif %}
       {% endif %}
     </nav>
     
     <div class="site-header__icons">
-      <a href="{{ routes.cart_url }}" class="site-header__cart" id="cart-icon-bubble">
+      <span class="site-header__studio-note"><span class="status-dot" aria-hidden="true"></span>The autumn studio</span>
+      <a href="{{ routes.cart_url }}" class="site-header__cart" id="cart-icon-bubble" aria-label="Your design{% if cart.item_count > 0 %}, {{ cart.item_count }} items{% else %}, empty{% endif %}">
         Your design
         {% if cart.item_count > 0 %}
-          <span class="cart-count">{{ cart.item_count }}</span>
+          <span class="cart-count" aria-hidden="true">{{ cart.item_count }}</span>
         {% endif %}
       </a>
     </div>
@@ -43,21 +44,21 @@
   <nav id="MobileNav" class="container mobile-nav hidden" data-mobile-nav aria-label="Mobile navigation">
     {% if linklists[section.settings.menu].links.size > 0 %}
       {% for link in linklists[section.settings.menu].links %}
-        <a href="{{ link.url }}" class="site-header__nav-link">{{ link.title }}</a>
+        <a href="{{ link.url }}" class="site-header__nav-link"{% if link.current %} aria-current="page"{% endif %}>{{ link.title }}</a>
       {% endfor %}
     {% else %}
       {% if pages.process != blank %}
-        <a href="{{ pages.process.url }}" class="site-header__nav-link">Process</a>
+        <a href="{{ pages.process.url }}" class="site-header__nav-link"{% if request.path == pages.process.url %} aria-current="page"{% endif %}>Process</a>
       {% endif %}
       <a href="{{ routes.root_url }}#compose" class="site-header__nav-link">Compose</a>
       {% if pages.gallery != blank %}
-        <a href="{{ pages.gallery.url }}" class="site-header__nav-link">Gallery</a>
+        <a href="{{ pages.gallery.url }}" class="site-header__nav-link"{% if request.path == pages.gallery.url %} aria-current="page"{% endif %}>Gallery</a>
       {% endif %}
       {% if pages.faq != blank %}
-        <a href="{{ pages.faq.url }}" class="site-header__nav-link">FAQ</a>
+        <a href="{{ pages.faq.url }}" class="site-header__nav-link"{% if request.path == pages.faq.url %} aria-current="page"{% endif %}>FAQ</a>
       {% endif %}
       {% if pages.contact != blank %}
-        <a href="{{ pages.contact.url }}" class="site-header__nav-link">Contact</a>
+        <a href="{{ pages.contact.url }}" class="site-header__nav-link"{% if request.path == pages.contact.url %} aria-current="page"{% endif %}>Contact</a>
       {% endif %}
     {% endif %}
   </nav>

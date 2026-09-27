@@ -6,19 +6,19 @@
         "type": "color",
         "id": "color_background",
         "label": "Background",
-        "default": "#eeece7"
+        "default": "#f4f0e8"
       },
       {
         "type": "color",
         "id": "color_foreground",
         "label": "Text",
-        "default": "#2e302d"
+        "default": "#302d28"
       },
       {
         "type": "color",
         "id": "color_accent",
         "label": "Accent",
-        "default": "#9b4c39"
+        "default": "#955c42"
       }
     ]
   },

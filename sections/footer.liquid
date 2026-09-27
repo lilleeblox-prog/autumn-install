@@ -1,10 +1,12 @@
 <footer class="site-footer">
   <div class="container site-footer__inner">
     <div class="site-footer__brand">
-      <h2 class="site-footer__title">{{ section.settings.brand_name | escape }}</h2>
+      <h2 class="site-footer__title">
+        <a class="site-footer__wordmark" href="{{ routes.root_url }}">{{ section.settings.brand_name | escape }}</a>
+      </h2>
       <p class="site-footer__link">{{ section.settings.text }}</p>
       {% if settings.social_instagram_link != blank %}
-        <a class="site-footer__link" href="{{ settings.social_instagram_link | escape }}" rel="noopener noreferrer" target="_blank">Instagram ↗</a>
+        <a class="site-footer__link site-footer__social" href="{{ settings.social_instagram_link | escape }}" rel="noopener noreferrer" target="_blank">Instagram <span aria-hidden="true">↗</span></a>
       {% endif %}
     </div>
     
