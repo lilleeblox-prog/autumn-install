@@ -941,8 +941,8 @@
                 {% when 'medium' %}{% assign delivery = section.settings.delivery_medium_product %}{% assign removal = section.settings.removal_medium_product %}{% assign expected_service_fee = 5000 %}
                 {% when 'large' %}{% assign delivery = section.settings.delivery_large_product %}{% assign removal = section.settings.removal_large_product %}{% assign expected_service_fee = 8500 %}
               {% endcase %}
-              <div class="package-card-shell">
-                <button type="button" class="package-card" data-composer-scale data-scale-name="{{ block.settings.scale_name | escape }}" data-display-size="{{ display_size }}" data-expected-service-fee="{{ expected_service_fee }}" data-product-id="{% if prod != blank %}{{ prod.id }}{% endif %}" data-product-title="{% if prod != blank %}{{ prod.title | escape }}{% else %}{{ block.settings.scale_name | escape }}{% endif %}" data-product-available="{% if prod != blank and prod.available and prod.published_at != blank %}true{% else %}false{% endif %}" data-palette-index="{{ option_index }}" data-variants="{% if prod != blank %}{{ prod.variants | json | escape }}{% endif %}" data-delivery-id="{% if delivery != blank and delivery.available and delivery.published_at != blank and delivery.selected_or_first_available_variant.price > 0 %}{{ delivery.selected_or_first_available_variant.id }}{% endif %}" data-delivery-price="{{ delivery.selected_or_first_available_variant.price | default: 0 }}" data-removal-id="{% if removal != blank and removal.available and removal.published_at != blank and removal.selected_or_first_available_variant.price > 0 %}{{ removal.selected_or_first_available_variant.id }}{% endif %}" data-removal-price="{{ removal.selected_or_first_available_variant.price | default: 0 }}" aria-pressed="{% if block.settings.default_selected %}true{% else %}false{% endif %}" aria-expanded="false" aria-controls="package-includes-{{ block.id }}" {{ block.shopify_attributes }}>
+              <div class="package-card-shell" {{ block.shopify_attributes }}>
+                <button type="button" class="package-card" data-composer-scale data-scale-name="{{ block.settings.scale_name | escape }}" data-display-size="{{ display_size }}" data-expected-service-fee="{{ expected_service_fee }}" data-product-id="{% if prod != blank %}{{ prod.id }}{% endif %}" data-product-title="{% if prod != blank %}{{ prod.title | escape }}{% else %}{{ block.settings.scale_name | escape }}{% endif %}" data-product-available="{% if prod != blank and prod.available and prod.published_at != blank %}true{% else %}false{% endif %}" data-palette-index="{{ option_index }}" data-variants="{% if prod != blank %}{{ prod.variants | json | escape }}{% endif %}" data-delivery-id="{% if delivery != blank and delivery.available and delivery.published_at != blank and delivery.selected_or_first_available_variant.price > 0 %}{{ delivery.selected_or_first_available_variant.id }}{% endif %}" data-delivery-price="{{ delivery.selected_or_first_available_variant.price | default: 0 }}" data-removal-id="{% if removal != blank and removal.available and removal.published_at != blank and removal.selected_or_first_available_variant.price > 0 %}{{ removal.selected_or_first_available_variant.id }}{% endif %}" data-removal-price="{{ removal.selected_or_first_available_variant.price | default: 0 }}" aria-pressed="{% if block.settings.default_selected %}true{% else %}false{% endif %}" aria-expanded="false" aria-controls="package-includes-{{ block.id }}">
                   {% if block.settings.most_popular %}<small class="package-card__popular">Most popular</small>{% endif %}
                   <span class="package-title">{{ block.settings.scale_name | escape }}</span>
                   <span class="package-room">{{ block.settings.room_fallback | default: block.settings.subtitle_fallback | escape }}</span>
@@ -1282,19 +1282,17 @@
         : 'Requested delivery & installation week';
       rememberSelection();
     };
-    const nextExpandedScale = (current, clicked) => current === clicked ? null : clicked;
-    let expandedScale = null;
     cards.forEach(card => card.addEventListener('click', () => {
-      expandedScale = nextExpandedScale(expandedScale, card);
-      selectScale(card);
+      const shouldExpand = card.getAttribute('aria-expanded') !== 'true';
       cards.forEach(item => {
-        const expanded = item === expandedScale;
+        const expanded = item === card && shouldExpand;
         item.setAttribute('aria-expanded', expanded ? 'true' : 'false');
-        const details = root.querySelector(`#${CSS.escape(item.getAttribute('aria-controls'))}`);
+        const details = item.closest('.package-card-shell')?.querySelector('.package-card-details');
         if (details) details.hidden = !expanded;
         const label = item.querySelector('[data-scale-disclosure-label]');
         if (label) label.textContent = expanded ? 'Hide what’s included' : 'See what’s included';
       });
+      selectScale(card);
     }));
     paletteRadios.forEach(radio => radio.addEventListener('change', () => {
       updatePalette(radio.value);
