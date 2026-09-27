@@ -1,8 +1,5 @@
 <header class="site-header">
   {% capture canonical_navigation %}
-    {% assign process_href = routes.root_url | append: '#process' %}
-    {% if pages.process != blank %}{% assign process_href = pages.process.url %}{% endif %}
-    <a href="{{ process_href }}" class="site-header__nav-link"{% if pages.process != blank and request.path == pages.process.url %} aria-current="page"{% endif %}>Process</a>
     <a href="{{ routes.root_url }}#compose" class="site-header__nav-link">Compose</a>
     {% if pages.gallery != blank %}
       <a href="{{ pages.gallery.url }}" class="site-header__nav-link"{% if request.path == pages.gallery.url %} aria-current="page"{% endif %}>Gallery</a>
