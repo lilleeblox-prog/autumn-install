@@ -373,7 +373,7 @@ function setupProductEstimate(form) {
     if (form.querySelector('[data-monogram-choice="yes"]:checked')) {
       additions.push({
         label: 'Vinyl-wrapped pumpkin',
-        priceCents: products.dataset.monogramPrice,
+        priceCents: products.dataset.monogramEstimateCents,
         quantity: form.querySelector('[data-monogram-quantity]')?.value,
       });
     }
@@ -400,9 +400,12 @@ function setupProductEstimate(form) {
     }));
     estimate.querySelector('[data-estimate-total]').textContent = result.pending.includes('Base display') && result.knownCents === 0
       ? 'Rate pending' : formatMoney(result.knownCents, moneyFormat);
+    const vinylIsReference = !!form.querySelector('[data-monogram-choice="yes"]:checked') &&
+      !products.dataset.monogramId && Number(products.dataset.monogramEstimateCents) > 0;
+    const referenceNote = `${isComposer ? 'Draft display prices are estimates until a matching palette variant is available. ' : ''}${vinylIsReference ? 'Vinyl artwork is a reference estimate per pumpkin; it cannot be ordered until the add-on is available. ' : ''}`;
     estimate.querySelector('[data-estimate-note]').textContent = result.pending.length
-      ? `${result.pending.join(', ')} ${result.pending.length === 1 ? 'is' : 'are'} not included in this subtotal. ${isComposer ? 'Draft display prices are estimates until a matching palette variant is available. ' : ''}Taxes and any other Shopify checkout charges are shown before payment.`
-      : `${isComposer ? 'Draft display prices are estimates until a matching palette variant is available. ' : ''}Delivery is charged for both fulfillment choices; removal is separate. Taxes and any other Shopify checkout charges are shown before payment.`;
+      ? `${result.pending.join(', ')} ${result.pending.length === 1 ? 'is' : 'are'} not included in this subtotal. ${referenceNote}Taxes and any other Shopify checkout charges are shown before payment.`
+      : `${referenceNote}Delivery is charged for both fulfillment choices; removal is separate. Taxes and any other Shopify checkout charges are shown before payment.`;
   };
   form.addEventListener('input', update);
   form.addEventListener('change', update);
@@ -502,7 +505,8 @@ function previewCartDesign(form) {
     baseEstimateCents: Number(form.querySelector('[data-base-variant]')?.selectedOptions[0]?.dataset.price) > 0
       ? Number(form.querySelector('[data-base-variant]').selectedOptions[0].dataset.price)
       : Number(card.dataset.baseEstimateCents) || 0,
-    deliveryEstimateCents: Number(services?.dataset.expectedServiceFee) || 0
+    deliveryEstimateCents: Number(services?.dataset.expectedServiceFee) || 0,
+    vinylEstimateCents: Number(services?.dataset.monogramEstimateCents) || 0
   };
   try {
     sessionStorage.setItem(CART_PREVIEW_KEY, JSON.stringify(preview));

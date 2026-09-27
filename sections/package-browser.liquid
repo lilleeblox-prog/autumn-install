@@ -911,7 +911,7 @@
         <span class="eyebrow">03 / The details</span><h2>A detail that’s yours.</h2>
         <p>A personal motif can make the welcome feel even more like home. Add your artwork in vinyl to a pumpkin, then choose its colors.</p>
         <fieldset class="composer-choice composer-choice--artwork composer-choice--full-card"><legend>Add a vinyl-wrapped artwork pumpkin?</legend>
-          <label><input class="composer-hidden" type="radio" name="properties[Vinyl Artwork]" value="Yes" data-monogram-choice="yes" required><span>Yes, add my artwork{% if monogram_product != blank and monogram_product.available and monogram_product.published_at != blank and monogram_product.selected_or_first_available_variant.price > 0 %} (+{{ monogram_product.selected_or_first_available_variant.price | money }} per pumpkin){% endif %}</span><small>{% if monogram_product != blank and monogram_product.available and monogram_product.published_at != blank and monogram_product.selected_or_first_available_variant.price > 0 %}Your design, wrapped in vinyl on a pumpkin.{% else %}A preview for now; price and availability must be confirmed before ordering.{% endif %}</small></label>
+          <label><input class="composer-hidden" type="radio" name="properties[Vinyl Artwork]" value="Yes" data-monogram-choice="yes" required><span>Yes, add my artwork{% if monogram_product != blank and monogram_product.available and monogram_product.published_at != blank and monogram_product.selected_or_first_available_variant.price > 0 %} (+{{ monogram_product.selected_or_first_available_variant.price | money }} per pumpkin){% elsif section.settings.vinyl_estimate_cents > 0 %} (+{{ section.settings.vinyl_estimate_cents | money }} per pumpkin · estimate){% endif %}</span><small>{% if monogram_product != blank and monogram_product.available and monogram_product.published_at != blank and monogram_product.selected_or_first_available_variant.price > 0 %}Your design, wrapped in vinyl on a pumpkin.{% else %}A preview for now; availability must be confirmed before ordering.{% endif %}</small></label>
           <label><input class="composer-hidden" type="radio" name="properties[Vinyl Artwork]" value="No" data-monogram-choice="no" required><span>No thanks</span><small>Keep the palette just as it is.</small></label>
         </fieldset>
         <div data-monogram-fields hidden>
@@ -960,7 +960,7 @@
           <select name="id" data-base-variant><option value="" data-price="0">Choose a priced package</option></select>
         </div>
         {% assign mono_variant = monogram_product.selected_or_first_available_variant %}
-        <div data-service-products data-display-size="" data-expected-service-fee="0" data-delivery-id="" data-delivery-price="0" data-monogram-id="{% if monogram_product.available and monogram_product.published_at != blank and mono_variant.price > 0 %}{{ mono_variant.id }}{% endif %}" data-monogram-price="{{ mono_variant.price | default: 0 }}" data-removal-id="" data-removal-price="0"></div>
+        <div data-service-products data-display-size="" data-expected-service-fee="0" data-delivery-id="" data-delivery-price="0" data-monogram-id="{% if monogram_product.available and monogram_product.published_at != blank and mono_variant.price > 0 %}{{ mono_variant.id }}{% endif %}" data-monogram-price="{{ mono_variant.price | default: 0 }}" data-monogram-estimate-cents="{% if mono_variant.price > 0 %}{{ mono_variant.price }}{% else %}{{ section.settings.vinyl_estimate_cents | default: 0 }}{% endif %}" data-removal-id="" data-removal-price="0"></div>
       </div>
       <p class="package-browser__transfer-error" role="alert" data-consultation-transfer-error hidden>Choices could not be saved for consultation. Please enter them in the form yourself.</p>
       <div id="product-form-error" class="hidden" role="alert" aria-live="assertive" aria-atomic="true"></div>
@@ -1347,7 +1347,8 @@
     { "type": "product", "id": "removal_small_product", "label": "The Stoop removal service product" },
     { "type": "product", "id": "removal_medium_product", "label": "The Porch removal service product" },
     { "type": "product", "id": "removal_large_product", "label": "The Estate removal service product" },
-    { "type": "product", "id": "monogram_product", "label": "Vinyl artwork per-pumpkin service product" }
+    { "type": "product", "id": "monogram_product", "label": "Vinyl artwork per-pumpkin service product" },
+    { "type": "number", "id": "vinyl_estimate_cents", "label": "Vinyl artwork reference estimate per pumpkin (cents)", "default": 2500, "info": "Only for display while the Shopify add-on is unavailable. Does not enable cart or checkout; update if the product price changes." }
   ],
   "blocks": [
     {

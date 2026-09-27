@@ -202,7 +202,7 @@
   </div>
   <div class="cart-footer cart-preview__footer" data-preview-footer hidden>
     <div class="cart-subtotal"><span>Known reference estimate</span><span data-preview-total></span></div>
-    <p class="cart-note">Draft display and service estimates are for review only. Unpriced artwork is excluded from this estimate. Taxes and any shipping are not included. This preview cannot place an order or reserve a week.</p>
+    <p class="cart-note" data-preview-estimate-note>Draft display and service estimates are for review only. Taxes and any shipping are not included. This preview cannot place an order or reserve a week.</p>
     <div class="cart-buttons">
       <a class="button button--secondary" href="{{ routes.cart_url }}">View actual cart</a>
       <a class="button button--accent" href="{{ routes.root_url }}#compose">Refine your design</a>
@@ -278,11 +278,17 @@
     };
     addService('Delivery', design.service === 'Custom installation'
       ? 'Delivery with styling at your entry' : 'Delivery for you to arrange', design.deliveryEstimateCents);
-    if (design.artwork === 'Yes') addService('Vinyl artwork', 'Artwork price pending · file not uploaded', 0);
+    if (design.artwork === 'Yes') addService('Vinyl artwork', `${design.artworkQuantity} pumpkin${design.artworkQuantity === 1 ? '' : 's'} · file not uploaded · reference estimate`, design.vinylEstimateCents * design.artworkQuantity);
     if (design.removal === 'Yes') addService('Post-season removal', 'Requested service', design.deliveryEstimateCents);
     const knownTotal = Number(design.baseEstimateCents) + Number(design.deliveryEstimateCents) *
-      (design.removal === 'Yes' ? 2 : 1);
+      (design.removal === 'Yes' ? 2 : 1) +
+      (design.artwork === 'Yes' ? Number(design.vinylEstimateCents) * design.artworkQuantity : 0);
     put('[data-preview-total]', money(knownTotal));
+    if (design.artwork === 'Yes') {
+      put('[data-preview-estimate-note]', design.vinylEstimateCents > 0
+        ? 'Vinyl artwork is included at a reference rate per pumpkin. Draft prices are for review only; taxes and any shipping are not included. This preview cannot place an order or reserve a week.'
+        : 'Vinyl artwork has no confirmed price and is excluded from this estimate. Draft prices are for review only. This preview cannot place an order or reserve a week.');
+    }
     preview.querySelector('[data-preview-footer]').hidden = false;
   })();
 </script>

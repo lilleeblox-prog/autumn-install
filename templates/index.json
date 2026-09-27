@@ -67,7 +67,8 @@
         "removal_small_product": "small-display-removal",
         "removal_medium_product": "medium-display-removal",
         "removal_large_product": "large-display-removal",
-        "monogram_product": "monogrammed-pumpkin"
+        "monogram_product": "monogrammed-pumpkin",
+        "vinyl_estimate_cents": 2500
       },
       "blocks": {
         "small": {

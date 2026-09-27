@@ -290,7 +290,7 @@
          <fieldset>
             <legend class="visually-hidden">Add vinyl-wrapped artwork to a pumpkin</legend>
            <div class="choice-list">
-               <label class="choice-option"><input type="radio" name="properties[Vinyl Artwork]" value="Yes" required data-monogram-choice="yes"> Yes, wrap my artwork in vinyl on a pumpkin {% if monogram_product != blank and monogram_product.published_at != blank and monogram_product.selected_or_first_available_variant.price > 0 %}(+{{ monogram_product.selected_or_first_available_variant.price | money }} per pumpkin{% unless monogram_product.available %} · not yet available{% endunless %}){% else %}(not ready to order · price pending){% endif %}</label>
+                <label class="choice-option"><input type="radio" name="properties[Vinyl Artwork]" value="Yes" required data-monogram-choice="yes"> Yes, wrap my artwork in vinyl on a pumpkin {% if monogram_product != blank and monogram_product.published_at != blank and monogram_product.selected_or_first_available_variant.price > 0 %}(+{{ monogram_product.selected_or_first_available_variant.price | money }} per pumpkin{% unless monogram_product.available %} · not yet available{% endunless %}){% elsif section.settings.vinyl_estimate_cents > 0 %}(+{{ section.settings.vinyl_estimate_cents | money }} per pumpkin · estimate, not ready to order){% else %}(not ready to order · price pending){% endif %}</label>
               <label class="choice-option"><input type="radio" name="properties[Vinyl Artwork]" value="No" required data-monogram-choice="no"> No vinyl artwork</label>
            </div>
          </fieldset>
@@ -359,7 +359,8 @@
             data-delivery-id="{% if delivery_product != blank and delivery_product.available and delivery_product.published_at != blank and delivery_product.selected_or_first_available_variant.price > 0 %}{{ delivery_product.selected_or_first_available_variant.id }}{% endif %}"
            data-delivery-price="{{ delivery_product.selected_or_first_available_variant.price | default: 0 }}"
            data-monogram-id="{% if monogram_product != blank and monogram_product.available and monogram_product.published_at != blank and monogram_product.selected_or_first_available_variant.price > 0 %}{{ monogram_product.selected_or_first_available_variant.id }}{% endif %}"
-           data-monogram-price="{{ monogram_product.selected_or_first_available_variant.price | default: 0 }}"
+            data-monogram-price="{{ monogram_product.selected_or_first_available_variant.price | default: 0 }}"
+            data-monogram-estimate-cents="{% if monogram_product.selected_or_first_available_variant.price > 0 %}{{ monogram_product.selected_or_first_available_variant.price }}{% else %}{{ section.settings.vinyl_estimate_cents | default: 0 }}{% endif %}"
             data-removal-id="{% if removal_product != blank and removal_product.available and removal_product.published_at != blank and removal_product.selected_or_first_available_variant.price > 0 %}{{ removal_product.selected_or_first_available_variant.id }}{% endif %}"
            data-removal-price="{{ removal_product.selected_or_first_available_variant.price | default: 0 }}">
        </div>
@@ -467,6 +468,13 @@
       "id": "monogram_product",
       "label": "Vinyl artwork per-pumpkin add-on",
       "info": "Optional paid product charged per vinyl-wrapped pumpkin. Artwork orders are blocked until this is configured and available."
+    },
+    {
+      "type": "number",
+      "id": "vinyl_estimate_cents",
+      "label": "Vinyl artwork reference estimate per pumpkin (cents)",
+      "default": 2500,
+      "info": "Used only for display when the add-on is unavailable. Does not enable cart or checkout."
     },
     { "type": "product", "id": "removal_small_product", "label": "The Stoop removal service product" },
     { "type": "product", "id": "removal_medium_product", "label": "The Porch removal service product" },
