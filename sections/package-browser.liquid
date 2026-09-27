@@ -937,9 +937,9 @@
           </div>
           <small class="composer-field__hint">These are requested weeks, not reserved dates. We’ll confirm your delivery or installation date and time as your requested week approaches. If you need a specific date for an event, please let us know in your design notes above.</small>
         </fieldset>
-        <fieldset class="composer-choice"><legend>Removal service</legend>
-          <label><input type="radio" name="properties[Removal]" value="Yes" required> Schedule Removal <small>We clear everything post-season.</small></label>
-          <label><input type="radio" name="properties[Removal]" value="No" required> I’ll Handle It <small>No removal service needed.</small></label>
+        <fieldset class="composer-choice composer-choice--full-card"><legend>Removal service</legend>
+          <label><input class="composer-hidden" type="radio" name="properties[Removal]" value="Yes" required><span>Schedule Removal</span><small>We clear everything post-season.</small></label>
+          <label><input class="composer-hidden" type="radio" name="properties[Removal]" value="No" required><span>I’ll Handle It</span><small>No removal service needed.</small></label>
         </fieldset>
         <div class="composer-hidden" aria-hidden="true">
           <select name="id" data-base-variant><option value="" data-price="0">Choose a priced package</option></select>
