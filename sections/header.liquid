@@ -3,8 +3,6 @@
     <a href="{{ routes.root_url }}#compose" class="site-header__nav-link">Compose</a>
     {% if pages.gallery != blank %}
       <a href="{{ pages.gallery.url }}" class="site-header__nav-link"{% if request.path == pages.gallery.url %} aria-current="page"{% endif %}>Gallery</a>
-    {% else %}
-      <a href="{{ routes.root_url }}#gallery" class="site-header__nav-link">Gallery</a>
     {% endif %}
     {% if pages.faq != blank %}
       <a href="{{ pages.faq.url }}" class="site-header__nav-link"{% if request.path == pages.faq.url %} aria-current="page"{% endif %}>FAQ</a>
