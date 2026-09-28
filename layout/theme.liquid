@@ -28,6 +28,9 @@
         --color-accent: {{ settings.color_accent }};
       }
     </style>
+    <script>
+      window.paletteInstallCartPageUrl = {% if theme.role != 'main' and theme.id != blank %}{{ routes.cart_url | append: '?preview_theme_id=' | append: theme.id | json }}{% else %}{{ routes.cart_url | json }}{% endif %};
+    </script>
     <script src="{{ 'theme.js' | asset_url }}" defer="defer"></script>
 
   </head>

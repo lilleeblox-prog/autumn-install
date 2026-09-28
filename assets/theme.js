@@ -1147,7 +1147,7 @@ async function finishPendingUpload(cartForm) {
   }
   if (pending.editId) await replaceComposition(pending.editId, pending.compositionId);
   sessionStorage.removeItem(PENDING_UPLOAD_KEY);
-  window.location.replace(window.cartUrl || '/cart');
+  window.location.replace(window.paletteInstallCartPageUrl || window.cartUrl || '/cart');
 }
 
 async function loadEditingComposition(form) {
@@ -1507,7 +1507,7 @@ document.addEventListener('DOMContentLoaded', () => {
       productForm.dataset.cartSubmitting = 'true';
       submit.disabled = true;
       submit.textContent = 'Preparing your design…';
-      const cartUrl = window.cartUrl || '/cart';
+      const cartUrl = window.paletteInstallCartPageUrl || window.cartUrl || '/cart';
       const requireCartReview = (message) => {
         productForm.dataset.cartSubmitting = 'false';
         productForm.dataset.cartNeedsReview = 'true';

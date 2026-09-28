@@ -179,6 +179,7 @@
     <form {% if display_size != blank %}method="post" action="{{ routes.cart_add_url }}"{% else %}onsubmit="return false"{% endif %} enctype="multipart/form-data" data-product-form data-product-id="{{ product.id }}" data-product-title="{{ product.title | escape }}">
       <noscript><p class="product-form__noscript">Please enable JavaScript to safely add configured display and service products to your cart. You can still review the details above.</p></noscript>
       <input type="hidden" name="form_type" value="product">
+      <input type="hidden" name="return_to" value="{% if theme.role != 'main' and theme.id != blank %}{{ routes.cart_url }}?preview_theme_id={{ theme.id }}{% else %}{{ routes.cart_url }}{% endif %}">
         <input type="hidden" name="properties[_Composition ID]" value="" data-composition-id-input>
         <input type="hidden" name="properties[_House Photo Expected]" value="Yes" data-house-photo-expected disabled>
       
