@@ -3,16 +3,16 @@
     "main": {
       "type": "main-product",
       "settings": {
-        "delivery_small_product": "small-display-delivery",
-        "delivery_medium_product": "medium-display-delivery",
-        "delivery_large_product": "large-display-delivery",
-        "small_package_product": "small-pumpkin-display",
-        "medium_package_product": "medium-pumpkin-display",
-        "large_package_product": "large-pumpkin-display",
-        "removal_small_product": "small-display-removal",
-        "removal_medium_product": "medium-display-removal",
-        "removal_large_product": "large-display-removal",
-        "monogram_product": "monogrammed-pumpkin",
+        "delivery_small_product": "delivery-the-stoop",
+        "delivery_medium_product": "delivery-the-porch",
+        "delivery_large_product": "delivery-the-estate",
+        "small_package_product": "the-stoop",
+        "medium_package_product": "the-porch",
+        "large_package_product": "the-estate",
+        "removal_small_product": "removal-the-stoop",
+        "removal_medium_product": "removal-the-porch",
+        "removal_large_product": "removal-the-estate",
+        "monogram_product": "vinyl-artwork-per-pumpkin",
         "vinyl_estimate_cents": 2500
       },
       "blocks": {

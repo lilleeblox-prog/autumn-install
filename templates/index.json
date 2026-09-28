@@ -61,20 +61,20 @@
         "scale_heading": "Find your scale.",
         "continue_label": "Approve design",
         "continue_disclosure": "Take a moment with your design. Approval adds it to the cart for review; it does not place an order or reserve a week.",
-        "delivery_small_product": "small-display-delivery",
-        "delivery_medium_product": "medium-display-delivery",
-        "delivery_large_product": "large-display-delivery",
-        "removal_small_product": "small-display-removal",
-        "removal_medium_product": "medium-display-removal",
-        "removal_large_product": "large-display-removal",
-        "monogram_product": "monogrammed-pumpkin",
+        "delivery_small_product": "delivery-the-stoop",
+        "delivery_medium_product": "delivery-the-porch",
+        "delivery_large_product": "delivery-the-estate",
+        "removal_small_product": "removal-the-stoop",
+        "removal_medium_product": "removal-the-porch",
+        "removal_large_product": "removal-the-estate",
+        "monogram_product": "vinyl-artwork-per-pumpkin",
         "vinyl_estimate_cents": 2500
       },
       "blocks": {
         "small": {
           "type": "package",
           "settings": {
-            "product": "small-pumpkin-display",
+            "product": "the-stoop",
             "service_fee_tier": "small",
             "scale_name": "The Stoop",
             "draft_estimate_cents": 42500,
@@ -86,7 +86,7 @@
         "medium": {
           "type": "package",
           "settings": {
-            "product": "medium-pumpkin-display",
+            "product": "the-porch",
             "service_fee_tier": "medium",
             "scale_name": "The Porch",
             "draft_estimate_cents": 82500,
@@ -100,7 +100,7 @@
         "large": {
           "type": "package",
           "settings": {
-            "product": "large-pumpkin-display",
+            "product": "the-estate",
             "service_fee_tier": "large",
             "scale_name": "The Estate",
             "draft_estimate_cents": 125000,
