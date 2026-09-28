@@ -23,6 +23,17 @@
     ]
   },
   {
+    "name": "Consultation uploads",
+    "settings": [
+      {
+        "type": "text",
+        "id": "consultation_upload_endpoint",
+        "label": "Secure inquiry upload URL",
+        "info": "Enter the published HTTPS URL ending in /api/consultation-uploads. Leave blank until the secure upload service is published and tested."
+      }
+    ]
+  },
+  {
     "name": "Social media",
     "settings": [
       {

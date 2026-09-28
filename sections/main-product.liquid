@@ -388,7 +388,7 @@
          <label class="choice-option"><input type="checkbox" data-custom-request> I’d like further customization beyond these choices</label>
          <p class="field-hint" data-custom-request-note hidden>
            Further customization needs a consultation before pricing or availability can be confirmed.
-            {% if pages.contact != blank %}<a href="{{ pages.contact.url }}#consultation-form" data-consultation-link>Continue to consultation with your choices &rarr;</a>{% else %}Please contact the studio before ordering.{% endif %}
+            <a href="{% if pages.contact != blank %}{{ pages.contact.url }}{% else %}{{ routes.root_url }}{% endif %}#consultation-form" data-consultation-link>Open the inquiry with your choices and files &rarr;</a>
          </p>
        </div>
 
@@ -472,6 +472,7 @@
          <button type="submit" class="button button--accent button--full" data-cart-submit hidden>Review your composition</button>
       </div>
     </form>
+    {% render 'consultation-dialog', section: section %}
   </div>
 </div>
 

@@ -1,0 +1,45 @@
+{% assign inquiry_form_id = 'SpecialRequest-' | append: section.id %}
+<style>
+  .special-request-dialog { border: 1px solid #d5c9bb; background: #f7f4ee; color: var(--color-foreground); width: min(94vw, 640px); max-height: 90vh; padding: 0; box-shadow: 0 28px 80px #221a1690; }
+  .special-request-dialog::backdrop { background: #241e19aa; }
+  .special-request-dialog__inner { padding: clamp(22px, 5vw, 44px); }
+  .special-request-dialog h2 { font-size: clamp(2rem, 5vw, 3rem); margin: .3em 0; line-height: 1.1; }
+  .special-request-dialog p { line-height: 1.6; }
+  .special-request-dialog__top { display: flex; align-items: start; justify-content: space-between; gap: 16px; }
+  .special-request-dialog__close { background: none; border: 0; color: inherit; cursor: pointer; font-size: 2rem; line-height: 1; }
+  .special-request-dialog__summary { white-space: pre-wrap; font: inherit; background: #ebe4db; padding: 15px; margin: 18px 0; max-height: 165px; overflow: auto; font-size: .88rem; line-height: 1.55; }
+  .special-request-dialog__field { display: block; margin: 15px 0; font-size: .88rem; }
+  .special-request-dialog__field input, .special-request-dialog__field textarea { display: block; box-sizing: border-box; width: 100%; margin-top: 6px; border: 1px solid #b9aa9b; background: #fff; color: #302d28; padding: 12px; font: inherit; }
+  .special-request-dialog__error { color: #9b392e; font-weight: 600; }
+  .special-request-dialog__error[hidden] { display: none; }
+  .special-request-dialog__files { font-size: .83rem; }
+  .special-request-dialog button[type="submit"] { width: 100%; margin-top: 12px; }
+</style>
+<dialog class="special-request-dialog" data-consultation-dialog data-upload-endpoint="{{ settings.consultation_upload_endpoint | escape }}" aria-labelledby="SpecialRequestTitle-{{ section.id }}">
+  <div class="special-request-dialog__inner">
+    <div class="special-request-dialog__top">
+      <div><span class="eyebrow">A conversation with the studio</span><h2 id="SpecialRequestTitle-{{ section.id }}">Tell us your idea.</h2></div>
+      <button type="button" class="special-request-dialog__close" data-inquiry-close aria-label="Close inquiry">&times;</button>
+    </div>
+    {% form 'contact', id: inquiry_form_id %}
+      {% if form.posted_successfully? %}
+        <p role="status" data-inquiry-success>Thank you. Your inquiry has reached the studio. We’ll be in touch; this is not an order or a confirmed date.</p>
+      {% endif %}
+      {% if form.errors %}
+        <div data-inquiry-form-error>{{ form.errors | default_errors }}</div>
+      {% endif %}
+      <p>Your choices are below. Add your contact details and tell us what you would like to change. Selected files will be securely uploaded before your inquiry is sent.</p>
+      <pre class="special-request-dialog__summary" data-inquiry-summary aria-label="Selected design details"></pre>
+      <p class="special-request-dialog__files" data-inquiry-files></p>
+      <label class="special-request-dialog__field">Name <input name="contact[name]" autocomplete="name" value="{{ form.name | escape }}" required></label>
+      <label class="special-request-dialog__field">Email <input name="contact[email]" type="email" autocomplete="email" value="{{ form.email | escape }}" required></label>
+      <label class="special-request-dialog__field">Phone <input name="contact[phone]" type="tel" autocomplete="tel" value="{{ form.phone | escape }}" required></label>
+      <label class="special-request-dialog__field">Space or location <input name="contact[space]" placeholder="Porch, stoop, storefront…" value="{{ form.space | escape }}"></label>
+      <label class="special-request-dialog__field">Preferred timing <input name="contact[timing]" data-inquiry-timing value="{{ form.timing | escape }}"></label>
+      <label class="special-request-dialog__field">What makes this request special? <textarea name="contact[body]" data-inquiry-body rows="6" required>{{ form.body | escape }}</textarea></label>
+      <p class="special-request-dialog__error" data-inquiry-error role="alert" hidden></p>
+      <button type="submit" class="button button--accent">Send inquiry</button>
+      <p class="contact-form__note">An inquiry is not a booking, quote, or order. Files are only sent when the inquiry is submitted successfully.</p>
+    {% endform %}
+  </div>
+</dialog>

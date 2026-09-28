@@ -282,9 +282,168 @@ function productConsultationChoices(form) {
     week: text('properties[Requested Week]'),
     removal: text('properties[Removal]'),
     notes: text('properties[General Notes]'),
+    addons: Array.from(form.querySelectorAll('input[name="addons[]"]:checked'))
+      .map(input => input.closest('.addon-option')?.querySelector('strong')?.textContent?.trim())
+      .filter(Boolean),
     custom: !!form.querySelector('[data-custom-request]')?.checked
   };
 }
+
+function consultationSummary(choices) {
+  const includesHay = ['medium', 'large'].includes(choices.displaySize) ||
+    (!choices.displaySize && ['The Porch', 'The Estate'].includes(choices.display));
+  return [
+    choices.display && `Display: ${choices.display}`,
+    choices.palette && `Palette: ${choices.palette}`,
+    choices.service && `Fulfillment: ${choices.service}`,
+    choices.installationZip && `Requested installation/delivery ZIP: ${choices.installationZip}`,
+    includesHay && 'Hay bales: 2 included with the display',
+    choices.artwork && `Vinyl artwork: ${choices.artwork}`,
+    choices.artwork === 'Yes' && choices.quantity && `Vinyl-wrapped pumpkins: ${choices.quantity}`,
+    choices.artwork === 'Yes' && choices.pumpkinColor && `Pumpkin color: ${choices.pumpkinColor}`,
+    choices.artwork === 'Yes' && choices.vinylColor && `Vinyl color: ${choices.vinylColor}`,
+    choices.week && `Requested week: ${choices.week}`,
+    choices.removal && `Removal: ${choices.removal}`,
+    choices.addons?.length && `Finishing touches: ${choices.addons.join(', ')}`,
+    choices.custom && 'Further customization: Consultation requested',
+    typeof choices.notes === 'string' && choices.notes.trim() && `Your vision: ${choices.notes.trim()}`
+  ].filter(Boolean).join('\n');
+}
+
+const INQUIRY_PENDING_KEY = 'palette-install-inquiry-pending-v1';
+
+function setupSpecialInquiryDialog(dialog) {
+  if (dialog.dataset.inquiryBound === 'true') return;
+  dialog.dataset.inquiryBound = 'true';
+  const contactForm = dialog.querySelector('form');
+  const error = dialog.querySelector('[data-inquiry-error]');
+  const summary = dialog.querySelector('[data-inquiry-summary]');
+  const body = dialog.querySelector('[data-inquiry-body]');
+  const filesNotice = dialog.querySelector('[data-inquiry-files]');
+  dialog.querySelector('[data-inquiry-close]')?.addEventListener('click', () => dialog.close());
+  const showError = message => { error.textContent = message; error.hidden = !message; };
+
+  let pending;
+  try { pending = JSON.parse(sessionStorage.getItem(INQUIRY_PENDING_KEY) || 'null'); } catch { /* A blocked browser store cannot resume. */ }
+  if (dialog.querySelector('[data-inquiry-success]')) {
+    try { sessionStorage.removeItem(INQUIRY_PENDING_KEY); } catch { /* Storage may be unavailable. */ }
+    dialog.showModal();
+  } else if (dialog.querySelector('[data-inquiry-form-error]')) {
+    // Shopify repopulates form.body on validation errors. Session storage is
+    // only a backup; the submitted message survives even when storage is blocked.
+    const previousBody = body.value || pending?.body;
+    if (previousBody) {
+      dialog.inquiryRetry = true;
+      body.value = previousBody;
+      summary.textContent = 'Review your previous design, request, and file links in the message below before resending.';
+      filesNotice.textContent = 'Your previously uploaded files are linked in the message.';
+      dialog.showModal();
+    }
+  }
+
+  contactForm.addEventListener('submit', async event => {
+    event.preventDefault();
+    if (!contactForm.reportValidity()) return;
+    showError('');
+    const submit = contactForm.querySelector('[type="submit"]');
+    submit.disabled = true;
+    submit.textContent = 'Sending your inquiry…';
+    try {
+      const choices = dialog.inquiryChoices;
+      const source = dialog.inquirySource;
+      const retry = dialog.inquiryRetry;
+      if (retry) {
+        HTMLFormElement.prototype.submit.call(contactForm);
+        return;
+      }
+      if (!source) throw new Error('Your design details are no longer available. Return to the builder and try again.');
+      const design = consultationSummary(choices);
+      const artwork = choices?.artwork === 'Yes' ? source?.querySelector('[data-artwork-file]')?.files?.[0] : null;
+      const housePhoto = source?.querySelector('[data-house-photo-file]')?.files?.[0];
+      if (choices?.artwork === 'Yes' && !artwork) {
+        throw new Error('Choose your PNG or PDF artwork file before sending a vinyl-artwork inquiry.');
+      }
+      let links = {};
+      let reference = '';
+      if (artwork || housePhoto) {
+        const rawEndpoint = dialog.dataset.uploadEndpoint || '';
+        let endpoint;
+        try { endpoint = new URL(rawEndpoint); } catch { /* No service configured yet. */ }
+        if (!endpoint || endpoint.protocol !== 'https:' || endpoint.pathname !== '/api/consultation-uploads') {
+          throw new Error('Secure file submission is not available yet. Your files have not been sent; please contact the studio.');
+        }
+        if (artwork && (!/\.(png|pdf)$/i.test(artwork.name) || artwork.size < 1 || artwork.size > MAX_ARTWORK_SIZE)) {
+          throw new Error('Choose a PNG or PDF artwork file 20 MB or smaller.');
+        }
+        if (housePhoto) selectedHousePhoto(source);
+        const uploads = new FormData();
+        if (artwork) uploads.append('artwork', artwork);
+        if (housePhoto) uploads.append('housePhoto', housePhoto);
+        const response = await fetch(endpoint.href, { method: 'POST', body: uploads, credentials: 'omit' });
+        const result = await response.json();
+        if (!response.ok) throw new Error(result.error || 'Files could not be uploaded. No inquiry was sent; please try again.');
+        const safeLink = value => {
+          const link = new URL(value, endpoint);
+          if (link.origin !== endpoint.origin || link.protocol !== 'https:') throw new Error('The file service returned an invalid link. No inquiry was sent.');
+          return link.href;
+        };
+        if ((artwork && !result.links?.artwork) || (housePhoto && !result.links?.housePhoto) || !result.reference) {
+          throw new Error('The file service did not confirm both selected uploads. No inquiry was sent.');
+        }
+        links = {
+          ...(artwork && { artwork: safeLink(result.links.artwork) }),
+          ...(housePhoto && { housePhoto: safeLink(result.links.housePhoto) })
+        };
+        reference = result.reference;
+      }
+      const message = [
+        `Design choices:\n${design}`,
+        `Special request:\n${body.value.trim()}`,
+        reference && `File reference: ${reference}`,
+        links.artwork && `Uploaded vinyl artwork: ${links.artwork}`,
+        links.housePhoto && `Uploaded house photo: ${links.housePhoto}`
+      ].filter(Boolean).join('\n\n');
+      body.value = message;
+      dialog.inquiryRetry = true;
+      try {
+        sessionStorage.setItem(INQUIRY_PENDING_KEY, JSON.stringify({ body: message }));
+      } catch { /* Shopify's form.body still carries the full submitted message. */ }
+      HTMLFormElement.prototype.submit.call(contactForm);
+    } catch (problem) {
+      showError(problem.message || 'Your inquiry was not sent. Please try again.');
+      submit.disabled = false;
+      submit.textContent = 'Send inquiry';
+    }
+  });
+}
+
+function openSpecialInquiry(sourceForm, choices) {
+  const dialog = document.querySelector('[data-consultation-dialog]');
+  if (!dialog) throw new Error('The inquiry form is unavailable. Please contact the studio.');
+  setupSpecialInquiryDialog(dialog);
+  dialog.inquirySource = sourceForm;
+  dialog.inquiryChoices = choices;
+  if (dialog.inquiryRetry) dialog.querySelector('[data-inquiry-body]').value = '';
+  dialog.inquiryRetry = false;
+  dialog.querySelector('[data-inquiry-summary]').textContent = consultationSummary(choices);
+  const artwork = choices.artwork === 'Yes' ? sourceForm.querySelector('[data-artwork-file]')?.files?.[0] : null;
+  const photo = sourceForm.querySelector('[data-house-photo-file]')?.files?.[0];
+  dialog.querySelector('[data-inquiry-files]').textContent =
+    [artwork && `Artwork: ${artwork.name}`, photo && `House photo: ${photo.name}`].filter(Boolean).join(' · ') ||
+    'No files selected.';
+  const timing = dialog.querySelector('[data-inquiry-timing]');
+  if (timing && !timing.value) timing.value = choices.week || '';
+  const endpoint = dialog.dataset.uploadEndpoint || '';
+  const uploadUnavailable = !!(artwork || photo) && !/^https:\/\/[^/]+\/api\/consultation-uploads\/?$/.test(endpoint);
+  const error = dialog.querySelector('[data-inquiry-error]');
+  error.textContent = uploadUnavailable
+    ? 'Secure file submission is not available yet. Your files have not been sent; please contact the studio.'
+    : '';
+  error.hidden = !uploadUnavailable;
+  dialog.querySelector('[type="submit"]').disabled = uploadUnavailable;
+  if (!dialog.open) dialog.showModal();
+}
+window.paletteInstallOpenInquiry = openSpecialInquiry;
 
 function setupConsultationForm(root) {
   if (root.dataset.consultationBound === 'true') return;
@@ -386,11 +545,15 @@ function setupProductJourney(form) {
   form.addEventListener('change', saveChoices);
   form.querySelector('[name="properties[General Notes]"]')?.addEventListener('input', saveChoices);
   form.querySelectorAll('[data-consultation-link]').forEach(link => link.addEventListener('click', event => {
-    if (!saveChoices()) {
-      event.preventDefault();
-      productFormError(form, 'Your choices could not be carried to the consultation form. Please try again in this tab.');
-    }
+    event.preventDefault();
+    try { openSpecialInquiry(form, productConsultationChoices(form)); }
+    catch (problem) { productFormError(form, problem.message); }
   }));
+  form.querySelector('[data-custom-request]')?.addEventListener('change', event => {
+    if (!event.currentTarget.checked) return;
+    try { openSpecialInquiry(form, productConsultationChoices(form)); }
+    catch (problem) { productFormError(form, problem.message); }
+  });
   setVisibility();
 }
 
@@ -1198,6 +1361,7 @@ document.addEventListener('DOMContentLoaded', () => {
   document.querySelectorAll('[data-product-form]').forEach(setupCompositionBrief);
   document.querySelectorAll('[data-product-form]').forEach(setupProductEstimate);
   document.querySelectorAll('[data-consultation-form]').forEach(setupConsultationForm);
+  document.querySelectorAll('[data-consultation-dialog]').forEach(setupSpecialInquiryDialog);
   const cartForm = document.querySelector('#cart');
   if (cartForm) {
     finishPendingUpload(cartForm).catch(error => {
@@ -1428,6 +1592,7 @@ document.addEventListener('shopify:section:load', () => {
   document.querySelectorAll('[data-product-form]').forEach(setupCompositionBrief);
   document.querySelectorAll('[data-product-form]').forEach(setupProductEstimate);
   document.querySelectorAll('[data-consultation-form]').forEach(setupConsultationForm);
+  document.querySelectorAll('[data-consultation-dialog]').forEach(setupSpecialInquiryDialog);
   syncPaletteGalleries(document.querySelector('variant-selects'));
 });
 

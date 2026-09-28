@@ -1037,7 +1037,7 @@
           <h3>Something only you could imagine?</h3>
           <p>A different scale, a distinctive doorway, a detail that makes it yours—tell us what you have in mind. We can explore the possibilities together before confirming scope, price, or timing.</p>
           <label class="composer-custom"><input type="checkbox" data-custom-request> I have a special request</label>
-          <p data-custom-request-note hidden>A consultation is required for this request. Your selected details will be carried to the inquiry form. <a href="{% if pages.contact != blank %}{{ pages.contact.url }}{% else %}{{ routes.root_url }}{% endif %}#consultation-form" data-consultation-link>Open the inquiry form →</a></p>
+          <p data-custom-request-note hidden>A consultation is required for this request. Your selected details and files will be included when you send the inquiry. <a href="{% if pages.contact != blank %}{{ pages.contact.url }}{% else %}{{ routes.root_url }}{% endif %}#consultation-form" data-consultation-link>Open the inquiry form →</a></p>
         </div>
         <div class="palette-composer__arrival">
           <span class="eyebrow">04 / The arrival</span>
@@ -1146,6 +1146,7 @@
       <button type="button" data-open-final-review>Approve final design</button>
     </div>
   </form>
+  {% render 'consultation-dialog', section: section %}
   <dialog class="cart-layout-dialog" data-cart-layout-dialog aria-labelledby="CartLayoutTitle-{{ section.id }}">
     <div class="cart-layout-dialog__top">
       <div><span class="eyebrow">A private look / Cart layout preview</span><h2 id="CartLayoutTitle-{{ section.id }}">Your design, gathered.</h2></div>
@@ -1230,7 +1231,7 @@
         service: text('Service'),
         installationZip: text('Installation ZIP'),
         artwork: text('Vinyl Artwork'),
-        artworkSelected: !!form.querySelector('[data-artwork-file]')?.files?.[0],
+        artworkSelected: text('Vinyl Artwork') === 'Yes' && !!form.querySelector('[data-artwork-file]')?.files?.[0],
         housePhotoSelected: !!form.querySelector('[data-house-photo-file]')?.files?.[0],
         quantity: text('Vinyl-wrapped Pumpkins'),
         pumpkinColor: text('Pumpkin Color Preference'),
@@ -1245,22 +1246,22 @@
         document.dispatchEvent(new Event('palette-install:consultation-updated'));
         const notice = root.querySelector('[data-consultation-transfer-error]');
         if (notice) notice.hidden = true;
-        return true;
+        return choices;
       } catch {
-        const notice = root.querySelector('[data-consultation-transfer-error]');
-        if (notice) notice.hidden = false;
-        return false;
+        // The inline inquiry uses these live choices even if session storage is blocked.
+        return choices;
       }
     };
     const openConsultation = (link) => {
-      if (!link) {
-        productFormError(form, 'The inquiry form is unavailable. Please contact the studio.');
-        return;
+      try {
+        const choices = rememberSelection();
+        if (!choices || !window.paletteInstallOpenInquiry) {
+          throw new Error('Your design could not be carried into the inquiry. Please try again.');
+        }
+        window.paletteInstallOpenInquiry(form, choices);
+      } catch (error) {
+        productFormError(form, error.message);
       }
-      const saved = saveConsultationChoices();
-      const destination = new URL(link.href, window.location.href);
-      if (!saved) destination.searchParams.set('consultation_transfer', 'failed');
-      window.location.assign(destination.href);
     };
     const chosenVariant = (card, palette) => {
       const index = Number(card?.dataset.paletteIndex);
