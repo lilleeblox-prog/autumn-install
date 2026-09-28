@@ -955,7 +955,7 @@
                 {% when 'large' %}{% assign delivery = section.settings.delivery_large_product %}{% assign removal = section.settings.removal_large_product %}{% assign expected_service_fee = 8500 %}
               {% endcase %}
               <div class="package-card-shell" {{ block.shopify_attributes }}>
-                <button type="button" class="package-card" data-composer-scale data-scale-name="{{ block.settings.scale_name | escape }}" data-display-size="{{ display_size }}" data-expected-service-fee="{{ expected_service_fee }}" data-base-estimate-cents="{% if prod != blank and prod.price_min > 0 and prod.price_min == prod.price_max %}{{ prod.price_min }}{% else %}{{ block.settings.draft_estimate_cents | default: 0 }}{% endif %}" data-product-id="{% if prod != blank %}{{ prod.id }}{% endif %}" data-product-title="{% if prod != blank %}{{ prod.title | escape }}{% else %}{{ block.settings.scale_name | escape }}{% endif %}" data-product-available="{% if prod != blank and prod.available and prod.published_at != blank %}true{% else %}false{% endif %}" data-palette-index="{{ option_index }}" data-variants="{% if prod != blank %}{{ prod.variants | json | escape }}{% endif %}" data-delivery-id="{% if delivery != blank and delivery.available and delivery.published_at != blank and delivery.selected_or_first_available_variant.price > 0 %}{{ delivery.selected_or_first_available_variant.id }}{% endif %}" data-delivery-price="{{ delivery.selected_or_first_available_variant.price | default: 0 }}" data-removal-id="{% if removal != blank and removal.available and removal.published_at != blank and removal.selected_or_first_available_variant.price > 0 %}{{ removal.selected_or_first_available_variant.id }}{% endif %}" data-removal-price="{{ removal.selected_or_first_available_variant.price | default: 0 }}" aria-pressed="{% if block.settings.default_selected %}true{% else %}false{% endif %}" aria-expanded="false" aria-controls="package-includes-{{ block.id }}">
+                <button type="button" class="package-card" data-composer-scale data-scale-name="{{ block.settings.scale_name | escape }}" data-display-size="{{ display_size }}" data-expected-service-fee="{{ expected_service_fee }}" data-base-estimate-cents="{% if prod != blank and prod.price_min > 0 and prod.price_min == prod.price_max %}{{ prod.price_min }}{% else %}{{ block.settings.draft_estimate_cents | default: 0 }}{% endif %}" data-product-id="{% if prod != blank %}{{ prod.id }}{% endif %}" data-product-title="{% if prod != blank %}{{ prod.title | escape }}{% else %}{{ block.settings.scale_name | escape }}{% endif %}" data-product-available="{% if prod != blank and prod.available and prod.published_at != blank %}true{% else %}false{% endif %}" data-palette-index="{{ option_index }}" data-default-variant="{% if prod != blank and prod.has_only_default_variant %}true{% else %}false{% endif %}" data-variants="{% if prod != blank %}{{ prod.variants | json | escape }}{% endif %}" data-delivery-id="{% if delivery != blank and delivery.available and delivery.published_at != blank and delivery.selected_or_first_available_variant.price > 0 %}{{ delivery.selected_or_first_available_variant.id }}{% endif %}" data-delivery-price="{{ delivery.selected_or_first_available_variant.price | default: 0 }}" data-removal-id="{% if removal != blank and removal.available and removal.published_at != blank and removal.selected_or_first_available_variant.price > 0 %}{{ removal.selected_or_first_available_variant.id }}{% endif %}" data-removal-price="{{ removal.selected_or_first_available_variant.price | default: 0 }}" aria-pressed="{% if block.settings.default_selected %}true{% else %}false{% endif %}" aria-expanded="false" aria-controls="package-includes-{{ block.id }}">
                   {% if block.settings.most_popular %}<small class="package-card__popular">Most popular</small>{% endif %}
                   <span class="package-title">{{ block.settings.scale_name | escape }}</span>
                   <span class="package-room">{{ block.settings.room_fallback | default: block.settings.subtitle_fallback | escape }}</span>
@@ -966,7 +966,7 @@
                   {% assign included_items = block.settings.included_items | newline_to_br | split: '<br />' %}
                   <ul>{% for item in included_items %}{% assign line = item | strip %}{% if line != blank %}<li>{{ line | escape }}</li>{% endif %}{% endfor %}</ul>
                   <div class="package-card-details__availability">
-                    <small data-scale-status role="status" aria-live="polite">{% if prod == blank %}Preview only · product not configured{% elsif prod.available == false or prod.published_at == blank %}Preview only · product not available{% elsif option_index < 0 %}Cannot order · a palette variant is required{% else %}Choose a palette to check ordering availability.{% endif %}</small>
+                    <small data-scale-status role="status" aria-live="polite">{% if prod == blank %}Preview only · product not configured{% elsif prod.available == false or prod.published_at == blank %}Preview only · product not available{% elsif option_index < 0 and prod.has_only_default_variant == false %}Cannot order · no single priced display variant{% else %}Choose a palette to check ordering availability.{% endif %}</small>
                   </div>
                 </div>
               </div>
@@ -1186,10 +1186,11 @@
     };
     const chosenVariant = (card, palette) => {
       const index = Number(card?.dataset.paletteIndex);
-      if (!card || card.dataset.productAvailable !== 'true' || index < 0 || !palette) return null;
+      if (!card || card.dataset.productAvailable !== 'true' || !palette) return null;
       try {
         return JSON.parse(card.dataset.variants || '[]').find(variant =>
-          variant.options[index] === palette && variant.available && Number(variant.price) > 0
+          (index >= 0 ? variant.options[index] === palette : card.dataset.defaultVariant === 'true') &&
+          variant.available && Number(variant.price) > 0
         ) || null;
       } catch { return null; }
     };
@@ -1200,9 +1201,9 @@
       if (!status) return;
       if (!card.dataset.productId) status.textContent = 'Preview only · product not configured';
       else if (card.dataset.productAvailable !== 'true') status.textContent = 'Preview only · product not available';
-      else if (Number(card.dataset.paletteIndex) < 0) status.textContent = 'Cannot order · a palette variant is required';
+      else if (Number(card.dataset.paletteIndex) < 0 && card.dataset.defaultVariant !== 'true') status.textContent = 'Cannot order · no single priced display variant';
       else if (!palette) status.textContent = 'Choose a palette to check ordering availability.';
-      else if (!variant) status.textContent = 'Preview only · no available, priced variant for this palette.';
+      else if (!variant) status.textContent = 'Preview only · no available, priced display for this palette.';
       else status.textContent = 'Available · select this scale to continue.';
     };
     const updatePalette = (palette) => {
@@ -1232,7 +1233,8 @@
               const option = new Option(`${item.dataset.productTitle} · ${candidate.title}`, candidate.id);
               option.dataset.price = candidate.price;
               option.disabled = !candidate.available || Number(candidate.price) <= 0 ||
-                item.dataset.productAvailable !== 'true' || Number(item.dataset.paletteIndex) < 0;
+                item.dataset.productAvailable !== 'true' ||
+                (Number(item.dataset.paletteIndex) < 0 && item.dataset.defaultVariant !== 'true');
               option.dataset.productId = item.dataset.productId;
               option.dataset.productTitle = item.dataset.productTitle;
               variantSelect.add(option);

@@ -37,6 +37,7 @@
 .product-meta__row span:first-child { color: var(--color-muted); font-family: var(--font-mono); text-transform: uppercase; letter-spacing: 0.05em; }
 
 .variant-picker { margin-bottom: var(--spacing-md); }
+.variant-picker__group[data-product-palette] { border: 0; padding: 0; margin: 0 0 var(--spacing-md); min-width: 0; }
 .variant-picker__label { display: block; font-family: var(--font-sans); font-size: .68rem; font-weight: 600; text-transform: uppercase; letter-spacing: .15em; margin-bottom: .85rem; }
 .variant-options { display: flex; flex-wrap: wrap; gap: 0.5rem; }
 .variant-option {
@@ -197,6 +198,20 @@
           </script>
         </variant-selects>
       {% endunless %}
+      {% if product.has_only_default_variant %}
+        <fieldset class="variant-picker__group" data-product-palette>
+          <legend class="variant-picker__label">Choose a palette</legend>
+          <div class="variant-options">
+            {% assign palette_choices = 'Autumn in the Countryside|Classic Harvest|Coastal Cowgirl' | split: '|' %}
+            {% for palette in palette_choices %}
+              <label class="variant-option">
+                <input type="radio" name="properties[Palette]" value="{{ palette | escape }}" required>
+                {{ palette | escape }}
+              </label>
+            {% endfor %}
+          </div>
+        </fieldset>
+      {% endif %}
 
        {% assign selected_palette = blank %}
        {% assign palette_option_index = blank %}

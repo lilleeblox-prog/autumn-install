@@ -154,6 +154,27 @@ function setupVariantSelectors() {
   });
 }
 
+function setupProductPalette(form) {
+  const group = form.querySelector('[data-product-palette]');
+  if (!group || group.dataset.paletteBound === 'true') return;
+  group.dataset.paletteBound = 'true';
+  const radios = Array.from(group.querySelectorAll('input[name="properties[Palette]"]'));
+  const requested = new URLSearchParams(window.location.search).get('palette');
+  const match = radios.find(input => input.value === requested);
+  if (match) match.checked = true;
+  const update = () => {
+    const selected = radios.find(input => input.checked);
+    updatePaletteGalleries(selected?.value || '');
+    if (selected) {
+      const url = new URL(window.location.href);
+      url.searchParams.set('palette', selected.value);
+      window.history.replaceState({}, '', url);
+    }
+  };
+  group.addEventListener('change', update);
+  update();
+}
+
 const CONSULTATION_STORAGE_KEY = 'palette-install-consultation-v1';
 
 function saveConsultationDraft(choices) {
@@ -290,7 +311,8 @@ function setupCompositionBrief(form) {
   const update = () => {
     const paletteGroup = Array.from(form.querySelectorAll('.variant-picker__group'))
       .find(group => group.querySelector('.variant-picker__label')?.textContent.toLowerCase().includes('palette'));
-    const palette = paletteGroup?.querySelector('input[type="radio"]:checked')?.value || 'Choose a palette';
+    const palette = paletteGroup?.querySelector('input[type="radio"]:checked')?.value ||
+      form.querySelector('[data-product-palette] input:checked')?.value || 'Choose a palette';
     const data = new FormData(form);
     const service = data.get('properties[Service]') || 'Yours to choose';
     const monogram = data.get('properties[Vinyl Artwork]');
@@ -413,7 +435,7 @@ function setupProductEstimate(form) {
       !products.dataset.monogramId && Number(products.dataset.monogramEstimateCents) > 0;
     const serviceIsReference = (!products.dataset.deliveryId && !!form.querySelector('[data-service]:checked') && deliveryEstimate !== null) ||
       (!products.dataset.removalId && !!form.querySelector('input[name="properties[Removal]"][value="Yes"]:checked') && removalEstimate !== null);
-    const referenceNote = `${isComposer ? 'Draft display prices are estimates until a matching palette variant is available. ' : ''}${serviceIsReference ? 'Delivery and selected removal rates are reference estimates until their services are available. ' : ''}${vinylIsReference ? 'Vinyl artwork is a reference estimate per pumpkin; it cannot be ordered until the add-on is available. ' : ''}`;
+    const referenceNote = `${isComposer && !selectedVariant?.value ? 'Draft display prices are estimates until a priced display is available. ' : ''}${serviceIsReference ? 'Delivery and selected removal rates are reference estimates until their services are available. ' : ''}${vinylIsReference ? 'Vinyl artwork is a reference estimate per pumpkin; it cannot be ordered until the add-on is available. ' : ''}`;
     estimate.querySelector('[data-estimate-note]').textContent = result.pending.length
       ? `${result.pending.join(', ')} ${result.pending.length === 1 ? 'is' : 'are'} not included in this subtotal. ${referenceNote}Taxes and any other Shopify checkout charges are shown before payment.`
       : `${referenceNote}Delivery is charged for both fulfillment choices; removal is separate. Taxes and any other Shopify checkout charges are shown before payment.`;
@@ -638,6 +660,10 @@ function configuredCartItems(form) {
     'Hay Bales': hayBales
   };
   const palette = String(data.get('properties[Palette]') || '').trim();
+  const offeredPalettes = Array.from(form.querySelectorAll('[data-composer-palette], [data-product-palette] input[name="properties[Palette]"]'));
+  if (offeredPalettes.length && !offeredPalettes.some(input => input.value === palette)) {
+    throw new Error('Please choose an available palette before approving your design.');
+  }
   if (palette) properties.Palette = palette;
   const notes = String(data.get('properties[General Notes]') || '').trim();
   if (notes) properties['General Notes'] = notes;
@@ -842,6 +868,7 @@ async function loadEditingComposition(form) {
     const radio = Array.from(form.elements).find(element => element.name === `properties[${name}]` && element.type === 'radio' && element.value === value);
     if (radio) radio.checked = true;
   }
+  form.querySelector('[data-product-palette] input:checked')?.dispatchEvent(new Event('change', { bubbles: true }));
   form.querySelector('[data-service]:checked')?.dispatchEvent(new Event('change', { bubbles: true }));
   form.querySelector('[data-monogram-choice]:checked')?.dispatchEvent(new Event('change', { bubbles: true }));
   // The requested week may have expired since the original order; require a new choice then.
@@ -1010,6 +1037,7 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   setupVariantSelectors();
+  document.querySelectorAll('[data-product-form]').forEach(setupProductPalette);
   document.querySelectorAll('[data-product-form]').forEach(setupProductJourney);
   document.querySelectorAll('[data-product-form]').forEach(setupCompositionBrief);
   document.querySelectorAll('[data-product-form]').forEach(setupProductEstimate);
@@ -1230,6 +1258,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 document.addEventListener('shopify:section:load', () => {
   setupVariantSelectors();
+  document.querySelectorAll('[data-product-form]').forEach(setupProductPalette);
   document.querySelectorAll('[data-product-form]').forEach(setupProductJourney);
   document.querySelectorAll('[data-product-form]').forEach(setupCompositionBrief);
   document.querySelectorAll('[data-product-form]').forEach(setupProductEstimate);
