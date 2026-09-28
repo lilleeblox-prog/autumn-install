@@ -232,12 +232,16 @@ window.paletteInstallWeekAvailability = { setup: setupRequestedWeekAvailability,
 
 const CONSULTATION_STORAGE_KEY = 'palette-install-consultation-v1';
 
-// ZIP Tabulation Area representative points within 25 miles of 36047's representative point.
-// Source: U.S. Census 2025 Gazetteer, 2025_Gaz_zcta_national.zip. Border ZIPs need consultation.
+// Merchant-provided delivery list: "ZIPs near 37064" workbook, ZIP Type = Standard.
+// PO Box-only and unique-organization ZIPs cannot receive a street installation.
 const SERVICE_AREA_ZIPS = new Set([
-  '36032', '36036', '36037', '36040', '36041', '36042', '36043', '36046',
-  '36047', '36069', '36101', '36104', '36105', '36106', '36107', '36108',
-  '36111', '36112', '36113', '36116', '36130', '36752', '36761', '36785'
+  '37064', '37069', '37067', '37027', '37179', '37221', '37220', '37135',
+  '37215', '37205', '37046', '37211', '37014', '37204', '37062', '37212',
+  '37174', '37013', '37143', '37209', '37203', '37210', '37201', '37217',
+  '37219', '37208', '37213', '37082', '37228', '37238', '37060', '37086',
+  '37206', '37218', '38482', '37214', '37207', '37167', '37216', '38476',
+  '37128', '37153', '37187', '37034', '37076', '37025', '38401', '37189',
+  '37115', '37098'
 ]);
 function serviceAreaForZip(value) {
   const zip = String(value || '').trim();
@@ -637,7 +641,7 @@ function previewCartDesign(form) {
   }
   const zipStatus = serviceAreaForZip(new FormData(form).get('properties[Installation ZIP]'));
   if (zipStatus === 'outside') {
-    throw new Error('Outside our 25-mile service area? Please request a consultation instead of reviewing an order.');
+    throw new Error('Outside our delivery ZIP list? Please request a consultation instead of reviewing an order.');
   }
   if (zipStatus !== 'within') {
     throw new Error('Enter a valid five-digit installation or delivery ZIP code.');
@@ -698,7 +702,7 @@ function configuredCartItems(form) {
   const installationZip = String(new FormData(form).get('properties[Installation ZIP]') || '').trim();
   const zipStatus = serviceAreaForZip(installationZip);
   if (zipStatus === 'outside') {
-    throw new Error('Outside our 25-mile service area? Please request a consultation instead of ordering.');
+    throw new Error('Outside our delivery ZIP list? Please request a consultation instead of ordering.');
   }
   if (zipStatus !== 'within') {
     throw new Error('Enter a valid five-digit installation or delivery ZIP code.');
