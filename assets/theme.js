@@ -28,9 +28,6 @@ function formatMoney(cents, format) {
   return formatString.replace(placeholderRegex, value);
 }
 
-window.paletteInstallThemeReady = true;
-document.dispatchEvent(new Event('palette-install:theme-ready'));
-
 function updatePaletteGalleries(palette) {
   document.querySelectorAll('[data-palette-gallery]').forEach((gallery) => {
     const items = gallery.querySelectorAll('[data-palette]');
@@ -1336,3 +1333,8 @@ document.addEventListener('shopify:section:load', () => {
   document.querySelectorAll('[data-consultation-form]').forEach(setupConsultationForm);
   syncPaletteGalleries(document.querySelector('variant-selects'));
 });
+
+// Section scripts can listen for readiness while this deferred asset is still
+// executing. Announce it only after all shared helpers have been defined.
+window.paletteInstallThemeReady = true;
+document.dispatchEvent(new Event('palette-install:theme-ready'));

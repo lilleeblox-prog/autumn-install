@@ -1136,10 +1136,10 @@
       return;
     }
     const initialize = () => {
-    if (!window.paletteInstallThemeReady || typeof window.formatMoney !== 'function') return;
+    if (!window.paletteInstallThemeReady || typeof window.formatMoney !== 'function' ||
+        typeof window.paletteInstallWeekAvailability?.setup !== 'function') return;
     const root = document.querySelector('[data-package-browser="{{ section.id }}"]');
     if (!root || root.dataset.initialized === 'true') return;
-    root.dataset.initialized = 'true';
     const paletteNames = {{ palette_names | json }};
     const paletteDescriptions = {{ palette_descriptions | json }};
     const paletteRadios = root.querySelectorAll('[data-composer-palette]');
@@ -1148,7 +1148,9 @@
     const selectedScale = root.querySelector('[data-selected-scale]');
     const cards = Array.from(root.querySelectorAll('[data-composer-scale]'));
     const form = root.querySelector('[data-product-form]');
+    if (!form) return;
     window.paletteInstallWeekAvailability.setup(form);
+    root.dataset.initialized = 'true';
     const previewContent = root.querySelector('[data-sticky-preview]');
     const updateStickyOffset = () => {
       if (!previewContent) return;
