@@ -367,7 +367,11 @@ function setupProductJourney(form) {
     const customNote = form.querySelector('[data-custom-request-note]');
     if (customNote && customRequest) customNote.hidden = !customRequest.checked;
     const outsideNote = form.querySelector('[data-outside-area-note]');
-    if (outsideNote) outsideNote.hidden = serviceAreaForZip(form.querySelector('[data-installation-zip]')?.value) !== 'outside';
+    if (outsideNote) {
+      const zip = form.querySelector('[data-installation-zip]')?.value?.trim() || '';
+      outsideNote.querySelector('[data-unavailable-zip]').textContent = zip;
+      outsideNote.hidden = serviceAreaForZip(zip) !== 'outside';
+    }
     if (monogramFields) monogramFields.hidden = !hasMonogram;
     monogramInputs.forEach(input => { input.disabled = !hasMonogram; input.required = !!hasMonogram; });
     if (dateLabel) dateLabel.innerHTML = isDelivery
@@ -628,6 +632,11 @@ function showDraftCartPreview(form, design) {
 }
 
 function previewCartDesign(form) {
+  const installationZip = String(new FormData(form).get('properties[Installation ZIP]') || '').trim();
+  const zipStatus = serviceAreaForZip(installationZip);
+  if (zipStatus === 'outside') {
+    throw new Error(`We don’t currently deliver or install to ZIP ${installationZip}. Fill out the consultation form instead of ordering.`);
+  }
   const requestedWeek = String(new FormData(form).get('properties[Requested Week]') || '');
   if (requestedWeek && !requestedWeekOpen(requestedWeek)) {
     throw new Error('This week has already started. Please select an upcoming week.');
@@ -638,10 +647,6 @@ function previewCartDesign(form) {
   }
   if (form.querySelector('[data-custom-request]')?.checked) {
     throw new Error('A special request needs a consultation before it can be included in a cart preview.');
-  }
-  const zipStatus = serviceAreaForZip(new FormData(form).get('properties[Installation ZIP]'));
-  if (zipStatus === 'outside') {
-    throw new Error('Outside our delivery ZIP list? Please request a consultation instead of reviewing an order.');
   }
   if (zipStatus !== 'within') {
     throw new Error('Enter a valid five-digit installation or delivery ZIP code.');
@@ -692,17 +697,17 @@ function previewCartDesign(form) {
 }
 
 function configuredCartItems(form) {
+  const installationZip = String(new FormData(form).get('properties[Installation ZIP]') || '').trim();
+  const zipStatus = serviceAreaForZip(installationZip);
+  if (zipStatus === 'outside') {
+    throw new Error(`We don’t currently deliver or install to ZIP ${installationZip}. Fill out the consultation form instead of ordering.`);
+  }
   if (!form.checkValidity()) {
     const missingField = focusFirstInvalidComposerField(form);
     throw new Error(`Please complete ${missingField || 'the highlighted choices'} before approving your design.`);
   }
   if (form.querySelector('[data-custom-request]')?.checked) {
     throw new Error('Further customization needs a consultation before this design can be ordered. Please request a consultation.');
-  }
-  const installationZip = String(new FormData(form).get('properties[Installation ZIP]') || '').trim();
-  const zipStatus = serviceAreaForZip(installationZip);
-  if (zipStatus === 'outside') {
-    throw new Error('Outside our delivery ZIP list? Please request a consultation instead of ordering.');
   }
   if (zipStatus !== 'within') {
     throw new Error('Enter a valid five-digit installation or delivery ZIP code.');
@@ -1302,6 +1307,10 @@ document.addEventListener('DOMContentLoaded', () => {
         productForm.requestSubmit(submit);
       } catch (error) {
         productFormError(productForm, error.message);
+        if (error.message.includes('Fill out the consultation form') &&
+            serviceAreaForZip(productForm.querySelector('[data-installation-zip]')?.value) === 'outside') {
+          productForm.querySelector('[data-outside-area-note] a')?.focus();
+        }
       }
     };
     approveButtons.forEach(button => button.addEventListener('click', approveDesign));
