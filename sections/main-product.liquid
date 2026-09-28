@@ -162,6 +162,14 @@
     </div>
 
     <form method="post" action="{{ routes.cart_add_url }}" enctype="multipart/form-data" data-product-form data-product-id="{{ product.id }}" data-product-title="{{ product.title | escape }}">
+      {% assign display_size = blank %}
+      {% if section.settings.small_package_product != blank and product.id == section.settings.small_package_product.id %}
+        {% assign display_size = 'small' %}
+      {% elsif section.settings.medium_package_product != blank and product.id == section.settings.medium_package_product.id %}
+        {% assign display_size = 'medium' %}
+      {% elsif section.settings.large_package_product != blank and product.id == section.settings.large_package_product.id %}
+        {% assign display_size = 'large' %}
+      {% endif %}
       <noscript><p class="product-form__noscript">Please enable JavaScript to safely add configured installation, hay bale, vinyl artwork, or removal services to your cart. You can still review the variant above.</p></noscript>
       <input type="hidden" name="form_type" value="product">
       <input type="hidden" name="properties[_Composition ID]" value="" data-composition-id-input>
@@ -198,7 +206,7 @@
           </script>
         </variant-selects>
       {% endunless %}
-      {% if product.has_only_default_variant %}
+      {% if product.has_only_default_variant and display_size != blank %}
         <fieldset class="variant-picker__group" data-product-palette>
           <legend class="variant-picker__label">Choose a palette</legend>
           <div class="variant-options">
@@ -259,14 +267,6 @@
          {% endif %}
        </section>
 
-        {% assign display_size = blank %}
-        {% if section.settings.small_package_product != blank and product.id == section.settings.small_package_product.id %}
-          {% assign display_size = 'small' %}
-        {% elsif section.settings.medium_package_product != blank and product.id == section.settings.medium_package_product.id %}
-          {% assign display_size = 'medium' %}
-        {% elsif section.settings.large_package_product != blank and product.id == section.settings.large_package_product.id %}
-          {% assign display_size = 'large' %}
-        {% endif %}
         {% assign expected_service_fee = 0 %}
        {% case display_size %}
          {% when 'small' %}
