@@ -1,3 +1,12 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
 {
   "sections": {
     "faq": {
@@ -5,53 +14,102 @@
       "settings": {
         "eyebrow": "A few details / Good to know",
         "title": "The details, thoughtfully answered.",
-        "intro": "A little more on the palettes, timing, installation, and the steps between reviewing a design and moving forward."
+        "intro": "An honest guide to the conversation, the composition, and what happens after the season."
       },
       "blocks": {
         "q1": {
           "type": "qa",
           "settings": {
-            "question": "Does the photo show my exact finished display?",
-            "answer": "<p>Package photos are references for scale, not exact finished displays. Your chosen palette guides the color story, while individual heirloom varieties may vary with the harvest.</p>"
+            "question": "When is a consultation the right place to begin?",
+            "answer": "<p>A consultation is for a display that needs a different scale, a particular color direction, an unusual entry, or a detail the standard builder cannot capture. Share the idea first, and we can explore its scope before discussing a price or date.</p>"
           }
         },
         "q2": {
           "type": "qa",
           "settings": {
-            "question": "What is the difference between delivery and installation?",
-            "answer": "<p>With custom installation, the display is styled at your entry. With delivery only, the pumpkins and gourds are delivered for you to arrange. You may choose either option while shaping your design.</p>"
+            "question": "What should I include in my inquiry?",
+            "answer": "<p>Tell us about your space, the look you are drawn to, any practical access details, and the week or event you are planning around. The form asks for your name, email, and phone number so the studio can follow up. You do not need a fully formed design before reaching out.</p>"
           }
         },
         "q3": {
           "type": "qa",
           "settings": {
-            "question": "Is my requested week a confirmed booking?",
-            "answer": "<p>No. Your selected week is a request, not a reserved date. Availability and scheduling are confirmed separately. If you are planning around an event, please include its date in your notes.</p>"
+            "question": "What happens after I send an inquiry?",
+            "answer": "<p>Once you submit the form, the studio can review your notes and follow up about feasibility, design scope, availability, and next steps. An inquiry is the beginning of a conversation—not a confirmed quote, order, or booking. Nothing is reserved simply because the form was sent.</p>"
           }
         },
         "q4": {
           "type": "qa",
           "settings": {
-            "question": "Can I add custom vinyl artwork or arrange removal?",
-            "answer": "<p>Yes. Upload a PNG or PDF, choose how many pumpkins to wrap, then select a white or orange pumpkin and white, black, or gold vinyl. We’ll confirm the artwork before production. You may also request post-season removal.</p>"
+            "question": "Will the design choices I made carry into the consultation?",
+            "answer": "<p>If you open the consultation from the builder, your selected design details can be carried into the inquiry text. Please review and edit them before sending, and add your own contact information and details about the actual space. A file you selected for vinyl artwork does not transfer with an inquiry.</p>"
           }
         },
         "q5": {
           "type": "qa",
           "settings": {
-            "question": "How long do the pumpkins last?",
-            "answer": "<p>Longevity depends on the weather, sun exposure, and each pumpkin. Where possible, keep the display out of prolonged standing water, and check the pieces regularly for softness or damage.</p>"
+            "question": "Is my requested week a confirmed booking?",
+            "answer": "<p>No. The week helps us understand your preferred timing, but it is not a reserved date. We’ll confirm availability and the actual schedule separately. If you have an event, include its date in your notes.</p>"
           }
         },
         "q6": {
           "type": "qa",
           "settings": {
-            "question": "Do I need to be home for the installation?",
-            "answer": "<p>We’ll confirm access and placement details with you before an installation. You may include entry instructions or a requested event date in the notes in your brief.</p>"
+            "question": "Will the display look exactly like the photographs?",
+            "answer": "<p>Package images are references for scale, not promises of an identical finished display. Palette images show the color story rather than a completed installation. Individual heirloom pumpkins and gourds vary with the harvest, making each composition a little different.</p>"
+          }
+        },
+        "q7": {
+          "type": "qa",
+          "settings": {
+            "question": "What is the difference between delivery and installation?",
+            "answer": "<p>Delivery only brings the curated pumpkins and gourds to you to arrange yourself. With custom installation, the studio places and styles the display at your entrance. We’ll discuss access and placement details before an installation is confirmed.</p>"
+          }
+        },
+        "q8": {
+          "type": "qa",
+          "settings": {
+            "question": "How do I request a custom vinyl pumpkin?",
+            "answer": "<p>In the builder, choose how many pumpkins will carry your artwork, select a white or orange pumpkin, and choose white, black, or gold vinyl. For a standard order, upload a PNG or PDF of the artwork there. Vinyl is a separate per-pumpkin service when available; we’ll confirm the artwork details before production.</p>"
+          }
+        },
+        "q9": {
+          "type": "qa",
+          "settings": {
+            "question": "Will an artwork file follow me into a consultation?",
+            "answer": "<p>No. A file selected in the builder is not attached to the consultation form. Describe what you have in mind in your inquiry; the studio can arrange how to review the actual file. Please do not assume we have received artwork until it has been sent through an agreed route.</p>"
+          }
+        },
+        "q10": {
+          "type": "qa",
+          "settings": {
+            "question": "What if my artwork needs something more bespoke?",
+            "answer": "<p>If the piece needs special sizing, a different treatment, or a closer look at what will reproduce well on a pumpkin, begin with a consultation rather than assuming it is covered by the standard vinyl choice. We’ll discuss what is feasible and confirm any change to scope or price before proceeding.</p>"
+          }
+        },
+        "q11": {
+          "type": "qa",
+          "settings": {
+            "question": "Can you return to remove the display?",
+            "answer": "<p>Yes, you can request post-season removal while building your design. When available, removal is a separate service priced by display size; it is not included simply because installation was selected. We’ll arrange the collection timing with you rather than treating your requested installation week as a pickup appointment.</p>"
+          }
+        },
+        "q12": {
+          "type": "qa",
+          "settings": {
+            "question": "How long will the pumpkins last?",
+            "answer": "<p>Natural pumpkins change at their own pace. Weather, direct sun, moisture, and the individual pieces all affect longevity, so we cannot promise an exact number of weeks. Avoid prolonged standing water where possible and check the display regularly for softness or damage.</p>"
+          }
+        },
+        "q13": {
+          "type": "qa",
+          "settings": {
+            "question": "Do I need to be home for installation?",
+            "answer": "<p>We’ll talk through access, placement, and any entry instructions before a date is confirmed. Let us know if the entrance has particular requirements, and we’ll tell you whether your presence is needed for your installation.</p>"
           }
         }
       },
-      "block_order": ["q1", "q2", "q3", "q4", "q5", "q6"]
+      "block_order": ["q1", "q2", "q3", "q4", "q5", "q6", "q7", "q8", "q9", "q10", "q11", "q12", "q13"]
     }
   },
   "order": ["faq"]

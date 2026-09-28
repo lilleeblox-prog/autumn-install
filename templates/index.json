@@ -1,3 +1,12 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
 {
   "sections": {
     "hero": {
@@ -165,25 +174,68 @@
     "faq": {
       "type": "faq",
       "settings": {
-        "title": "The little things worth knowing"
+        "title": "The little things worth knowing",
+        "intro": "From the first conversation to the finishing touches, here is what to expect when shaping a welcome of your own."
       },
       "blocks": {
         "q1": {
           "type": "qa",
           "settings": {
-            "question": "How long do the pumpkins last?",
-            "answer": "<p>Each pumpkin is its own little piece of the harvest. How long it lasts depends on weather and exposure; get in touch if you’d like care advice for your entry.</p>"
+            "question": "When should I start with a consultation?",
+            "answer": "<p>If your space, palette, or idea calls for something beyond the standard display choices, send an inquiry. Tell us about the entrance and the feeling you have in mind; we’ll talk through what is possible before confirming a design, price, or date.</p>"
           }
         },
         "q2": {
           "type": "qa",
           "settings": {
-            "question": "Do I need to be home for the installation?",
-            "answer": "<p>We’ll discuss access and placement with you before any installation date is confirmed.</p>"
+            "question": "What happens after I send an inquiry?",
+            "answer": "<p>The studio reviews the details you submit and follows up to discuss scope, availability, and next steps. Sending an inquiry starts a conversation; it is not a quote, an order, or a reserved installation date.</p>"
+          }
+        },
+        "q3": {
+          "type": "qa",
+          "settings": {
+            "question": "Is my requested week a confirmed booking?",
+            "answer": "<p>Not yet. Choose the week that suits you and include any important event date in your notes. We’ll confirm availability and the actual timing separately.</p>"
+          }
+        },
+        "q4": {
+          "type": "qa",
+          "settings": {
+            "question": "What is the difference between delivery and installation?",
+            "answer": "<p>With delivery only, the curated pumpkins and gourds arrive for you to arrange. With custom installation, the studio styles the display at your entrance. We’ll discuss access and placement before confirming an installation.</p>"
+          }
+        },
+        "q5": {
+          "type": "qa",
+          "settings": {
+            "question": "How do custom vinyl pumpkins work?",
+            "answer": "<p>Choose the number of pumpkins, a white or orange pumpkin, and white, black, or gold vinyl. For a standard order, upload your PNG or PDF artwork in the design builder. We’ll review the artwork and confirm the details before production; the vinyl service is priced per pumpkin when available.</p>"
+          }
+        },
+        "q6": {
+          "type": "qa",
+          "settings": {
+            "question": "What if my artwork or idea needs a closer look?",
+            "answer": "<p>Use the consultation form for unusual artwork or a more bespoke request. Describe the idea in your message; a file selected in the builder does not transfer into the inquiry. We can discuss how to review the actual artwork before any work begins.</p>"
+          }
+        },
+        "q7": {
+          "type": "qa",
+          "settings": {
+            "question": "Can you collect the display after the season?",
+            "answer": "<p>You can request post-season removal while shaping your design. It is a separate, size-based service when available, and we’ll arrange collection timing with you. If you prefer, you can handle removal yourself.</p>"
+          }
+        },
+        "q8": {
+          "type": "qa",
+          "settings": {
+            "question": "Will my display look exactly like the photographs?",
+            "answer": "<p>The package images show scale, and the palette images suggest a color direction rather than a finished installation. Individual heirloom pumpkins and gourds vary with the harvest, so every composition has its own character.</p>"
           }
         }
       },
-      "block_order": ["q1", "q2"]
+      "block_order": ["q1", "q2", "q3", "q4", "q5", "q6", "q7", "q8"]
     },
     "contact": {
       "type": "contact-form",
