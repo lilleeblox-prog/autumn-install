@@ -159,7 +159,7 @@
           <span>{{ cart.total_price | money }}</span>
         </div>
             <p class="cart-note">Your display and services appear as separate lines. To change a detail, choose “Edit design” above. At checkout, enter the full address where you want the display installed or delivered, using the same ZIP you chose for your design. The delivery service above is charged once; your preferred week still needs confirmation. Review the final total before paying.</p>
-            <p class="cart-note">We serve addresses within 25 miles of 36047. Outside that area? {% if pages.contact != blank %}<a href="{{ pages.contact.url }}#consultation-form">Request a consultation instead</a>.{% else %}Please contact the studio before ordering.{% endif %}</p>
+            <p class="cart-note">We serve selected ZIP codes around 36047. Outside those ZIPs? {% if pages.contact != blank %}<a href="{{ pages.contact.url }}#consultation-form">Request a consultation instead</a>.{% else %}Please contact the studio before ordering.{% endif %}</p>
         <div class="cart-buttons">
           <button type="submit" name="update" class="button button--secondary">Update selection</button>
           <button type="submit" name="checkout" class="button button--accent">Proceed to checkout</button>
