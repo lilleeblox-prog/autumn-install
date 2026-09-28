@@ -158,7 +158,7 @@
           <span>Estimated Total</span>
           <span>{{ cart.total_price | money }}</span>
         </div>
-          <p class="cart-note">Your display and services appear as separate lines. To change a detail, choose “Edit design” above. Your preferred week still needs confirmation; taxes and any shipping are calculated at checkout.</p>
+           <p class="cart-note">Your display and services appear as separate lines. To change a detail, choose “Edit design” above. At checkout, enter the address where you want the display installed or delivered. The delivery service above is charged once; your preferred week still needs confirmation. Review the final total before paying.</p>
         <div class="cart-buttons">
           <button type="submit" name="update" class="button button--secondary">Update selection</button>
           <button type="submit" name="checkout" class="button button--accent">Proceed to checkout</button>
@@ -202,7 +202,7 @@
   </div>
   <div class="cart-footer cart-preview__footer" data-preview-footer hidden>
     <div class="cart-subtotal"><span>Known reference estimate</span><span data-preview-total></span></div>
-    <p class="cart-note" data-preview-estimate-note>Draft display and service estimates are for review only. Taxes and any shipping are not included. This preview cannot place an order or reserve a week.</p>
+     <p class="cart-note" data-preview-estimate-note>Draft display and service estimates are for review only. Taxes and other checkout charges are not included. This preview cannot place an order or reserve a week.</p>
     <div class="cart-buttons">
       <a class="button button--secondary" href="{{ routes.cart_url }}">View actual cart</a>
       <a class="button button--accent" href="{{ routes.root_url }}#compose">Refine your design</a>
@@ -295,7 +295,7 @@
     put('[data-preview-total]', money(knownTotal));
     if (design.artwork === 'Yes') {
       put('[data-preview-estimate-note]', design.vinylEstimateCents > 0
-        ? 'Vinyl artwork is included at a reference rate per pumpkin. Draft prices are for review only; taxes and any shipping are not included. This preview cannot place an order or reserve a week.'
+        ? 'Vinyl artwork is included at a reference rate per pumpkin. Draft prices are for review only; taxes and other checkout charges are not included. This preview cannot place an order or reserve a week.'
         : 'Vinyl artwork has no confirmed price and is excluded from this estimate. Draft prices are for review only. This preview cannot place an order or reserve a week.');
     }
     preview.querySelector('[data-preview-footer]').hidden = false;
