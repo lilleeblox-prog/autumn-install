@@ -8,6 +8,8 @@
 .contact-form__success { padding: var(--spacing-md); background: rgba(155, 76, 57, 0.05); border: 1px solid var(--color-accent); color: var(--color-accent); margin-bottom: var(--spacing-md); text-align: center; font-size: 0.875rem; }
 .contact-form__prefill { padding: 14px 16px; margin: 0 0 var(--spacing-md); border-left: 2px solid var(--color-accent); background: rgba(155, 76, 57, 0.05); color: var(--color-foreground); font-size: .85rem; line-height: 1.6; }
 .contact-form__prefill[hidden] { display: none; }
+.contact-form__transfer-error { padding: 14px 16px; margin: 0 0 var(--spacing-md); border-left: 2px solid var(--color-accent); color: var(--color-foreground); font-size: .85rem; line-height: 1.6; }
+.contact-form__transfer-error[hidden] { display: none; }
 </style>
 
 <section class="contact-form-section container" id="consultation-form" data-consultation-form>
@@ -32,6 +34,7 @@
 
     {{ form.errors | default_errors }}
      <p class="contact-form__prefill" data-consultation-prefill-notice hidden>We’ve carried your design notes into this conversation. Add your contact details and take a look before sending; an inquiry is not a booking or quote.</p>
+      <p class="contact-form__transfer-error" data-consultation-transfer-error role="alert" hidden>Your selected details could not be carried over. Please enter your special request in the form below before sending.</p>
 
     <div class="form-field">
       <label class="form-label" for="ContactFormName-{{ section.id }}">Name</label>

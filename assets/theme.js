@@ -269,6 +269,10 @@ function productConsultationChoices(form) {
 function setupConsultationForm(root) {
   if (root.dataset.consultationBound === 'true') return;
   root.dataset.consultationBound = 'true';
+  const transferError = root.querySelector('[data-consultation-transfer-error]');
+  if (transferError && new URLSearchParams(window.location.search).get('consultation_transfer') === 'failed') {
+    transferError.hidden = false;
+  }
   if (root.querySelector('[data-contact-success]')) {
     try { sessionStorage.removeItem(CONSULTATION_STORAGE_KEY); } catch { /* Storage may be unavailable. */ }
     return;

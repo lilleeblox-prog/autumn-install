@@ -1002,7 +1002,7 @@
           <h3>Something only you could imagine?</h3>
           <p>A different scale, a distinctive doorway, a detail that makes it yours—tell us what you have in mind. We can explore the possibilities together before confirming scope, price, or timing.</p>
           <label class="composer-custom"><input type="checkbox" data-custom-request> I have a special request</label>
-          <p data-custom-request-note hidden>A consultation is required for this request. Add details in “Your vision”; your chosen details will appear in the consultation draft. {% if pages.contact != blank %}<a href="{{ pages.contact.url }}#consultation-form" data-consultation-link>Continue to consultation draft →</a>{% else %}Please contact the studio before ordering.{% endif %}</p>
+          <p data-custom-request-note hidden>A consultation is required for this request. Your selected details will be carried to the inquiry form. <a href="{% if pages.contact != blank %}{{ pages.contact.url }}{% else %}{{ routes.root_url }}{% endif %}#consultation-form" data-consultation-link>Open the inquiry form →</a></p>
         </div>
         <div class="palette-composer__arrival">
           <span class="eyebrow">04 / The arrival</span>
@@ -1178,7 +1178,6 @@
     let activeScale = null;
     const rememberSelection = () => {
       const palette = root.querySelector('[data-composer-palette]:checked')?.value;
-      if (!palette) return;
       const choices = {
         display: activeScale?.dataset.scaleName || '',
         displaySize: activeScale?.dataset.displaySize || '',
@@ -1199,10 +1198,22 @@
         document.dispatchEvent(new Event('palette-install:consultation-updated'));
         const notice = root.querySelector('[data-consultation-transfer-error]');
         if (notice) notice.hidden = true;
+        return true;
       } catch {
         const notice = root.querySelector('[data-consultation-transfer-error]');
         if (notice) notice.hidden = false;
+        return false;
       }
+    };
+    const openConsultation = (link) => {
+      if (!link) {
+        productFormError(form, 'The inquiry form is unavailable. Please contact the studio.');
+        return;
+      }
+      const saved = saveConsultationChoices();
+      const destination = new URL(link.href, window.location.href);
+      if (!saved) destination.searchParams.set('consultation_transfer', 'failed');
+      window.location.assign(destination.href);
     };
     const chosenVariant = (card, palette) => {
       const index = Number(card?.dataset.paletteIndex);
@@ -1374,6 +1385,9 @@
       updatePalette(radio.value);
       updateBrief();
     }));
+    root.querySelector('[data-custom-request]')?.addEventListener('change', event => {
+      if (event.currentTarget.checked) openConsultation(root.querySelector('[data-consultation-link]'));
+    });
     form.addEventListener('input', updateBrief);
     form.addEventListener('change', event => {
       updateBrief();
