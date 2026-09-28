@@ -3,7 +3,7 @@
 .faq-section .faq-header { max-width: 800px; margin-bottom: clamp(50px, 7vw, 94px); text-align: left; }
 .faq-section .faq-header .eyebrow { margin-bottom: 0; }
 .faq-section .faq-header h1, .faq-section .faq-header h2 {
-  font-size: clamp(52px, 6vw, 80px); line-height: 1; letter-spacing: -.03em; margin: 16px 0 24px;
+  font-size: clamp(60px, 6vw, 80px); line-height: 1; letter-spacing: -.03em; margin: 16px 0 24px;
 }
 .faq-section .faq-header > p { max-width: 600px; color: var(--color-muted); font-size: 17px; line-height: 1.6; }
 .faq-section .faq-list { border-top: 1px solid var(--color-border); }
@@ -11,7 +11,7 @@
 .faq-section .faq-item__question {
   display: flex; align-items: center; justify-content: space-between; gap: 40px;
   width: 100%; padding: 38px 0; text-align: left; background: none; border: none;
-  color: var(--color-foreground); font: 400 clamp(30px, 3.2vw, 51px)/1.08 var(--font-serif);
+  color: var(--color-foreground); font: 400 clamp(40px, 4vw, 51px)/1.08 var(--font-serif);
   letter-spacing: -.03em; cursor: pointer; list-style: none;
 }
 .faq-section .faq-item__question::-webkit-details-marker { display: none; }
@@ -29,8 +29,9 @@
   color: var(--color-muted); font-size: 15px; line-height: 1.85;
 }
 .faq-section .faq-item__answer p:last-child { margin-bottom: 0; }
-@media (max-width: 768px) {
+@media (max-width: 600px) {
   .faq-section .faq-header { margin-bottom: 48px; }
+  .faq-section .faq-header h1, .faq-section .faq-header h2 { font-size: clamp(48px, 10vw, 60px); }
   .faq-section .faq-item__question { font-size: 33px; padding: 28px 0; gap: 20px; }
   .faq-section .faq-item__question > span { gap: 20px; }
   .faq-section .faq-item__answer { margin-left: 0; padding-bottom: 32px; font-size: 14px; }
