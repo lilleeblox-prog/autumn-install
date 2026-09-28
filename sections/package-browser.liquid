@@ -952,7 +952,7 @@
     <button type="button" aria-pressed="true" data-pane-tab="build">Create your look</button>
     <button type="button" aria-pressed="false" data-pane-tab="preview">See your design</button>
   </nav>
-  <form class="palette-composer__form" enctype="multipart/form-data" data-product-form data-inquiry-only="true" data-product-title="{{ section.settings.title | escape }}" data-selected-scale-name="{{ initial_scale | escape }}" data-base-estimate-cents="{{ initial_base_estimate_cents }}">
+  <form class="palette-composer__form" method="post" action="{{ routes.cart_add_url }}" enctype="multipart/form-data" data-product-form data-product-title="{{ section.settings.title | escape }}" data-selected-scale-name="{{ initial_scale | escape }}" data-base-estimate-cents="{{ initial_base_estimate_cents }}">
     <input type="hidden" name="form_type" value="product">
     <input type="hidden" name="quantity" value="1">
     <input type="hidden" name="properties[_Composition ID]" value="" data-composition-id-input>
@@ -1132,22 +1132,24 @@
         <section class="composition-price-estimate" data-composition-estimate aria-label="Live price breakdown">
           <span class="eyebrow">Live estimate</span><div data-estimate-rows></div>
           <div class="composition-price-estimate__total"><span>Known subtotal</span><strong data-estimate-total aria-live="polite"></strong></div>
-          <p class="composition-price-estimate__note" data-estimate-note>This is a planning estimate, not a quote. The studio will confirm details and pricing after your inquiry.</p>
+          <p class="composition-price-estimate__note" data-estimate-note>Unconfirmed service pricing is excluded. Final taxes and checkout charges are shown before payment.</p>
         </section>
         <div class="composer-final-approval">
-          <p class="product-approval-note" data-approval-disclosure>Review your choices, then send an inquiry. The studio will confirm scope, pricing, and timing with you.</p>
+          <p class="product-approval-note" data-approval-disclosure>{{ section.settings.continue_disclosure | escape }} Preferred weeks require confirmation.</p>
           <p class="composer-review-error hidden" data-review-error role="alert" aria-live="assertive"></p>
           <div class="composer-review-actions">
             <button type="button" data-edit-design>Edit design</button>
+            <button type="button" data-approve-design disabled>Approve</button>
           </div>
-          <button type="button" class="composer-inquiry-button" data-consultation-link>Send a design inquiry</button>
+          <div class="product-approval" data-approval-status hidden role="status"><strong>Your design is ready to review</strong><p>Review its details in the Shopify cart before checkout. Your preferred week still needs confirmation.</p></div>
+          <button type="submit" data-cart-submit hidden>Review your composition</button>
         </div>
       </div>
       </div>
     </aside>
     <div class="composer-editor-approval">
-      <p>Ready to look at everything together? Review your choices before contacting the studio.</p>
-      <button type="button" data-open-final-review>Review your design</button>
+      <p>Ready to look at everything together? Review your choices and estimated total before continuing.</p>
+      <button type="button" data-open-final-review>Approve final design</button>
     </div>
   </form>
   {% render 'consultation-dialog', section: section %}
@@ -1282,10 +1284,6 @@
       const status = details?.querySelector('[data-scale-status]');
       const variant = chosenVariant(card, palette);
       if (!status) return;
-      if (form.dataset.inquiryOnly === 'true') {
-        status.textContent = 'Choose this scale for your studio inquiry.';
-        return;
-      }
       if (!card.dataset.productId) status.textContent = 'Preview only · product not configured';
       else if (card.dataset.productAvailable !== 'true') status.textContent = 'Preview only · product not available';
       else if (Number(card.dataset.paletteIndex) < 0 && card.dataset.defaultVariant !== 'true') status.textContent = 'Cannot order · no single priced display variant';
@@ -1360,7 +1358,9 @@
         button.textContent = 'Approve';
       });
       form.querySelectorAll('[data-approval-disclosure]').forEach(note => {
-        note.textContent = 'Your choices are a starting point. The studio will confirm scope, pricing, and timing after your inquiry.';
+        note.textContent = availableToOrder
+          ? {{ section.settings.continue_disclosure | append: ' Preferred weeks require confirmation.' | json }}
+          : 'This design cannot be added to the Shopify cart while the display or required services are unavailable. No order has been placed.';
       });
       const sizeLabel = card.dataset.scaleName || '';
       root.dataset.productTitle = card.dataset.productTitle || sizeLabel;
@@ -1398,6 +1398,21 @@
       rememberSelection();
     };
     root.querySelector('[data-open-final-review]')?.addEventListener('click', () => {
+      if (window.paletteInstallServiceArea.check(text('Installation ZIP')) === 'outside') {
+        productFormError(form, 'We don’t currently serve this ZIP. Fill out the consultation form below instead of placing an order.');
+        form.querySelector('[data-outside-area-note] a')?.focus();
+        return;
+      }
+      if (!form.checkValidity()) {
+        const missingField = focusFirstInvalidComposerField(form);
+        productFormError(form, `Please complete ${missingField || 'the highlighted choices'} before reviewing your design.`);
+        return;
+      }
+      if (form.querySelector('[data-custom-request]')?.checked) {
+        productFormError(form, 'A special request needs a consultation before it can be approved for cart review.');
+        form.querySelector('[data-custom-request]')?.focus();
+        return;
+      }
       productFormError(form, '');
       root.dataset.reviewStage = 'final';
       root.dataset.mobilePane = 'preview';
@@ -1551,14 +1566,14 @@
     {
       "type": "text",
       "id": "continue_label",
-      "label": "Inquiry button label",
-      "default": "Send a design inquiry"
+      "label": "Approval button label",
+      "default": "Approve design"
     },
     {
       "type": "textarea",
       "id": "continue_disclosure",
-      "label": "Inquiry action disclosure",
-      "default": "An inquiry is not an order, a quote, or a confirmed date."
+      "label": "Approval action disclosure",
+      "default": "Approval adds your selected composition to cart for review and does not place an order or reserve a week."
     },
     { "type": "product", "id": "delivery_small_product", "label": "The Stoop delivery service product" },
     { "type": "product", "id": "delivery_medium_product", "label": "The Porch delivery service product" },

@@ -168,16 +168,16 @@
       {{ product.description }}
     </div>
 
-    <form enctype="multipart/form-data" data-product-form data-inquiry-only="true" data-product-id="{{ product.id }}" data-product-title="{{ product.title | escape }}">
-      {% assign display_size = blank %}
-      {% if section.settings.small_package_product != blank and product.id == section.settings.small_package_product.id %}
-        {% assign display_size = 'small' %}
-      {% elsif section.settings.medium_package_product != blank and product.id == section.settings.medium_package_product.id %}
-        {% assign display_size = 'medium' %}
-      {% elsif section.settings.large_package_product != blank and product.id == section.settings.large_package_product.id %}
-        {% assign display_size = 'large' %}
-      {% endif %}
-      <noscript><p class="product-form__noscript">Please enable JavaScript to send your design choices and selected files with an inquiry, or use the Contact page to reach the studio.</p></noscript>
+    {% assign display_size = blank %}
+    {% if section.settings.small_package_product != blank and product.id == section.settings.small_package_product.id %}
+      {% assign display_size = 'small' %}
+    {% elsif section.settings.medium_package_product != blank and product.id == section.settings.medium_package_product.id %}
+      {% assign display_size = 'medium' %}
+    {% elsif section.settings.large_package_product != blank and product.id == section.settings.large_package_product.id %}
+      {% assign display_size = 'large' %}
+    {% endif %}
+    <form {% if display_size != blank %}method="post" action="{{ routes.cart_add_url }}"{% else %}onsubmit="return false"{% endif %} enctype="multipart/form-data" data-product-form data-product-id="{{ product.id }}" data-product-title="{{ product.title | escape }}">
+      <noscript><p class="product-form__noscript">Please enable JavaScript to safely add configured display and service products to your cart. You can still review the details above.</p></noscript>
       <input type="hidden" name="form_type" value="product">
         <input type="hidden" name="properties[_Composition ID]" value="" data-composition-id-input>
         <input type="hidden" name="properties[_House Photo Expected]" value="Yes" data-house-photo-expected disabled>
@@ -358,7 +358,7 @@
           <div class="journey-field">
             <label for="HousePhoto-{{ section.id }}">House or porch photo (optional)</label>
             <input id="HousePhoto-{{ section.id }}" type="file" name="properties[House Photo]" class="form-input" accept=".jpg,.jpeg,.png,image/jpeg,image/png" data-house-photo-file>
-            <p class="field-hint">Share one JPG or PNG, up to 20 MB, so we can plan for your space. Your selected photo will be included with your inquiry.</p>
+            <p class="field-hint">Share one JPG or PNG, up to 20 MB, so we can plan for your space. The selected photo will be attached to the display in your Shopify cart.</p>
           </div>
        </div>
 
@@ -424,6 +424,7 @@
         </div>
       {% endif %}
 
+      <input type="hidden" name="quantity" value="1">
        <section class="composition-brief" data-composition-brief aria-labelledby="composition-brief-title">
           <div class="eyebrow">Your entrance / In the making</div>
           <h2 id="composition-brief-title">A welcome taking shape.</h2>
@@ -435,19 +436,37 @@
            <div><dt>Preferred week</dt><dd data-brief-week>Yours to choose</dd></div>
            <div><dt>Removal</dt><dd data-brief-removal>Yours to choose</dd></div>
          </dl>
-          <p class="composition-brief__note">This is a study of your choices, not a rendering of the finished display or a confirmed date. Send an inquiry to review the possibilities with the studio.</p>
+          <p class="composition-brief__note">This is a study of your choices, not a rendering of the finished display or a confirmed date. You can review every detail in the cart.</p>
        </section>
         <section class="composition-price-estimate" data-composition-estimate aria-label="Live price breakdown">
           <span class="eyebrow">The details of your design</span>
           <div data-estimate-rows></div>
           <div class="composition-price-estimate__total"><span>Known subtotal</span><strong data-estimate-total aria-live="polite"></strong></div>
-           <p class="composition-price-estimate__note" data-estimate-note>Selected services with unconfirmed rates are not included. The studio will confirm your quote after your inquiry.</p>
+           <p class="composition-price-estimate__note" data-estimate-note>Selected services with unconfirmed rates are not included. Final taxes and checkout charges are shown before payment.</p>
         </section>
        <div id="product-form-error" class="hidden" role="alert" aria-live="polite" style="color: var(--color-accent); margin: 1rem 0; font-size: 0.875rem;"></div>
 
       <div class="product-form__buttons">
-          <p class="product-approval-note">Send your design choices to the studio for a conversation about scope, pricing, and timing. This is not an order or reservation.</p>
-          <button type="button" class="button button--accent button--full" data-consultation-link>Send a design inquiry</button>
+        {% if display_size != blank %}
+          <p class="product-approval-note">Approve to add this complete design and its required services to your Shopify cart for review. This does not place an order or reserve a week.</p>
+          <button type="button" class="button button--accent button--full" data-approve-design {% if product.available == false or product.selected_or_first_available_variant.price <= 0 %}disabled{% endif %}>
+            {% if product.available == false %}
+              Sold out
+            {% elsif product.selected_or_first_available_variant.price <= 0 %}
+              Pricing pending
+            {% else %}
+              Approve design
+            {% endif %}
+          </button>
+          <div class="product-approval" data-approval-status hidden role="status">
+            <strong>Your design is ready to review</strong>
+            <p>Check every detail in your Shopify cart before checkout. We’ll confirm timing separately.</p>
+          </div>
+          <button type="submit" class="button button--accent button--full" data-cart-submit hidden>Review your composition</button>
+        {% else %}
+          <p class="product-approval-note">Individual pumpkins and service items are not available to order separately. Explore a complete display instead.</p>
+          <a class="button button--accent button--full" href="{{ routes.root_url }}#compose">Explore complete displays</a>
+        {% endif %}
       </div>
     </form>
     {% render 'consultation-dialog', section: section %}

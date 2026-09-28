@@ -10,7 +10,7 @@
 {
   "sections": {
     "main": {
-      "type": "inquiry-cart",
+      "type": "main-cart",
       "settings": {
       }
     }

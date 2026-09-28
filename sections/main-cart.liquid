@@ -80,8 +80,13 @@
 
   {% if cart.item_count > 0 %}
     {% assign has_grouped = false %}
+    {% assign has_standalone = false %}
     {% for grouped_item in cart.items %}
-      {% if grouped_item.properties['_Composition ID'] != blank %}{% assign has_grouped = true %}{% endif %}
+      {% if grouped_item.properties['_Composition ID'] != blank %}
+        {% assign has_grouped = true %}
+      {% else %}
+        {% assign has_standalone = true %}
+      {% endif %}
     {% endfor %}
     <form action="{{ routes.cart_url }}" method="post" id="cart"{% if has_grouped %} class="cart-has-grouped"{% endif %}>
       <div class="cart-items">
@@ -162,6 +167,9 @@
       
        <p class="cart-noscript">JavaScript is required to safely validate grouped composition services before checkout. Your variant selections remain visible above.</p>
        <div class="cart-footer">
+        {% if has_standalone %}
+          <p class="cart-note" role="alert">Individual items already in your cart are not part of an approved design. Remove them above before checkout. They have not been deleted automatically.</p>
+        {% endif %}
         <div class="cart-subtotal">
           <span>Estimated Total</span>
           <span>{{ cart.total_price | money }}</span>
@@ -170,7 +178,7 @@
             <p class="cart-note">We serve selected ZIP codes near Franklin, Tennessee. Outside those ZIPs? {% if pages.contact != blank %}<a href="{{ pages.contact.url }}#consultation-form">Request a consultation instead</a>.{% else %}Please contact the studio before ordering.{% endif %}</p>
         <div class="cart-buttons">
           <button type="submit" name="update" class="button button--secondary">Update selection</button>
-          <button type="submit" name="checkout" class="button button--accent">Proceed to checkout</button>
+          <button type="submit" name="checkout" class="button button--accent" {% if has_standalone %}disabled aria-disabled="true"{% endif %}>Proceed to checkout</button>
         </div>
       </div>
     </form>
