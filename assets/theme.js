@@ -232,6 +232,20 @@ window.paletteInstallWeekAvailability = { setup: setupRequestedWeekAvailability,
 
 const CONSULTATION_STORAGE_KEY = 'palette-install-consultation-v1';
 
+// ZIP Tabulation Area representative points within 25 miles of 36047's representative point.
+// Source: U.S. Census 2025 Gazetteer, 2025_Gaz_zcta_national.zip. Border ZIPs need consultation.
+const SERVICE_AREA_ZIPS = new Set([
+  '36032', '36036', '36037', '36040', '36041', '36042', '36043', '36046',
+  '36047', '36069', '36101', '36104', '36105', '36106', '36107', '36108',
+  '36111', '36112', '36113', '36116', '36130', '36752', '36761', '36785'
+]);
+function serviceAreaForZip(value) {
+  const zip = String(value || '').trim();
+  if (!/^\d{5}$/.test(zip)) return 'invalid';
+  return SERVICE_AREA_ZIPS.has(zip) ? 'within' : 'outside';
+}
+window.paletteInstallServiceArea = { check: serviceAreaForZip };
+
 function saveConsultationDraft(choices) {
   try {
     sessionStorage.setItem(CONSULTATION_STORAGE_KEY, JSON.stringify({ savedAt: Date.now(), choices }));
@@ -254,7 +268,7 @@ function productConsultationChoices(form) {
     palette: paletteGroup?.querySelector('input[type="radio"]:checked')?.value ||
       form.querySelector('[data-composer-palette]:checked')?.value || '',
     service: text('properties[Service]'),
-    serviceArea: text('properties[Service Area]'),
+    installationZip: text('properties[Installation ZIP]'),
     artwork,
     artworkSelected: artwork === 'Yes' && !!form.querySelector('[data-artwork-file]')?.files?.[0],
     quantity: artwork === 'Yes' ? text('properties[Vinyl-wrapped Pumpkins]') : '',
@@ -293,7 +307,7 @@ function setupConsultationForm(root) {
       choices.display && `Display: ${choices.display}`,
       choices.palette && `Palette: ${choices.palette}`,
       choices.service && `Fulfillment: ${choices.service}`,
-      choices.serviceArea === 'Outside 25 miles of 36047' && 'Service area: Outside 25 miles of 36047 — consultation requested',
+      choices.installationZip && `Requested installation/delivery ZIP: ${choices.installationZip}`,
       includesHay && 'Hay bales: 2 included with the display',
       choices.artwork && `Vinyl artwork: ${choices.artwork}`,
       choices.artwork === 'Yes' && choices.quantity && `Vinyl-wrapped pumpkins: ${choices.quantity}`,
@@ -349,14 +363,15 @@ function setupProductJourney(form) {
     const customNote = form.querySelector('[data-custom-request-note]');
     if (customNote && customRequest) customNote.hidden = !customRequest.checked;
     const outsideNote = form.querySelector('[data-outside-area-note]');
-    if (outsideNote) outsideNote.hidden = !form.querySelector('[data-service-area="outside"]:checked');
+    if (outsideNote) outsideNote.hidden = serviceAreaForZip(form.querySelector('[data-installation-zip]')?.value) !== 'outside';
     if (monogramFields) monogramFields.hidden = !hasMonogram;
     monogramInputs.forEach(input => { input.disabled = !hasMonogram; input.required = !!hasMonogram; });
     if (dateLabel) dateLabel.innerHTML = isDelivery
        ? '03 / Requested delivery week'
        : '03 / Requested delivery &amp; installation week';
   };
-  form.querySelectorAll('[data-service], [data-monogram-choice], [data-custom-request], [data-service-area]').forEach(input => input.addEventListener('change', setVisibility));
+  form.querySelectorAll('[data-service], [data-monogram-choice], [data-custom-request]').forEach(input => input.addEventListener('change', setVisibility));
+  form.querySelector('[data-installation-zip]')?.addEventListener('input', setVisibility);
   const saveChoices = () => saveConsultationDraft(productConsultationChoices(form));
   form.addEventListener('change', saveChoices);
   form.querySelector('[name="properties[General Notes]"]')?.addEventListener('input', saveChoices);
@@ -620,11 +635,12 @@ function previewCartDesign(form) {
   if (form.querySelector('[data-custom-request]')?.checked) {
     throw new Error('A special request needs a consultation before it can be included in a cart preview.');
   }
-  if (form.querySelector('[data-service-area="outside"]:checked')) {
+  const zipStatus = serviceAreaForZip(new FormData(form).get('properties[Installation ZIP]'));
+  if (zipStatus === 'outside') {
     throw new Error('Outside our 25-mile service area? Please request a consultation instead of reviewing an order.');
   }
-  if (!form.querySelector('[data-service-area="within"]:checked')) {
-    throw new Error('Please confirm the delivery or installation address is within 25 miles of 36047.');
+  if (zipStatus !== 'within') {
+    throw new Error('Enter a valid five-digit installation or delivery ZIP code.');
   }
   const data = new FormData(form);
   const artwork = form.querySelector('[data-artwork-file]')?.files?.[0];
@@ -679,11 +695,13 @@ function configuredCartItems(form) {
   if (form.querySelector('[data-custom-request]')?.checked) {
     throw new Error('Further customization needs a consultation before this design can be ordered. Please request a consultation.');
   }
-  if (form.querySelector('[data-service-area="outside"]:checked')) {
+  const installationZip = String(new FormData(form).get('properties[Installation ZIP]') || '').trim();
+  const zipStatus = serviceAreaForZip(installationZip);
+  if (zipStatus === 'outside') {
     throw new Error('Outside our 25-mile service area? Please request a consultation instead of ordering.');
   }
-  if (!form.querySelector('[data-service-area="within"]:checked')) {
-    throw new Error('Please confirm the delivery or installation address is within 25 miles of 36047.');
+  if (zipStatus !== 'within') {
+    throw new Error('Enter a valid five-digit installation or delivery ZIP code.');
   }
   const data = new FormData(form);
   const masterId = String(data.get('id') || '');
@@ -740,7 +758,7 @@ function configuredCartItems(form) {
     '_Composition ID': compositionId,
     'Requested Week': requestedWeek,
     'Service': service,
-    'Service Area': 'Within 25 miles of 36047',
+    'Installation ZIP': installationZip,
     'Vinyl Artwork': monogram,
     'Removal': removal,
     'Hay Bales': hayBales
@@ -1019,10 +1037,11 @@ function validateCartGroups(cartForm) {
       error.textContent = 'Choose a valid fulfillment method before checkout.';
       return false;
     }
-    if (base[0].dataset.serviceArea !== 'Within 25 miles of 36047') {
-      error.textContent = base[0].dataset.serviceArea === 'Outside 25 miles of 36047'
+    const zipStatus = serviceAreaForZip(base[0].dataset.installationZip);
+    if (zipStatus !== 'within') {
+      error.textContent = zipStatus === 'outside'
         ? 'Outside our service area? Please request a consultation instead of checking out.'
-        : 'Please edit your design and confirm the delivery or installation address is within 25 miles of 36047.';
+        : 'Please edit your design and enter a valid five-digit installation or delivery ZIP code.';
       return false;
     }
     if (!['Yes', 'No'].includes(base[0].dataset.hay)) {
