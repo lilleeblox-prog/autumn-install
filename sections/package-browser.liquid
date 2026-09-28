@@ -298,8 +298,8 @@
   #PackageBrowser-{{ section.id }} { --composer-line:var(--color-border,#d8d2c8); --composer-accent:var(--color-accent,#9b4c39); }
   #PackageBrowser-{{ section.id }}.palette-composer { width:100%; max-width:none; padding:0; }
   #PackageBrowser-{{ section.id }} .palette-composer__tabs { display:none; }
-  #PackageBrowser-{{ section.id }} .palette-composer__form { display:grid; grid-template-columns:minmax(0,1fr) minmax(0,1fr); height:calc(100vh - 84px); min-height:680px; overflow:hidden; }
-  #PackageBrowser-{{ section.id }} .palette-composer__editor, #PackageBrowser-{{ section.id }} .palette-composer__preview { min-width:0; overflow-y:auto; overscroll-behavior:contain; padding:clamp(24px,4vw,64px); }
+  #PackageBrowser-{{ section.id }} .palette-composer__form { display:grid; grid-template-columns:minmax(0,1fr) minmax(0,1fr); min-height:calc(100vh - 84px); overflow:visible; }
+  #PackageBrowser-{{ section.id }} .palette-composer__editor, #PackageBrowser-{{ section.id }} .palette-composer__preview { min-width:0; overflow:visible; padding:clamp(24px,4vw,64px); }
   #PackageBrowser-{{ section.id }} .palette-composer__editor { border-right:1px solid var(--composer-line); }
   #PackageBrowser-{{ section.id }} .palette-composer__intro { max-width:650px; margin:0 auto 48px; }
   #PackageBrowser-{{ section.id }} .palette-composer__intro h1 { font:400 clamp(2.6rem,5vw,5rem)/1 var(--font-serif); letter-spacing:-.04em; margin:14px 0; }
@@ -364,15 +364,11 @@
   }
   #PackageBrowser-{{ section.id }} .palette-composer__form {
     grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
-    grid-template-rows: minmax(0, 1fr) auto;
-    height: calc(100dvh - 80px);
-    min-height: 680px;
+    min-height: calc(100dvh - 80px);
   }
   #PackageBrowser-{{ section.id }} .palette-composer__editor,
   #PackageBrowser-{{ section.id }} .palette-composer__preview {
     padding: clamp(52px, 5vw, 90px) clamp(36px, 5vw, 104px) 72px;
-    scroll-behavior: smooth;
-    scroll-padding-top: 48px;
   }
   #PackageBrowser-{{ section.id }} .palette-composer__editor {
     border-right: 1px solid rgba(62, 53, 43, .20);
@@ -822,9 +818,6 @@
   }
   #PackageBrowser-{{ section.id }}[data-review-stage=build] [data-approve-design],
   #PackageBrowser-{{ section.id }}[data-review-stage=build] [data-edit-design] { display:none !important; }
-  @media(min-width:901px) {
-    #PackageBrowser-{{ section.id }}[data-review-ready=false] .composer-editor-approval { display:none !important; }
-  }
   @media(max-width:900px) {
     #PackageBrowser-{{ section.id }}[data-mobile-pane=preview][data-review-stage=build] .composer-editor-approval { display:none !important; }
   }
@@ -832,7 +825,7 @@
   #PackageBrowser-{{ section.id }}[data-review-stage=final] .palette-composer__editor,
   #PackageBrowser-{{ section.id }}[data-review-stage=final] .composer-editor-approval { display:none !important; }
   #PackageBrowser-{{ section.id }}[data-review-stage=final] .palette-composer__form { display:block; }
-  #PackageBrowser-{{ section.id }}[data-review-stage=final] .palette-composer__preview { width:100%;height:100%; }
+  #PackageBrowser-{{ section.id }}[data-review-stage=final] .palette-composer__preview { width:100%; }
   #PackageBrowser-{{ section.id }}[data-review-stage=final] .palette-composer__preview-intro,
   #PackageBrowser-{{ section.id }}[data-review-stage=final] .composition-summary {
     box-sizing:border-box;
@@ -904,7 +897,7 @@
 {% endfor %}
 
 <div id="{{ section.settings.section_id | default: 'compose' | escape }}" style="scroll-margin-top: 100px"></div>
-<section class="palette-composer" id="PackageBrowser-{{ section.id }}" data-package-browser="{{ section.id }}" data-mobile-pane="build" data-review-stage="build" data-review-ready="false">
+<section class="palette-composer" id="PackageBrowser-{{ section.id }}" data-package-browser="{{ section.id }}" data-mobile-pane="build" data-review-stage="build">
   <nav class="palette-composer__tabs" aria-label="Builder views">
     <button type="button" aria-pressed="true" data-pane-tab="build">Create your look</button>
     <button type="button" aria-pressed="false" data-pane-tab="preview">See your design</button>
@@ -1130,14 +1123,6 @@
     const selectedScale = root.querySelector('[data-selected-scale]');
     const cards = Array.from(root.querySelectorAll('[data-composer-scale]'));
     const form = root.querySelector('[data-product-form]');
-    const editorPane = root.querySelector('[data-composer-pane="build"]');
-    const revealReviewAction = () => {
-      if (editorPane && editorPane.scrollTop + editorPane.clientHeight >= editorPane.scrollHeight - 32) {
-        root.dataset.reviewReady = 'true';
-      }
-    };
-    editorPane?.addEventListener('scroll', revealReviewAction, { passive: true });
-    requestAnimationFrame(revealReviewAction);
     const variantSelect = form.querySelector('[data-base-variant]');
       const services = form.querySelector('[data-service-products]');
     const hayProperty = form.querySelector('[data-hay-property]');
@@ -1318,9 +1303,7 @@
       root.dataset.mobilePane = 'preview';
       root.querySelectorAll('[data-pane-tab]').forEach(tab =>
         tab.setAttribute('aria-pressed', String(tab.dataset.paneTab === 'preview')));
-      const previewPane = root.querySelector('[data-composer-pane="preview"]');
-      if (previewPane) previewPane.scrollTop = 0;
-      root.scrollIntoView({ block: 'start', behavior: 'smooth' });
+      root.scrollIntoView({ block: 'start', behavior: 'instant' });
       root.querySelector('[data-edit-design]')?.focus({ preventScroll: true });
     });
     root.querySelectorAll('[data-edit-design]').forEach(button => button.addEventListener('click', () => {
@@ -1328,7 +1311,7 @@
       root.dataset.mobilePane = 'build';
       root.querySelectorAll('[data-pane-tab]').forEach(tab =>
         tab.setAttribute('aria-pressed', String(tab.dataset.paneTab === 'build')));
-      root.scrollIntoView({ block: 'start', behavior: 'smooth' });
+      root.scrollIntoView({ block: 'start', behavior: 'instant' });
     }));
     cards.forEach(card => card.addEventListener('click', () => {
       const shouldExpand = card.getAttribute('aria-expanded') !== 'true';
