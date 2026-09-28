@@ -179,7 +179,8 @@
       {% endif %}
       <noscript><p class="product-form__noscript">Please enable JavaScript to safely add configured installation, hay bale, vinyl artwork, or removal services to your cart. You can still review the variant above.</p></noscript>
       <input type="hidden" name="form_type" value="product">
-      <input type="hidden" name="properties[_Composition ID]" value="" data-composition-id-input>
+        <input type="hidden" name="properties[_Composition ID]" value="" data-composition-id-input>
+        <input type="hidden" name="properties[_House Photo Expected]" value="Yes" data-house-photo-expected disabled>
       
       <!-- Native Select (No JS or Form Target) -->
       <select name="id" id="ProductSelect-{{ section.id }}" class="form-select product-variant-select">
@@ -352,8 +353,13 @@
                 <option value="Gold">Gold</option>
               </select>
            </div>
-             <p class="field-hint">White or orange pumpkin; white, black, or gold vinyl. We’ll confirm your artwork and materials together before production.</p>
-         </div>
+              <p class="field-hint">White or orange pumpkin; white, black, or gold vinyl. We’ll confirm your artwork and materials together before production.</p>
+          </div>
+          <div class="journey-field">
+            <label for="HousePhoto-{{ section.id }}">House or porch photo (optional)</label>
+            <input id="HousePhoto-{{ section.id }}" type="file" name="properties[House Photo]" class="form-input" accept=".jpg,.jpeg,.png,image/jpeg,image/png" data-house-photo-file>
+            <p class="field-hint">Share one JPG or PNG, up to 20 MB, so we can plan for your space. The photo will be attached to this display in your Shopify order. If you edit this design, select the photo again to keep it.</p>
+          </div>
        </div>
 
        <div class="journey-step">

@@ -950,6 +950,7 @@
     <input type="hidden" name="form_type" value="product">
     <input type="hidden" name="quantity" value="1">
     <input type="hidden" name="properties[_Composition ID]" value="" data-composition-id-input>
+    <input type="hidden" name="properties[_House Photo Expected]" value="Yes" data-house-photo-expected disabled>
     <input type="hidden" name="properties[Hay Bales]" value="No" data-hay-property>
     <input type="hidden" name="properties[Palette]" value="" data-chosen-palette>
     <div class="palette-composer__editor" data-composer-pane="build" aria-label="Create your display">
@@ -1026,7 +1027,11 @@
           <label>Vinyl color<select name="properties[Vinyl Color Preference]" data-monogram-detail><option value="">Choose a vinyl color</option><option>White</option><option>Black</option><option>Gold</option></select></label>
           <p>One PNG or PDF, up to 20 MB. We’ll confirm your artwork and materials before production.</p>
         </div>
-        <label class="composer-field">Your vision (optional)<textarea name="properties[General Notes]" rows="3" placeholder="The feeling, colors, event, or little details you're imagining..."></textarea></label>
+         <label class="composer-field">House or porch photo (optional)
+           <input type="file" name="properties[House Photo]" accept=".jpg,.jpeg,.png,image/jpeg,image/png" data-house-photo-file>
+           <small class="composer-field__hint">Share one JPG or PNG, up to 20 MB, so we can plan for your space. It will be attached to your display in your Shopify order. If you edit this design, select it again to keep it.</small>
+         </label>
+         <label class="composer-field">Your vision (optional)<textarea name="properties[General Notes]" rows="3" placeholder="The feeling, colors, event, or little details you're imagining..."></textarea></label>
         <div class="composer-consultation">
           <span class="eyebrow">Beyond the builder</span>
           <h3>Something only you could imagine?</h3>
@@ -1153,6 +1158,7 @@
       <div><dt>Fulfillment</dt><dd data-draft-cart-service></dd></div>
       <div><dt>Requested week</dt><dd data-draft-cart-week></dd></div>
       <div><dt>Vinyl artwork</dt><dd data-draft-cart-artwork></dd></div>
+      <div><dt>House photo</dt><dd data-draft-cart-house-photo></dd></div>
       <div><dt>Removal</dt><dd data-draft-cart-removal></dd></div>
       <div><dt>Notes</dt><dd data-draft-cart-notes></dd></div>
     </dl>
@@ -1225,6 +1231,7 @@
         installationZip: text('Installation ZIP'),
         artwork: text('Vinyl Artwork'),
         artworkSelected: !!form.querySelector('[data-artwork-file]')?.files?.[0],
+        housePhotoSelected: !!form.querySelector('[data-house-photo-file]')?.files?.[0],
         quantity: text('Vinyl-wrapped Pumpkins'),
         pumpkinColor: text('Pumpkin Color Preference'),
         vinylColor: text('Vinyl Color Preference'),

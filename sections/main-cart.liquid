@@ -96,7 +96,13 @@
           {% if artwork_url_https == 'https://cdn.shopify.com/' or artwork_url_relative == '//cdn.shopify.com/' %}
             {% assign has_uploaded_artwork = true %}
           {% endif %}
-          <div class="cart-item{% if composition_id != blank %} cart-item--grouped{% endif %}" data-cart-item data-line-key="{{ item.key | escape }}" data-composition-id="{{ composition_id | escape }}" data-service-kind="{{ service_kind | escape }}" data-item-quantity="{{ item.quantity }}" data-display-size="{{ item.product.handle | split: '-' | first | escape }}" data-service="{{ item.properties['Service'] | escape }}" data-installation-zip="{{ item.properties['Installation ZIP'] | escape }}" data-hay="{{ item.properties['Hay Bales'] | escape }}" data-monogram="{{ artwork_choice | escape }}" data-monogram-qty="{{ artwork_quantity | escape }}" data-artwork-required="{% if item.properties['Vinyl Artwork'] == 'Yes' %}true{% else %}false{% endif %}" data-artwork-present="{{ has_uploaded_artwork }}" data-removal="{{ item.properties['Removal'] | escape }}">
+          {% assign house_photo_https = item.properties['House Photo'] | slice: 0, 24 %}
+          {% assign house_photo_relative = item.properties['House Photo'] | slice: 0, 18 %}
+          {% assign has_uploaded_house_photo = false %}
+          {% if house_photo_https == 'https://cdn.shopify.com/' or house_photo_relative == '//cdn.shopify.com/' %}
+            {% assign has_uploaded_house_photo = true %}
+          {% endif %}
+          <div class="cart-item{% if composition_id != blank %} cart-item--grouped{% endif %}" data-cart-item data-line-key="{{ item.key | escape }}" data-composition-id="{{ composition_id | escape }}" data-service-kind="{{ service_kind | escape }}" data-item-quantity="{{ item.quantity }}" data-display-size="{{ item.product.handle | split: '-' | first | escape }}" data-service="{{ item.properties['Service'] | escape }}" data-installation-zip="{{ item.properties['Installation ZIP'] | escape }}" data-hay="{{ item.properties['Hay Bales'] | escape }}" data-monogram="{{ artwork_choice | escape }}" data-monogram-qty="{{ artwork_quantity | escape }}" data-artwork-required="{% if item.properties['Vinyl Artwork'] == 'Yes' %}true{% else %}false{% endif %}" data-artwork-present="{{ has_uploaded_artwork }}" data-house-photo-required="{% if item.properties['_House Photo Expected'] == 'Yes' %}true{% else %}false{% endif %}" data-house-photo-present="{{ has_uploaded_house_photo }}" data-removal="{{ item.properties['Removal'] | escape }}">
             <div class="cart-item__image">
               {% if item.image %}
                 <img src="{{ item.image | image_url: width: 200 }}" width="{{ item.image.width }}" height="{{ item.image.height }}" alt="{{ item.image.alt | escape }}" loading="lazy">
@@ -121,6 +127,8 @@
                             {% assign artwork_protocol_relative = property.last | slice: 0, 18 %}
                             {% if property.first == 'Artwork File' and artwork_https == 'https://cdn.shopify.com/' or property.first == 'Artwork File' and artwork_protocol_relative == '//cdn.shopify.com/' %}
                               <a href="{{ property.last | escape }}" target="_blank" rel="noopener noreferrer">View uploaded artwork</a>
+                            {% elsif property.first == 'House Photo' and artwork_https == 'https://cdn.shopify.com/' or property.first == 'House Photo' and artwork_protocol_relative == '//cdn.shopify.com/' %}
+                              <a href="{{ property.last | escape }}" target="_blank" rel="noopener noreferrer">View house photo</a>
                             {% else %}
                               {{ property.last | escape }}
                             {% endif %}
