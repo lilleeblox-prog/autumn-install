@@ -1058,6 +1058,15 @@
                 </div>
               {% endif %}
             {% endfor %}
+            <div class="palette-study__item hidden" data-palette="Autumn in the Countryside" data-palette-fallback>
+              <img src="{{ 'palette-countryside-landscape.webp' | asset_url }}" width="1000" height="667" loading="lazy" alt="Autumn in the Countryside palette study">
+            </div>
+            <div class="palette-study__item hidden" data-palette="Classic Harvest" data-palette-fallback>
+              <img src="{{ 'palette-classic-harvest-landscape.webp' | asset_url }}" width="1000" height="667" loading="lazy" alt="Classic Harvest palette study">
+            </div>
+            <div class="palette-study__item hidden" data-palette="Coastal Cowgirl" data-palette-fallback>
+              <img src="{{ 'palette-coastal-cowgirl-landscape.webp' | asset_url }}" width="1000" height="667" loading="lazy" alt="Coastal Cowgirl palette study">
+            </div>
           </div>
         </div>
         <div class="eyebrow">The design you've made</div><h2>Review your design</h2>
@@ -1216,9 +1225,12 @@
       else status.textContent = 'Available · select this scale to continue.';
     };
     const updatePalette = (palette) => {
+      const hasConfiguredImage = Array.from(paletteImages).some(image =>
+        image.dataset.palette === palette && !image.hasAttribute('data-palette-fallback'));
       let imageCount = 0;
       paletteImages.forEach((image) => {
-        const match = image.dataset.palette === palette;
+        const match = image.dataset.palette === palette &&
+          (hasConfiguredImage ? !image.hasAttribute('data-palette-fallback') : image.hasAttribute('data-palette-fallback'));
         image.classList.toggle('hidden', !match);
         if (match) imageCount += 1;
       });
