@@ -665,8 +665,11 @@ function setupProductEstimate(form) {
       additions.push({ label: 'Hay bales · pair', included: true });
     }
     if (form.querySelector('[data-monogram-choice="yes"]:checked')) {
+      const vinylUnitCents = Number(products.dataset.monogramEstimateCents);
+      const vinylUnitLabel = Number.isSafeInteger(vinylUnitCents) && vinylUnitCents > 0
+        ? ` · ${formatMoney(vinylUnitCents, moneyFormat)} per pumpkin` : '';
       additions.push({
-        label: products.dataset.monogramId ? 'Vinyl-wrapped pumpkin' : 'Vinyl-wrapped pumpkin · estimate',
+        label: `Vinyl artwork${vinylUnitLabel}${products.dataset.monogramId ? '' : ' · estimate'}`,
         priceCents: products.dataset.monogramEstimateCents,
         quantity: form.querySelector('[data-monogram-quantity]')?.value,
       });
@@ -1374,6 +1377,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const cartForm = document.querySelector('#cart');
   if (cartForm) {
     finishPendingUpload(cartForm).catch(error => {
+      document.documentElement.classList.remove('cart-finalizing');
       cartForm.dataset.cartNeedsReview = 'true';
       const notice = cartForm.querySelector('[data-cart-validation-error]') || document.createElement('p');
       notice.dataset.cartValidationError = 'true';

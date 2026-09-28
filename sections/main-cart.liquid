@@ -47,6 +47,11 @@
 .cart-preview__item .cart-item__totals { font-size: .73rem; color: var(--color-muted); }
 .cart-preview__item[hidden] { display: none; }
 .cart-preview__footer .cart-buttons { margin-top: 22px; }
+.cart-finalizing-note { display: none; padding: clamp(90px, 12vw, 150px) 0; }
+.cart-finalizing-note h2 { font-size: clamp(2.6rem, 6vw, 5rem); line-height: 1.06; }
+.cart-finalizing-note p { max-width: 38rem; line-height: 1.7; color: var(--color-muted); }
+.cart-finalizing .cart-finalizing-note { display: block; }
+.cart-finalizing [data-live-cart] { display: none; }
 
 @media (max-width: 700px) {
   .cart-page { padding-top: 72px; }
@@ -68,6 +73,20 @@
 }
 </style>
 
+{% if cart.item_count > 0 %}
+  <script>
+    try {
+      if (sessionStorage.getItem('palette-pending-artwork-composition')) {
+        document.documentElement.classList.add('cart-finalizing');
+      }
+    } catch { /* The cart stays visible if browser storage is unavailable. */ }
+  </script>
+{% endif %}
+<div class="container cart-finalizing-note" role="status" aria-live="polite">
+  <span class="eyebrow">Just a moment</span>
+  <h2>Finishing your design.</h2>
+  <p>We’re adding your selected artwork and services. Your cart will refresh with the complete price before you continue.</p>
+</div>
 <div class="container cart-page" data-live-cart>
   <div class="cart-header">
     <div>
@@ -114,7 +133,10 @@
               {% endif %}
             </div>
             <div class="cart-item__info">
-                <h3><a href="{{ item.url }}">{% if service_kind == 'monogram' %}Vinyl artwork · per pumpkin{% else %}{{ item.product.title | escape }}{% endif %}</a></h3>
+                <h3><a href="{{ item.url }}">{% if service_kind == 'monogram' %}Vinyl artwork{% else %}{{ item.product.title | escape }}{% endif %}</a></h3>
+              {% if service_kind == 'monogram' %}
+                <div class="cart-item__variant">{{ item.final_price | money }} per pumpkin × {{ item.quantity }}</div>
+              {% endif %}
               {% unless item.product.has_only_default_variant %}
                 <div class="cart-item__variant">{{ item.variant.title }}</div>
               {% endunless %}
