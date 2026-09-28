@@ -1350,7 +1350,8 @@
         ? formatMoney(selected.dataset.price, window.shopMoneyFormat)
         : 'Pricing to be confirmed';
       const availableToOrder = !!variant && !!services.dataset.deliveryId &&
-        (text('Vinyl Artwork') !== 'Yes' || !!services.dataset.monogramId) &&
+        (text('Vinyl Artwork') !== 'Yes' ||
+          (!!services.dataset.monogramId && Number(services.dataset.monogramPrice) === 2500)) &&
         (text('Removal') !== 'Yes' || !!services.dataset.removalId) &&
         Number(services.dataset.deliveryPrice) === Number(services.dataset.expectedServiceFee);
       root.dataset.cartPreviewOnly = availableToOrder ? 'false' : 'true';

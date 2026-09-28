@@ -998,6 +998,10 @@ function configuredCartItems(form) {
   properties['_Delivery Variant ID'] = String(serviceProducts.dataset.deliveryId);
   addService(serviceProducts.dataset.deliveryId, 1, 'Delivery', 'delivery');
   if (monogram === 'Yes') {
+    if (!serviceProducts.dataset.monogramId ||
+        Number(serviceProducts.dataset.monogramPrice) !== APPROVED_VINYL_UNIT_PRICE_CENTS) {
+      throw new Error('Vinyl artwork must be available at $25 per pumpkin before it can be added to this design.');
+    }
     properties['_Monogram Variant ID'] = String(serviceProducts.dataset.monogramId || '');
     properties['_Monogram Unit Price'] = String(serviceProducts.dataset.monogramPrice || '');
     addService(serviceProducts?.dataset.monogramId, monogramQuantity, 'Vinyl artwork', 'monogram');
@@ -1289,6 +1293,7 @@ const APPROVED_SERVICE_FEES_BY_TIER = Object.freeze({
   medium: 5000,
   large: 8500
 });
+const APPROVED_VINYL_UNIT_PRICE_CENTS = 2500;
 
 async function validateCartServiceFees() {
   const cart = await cartJson();
@@ -1334,7 +1339,7 @@ async function validateCartServiceFees() {
       const vinylQuantity = Number(properties['Vinyl-wrapped Pumpkins']);
       const vinylPrice = Number(properties['_Monogram Unit Price']);
       if (monogram.length !== 1 || !variantMatches(monogram[0], properties['_Monogram Variant ID']) ||
-          !Number.isSafeInteger(vinylPrice) || vinylPrice <= 0 ||
+          vinylPrice !== APPROVED_VINYL_UNIT_PRICE_CENTS ||
           unitPrice(monogram[0]) !== vinylPrice || Number(monogram[0].quantity) !== vinylQuantity) {
         throw new Error('The vinyl artwork service product or quantity does not match this composition. Edit or remove it before checkout.');
       }
