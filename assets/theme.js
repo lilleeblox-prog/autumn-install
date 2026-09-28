@@ -600,7 +600,7 @@ function showDraftCartPreview(form, design) {
   put('[data-draft-cart-total]', estimate.knownCents > 0 ? money(estimate.knownCents) : 'Rate pending');
   put('[data-draft-cart-note]', estimate.pending.length
     ? `${estimate.pending.join(', ')} ${estimate.pending.length === 1 ? 'is' : 'are'} excluded until priced. This is a reference estimate, not an order. Nothing was added to the Shopify cart.`
-    : 'Reference estimates may change. Taxes and any shipping are not included. Nothing was added to the Shopify cart; this preview cannot place an order or reserve a week.');
+    : 'Reference estimates may change. Taxes and other checkout charges are not included. Nothing was added to the Shopify cart; this preview cannot place an order or reserve a week.');
   if (!dialog.open) dialog.showModal();
 }
 
