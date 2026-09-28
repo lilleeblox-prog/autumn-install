@@ -175,6 +175,64 @@ function setupProductPalette(form) {
   update();
 }
 
+// Requested weeks close at midnight Monday in the studio's Central time zone.
+const requestedWeekDateFormatter = new Intl.DateTimeFormat('en-US', {
+  timeZone: 'America/Chicago', year: 'numeric', month: '2-digit', day: '2-digit'
+});
+function studioTodayIso(now = new Date()) {
+  const parts = Object.fromEntries(requestedWeekDateFormatter.formatToParts(now).map(part => [part.type, part.value]));
+  return `${parts.year}-${parts.month}-${parts.day}`;
+}
+function requestedWeekStart(value) {
+  const match = /^Week of (Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec) (\d{1,2}), (\d{4})(?:$| [–-] )/.exec(value || '');
+  if (!match) return '';
+  const month = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'].indexOf(match[1]);
+  const year = Number(match[3]);
+  const day = Number(match[2]);
+  const date = new Date(Date.UTC(year, month, day));
+  if (date.getUTCFullYear() !== year || date.getUTCMonth() !== month ||
+      date.getUTCDate() !== day || date.getUTCDay() !== 1) return '';
+  return `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+}
+function requestedWeekOpen(value, now = new Date()) {
+  const start = requestedWeekStart(value);
+  return !!start && start > studioTodayIso(now);
+}
+function refreshRequestedWeeks(form) {
+  form.querySelectorAll('[data-requested-week]').forEach(control => {
+    if (control.tagName === 'SELECT') {
+      Array.from(control.options).forEach(option => {
+        if (option.value) option.disabled = !requestedWeekOpen(option.value);
+      });
+      if (control.value && !requestedWeekOpen(control.value)) {
+        control.value = '';
+        control.dispatchEvent(new Event('change', { bubbles: true }));
+      }
+    } else {
+      control.disabled = !requestedWeekOpen(control.value);
+      control.closest('.composer-week-card')?.classList.toggle('is-expired', control.disabled);
+      if (control.disabled && control.checked) {
+        control.checked = false;
+        control.dispatchEvent(new Event('change', { bubbles: true }));
+      }
+    }
+  });
+}
+function setupRequestedWeekAvailability(form) {
+  if (form.dataset.weekAvailabilityBound === 'true') return;
+  form.dataset.weekAvailabilityBound = 'true';
+  const refresh = () => refreshRequestedWeeks(form);
+  const tick = () => {
+    if (!form.isConnected) return;
+    refresh();
+    setTimeout(tick, 60000 - Date.now() % 60000 + 50);
+  };
+  tick();
+  document.addEventListener('visibilitychange', () => { if (!document.hidden) refresh(); });
+  window.addEventListener('focus', refresh);
+}
+window.paletteInstallWeekAvailability = { setup: setupRequestedWeekAvailability, open: requestedWeekOpen };
+
 const CONSULTATION_STORAGE_KEY = 'palette-install-consultation-v1';
 
 function saveConsultationDraft(choices) {
@@ -266,17 +324,20 @@ function setupProductJourney(form) {
   const monogramInputs = monogramFields ? monogramFields.querySelectorAll('input, select') : [];
    const dateLabel = form.querySelector('[data-date-label]');
    const weekSelect = form.querySelector('[data-requested-week]');
-   if (weekSelect?.tagName === 'SELECT' && weekSelect.options.length === 1) {
-     const today = new Date();
-     const monday = new Date(today.getFullYear(), today.getMonth(), today.getDate() - ((today.getDay() + 6) % 7));
-     const format = new Intl.DateTimeFormat('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+    if (weekSelect?.tagName === 'SELECT' && weekSelect.options.length === 1) {
+      const [year, month, day] = studioTodayIso().split('-').map(Number);
+      const today = new Date(Date.UTC(year, month - 1, day));
+      const daysUntilMonday = (8 - today.getUTCDay()) % 7 || 7;
+      const monday = new Date(Date.UTC(year, month - 1, day + daysUntilMonday));
+      const format = new Intl.DateTimeFormat('en-US', { month: 'short', day: 'numeric', year: 'numeric', timeZone: 'UTC' });
      for (let index = 0; index < 52; index++) {
-       const start = new Date(monday.getFullYear(), monday.getMonth(), monday.getDate() + index * 7);
-       const end = new Date(start.getFullYear(), start.getMonth(), start.getDate() + 6);
-       const label = `Week of ${format.format(start)} – ${format.format(end)}`;
+        const start = new Date(monday.getTime() + index * 7 * 86400000);
+        const end = new Date(start.getTime() + 6 * 86400000);
+        const label = `Week of ${format.format(start)} – ${format.format(end)}`;
        weekSelect.add(new Option(label, label));
      }
    }
+    if (weekSelect) setupRequestedWeekAvailability(form);
   const setVisibility = () => {
     const service = form.querySelector('[data-service]:checked');
     const isDelivery = service && service.dataset.service === 'delivery';
@@ -543,6 +604,10 @@ function showDraftCartPreview(form, design) {
 }
 
 function previewCartDesign(form) {
+  const requestedWeek = String(new FormData(form).get('properties[Requested Week]') || '');
+  if (requestedWeek && !requestedWeekOpen(requestedWeek)) {
+    throw new Error('This week has already started. Please select an upcoming week.');
+  }
   if (!form.checkValidity()) {
     const missingField = focusFirstInvalidComposerField(form);
     throw new Error(`Please complete ${missingField || 'the highlighted choices'} before previewing your cart.`);
@@ -617,6 +682,9 @@ function configuredCartItems(form) {
         input.type === 'radio' && input.checked && !input.disabled && input.value === requestedWeek);
   if (!requestedWeek || !validWeek) {
     throw new Error('Please select an upcoming week.');
+  }
+  if (!requestedWeekOpen(requestedWeek)) {
+    throw new Error('This week has already started. Please select an upcoming week.');
   }
   const service = data.get('properties[Service]');
   const monogram = data.get('properties[Vinyl Artwork]');
@@ -873,7 +941,10 @@ async function loadEditingComposition(form) {
   form.querySelector('[data-monogram-choice]:checked')?.dispatchEvent(new Event('change', { bubbles: true }));
   // The requested week may have expired since the original order; require a new choice then.
   const week = form.querySelector('[data-requested-week]');
-  if (Array.from(week.options).some(option => option.value === properties['Requested Week'])) week.value = properties['Requested Week'];
+  if (Array.from(week.options).some(option =>
+    option.value === properties['Requested Week'] && !option.disabled && requestedWeekOpen(option.value))) {
+    week.value = properties['Requested Week'];
+  }
   for (const [name, value] of Object.entries(properties)) {
     const input = Array.from(form.elements).find(element => element.name === `properties[${name}]` && element.type !== 'radio' && element.type !== 'file');
     if (input && name !== 'Requested Week') input.value = value;

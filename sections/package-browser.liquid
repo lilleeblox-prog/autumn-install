@@ -723,6 +723,14 @@
     border-color: var(--composer-oxide);
     background: var(--composer-paper);
   }
+  #PackageBrowser-{{ section.id }} .composer-week-card.is-expired,
+  #PackageBrowser-{{ section.id }} .composer-week-card.is-expired:hover {
+    opacity: .42;
+    cursor: not-allowed;
+    background: var(--composer-card);
+    border-color: rgba(62, 53, 43, .20);
+  }
+  #PackageBrowser-{{ section.id }} .composer-week-card.is-expired input { cursor: not-allowed; }
   #PackageBrowser-{{ section.id }} .composer-week-card:has(input:checked) {
     border-color: var(--composer-oxide);
     background: var(--composer-ink);
@@ -1131,6 +1139,7 @@
     const selectedScale = root.querySelector('[data-selected-scale]');
     const cards = Array.from(root.querySelectorAll('[data-composer-scale]'));
     const form = root.querySelector('[data-product-form]');
+    window.paletteInstallWeekAvailability.setup(form);
     const previewContent = root.querySelector('[data-sticky-preview]');
     const updateStickyOffset = () => {
       if (!previewContent) return;
