@@ -342,6 +342,7 @@ function setupSpecialInquiryDialog(dialog) {
   }
 
   contactForm.addEventListener('submit', async event => {
+    if (dialog.inquiryPrepared) return;
     event.preventDefault();
     if (!contactForm.reportValidity()) return;
     showError('');
@@ -353,7 +354,9 @@ function setupSpecialInquiryDialog(dialog) {
       const source = dialog.inquirySource;
       const retry = dialog.inquiryRetry;
       if (retry) {
-        HTMLFormElement.prototype.submit.call(contactForm);
+        dialog.inquiryPrepared = true;
+        submit.disabled = false;
+        contactForm.requestSubmit(submit);
         return;
       }
       if (!source) throw new Error('Your design details are no longer available. Return to the builder and try again.');
@@ -408,8 +411,13 @@ function setupSpecialInquiryDialog(dialog) {
       try {
         sessionStorage.setItem(INQUIRY_PENDING_KEY, JSON.stringify({ body: message }));
       } catch { /* Shopify's form.body still carries the full submitted message. */ }
-      HTMLFormElement.prototype.submit.call(contactForm);
+      // Dispatch the native submit event so Shopify's own contact-form spam
+      // protection and validation still run.
+      dialog.inquiryPrepared = true;
+      submit.disabled = false;
+      contactForm.requestSubmit(submit);
     } catch (problem) {
+      dialog.inquiryPrepared = false;
       showError(problem.message || 'Your inquiry was not sent. Please try again.');
       submit.disabled = false;
       submit.textContent = 'Send inquiry';
@@ -423,6 +431,7 @@ function openSpecialInquiry(sourceForm, choices) {
   setupSpecialInquiryDialog(dialog);
   dialog.inquirySource = sourceForm;
   dialog.inquiryChoices = choices;
+  dialog.inquiryPrepared = false;
   if (dialog.inquiryRetry) dialog.querySelector('[data-inquiry-body]').value = '';
   dialog.inquiryRetry = false;
   dialog.querySelector('[data-inquiry-summary]').textContent = consultationSummary(choices);
