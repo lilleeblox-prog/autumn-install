@@ -16,8 +16,12 @@
     {% endif %}
   {% endcapture %}
   <div class="container site-header__inner">
-    <a href="{{ routes.root_url }}" class="site-header__logo" aria-label="Palette Install home">
-      {{ section.settings.wordmark }}
+    <a href="{{ routes.root_url }}" class="site-header__logo" aria-label="Made To Welcome home">
+      {% if section.settings.logo_image != blank %}
+        {{ section.settings.logo_image | image_url: width: 520 | image_tag: class: 'site-header__logo-image', alt: 'Made To Welcome', widths: '220, 360, 520', loading: 'eager' }}
+      {% else %}
+        <img src="{{ 'made-to-welcome-logo.png' | asset_url }}" class="site-header__logo-image" alt="Made To Welcome" width="1956" height="641" fetchpriority="high">
+      {% endif %}
     </a>
     
     <button class="site-header__menu-toggle" type="button" aria-expanded="false" aria-controls="MobileNav" aria-label="Open navigation menu" data-menu-toggle>
@@ -66,11 +70,10 @@
   "name": "Header",
   "settings": [
     {
-      "type": "html",
-      "id": "wordmark",
-      "label": "Wordmark (HTML)",
-      "default": "palette<span>/</span>install",
-      "info": "Use <span> for the accent color."
+      "type": "image_picker",
+      "id": "logo_image",
+      "label": "Logo image",
+      "info": "Leave blank to use the current Made To Welcome logo."
     },
     {
       "type": "link_list",
