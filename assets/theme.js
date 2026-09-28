@@ -254,6 +254,7 @@ function productConsultationChoices(form) {
     palette: paletteGroup?.querySelector('input[type="radio"]:checked')?.value ||
       form.querySelector('[data-composer-palette]:checked')?.value || '',
     service: text('properties[Service]'),
+    serviceArea: text('properties[Service Area]'),
     artwork,
     artworkSelected: artwork === 'Yes' && !!form.querySelector('[data-artwork-file]')?.files?.[0],
     quantity: artwork === 'Yes' ? text('properties[Vinyl-wrapped Pumpkins]') : '',
@@ -292,6 +293,7 @@ function setupConsultationForm(root) {
       choices.display && `Display: ${choices.display}`,
       choices.palette && `Palette: ${choices.palette}`,
       choices.service && `Fulfillment: ${choices.service}`,
+      choices.serviceArea === 'Outside 25 miles of 36047' && 'Service area: Outside 25 miles of 36047 — consultation requested',
       includesHay && 'Hay bales: 2 included with the display',
       choices.artwork && `Vinyl artwork: ${choices.artwork}`,
       choices.artwork === 'Yes' && choices.quantity && `Vinyl-wrapped pumpkins: ${choices.quantity}`,
@@ -346,22 +348,24 @@ function setupProductJourney(form) {
     const customRequest = form.querySelector('[data-custom-request]');
     const customNote = form.querySelector('[data-custom-request-note]');
     if (customNote && customRequest) customNote.hidden = !customRequest.checked;
+    const outsideNote = form.querySelector('[data-outside-area-note]');
+    if (outsideNote) outsideNote.hidden = !form.querySelector('[data-service-area="outside"]:checked');
     if (monogramFields) monogramFields.hidden = !hasMonogram;
     monogramInputs.forEach(input => { input.disabled = !hasMonogram; input.required = !!hasMonogram; });
     if (dateLabel) dateLabel.innerHTML = isDelivery
        ? '03 / Requested delivery week'
        : '03 / Requested delivery &amp; installation week';
   };
-  form.querySelectorAll('[data-service], [data-monogram-choice], [data-custom-request]').forEach(input => input.addEventListener('change', setVisibility));
+  form.querySelectorAll('[data-service], [data-monogram-choice], [data-custom-request], [data-service-area]').forEach(input => input.addEventListener('change', setVisibility));
   const saveChoices = () => saveConsultationDraft(productConsultationChoices(form));
   form.addEventListener('change', saveChoices);
   form.querySelector('[name="properties[General Notes]"]')?.addEventListener('input', saveChoices);
-  form.querySelector('[data-consultation-link]')?.addEventListener('click', event => {
+  form.querySelectorAll('[data-consultation-link]').forEach(link => link.addEventListener('click', event => {
     if (!saveChoices()) {
       event.preventDefault();
       productFormError(form, 'Your choices could not be carried to the consultation form. Please try again in this tab.');
     }
-  });
+  }));
   setVisibility();
 }
 
@@ -616,6 +620,12 @@ function previewCartDesign(form) {
   if (form.querySelector('[data-custom-request]')?.checked) {
     throw new Error('A special request needs a consultation before it can be included in a cart preview.');
   }
+  if (form.querySelector('[data-service-area="outside"]:checked')) {
+    throw new Error('Outside our 25-mile service area? Please request a consultation instead of reviewing an order.');
+  }
+  if (!form.querySelector('[data-service-area="within"]:checked')) {
+    throw new Error('Please confirm the delivery or installation address is within 25 miles of 36047.');
+  }
   const data = new FormData(form);
   const artwork = form.querySelector('[data-artwork-file]')?.files?.[0];
   const vinylArtwork = String(data.get('properties[Vinyl Artwork]') || '');
@@ -668,6 +678,12 @@ function configuredCartItems(form) {
   }
   if (form.querySelector('[data-custom-request]')?.checked) {
     throw new Error('Further customization needs a consultation before this design can be ordered. Please request a consultation.');
+  }
+  if (form.querySelector('[data-service-area="outside"]:checked')) {
+    throw new Error('Outside our 25-mile service area? Please request a consultation instead of ordering.');
+  }
+  if (!form.querySelector('[data-service-area="within"]:checked')) {
+    throw new Error('Please confirm the delivery or installation address is within 25 miles of 36047.');
   }
   const data = new FormData(form);
   const masterId = String(data.get('id') || '');
@@ -724,6 +740,7 @@ function configuredCartItems(form) {
     '_Composition ID': compositionId,
     'Requested Week': requestedWeek,
     'Service': service,
+    'Service Area': 'Within 25 miles of 36047',
     'Vinyl Artwork': monogram,
     'Removal': removal,
     'Hay Bales': hayBales
@@ -1000,6 +1017,12 @@ function validateCartGroups(cartForm) {
     const expected = [];
     if (!['Custom installation', 'Delivery only'].includes(base[0].dataset.service)) {
       error.textContent = 'Choose a valid fulfillment method before checkout.';
+      return false;
+    }
+    if (base[0].dataset.serviceArea !== 'Within 25 miles of 36047') {
+      error.textContent = base[0].dataset.serviceArea === 'Outside 25 miles of 36047'
+        ? 'Outside our service area? Please request a consultation instead of checking out.'
+        : 'Please edit your design and confirm the delivery or installation address is within 25 miles of 36047.';
       return false;
     }
     if (!['Yes', 'No'].includes(base[0].dataset.hay)) {

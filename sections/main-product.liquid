@@ -299,6 +299,14 @@
            </div>
          </fieldset>
          <p class="field-hint">At checkout, use the address where you want the display installed or delivered. The delivery service is charged once for either choice.</p>
+         <fieldset>
+           <legend>Is that address within 25 miles of 36047?</legend>
+           <div class="choice-list">
+             <label class="choice-option"><input type="radio" name="properties[Service Area]" value="Within 25 miles of 36047" data-service-area="within" required> Yes, within the area</label>
+             <label class="choice-option"><input type="radio" name="properties[Service Area]" value="Outside 25 miles of 36047" data-service-area="outside" required> No, outside the area</label>
+           </div>
+         </fieldset>
+         <p class="field-hint" data-outside-area-note hidden>Outside our service area? Please request a consultation before ordering. Your choices will carry over. {% if pages.contact != blank %}<a href="{{ pages.contact.url }}#consultation-form" data-consultation-link>Open the inquiry form &rarr;</a>{% else %}Please contact the studio before ordering.{% endif %}</p>
        </div>
 
         <div class="journey-step">
