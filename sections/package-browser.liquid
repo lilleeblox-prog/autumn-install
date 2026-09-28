@@ -1015,7 +1015,7 @@
         </fieldset>
         <label class="composer-field" for="InstallationZip-{{ section.id }}">Installation or delivery ZIP code
           <input id="InstallationZip-{{ section.id }}" type="text" inputmode="numeric" autocomplete="postal-code" name="properties[Installation ZIP]" pattern="[0-9]{5}" maxlength="5" placeholder="Enter your ZIP code" data-installation-zip required>
-          <small>Enter the ZIP where your display will go. We serve ZIPs around 36047; outside requests begin with a consultation.</small>
+          <small>Enter the ZIP where your display will go. ZIPs not on our Franklin-area delivery list begin with a consultation.</small>
         </label>
         <p class="composer-field__hint" data-outside-area-note role="status" hidden>This ZIP is outside our standard service area. Please request a consultation before ordering. {% if pages.contact != blank %}Your design choices will carry over. <a href="{{ pages.contact.url }}#consultation-form" data-consultation-link>Open the inquiry form →</a>{% else %}Please contact the studio before ordering.{% endif %}</p>
         <fieldset class="composer-week-choice">
@@ -1403,11 +1403,17 @@
       event.preventDefault();
       openConsultation(event.currentTarget);
     }));
-    form.addEventListener('input', updateBrief);
-    form.addEventListener('change', event => {
-      updateBrief();
+    const updateOutsideNote = () => {
       const outsideNote = root.querySelector('[data-outside-area-note]');
       if (outsideNote) outsideNote.hidden = window.paletteInstallServiceArea.check(text('Installation ZIP')) !== 'outside';
+    };
+    form.addEventListener('input', () => {
+      updateBrief();
+      updateOutsideNote();
+    });
+    form.addEventListener('change', event => {
+      updateBrief();
+      updateOutsideNote();
       if (event.target.matches('[data-service], [data-monogram-choice], input[name="properties[Removal]"]')) {
         selectScale(activeScale);
       }

@@ -301,7 +301,7 @@
          <p class="field-hint">At checkout, use the address where you want the display installed or delivered. The delivery service is charged once for either choice.</p>
          <label for="InstallationZip-{{ section.id }}">Installation or delivery ZIP code</label>
          <input id="InstallationZip-{{ section.id }}" class="form-input" type="text" inputmode="numeric" autocomplete="postal-code" name="properties[Installation ZIP]" pattern="[0-9]{5}" maxlength="5" placeholder="Enter your ZIP code" data-installation-zip required>
-         <p class="field-hint">Enter the ZIP where your display will go. We serve ZIPs around 36047; outside requests begin with a consultation.</p>
+          <p class="field-hint">Enter the ZIP where your display will go. ZIPs not on our Franklin-area delivery list begin with a consultation.</p>
          <p class="field-hint" data-outside-area-note role="status" hidden>This ZIP is outside our standard service area. Please request a consultation before ordering. Your choices will carry over. {% if pages.contact != blank %}<a href="{{ pages.contact.url }}#consultation-form" data-consultation-link>Open the inquiry form &rarr;</a>{% else %}Please contact the studio before ordering.{% endif %}</p>
        </div>
 
