@@ -228,7 +228,6 @@
     },
     "contact": {
       "type": "contact-form",
-      "disabled": true,
       "settings": {
         "eyebrow": "The conversation / Begin here",
         "title": "Tell us about the space.",
@@ -309,7 +308,6 @@
         "q7",
         "q8"
       ],
-      "disabled": true,
       "settings": {
         "eyebrow": "The particulars / Good to know",
         "title": "The little things worth knowing",

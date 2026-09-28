@@ -1,8 +1,34 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
 {
   "current": {
     "color_background": "#f4f0e8",
     "color_foreground": "#302d28",
-    "color_accent": "#955c42"
+    "color_accent": "#955c42",
+    "sections": {
+      "header": {
+        "type": "header",
+        "settings": {
+          "menu": "main-menu"
+        }
+      },
+      "footer": {
+        "type": "footer",
+        "settings": {
+          "brand_name": "Made to Welcome",
+          "text": "The season begins at the door. Thoughtful color and a warm welcome, made for your space.",
+          "footer_note": "A welcome that feels like home"
+        }
+      }
+    },
+    "content_for_index": []
   },
   "presets": {
     "Default": {
