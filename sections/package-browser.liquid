@@ -818,6 +818,12 @@
   }
   #PackageBrowser-{{ section.id }}[data-review-stage=build] [data-approve-design],
   #PackageBrowser-{{ section.id }}[data-review-stage=build] [data-edit-design] { display:none !important; }
+  @media(min-width:901px) {
+    #PackageBrowser-{{ section.id }}[data-review-stage=build] .palette-composer__preview-content {
+      position: sticky;
+      top: var(--composer-preview-stick-top, 24px);
+    }
+  }
   @media(max-width:900px) {
     #PackageBrowser-{{ section.id }}[data-mobile-pane=preview][data-review-stage=build] .composer-editor-approval { display:none !important; }
   }
@@ -1027,6 +1033,7 @@
       <div id="product-form-error" class="hidden" role="alert" aria-live="assertive" aria-atomic="true"></div>
     </div>
     <aside class="palette-composer__preview" data-composer-pane="preview" aria-label="Live design review">
+      <div class="palette-composer__preview-content" data-sticky-preview>
       <div class="palette-composer__preview-intro">
         <button type="button" data-edit-design>&larr; Edit design</button>
         <span class="eyebrow">Your entrance / In the making</span>
@@ -1070,6 +1077,7 @@
           <div class="product-approval" data-approval-status hidden role="status"><strong>Your design is ready to review</strong><p>Take a closer look at each part of your composition in the cart before checkout.</p></div>
           <button type="submit" data-cart-submit hidden>Review your composition</button>
         </div>
+      </div>
       </div>
     </aside>
     <div class="composer-editor-approval">
@@ -1123,6 +1131,18 @@
     const selectedScale = root.querySelector('[data-selected-scale]');
     const cards = Array.from(root.querySelectorAll('[data-composer-scale]'));
     const form = root.querySelector('[data-product-form]');
+    const previewContent = root.querySelector('[data-sticky-preview]');
+    const updateStickyOffset = () => {
+      if (!previewContent) return;
+      const contentHeight = previewContent.getBoundingClientRect().height;
+      previewContent.style.setProperty('--composer-preview-stick-top',
+        `${Math.min(24, window.innerHeight - contentHeight - 24)}px`);
+    };
+    if (previewContent && 'ResizeObserver' in window) {
+      new ResizeObserver(updateStickyOffset).observe(previewContent);
+      window.addEventListener('resize', updateStickyOffset);
+      updateStickyOffset();
+    }
     const variantSelect = form.querySelector('[data-base-variant]');
       const services = form.querySelector('[data-service-products]');
     const hayProperty = form.querySelector('[data-hay-property]');
