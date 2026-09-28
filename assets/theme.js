@@ -1484,7 +1484,12 @@ document.addEventListener('DOMContentLoaded', () => {
     const approveButtons = Array.from(productForm.querySelectorAll('[data-approve-design]'));
     const submit = productForm.querySelector('[data-cart-submit]');
     const approvalStatus = productForm.querySelector('[data-approval-status]');
+    if (!approveButtons.length || !submit || !approvalStatus) {
+      productForm.addEventListener('submit', event => event.preventDefault());
+      return;
+    }
     const resetApproval = () => {
+      if (productForm.dataset.cartSubmitting === 'true') return;
       if (productForm.dataset.cartNeedsReview === 'true') {
         approvalStatus.hidden = true;
         return;
@@ -1497,48 +1502,14 @@ document.addEventListener('DOMContentLoaded', () => {
     };
     productForm.addEventListener('input', resetApproval);
     productForm.addEventListener('change', resetApproval);
-    const approveDesign = () => {
-      try {
-        if (productForm.closest('[data-package-browser]')?.dataset.cartPreviewOnly === 'true') {
-          previewCartDesign(productForm);
-          return;
-        }
-        configuredCartItems(productForm);
-        productForm.dataset.approvedSignature = designSignature(productForm);
-        approvalStatus.hidden = false;
-        submit.hidden = false;
-        approveButtons.forEach(button => { button.hidden = true; });
-        productFormError(productForm, '');
-        // A valid approval goes straight through the existing cart flow.
-        productForm.requestSubmit(submit);
-      } catch (error) {
-        productFormError(productForm, error.message);
-        if (error.message.includes('Fill out the consultation form') &&
-            serviceAreaForZip(productForm.querySelector('[data-installation-zip]')?.value) === 'outside') {
-          productForm.querySelector('[data-outside-area-note] a')?.focus();
-        }
-      }
-    };
-    approveButtons.forEach(button => button.addEventListener('click', approveDesign));
-    productForm.addEventListener('submit', async (event) => {
-      event.preventDefault();
-      if (!productForm.dataset.approvedSignature || productForm.dataset.approvedSignature !== designSignature(productForm)) {
-        resetApproval();
-        productFormError(productForm, 'Please approve your updated design before reviewing your composition.');
-        return;
-      }
-      let configured;
-      try {
-        configured = configuredCartItems(productForm);
-      } catch (error) {
-        resetApproval();
-        productFormError(productForm, error.message);
-        return;
-      }
+    const submitApprovedDesign = async (configured) => {
+      if (productForm.dataset.cartSubmitting === 'true') return;
+      productForm.dataset.cartSubmitting = 'true';
       submit.disabled = true;
       submit.textContent = 'Preparing your design…';
       const cartUrl = window.cartUrl || '/cart';
       const requireCartReview = (message) => {
+        productForm.dataset.cartSubmitting = 'false';
         productForm.dataset.cartNeedsReview = 'true';
         approveButtons.forEach(button => { button.disabled = true; });
         approvalStatus.hidden = true;
@@ -1579,9 +1550,51 @@ document.addEventListener('DOMContentLoaded', () => {
           return;
         }
         productFormError(productForm, error.message || 'Your selection could not be updated. Please try again.');
+        productForm.dataset.cartSubmitting = 'false';
         submit.disabled = false;
         submit.textContent = 'Review your composition';
       }
+    };
+    const approveDesign = () => {
+      try {
+        if (productForm.closest('[data-package-browser]')?.dataset.cartPreviewOnly === 'true') {
+          throw new Error('This design cannot be added to the Shopify cart until its display and required services are available. No items were added.');
+        }
+        const configured = configuredCartItems(productForm);
+        productForm.dataset.approvedSignature = designSignature(productForm);
+        approvalStatus.hidden = false;
+        submit.hidden = false;
+        approveButtons.forEach(button => { button.hidden = true; });
+        productFormError(productForm, '');
+        // Use the validated snapshot directly. A synthetic form submission can
+        // fire other form listeners and invalidate approval before cart addition.
+        void submitApprovedDesign(configured);
+      } catch (error) {
+        productFormError(productForm, error.message);
+        if (error.message.includes('Fill out the consultation form') &&
+            serviceAreaForZip(productForm.querySelector('[data-installation-zip]')?.value) === 'outside') {
+          productForm.querySelector('[data-outside-area-note] a')?.focus();
+        }
+      }
+    };
+    approveButtons.forEach(button => button.addEventListener('click', approveDesign));
+    productForm.addEventListener('submit', (event) => {
+      event.preventDefault();
+      if (productForm.dataset.cartSubmitting === 'true') return;
+      if (!productForm.dataset.approvedSignature || productForm.dataset.approvedSignature !== designSignature(productForm)) {
+        resetApproval();
+        productFormError(productForm, 'Please approve your updated design before reviewing your composition.');
+        return;
+      }
+      let configured;
+      try {
+        configured = configuredCartItems(productForm);
+      } catch (error) {
+        resetApproval();
+        productFormError(productForm, error.message);
+        return;
+      }
+      void submitApprovedDesign(configured);
     });
     loadEditingComposition(productForm).catch(error => {
       approveButtons.forEach(button => { button.disabled = true; });
