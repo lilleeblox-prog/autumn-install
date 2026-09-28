@@ -9,32 +9,13 @@
  */
 {
   "sections": {
-    "hero": {
-      "type": "hero",
-      "disabled": true,
-      "settings": {
-        "eyebrow": "Seasonal styling for the spaces that welcome us",
-        "heading": "A beautiful welcome\n<em>begins here.</em>",
-        "text": "Let your entrance feel as considered as the rooms beyond it. Choose a color story and a scale that belong to your space; we'll help you make it your own.",
-        "button_label": "Create your welcome",
-        "button_link": "#compose",
-        "secondary_label": "See the displays",
-        "secondary_link": "",
-        "caption": "Plate 01 / The Porch"
-      }
-    },
     "process": {
       "type": "process-steps",
-      "settings": {
-        "title": "Made for the way you welcome.",
-        "text": "An entrance can set the mood for the whole season. Start with a palette, find the right proportions, then gather the details into a design that feels distinctly yours.",
-        "button_label": "Begin your design",
-        "button_link": "#compose"
-      },
       "blocks": {
         "step1": {
           "type": "step",
           "settings": {
+            "kicker": "",
             "title": "01 / Find your color story",
             "text": "Warm and familiar, quietly classic, or a little unexpected. Choose the colors you would love to come home to."
           }
@@ -42,6 +23,7 @@
         "step2": {
           "type": "step",
           "settings": {
+            "kicker": "",
             "title": "02 / Consider the proportions",
             "text": "A small stoop and a generous staircase call for different gestures. Find the composition that gives your entry room to shine."
           }
@@ -49,18 +31,156 @@
         "step3": {
           "type": "step",
           "settings": {
+            "kicker": "",
             "title": "03 / Make it yours",
             "text": "Choose how it arrives, add any personal touches, and take one last look at your design and estimate before approving it for cart review."
           }
         }
       },
-      "block_order": ["step1", "step2", "step3"]
+      "block_order": [
+        "step1",
+        "step2",
+        "step3"
+      ],
+      "settings": {
+        "section_id": "process",
+        "title": "Made for the way you welcome.",
+        "eyebrow": "Our approach / From idea to entrance",
+        "text": "An entrance can set the mood for the whole season. Start with a palette, find the right proportions, then gather the details into a design that feels distinctly yours.",
+        "button_label": "Begin your design",
+        "button_link": "#compose"
+      }
     },
     "packages": {
       "type": "package-browser",
+      "blocks": {
+        "palette-countryside": {
+          "type": "palette_image",
+          "settings": {
+            "reference_asset": "palette-countryside-landscape",
+            "palette": "Autumn in the Countryside",
+            "position_x": 50,
+            "position_y": 50,
+            "zoom": 100,
+            "flip_180": false
+          }
+        },
+        "palette-classic-harvest": {
+          "type": "palette_image",
+          "settings": {
+            "reference_asset": "palette-classic-harvest-landscape",
+            "palette": "Classic Harvest",
+            "position_x": 50,
+            "position_y": 50,
+            "zoom": 100,
+            "flip_180": false
+          }
+        },
+        "palette-coastal-cowgirl": {
+          "type": "palette_image",
+          "settings": {
+            "reference_asset": "palette-coastal-cowgirl-landscape",
+            "palette": "Coastal Cowgirl",
+            "position_x": 50,
+            "position_y": 50,
+            "zoom": 100,
+            "flip_180": false
+          }
+        },
+        "small": {
+          "type": "package",
+          "settings": {
+            "product": "the-stoop",
+            "scale_name": "The Stoop",
+            "draft_estimate_cents": 42500,
+            "service_fee_tier": "small",
+            "included_items": "6 Large Pumpkins\n6 Medium Pumpkins\n6 White Pumpkins\nAssortment of Specialty Pumpkins\nAssortment of Pie Pumpkins",
+            "default_selected": false,
+            "most_popular": false,
+            "subtitle_fallback": "An intimate welcome",
+            "room_fallback": "A lovely fit for a single door or narrow stoop"
+          }
+        },
+        "medium": {
+          "type": "package",
+          "settings": {
+            "product": "the-porch",
+            "scale_name": "The Porch",
+            "draft_estimate_cents": 82500,
+            "service_fee_tier": "medium",
+            "included_items": "8 Large Pumpkins\n8 Medium Pumpkins\n8 White Pumpkins\nAssortment of Specialty Pumpkins\nAssortment of Pie Pumpkins\n2 Hay Bales",
+            "default_selected": true,
+            "most_popular": true,
+            "subtitle_fallback": "A generous welcome",
+            "room_fallback": "For a porch or a pair of welcoming steps"
+          }
+        },
+        "large": {
+          "type": "package",
+          "settings": {
+            "product": "the-estate",
+            "scale_name": "The Estate",
+            "draft_estimate_cents": 125000,
+            "service_fee_tier": "large",
+            "included_items": "2 Grand Prize Pumpkins\n10 Large Pumpkins\n8 Medium Pumpkins\n8 White Pumpkins\n16 Specialty Pumpkins\n2 Hay Bales\nassortment of minis\nOrnamental Gourds\nAssortment of Pie Pumpkins",
+            "default_selected": false,
+            "most_popular": false,
+            "subtitle_fallback": "A grand welcome",
+            "room_fallback": "For wide steps or a spacious storefront"
+          }
+        },
+        "week-sep-28": {
+          "type": "requested_week",
+          "settings": {
+            "week_label": "Sep 28",
+            "week_value": "Week of Sep 28, 2026"
+          }
+        },
+        "week-oct-5": {
+          "type": "requested_week",
+          "settings": {
+            "week_label": "Oct 5",
+            "week_value": "Week of Oct 5, 2026"
+          }
+        },
+        "week-oct-12": {
+          "type": "requested_week",
+          "settings": {
+            "week_label": "Oct 12",
+            "week_value": "Week of Oct 12, 2026"
+          }
+        },
+        "week-oct-19": {
+          "type": "requested_week",
+          "settings": {
+            "week_label": "Oct 19",
+            "week_value": "Week of Oct 19, 2026"
+          }
+        },
+        "week-oct-26": {
+          "type": "requested_week",
+          "settings": {
+            "week_label": "Oct 26",
+            "week_value": "Week of Oct 26, 2026"
+          }
+        }
+      },
+      "block_order": [
+        "palette-countryside",
+        "palette-classic-harvest",
+        "palette-coastal-cowgirl",
+        "small",
+        "medium",
+        "large",
+        "week-sep-28",
+        "week-oct-5",
+        "week-oct-12",
+        "week-oct-19",
+        "week-oct-26"
+      ],
       "settings": {
-        "eyebrow": "Palette Install / Seasonal interiors",
         "section_id": "compose",
+        "eyebrow": "Palette Install / Seasonal interiors",
         "title": "A welcome|all your own.",
         "text": "Your doorway is the first room anyone sees. Let’s give it the same warmth, color, and attention as everything within.",
         "palette_heading": "01 / The palette",
@@ -78,105 +198,36 @@
         "removal_large_product": "removal-the-estate",
         "monogram_product": "vinyl-artwork-per-pumpkin",
         "vinyl_estimate_cents": 2500
-      },
-      "blocks": {
-        "small": {
-          "type": "package",
-          "settings": {
-            "product": "the-stoop",
-            "service_fee_tier": "small",
-            "scale_name": "The Stoop",
-            "draft_estimate_cents": 42500,
-            "included_items": "6 Large Pumpkins\n6 Medium Pumpkins\n6 White Pumpkins\nAssortment of Specialty Pumpkins\nAssortment of Pie Pumpkins",
-            "subtitle_fallback": "An intimate welcome",
-            "room_fallback": "A lovely fit for a single door or narrow stoop"
-          }
-        },
-        "medium": {
-          "type": "package",
-          "settings": {
-            "product": "the-porch",
-            "service_fee_tier": "medium",
-            "scale_name": "The Porch",
-            "draft_estimate_cents": 82500,
-            "included_items": "8 Large Pumpkins\n8 Medium Pumpkins\n8 White Pumpkins\nAssortment of Specialty Pumpkins\nAssortment of Pie Pumpkins\n2 Hay Bales",
-            "default_selected": true,
-            "most_popular": true,
-            "subtitle_fallback": "A generous welcome",
-            "room_fallback": "For a porch or a pair of welcoming steps"
-          }
-        },
-        "large": {
-          "type": "package",
-          "settings": {
-            "product": "the-estate",
-            "service_fee_tier": "large",
-            "scale_name": "The Estate",
-            "draft_estimate_cents": 125000,
-            "included_items": "2 Grand Prize Pumpkins\n10 Large Pumpkins\n8 Medium Pumpkins\n8 White Pumpkins\n16 Specialty Pumpkins\n2 Hay Bales\nassortment of minis\nOrnamental Gourds\nAssortment of Pie Pumpkins",
-            "subtitle_fallback": "A grand welcome",
-            "room_fallback": "For wide steps or a spacious storefront"
-          }
-        },
-        "palette-countryside": {
-          "type": "palette_image",
-          "settings": {
-            "palette": "Autumn in the Countryside",
-            "reference_asset": "palette-countryside-landscape"
-          }
-        },
-        "palette-classic-harvest": {
-          "type": "palette_image",
-          "settings": {
-            "palette": "Classic Harvest",
-            "reference_asset": "palette-classic-harvest-landscape"
-          }
-        },
-        "palette-coastal-cowgirl": {
-          "type": "palette_image",
-          "settings": {
-            "palette": "Coastal Cowgirl",
-            "reference_asset": "palette-coastal-cowgirl-landscape"
-          }
-        },
-        "week-sep-28": {
-          "type": "requested_week",
-          "settings": { "week_label": "Sep 28", "week_value": "Week of Sep 28, 2026" }
-        },
-        "week-oct-5": {
-          "type": "requested_week",
-          "settings": { "week_label": "Oct 5", "week_value": "Week of Oct 5, 2026" }
-        },
-        "week-oct-12": {
-          "type": "requested_week",
-          "settings": { "week_label": "Oct 12", "week_value": "Week of Oct 12, 2026" }
-        },
-        "week-oct-19": {
-          "type": "requested_week",
-          "settings": { "week_label": "Oct 19", "week_value": "Week of Oct 19, 2026" }
-        },
-        "week-oct-26": {
-          "type": "requested_week",
-          "settings": { "week_label": "Oct 26", "week_value": "Week of Oct 26, 2026" }
-        }
-      },
-      "block_order": ["palette-countryside", "palette-classic-harvest", "palette-coastal-cowgirl", "small", "medium", "large", "week-sep-28", "week-oct-5", "week-oct-12", "week-oct-19", "week-oct-26"]
+      }
+    },
+    "hero": {
+      "type": "hero",
+      "disabled": true,
+      "settings": {
+        "eyebrow": "Seasonal styling for the spaces that welcome us",
+        "heading": "A beautiful welcome\n<em>begins here.</em>",
+        "text": "Let your entrance feel as considered as the rooms beyond it. Choose a color story and a scale that belong to your space; we'll help you make it your own.",
+        "button_label": "Create your welcome",
+        "button_link": "#compose",
+        "secondary_label": "See the displays",
+        "secondary_link": "",
+        "caption": "Plate 01 / The Porch"
+      }
     },
     "studio-about": {
       "type": "image-with-text",
+      "disabled": true,
       "settings": {
+        "layout": "left",
         "eyebrow": "A note from the studio",
         "title": "The feeling begins at the door.",
         "text": "<p>We believe the entrance deserves as much thought as the room beyond it. Color, proportion, and the character of your space all have a part to play in a welcome that feels like yours.</p>",
-        "layout": "left"
+        "button_label": "",
+        "button_link": ""
       }
     },
     "faq": {
       "type": "faq",
-      "settings": {
-        "title": "The little things worth knowing",
-        "intro": "From the first conversation to the finishing touches, here is what to expect when shaping a welcome of your own."
-      },
       "blocks": {
         "q1": {
           "type": "qa",
@@ -235,19 +286,41 @@
           }
         }
       },
-      "block_order": ["q1", "q2", "q3", "q4", "q5", "q6", "q7", "q8"]
+      "block_order": [
+        "q1",
+        "q2",
+        "q3",
+        "q4",
+        "q5",
+        "q6",
+        "q7",
+        "q8"
+      ],
+      "settings": {
+        "eyebrow": "The particulars / Good to know",
+        "title": "The little things worth knowing",
+        "intro": "From the first conversation to the finishing touches, here is what to expect when shaping a welcome of your own."
+      }
     },
     "contact": {
       "type": "contact-form",
-      "settings": {}
+      "settings": {
+        "eyebrow": "The conversation / Begin here",
+        "title": "Tell us about the space.",
+        "text": "The doorway, the occasion, the feeling you want guests to have. The best compositions begin with a conversation.",
+        "form_heading": "Let’s talk about your idea.",
+        "form_intro": "Need a different scale, a particular palette, or a design for a unique space? A consultation lets us discuss what’s possible before confirming scope, pricing, or a date.",
+        "submit_label": "Send an inquiry",
+        "form_note": "A consultation request is not a confirmed booking, quote, or order."
+      }
     }
   },
   "order": [
+    "process",
     "packages",
     "hero",
-    "process",
     "studio-about",
-    "faq",
-    "contact"
+    "contact",
+    "faq"
   ]
 }
