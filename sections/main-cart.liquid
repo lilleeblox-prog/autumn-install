@@ -96,7 +96,7 @@
           {% if artwork_url_https == 'https://cdn.shopify.com/' or artwork_url_relative == '//cdn.shopify.com/' %}
             {% assign has_uploaded_artwork = true %}
           {% endif %}
-          <div class="cart-item{% if composition_id != blank %} cart-item--grouped{% endif %}" data-cart-item data-line-key="{{ item.key | escape }}" data-composition-id="{{ composition_id | escape }}" data-service-kind="{{ service_kind | escape }}" data-item-quantity="{{ item.quantity }}" data-display-size="{{ item.product.handle | split: '-' | first | escape }}" data-service="{{ item.properties['Service'] | escape }}" data-service-area="{{ item.properties['Service Area'] | escape }}" data-hay="{{ item.properties['Hay Bales'] | escape }}" data-monogram="{{ artwork_choice | escape }}" data-monogram-qty="{{ artwork_quantity | escape }}" data-artwork-required="{% if item.properties['Vinyl Artwork'] == 'Yes' %}true{% else %}false{% endif %}" data-artwork-present="{{ has_uploaded_artwork }}" data-removal="{{ item.properties['Removal'] | escape }}">
+          <div class="cart-item{% if composition_id != blank %} cart-item--grouped{% endif %}" data-cart-item data-line-key="{{ item.key | escape }}" data-composition-id="{{ composition_id | escape }}" data-service-kind="{{ service_kind | escape }}" data-item-quantity="{{ item.quantity }}" data-display-size="{{ item.product.handle | split: '-' | first | escape }}" data-service="{{ item.properties['Service'] | escape }}" data-installation-zip="{{ item.properties['Installation ZIP'] | escape }}" data-hay="{{ item.properties['Hay Bales'] | escape }}" data-monogram="{{ artwork_choice | escape }}" data-monogram-qty="{{ artwork_quantity | escape }}" data-artwork-required="{% if item.properties['Vinyl Artwork'] == 'Yes' %}true{% else %}false{% endif %}" data-artwork-present="{{ has_uploaded_artwork }}" data-removal="{{ item.properties['Removal'] | escape }}">
             <div class="cart-item__image">
               {% if item.image %}
                 <img src="{{ item.image | image_url: width: 200 }}" width="{{ item.image.width }}" height="{{ item.image.height }}" alt="{{ item.image.alt | escape }}" loading="lazy">
@@ -158,7 +158,7 @@
           <span>Estimated Total</span>
           <span>{{ cart.total_price | money }}</span>
         </div>
-           <p class="cart-note">Your display and services appear as separate lines. To change a detail, choose “Edit design” above. At checkout, enter the address where you want the display installed or delivered. The delivery service above is charged once; your preferred week still needs confirmation. Review the final total before paying.</p>
+            <p class="cart-note">Your display and services appear as separate lines. To change a detail, choose “Edit design” above. At checkout, enter the full address where you want the display installed or delivered, using the same ZIP you chose for your design. The delivery service above is charged once; your preferred week still needs confirmation. Review the final total before paying.</p>
             <p class="cart-note">We serve addresses within 25 miles of 36047. Outside that area? {% if pages.contact != blank %}<a href="{{ pages.contact.url }}#consultation-form">Request a consultation instead</a>.{% else %}Please contact the studio before ordering.{% endif %}</p>
         <div class="cart-buttons">
           <button type="submit" name="update" class="button button--secondary">Update selection</button>

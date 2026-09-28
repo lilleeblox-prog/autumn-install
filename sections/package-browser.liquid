@@ -1013,11 +1013,11 @@
           <label><input class="composer-hidden" type="radio" name="properties[Service]" value="Custom installation" data-service="install" required><span>Custom installation</span><small>We style the display at your entry.</small></label>
           <label><input class="composer-hidden" type="radio" name="properties[Service]" value="Delivery only" data-service="delivery" required><span>Delivery only</span><small>The pieces arrive for you to arrange.</small></label>
         </fieldset>
-        <fieldset class="composer-choice composer-choice--full-card"><legend>Is your installation or delivery address within 25 miles of 36047?</legend>
-          <label><input class="composer-hidden" type="radio" name="properties[Service Area]" value="Within 25 miles of 36047" data-service-area="within" required><span>Yes, within the area</span><small>Continue with your design.</small></label>
-          <label><input class="composer-hidden" type="radio" name="properties[Service Area]" value="Outside 25 miles of 36047" data-service-area="outside" required><span>No, outside the area</span><small>Let’s discuss your location first.</small></label>
-        </fieldset>
-        <p class="composer-field__hint" data-outside-area-note hidden>Outside our 25-mile service area? Please request a consultation before ordering. {% if pages.contact != blank %}Your design choices will carry over. <a href="{{ pages.contact.url }}#consultation-form" data-consultation-link>Open the inquiry form →</a>{% else %}Please contact the studio before ordering.{% endif %}</p>
+        <label class="composer-field" for="InstallationZip-{{ section.id }}">Installation or delivery ZIP code
+          <input id="InstallationZip-{{ section.id }}" type="text" inputmode="numeric" autocomplete="postal-code" name="properties[Installation ZIP]" pattern="[0-9]{5}" maxlength="5" placeholder="Enter your ZIP code" data-installation-zip required>
+          <small>Enter the ZIP where your display will go. We serve ZIPs around 36047; outside requests begin with a consultation.</small>
+        </label>
+        <p class="composer-field__hint" data-outside-area-note role="status" hidden>This ZIP is outside our standard service area. Please request a consultation before ordering. {% if pages.contact != blank %}Your design choices will carry over. <a href="{{ pages.contact.url }}#consultation-form" data-consultation-link>Open the inquiry form →</a>{% else %}Please contact the studio before ordering.{% endif %}</p>
         <fieldset class="composer-week-choice">
           <legend data-requested-week-label>Requested delivery &amp; installation week</legend>
           <div class="composer-week-grid">
@@ -1188,7 +1188,7 @@
         displaySize: activeScale?.dataset.displaySize || '',
         palette,
         service: text('Service'),
-        serviceArea: text('Service Area'),
+        installationZip: text('Installation ZIP'),
         artwork: text('Vinyl Artwork'),
         artworkSelected: !!form.querySelector('[data-artwork-file]')?.files?.[0],
         quantity: text('Vinyl-wrapped Pumpkins'),
@@ -1360,8 +1360,8 @@
         form.querySelector('[data-custom-request]')?.focus();
         return;
       }
-      if (form.querySelector('[data-service-area="outside"]:checked')) {
-        productFormError(form, 'Outside our 25-mile service area? Please open the inquiry form for a consultation instead of placing an order.');
+      if (window.paletteInstallServiceArea.check(text('Installation ZIP')) !== 'within') {
+        productFormError(form, 'This ZIP is outside our standard service area. Please open the inquiry form for a consultation instead of placing an order.');
         form.querySelector('[data-outside-area-note] a')?.focus();
         return;
       }
@@ -1407,7 +1407,7 @@
     form.addEventListener('change', event => {
       updateBrief();
       const outsideNote = root.querySelector('[data-outside-area-note]');
-      if (outsideNote) outsideNote.hidden = !form.querySelector('[data-service-area="outside"]:checked');
+      if (outsideNote) outsideNote.hidden = window.paletteInstallServiceArea.check(text('Installation ZIP')) !== 'outside';
       if (event.target.matches('[data-service], [data-monogram-choice], input[name="properties[Removal]"]')) {
         selectScale(activeScale);
       }
