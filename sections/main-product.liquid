@@ -87,6 +87,13 @@
 .choice-option input[type="radio"] { position: absolute; width: 1px; height: 1px; opacity: 0; overflow: hidden; clip: rect(0,0,0,0); }
 .choice-option input { margin-top: .2rem; }
 .field-hint { color: var(--color-muted); font-size: .8rem; line-height: 1.65; margin: .7rem 0 0; }
+.service-area-alert[hidden] { display: none; }
+.service-area-alert { margin: 1rem 0 1.5rem; padding: 1.25rem; border-left: 4px solid var(--color-accent); background: #f2e8df; }
+.service-area-alert h3 { margin: 0 0 .6rem; font-family: var(--font-serif); font-size: clamp(1.4rem, 3vw, 1.9rem); font-weight: 400; line-height: 1.2; }
+.service-area-alert p { margin: 0 0 1rem; font-size: .85rem; line-height: 1.65; }
+.service-area-alert__link { display: inline-flex; align-items: center; justify-content: center; min-height: 48px; padding: .8rem 1rem; background: var(--color-foreground); color: #fff; font-size: .8rem; font-weight: 600; text-decoration: none; }
+.service-area-alert__link:hover, .service-area-alert__link:focus-visible { background: var(--color-accent); color: #fff; }
+.service-area-alert__link:focus-visible { outline: 2px solid var(--color-foreground); outline-offset: 3px; }
 .journey-fields[hidden] { display: none; }
 .no-js .journey-fields[hidden] { display: block !important; }
 .journey-field { margin-top: .75rem; }
@@ -300,9 +307,13 @@
          </fieldset>
          <p class="field-hint">At checkout, use the address where you want the display installed or delivered. The delivery service is charged once for either choice.</p>
          <label for="InstallationZip-{{ section.id }}">Installation or delivery ZIP code</label>
-         <input id="InstallationZip-{{ section.id }}" class="form-input" type="text" inputmode="numeric" autocomplete="postal-code" name="properties[Installation ZIP]" pattern="[0-9]{5}" maxlength="5" placeholder="Enter your ZIP code" data-installation-zip required>
-          <p class="field-hint">Enter the ZIP where your display will go. ZIPs not on our Franklin-area delivery list begin with a consultation.</p>
-         <p class="field-hint" data-outside-area-note role="status" hidden>This ZIP is outside our standard service area. Please request a consultation before ordering. Your choices will carry over. {% if pages.contact != blank %}<a href="{{ pages.contact.url }}#consultation-form" data-consultation-link>Open the inquiry form &rarr;</a>{% else %}Please contact the studio before ordering.{% endif %}</p>
+          <input id="InstallationZip-{{ section.id }}" class="form-input" type="text" inputmode="numeric" autocomplete="postal-code" name="properties[Installation ZIP]" pattern="[0-9]{5}" maxlength="5" placeholder="Enter your ZIP code" aria-describedby="ZipHint-{{ section.id }} OutsideZip-{{ section.id }}" data-installation-zip required>
+          <p id="ZipHint-{{ section.id }}" class="field-hint">Enter the ZIP where your display will go. ZIPs not on our Franklin-area delivery list begin with a consultation.</p>
+          <div id="OutsideZip-{{ section.id }}" class="service-area-alert" data-outside-area-note role="status" aria-live="polite" aria-atomic="true" hidden>
+            <h3>We don’t currently serve ZIP <span data-unavailable-zip></span>.</h3>
+            <p>Online delivery and installation aren’t available there. Fill out a consultation request so we can discuss your location and options. Your design choices will carry over.</p>
+            {% if pages.contact != blank %}<a class="service-area-alert__link" href="{{ pages.contact.url }}#consultation-form" data-consultation-link>Fill out the consultation form &rarr;</a>{% else %}<p>Please contact the studio to discuss your location.</p>{% endif %}
+          </div>
        </div>
 
         <div class="journey-step">
