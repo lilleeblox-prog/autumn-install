@@ -32,14 +32,6 @@
       {{ canonical_navigation }}
     </nav>
     
-    <div class="site-header__icons">
-      <a href="{{ routes.cart_url }}" class="site-header__cart" id="cart-icon-bubble" aria-label="Your design{% if cart.item_count > 0 %}, {{ cart.item_count }} items{% else %}, empty{% endif %}">
-        Your design
-        {% if cart.item_count > 0 %}
-          <span class="cart-count" aria-hidden="true">{{ cart.item_count }}</span>
-        {% endif %}
-      </a>
-    </div>
   </div>
 
   <nav id="MobileNav" class="container mobile-nav hidden" data-mobile-nav aria-label="Mobile navigation">

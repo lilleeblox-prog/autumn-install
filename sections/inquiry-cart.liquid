@@ -1,0 +1,16 @@
+<section class="container" style="min-height: 60vh; padding-block: clamp(80px, 12vw, 150px);">
+  <span class="eyebrow">A conversation with the studio</span>
+  <h1 style="max-width: 750px; margin-block: 20px; font-size: clamp(2.8rem, 7vw, 5.5rem); line-height: 1.08;">Your welcome begins with an inquiry.</h1>
+  <p style="max-width: 620px; line-height: 1.7;">Online ordering is not available. Build your full display and share your choices with the studio; we’ll discuss what is possible before confirming a quote or date.</p>
+  {% if cart.item_count > 0 %}
+    <p style="max-width: 620px; line-height: 1.7;">Items previously added to this browser’s Shopify cart have not been ordered or deleted. They cannot be checked out through this draft theme.</p>
+  {% endif %}
+  <a class="button button--accent" href="{{ routes.root_url }}#compose" style="display: inline-block; margin-top: 24px;">Create a design inquiry</a>
+</section>
+
+{% schema %}
+{
+  "name": "Inquiry instead of cart",
+  "settings": []
+}
+{% endschema %}
