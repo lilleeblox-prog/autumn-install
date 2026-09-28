@@ -275,6 +275,7 @@ function productConsultationChoices(form) {
     installationZip: text('properties[Installation ZIP]'),
     artwork,
     artworkSelected: artwork === 'Yes' && !!form.querySelector('[data-artwork-file]')?.files?.[0],
+    housePhotoSelected: !!form.querySelector('[data-house-photo-file]')?.files?.[0],
     quantity: artwork === 'Yes' ? text('properties[Vinyl-wrapped Pumpkins]') : '',
     pumpkinColor: artwork === 'Yes' ? text('properties[Pumpkin Color Preference]') : '',
     vinylColor: artwork === 'Yes' ? text('properties[Vinyl Color Preference]') : '',
@@ -318,6 +319,7 @@ function setupConsultationForm(root) {
       choices.artwork === 'Yes' && choices.pumpkinColor && `Pumpkin color: ${choices.pumpkinColor}`,
       choices.artwork === 'Yes' && choices.vinylColor && `Vinyl color: ${choices.vinylColor}`,
       choices.artwork === 'Yes' && choices.artworkSelected && 'Artwork file: selected on the product page (file not transferred)',
+      choices.housePhotoSelected && 'House photo: selected on the product page (file not transferred)',
       choices.removal && `Removal: ${choices.removal}`,
       choices.custom && 'Further customization: Consultation requested',
       typeof choices.notes === 'string' && choices.notes.trim() && `Your vision: ${choices.notes.trim()}`
@@ -539,8 +541,22 @@ function newCompositionId() {
   return `composition-${Date.now()}-${Math.random().toString(36).slice(2, 10)}`;
 }
 
-const PENDING_ARTWORK_KEY = 'palette-pending-artwork-composition';
+// Keep the storage key so carts started before a theme update can finish safely.
+const PENDING_UPLOAD_KEY = 'palette-pending-artwork-composition';
 const MAX_ARTWORK_SIZE = 20 * 1024 * 1024;
+const MAX_HOUSE_PHOTO_SIZE = 20 * 1024 * 1024;
+
+function selectedHousePhoto(form) {
+  const photo = form.querySelector('[data-house-photo-file]')?.files?.[0];
+  if (!photo) return null;
+  const mime = /\.jpe?g$/i.test(photo.name) ? 'image/jpeg'
+    : /\.png$/i.test(photo.name) ? 'image/png' : '';
+  if (!mime || (photo.type && photo.type !== mime) ||
+      photo.size < 1 || photo.size > MAX_HOUSE_PHOTO_SIZE) {
+    throw new Error('Choose a JPG or PNG house photo 20 MB or smaller, or leave the optional photo empty.');
+  }
+  return photo;
+}
 
 function productFormError(form, message) {
   form.querySelectorAll('#product-form-error, [data-review-error]').forEach(container => {
@@ -599,6 +615,7 @@ function showDraftCartPreview(form, design) {
   put('[data-draft-cart-artwork]', design.artwork === 'Yes'
     ? `${design.artworkQuantity} pumpkin${design.artworkQuantity === 1 ? '' : 's'} · ${design.pumpkinColor} pumpkin · ${design.vinylColor} vinyl · ${design.artworkFile} (not uploaded)`
     : 'No vinyl artwork');
+  put('[data-draft-cart-house-photo]', design.housePhotoFile ? `${design.housePhotoFile} (not uploaded)` : 'Not added');
   put('[data-draft-cart-removal]', design.removal === 'Yes' ? 'Requested' : 'Not requested');
   put('[data-draft-cart-notes]', design.notes || 'No additional notes');
   const additions = [
@@ -653,6 +670,7 @@ function previewCartDesign(form) {
   }
   const data = new FormData(form);
   const artwork = form.querySelector('[data-artwork-file]')?.files?.[0];
+  const housePhoto = selectedHousePhoto(form);
   const vinylArtwork = String(data.get('properties[Vinyl Artwork]') || '');
   if (vinylArtwork === 'Yes') {
     const expectedMime = /\.png$/i.test(artwork?.name || '') ? 'image/png'
@@ -683,6 +701,7 @@ function previewCartDesign(form) {
     artwork: vinylArtwork,
     artworkQuantity: vinylArtwork === 'Yes' ? Number(data.get('properties[Vinyl-wrapped Pumpkins]')) : 0,
     artworkFile: vinylArtwork === 'Yes' ? artwork.name : '',
+    housePhotoFile: housePhoto?.name || '',
     pumpkinColor: vinylArtwork === 'Yes' ? String(data.get('properties[Pumpkin Color Preference]')) : '',
     vinylColor: vinylArtwork === 'Yes' ? String(data.get('properties[Vinyl Color Preference]')) : '',
     removal: String(data.get('properties[Removal]') || ''),
@@ -745,6 +764,7 @@ function configuredCartItems(form) {
   }
   if (Number(data.get('quantity')) !== 1) throw new Error('Each composition must have exactly one base package.');
   const artwork = form.querySelector('[data-artwork-file]')?.files?.[0];
+  const housePhoto = selectedHousePhoto(form);
   const monogramQuantity = Number(data.get('properties[Vinyl-wrapped Pumpkins]') || 0);
   const pumpkinColor = String(data.get('properties[Pumpkin Color Preference]') || '').trim();
   const vinylColor = String(data.get('properties[Vinyl Color Preference]') || '').trim();
@@ -772,6 +792,7 @@ function configuredCartItems(form) {
     'Removal': removal,
     'Hay Bales': hayBales
   };
+  if (housePhoto) properties['_House Photo Expected'] = 'Yes';
   const palette = String(data.get('properties[Palette]') || '').trim();
   const offeredPalettes = Array.from(form.querySelectorAll('[data-composer-palette], [data-product-palette] input[name="properties[Palette]"]'));
   if (offeredPalettes.length && !offeredPalettes.some(input => input.value === palette)) {
@@ -895,8 +916,8 @@ function artworkExtrasComplete(cart, pending) {
   return expected.size === actual.size && Array.from(expected).every(([key, count]) => actual.get(key) === count);
 }
 
-async function finishPendingArtwork(cartForm) {
-  const serialized = sessionStorage.getItem(PENDING_ARTWORK_KEY);
+async function finishPendingUpload(cartForm) {
+  const serialized = sessionStorage.getItem(PENDING_UPLOAD_KEY);
   if (!serialized) return;
   cartForm.dataset.cartNeedsReview = 'true';
   let pending;
@@ -904,30 +925,38 @@ async function finishPendingArtwork(cartForm) {
     pending = JSON.parse(serialized);
     if (!pending?.compositionId || !Array.isArray(pending.extras) || !pending.extras.length) throw new Error();
   } catch {
-    sessionStorage.removeItem(PENDING_ARTWORK_KEY);
-    throw new CartReviewRequired('We could not confirm the uploaded artwork. Please review your composition before checkout.');
+    sessionStorage.removeItem(PENDING_UPLOAD_KEY);
+    throw new CartReviewRequired('We could not confirm the uploaded files. Please review your composition before checkout.');
   }
   const cart = await cartJson();
   const base = cart.items.find(item => item.properties?.['_Composition ID'] === pending.compositionId &&
     !item.properties?.['_Service Kind']);
   if (!base) {
-    sessionStorage.removeItem(PENDING_ARTWORK_KEY);
-    throw new CartReviewRequired('Your artwork was not added to the selection. Please return to the design and upload it again.');
+    sessionStorage.removeItem(PENDING_UPLOAD_KEY);
+    throw new CartReviewRequired('Your uploaded design was not added to the selection. Please return to the design and upload your files again.');
   }
   const artworkUrl = String(base.properties['Artwork File'] || '');
-  if (!/^https:\/\/cdn\.shopify\.com\/|^\/\/cdn\.shopify\.com\//i.test(artworkUrl)) {
-    sessionStorage.removeItem(PENDING_ARTWORK_KEY);
+  if (pending.artworkRequired !== false &&
+      !/^https:\/\/cdn\.shopify\.com\/|^\/\/cdn\.shopify\.com\//i.test(artworkUrl)) {
+    sessionStorage.removeItem(PENDING_UPLOAD_KEY);
     throw new CartReviewRequired('The artwork file did not reach the order. Remove this composition and upload it again before checkout.');
+  }
+  const housePhotoUrl = String(base.properties['House Photo'] || '');
+  if (pending.housePhotoRequired &&
+      (base.properties['_House Photo Expected'] !== 'Yes' ||
+       !/^https:\/\/cdn\.shopify\.com\/|^\/\/cdn\.shopify\.com\//i.test(housePhotoUrl))) {
+    sessionStorage.removeItem(PENDING_UPLOAD_KEY);
+    throw new CartReviewRequired('The house photo did not reach the order. Remove this composition and upload it again before checkout.');
   }
   if (!artworkExtrasComplete(cart, pending)) {
     const existing = cart.items.some(item => item.properties?.['_Composition ID'] === pending.compositionId &&
       item.properties?.['_Service Kind']);
     if (pending.started || existing) {
-      throw new CartReviewRequired('Your artwork arrived, but the paid services could not be verified. Remove this composition and try again before checkout.');
+      throw new CartReviewRequired('Your files arrived, but the paid services could not be verified. Remove this composition and try again before checkout.');
     }
     // Mark the attempt before sending it: an interrupted response must not trigger a duplicate charge on reload.
     pending.started = true;
-    sessionStorage.setItem(PENDING_ARTWORK_KEY, JSON.stringify(pending));
+    sessionStorage.setItem(PENDING_UPLOAD_KEY, JSON.stringify(pending));
     let response;
     try {
       response = await fetch((window.cartAddUrl || '/cart/add') + '.js', {
@@ -945,7 +974,7 @@ async function finishPendingArtwork(cartForm) {
     }
   }
   if (pending.editId) await replaceComposition(pending.editId, pending.compositionId);
-  sessionStorage.removeItem(PENDING_ARTWORK_KEY);
+  sessionStorage.removeItem(PENDING_UPLOAD_KEY);
   window.location.replace(window.cartUrl || '/cart');
 }
 
@@ -1039,6 +1068,10 @@ function validateCartGroups(cartForm) {
     }
     if (base[0].dataset.artworkRequired === 'true' && base[0].dataset.artworkPresent !== 'true') {
       error.textContent = 'Artwork is missing from this vinyl-wrapped pumpkin. Remove the composition and upload the file again before checkout.';
+      return false;
+    }
+    if (base[0].dataset.housePhotoRequired === 'true' && base[0].dataset.housePhotoPresent !== 'true') {
+      error.textContent = 'The house photo is missing from this display. Remove the composition and upload it again before checkout.';
       return false;
     }
     const expected = [];
@@ -1167,13 +1200,13 @@ document.addEventListener('DOMContentLoaded', () => {
   document.querySelectorAll('[data-consultation-form]').forEach(setupConsultationForm);
   const cartForm = document.querySelector('#cart');
   if (cartForm) {
-    finishPendingArtwork(cartForm).catch(error => {
+    finishPendingUpload(cartForm).catch(error => {
       cartForm.dataset.cartNeedsReview = 'true';
       const notice = cartForm.querySelector('[data-cart-validation-error]') || document.createElement('p');
       notice.dataset.cartValidationError = 'true';
       notice.setAttribute('role', 'alert');
       notice.style.color = 'var(--color-accent)';
-      notice.textContent = error.message || 'The artwork upload could not be verified. Review your composition before checkout.';
+      notice.textContent = error.message || 'The file uploads could not be verified. Review your composition before checkout.';
       cartForm.querySelector('.cart-footer').prepend(notice);
     });
     cartForm.querySelectorAll('[data-remove-composition]').forEach((button) => {
@@ -1343,17 +1376,22 @@ document.addEventListener('DOMContentLoaded', () => {
         submit.addEventListener('click', () => { window.location.href = cartUrl; }, { once: true });
       };
       try {
-        if (configured.items[0].properties['Vinyl Artwork'] === 'Yes') {
+        if (configured.items[0].properties['Vinyl Artwork'] === 'Yes' ||
+            configured.items[0].properties['_House Photo Expected'] === 'Yes') {
           const compositionInput = productForm.querySelector('[data-composition-id-input]');
-          if (!compositionInput) throw new Error('The artwork upload could not be prepared. Please try again.');
-          sessionStorage.setItem(PENDING_ARTWORK_KEY, JSON.stringify({
+          const housePhotoExpected = productForm.querySelector('[data-house-photo-expected]');
+          if (!compositionInput || !housePhotoExpected) throw new Error('The file uploads could not be prepared. Please try again.');
+          sessionStorage.setItem(PENDING_UPLOAD_KEY, JSON.stringify({
             compositionId: configured.compositionId,
             extras: configured.items.slice(1),
-            editId: productForm.dataset.editCompositionId || null
+            editId: productForm.dataset.editCompositionId || null,
+            artworkRequired: configured.items[0].properties['Vinyl Artwork'] === 'Yes',
+            housePhotoRequired: configured.items[0].properties['_House Photo Expected'] === 'Yes'
           }));
           compositionInput.value = configured.compositionId;
-          // Shopify's native multipart product form stores the actual file as a line-item property.
-          // JSON Cart API requests would only send a filename, not the uploaded artwork.
+          housePhotoExpected.disabled = configured.items[0].properties['_House Photo Expected'] !== 'Yes';
+          // Shopify's multipart product form stores both file bytes as line-item properties.
+          // JSON Cart API requests would only send filenames, not the uploads.
           HTMLFormElement.prototype.submit.call(productForm);
           return;
         }
