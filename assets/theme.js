@@ -675,7 +675,7 @@ function setupProductEstimate(form) {
       });
     }
     if (form.querySelector('input[name="properties[Removal]"][value="Yes"]:checked')) {
-      additions.push({ label: products.dataset.removalId ? 'Removal · not included' : 'Removal · estimate', priceCents: removalEstimate });
+      additions.push({ label: products.dataset.removalId ? 'Removal service' : 'Removal · estimate', priceCents: removalEstimate });
     }
     form.querySelectorAll('input[name="addons[]"]:checked').forEach(input => {
       additions.push({ label: input.closest('.addon-option')?.querySelector('strong')?.textContent || 'Finishing touch', priceCents: input.dataset.addonPrice });
@@ -1032,9 +1032,10 @@ function cartContainsComposition(cart, id) {
 }
 
 class CartReviewRequired extends Error {
-  constructor(message) {
+  constructor(message, canCleanStandalone = false) {
     super(message);
     this.name = 'CartReviewRequired';
+    this.canCleanStandalone = canCleanStandalone;
   }
 }
 
@@ -1357,7 +1358,7 @@ async function validateCheckoutCart(expectedCompositionId) {
   const groups = new Map();
   for (const item of cart.items) {
     const id = item.properties?.['_Composition ID'];
-    if (!id) throw new Error('Your cart contains an individual item. Review your cart and remove it before checkout.');
+    if (!id) throw new CartReviewRequired('Your cart contains older individual items. Remove them to continue to checkout; your approved displays and services will stay.', true);
     if (!groups.has(id)) groups.set(id, []);
     groups.get(id).push(item);
   }
@@ -1398,6 +1399,21 @@ async function validateCheckoutCart(expectedCompositionId) {
     }
   }
   await validateCartServiceFees(cart);
+}
+
+async function removeStandaloneCartItems() {
+  const cart = await cartJson();
+  const items = cart.items.filter(item => !item.properties?.['_Composition ID']);
+  if (!items.length) return true;
+  if (items.some(item => !item.key)) throw new Error('An individual cart line could not be identified. Please review your cart.');
+  const names = items.map(item => `• ${item.product_title || item.title || 'Individual item'}`).join('\n');
+  if (!window.confirm(`Remove these individual items from your cart?\n\n${names}\n\nYour approved displays and services will stay.`)) return false;
+  const updates = Object.fromEntries(items.map(item => [item.key, 0]));
+  const response = await fetch((window.cartUrl || '/cart') + '/update.js', {
+    method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ updates })
+  });
+  if (!response.ok) throw new Error('The individual items could not be removed. Please try again or review your cart.');
+  return true;
 }
 
 function standaloneCartUpdates(cartForm) {
@@ -1597,16 +1613,28 @@ document.addEventListener('DOMContentLoaded', () => {
       submit.disabled = true;
       submit.textContent = 'Preparing your design…';
       const cartUrl = window.paletteInstallCartPageUrl || window.cartUrl || '/cart';
-      const requireCartReview = (message) => {
+      const requireCartReview = (message, canCleanStandalone = false) => {
         productForm.dataset.cartSubmitting = 'false';
         productForm.dataset.cartNeedsReview = 'true';
         approveButtons.forEach(button => { button.disabled = true; });
         approvalStatus.hidden = true;
         productFormError(productForm, message);
-        submit.textContent = 'Review your composition';
+        submit.textContent = canCleanStandalone ? 'Remove individual items and continue' : 'Review your composition';
         submit.disabled = false;
         submit.type = 'button';
-        submit.addEventListener('click', () => { window.location.href = cartUrl; }, { once: true });
+        submit.onclick = canCleanStandalone ? async () => {
+          if (submit.disabled) return;
+          submit.disabled = true;
+          try {
+            if (!await removeStandaloneCartItems()) return;
+            await validateCheckoutCart(configured.compositionId);
+            window.location.href = '/checkout';
+          } catch (error) {
+            requireCartReview(error.message || 'Please review your cart before checkout.', error.canCleanStandalone);
+          } finally {
+            submit.disabled = false;
+          }
+        } : () => { window.location.href = cartUrl; };
       };
       try {
         if (configured.items[0].properties['Vinyl Artwork'] === 'Yes' ||
@@ -1635,12 +1663,13 @@ document.addEventListener('DOMContentLoaded', () => {
         try {
           await validateCheckoutCart(configured.compositionId);
         } catch (validationError) {
-          throw new CartReviewRequired(validationError.message || 'Review your cart before checkout.');
+          throw validationError instanceof CartReviewRequired
+            ? validationError : new CartReviewRequired(validationError.message || 'Review your cart before checkout.');
         }
         window.location.href = '/checkout';
       } catch (error) {
         if (error instanceof CartReviewRequired) {
-          requireCartReview(error.message);
+          requireCartReview(error.message, error.canCleanStandalone);
           return;
         }
         productFormError(productForm, error.message || 'Your selection could not be updated. Please try again.');

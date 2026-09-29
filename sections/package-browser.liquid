@@ -934,6 +934,7 @@
 {% assign initial_base_estimate_cents = 0 %}
 {% assign package_count = 0 %}
 {% assign monogram_product = section.settings.monogram_product %}
+{% assign approval_disclosure = section.settings.continue_disclosure | replace: 'adds it to the cart for review', 'opens Shopify checkout after checking your display and services' | replace: 'adds your selected composition to cart for review', 'opens Shopify checkout after checking your display and services' %}
 {% for block in section.blocks %}
   {% if block.type == 'package' %}{% assign package_count = package_count | plus: 1 %}{% endif %}
   {% if block.type == 'package' and block.settings.default_selected and initial_scale == 'Choose a scale below' %}
@@ -1136,7 +1137,7 @@
           <p class="composition-price-estimate__note" data-estimate-note>Unconfirmed service pricing is excluded. Final taxes and checkout charges are shown before payment.</p>
         </section>
         <div class="composer-final-approval">
-          <p class="product-approval-note" data-approval-disclosure>{{ section.settings.continue_disclosure | escape }} Preferred weeks require confirmation.</p>
+          <p class="product-approval-note" data-approval-disclosure>{{ approval_disclosure | escape }} Preferred weeks require confirmation.</p>
           <p class="composer-review-error hidden" data-review-error role="alert" aria-live="assertive"></p>
           <div class="composer-review-actions">
             <button type="button" data-edit-design>Edit design</button>
@@ -1361,7 +1362,7 @@
       });
       form.querySelectorAll('[data-approval-disclosure]').forEach(note => {
         note.textContent = availableToOrder
-          ? {{ section.settings.continue_disclosure | append: ' Preferred weeks require confirmation.' | json }}
+          ? {{ approval_disclosure | append: ' Preferred weeks require confirmation.' | json }}
           : 'This design cannot be added to the Shopify cart while the display or required services are unavailable. No order has been placed.';
       });
       const sizeLabel = card.dataset.scaleName || '';
@@ -1575,7 +1576,7 @@
       "type": "textarea",
       "id": "continue_disclosure",
       "label": "Approval action disclosure",
-      "default": "Approval adds your selected composition to cart for review and does not place an order or reserve a week."
+      "default": "Approval opens Shopify checkout after checking your display and services. It does not place an order or reserve a week."
     },
     { "type": "product", "id": "delivery_small_product", "label": "The Stoop delivery service product" },
     { "type": "product", "id": "delivery_medium_product", "label": "The Porch delivery service product" },
