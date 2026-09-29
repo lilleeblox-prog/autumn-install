@@ -1154,7 +1154,8 @@ async function finishPendingUpload(cartForm) {
   }
   if (pending.editId) await replaceComposition(pending.editId, pending.compositionId);
   sessionStorage.removeItem(PENDING_UPLOAD_KEY);
-  window.location.replace(window.paletteInstallCartPageUrl || window.cartUrl || '/cart');
+  await validateCheckoutCart(pending.compositionId);
+  window.location.replace('/checkout');
 }
 
 async function loadEditingComposition(form) {
@@ -1295,8 +1296,8 @@ const APPROVED_SERVICE_FEES_BY_TIER = Object.freeze({
 });
 const APPROVED_VINYL_UNIT_PRICE_CENTS = 2500;
 
-async function validateCartServiceFees() {
-  const cart = await cartJson();
+async function validateCartServiceFees(cart) {
+  cart ||= await cartJson();
   const groups = new Map();
   cart.items.forEach(item => {
     const compositionId = item.properties?.['_Composition ID'];
@@ -1348,6 +1349,55 @@ async function validateCartServiceFees() {
     }
   }
   return true;
+}
+
+async function validateCheckoutCart(expectedCompositionId) {
+  const cart = await cartJson();
+  if (!cart.items?.length) throw new Error('Your cart is empty. Please approve a design before checkout.');
+  const groups = new Map();
+  for (const item of cart.items) {
+    const id = item.properties?.['_Composition ID'];
+    if (!id) throw new Error('Your cart contains an individual item. Review your cart and remove it before checkout.');
+    if (!groups.has(id)) groups.set(id, []);
+    groups.get(id).push(item);
+  }
+  if (expectedCompositionId && !groups.has(expectedCompositionId)) {
+    throw new Error('Your approved design is missing from the cart. Review your cart before checkout.');
+  }
+  for (const items of groups.values()) {
+    const bases = items.filter(item => !item.properties?.['_Service Kind']);
+    if (bases.length !== 1 || Number(bases[0].quantity) !== 1) {
+      throw new Error('A design is missing its display or has an invalid quantity. Review your cart before checkout.');
+    }
+    const properties = bases[0].properties;
+    if (!['Custom installation', 'Delivery only'].includes(properties.Service) ||
+        serviceAreaForZip(properties['Installation ZIP']) !== 'within') {
+      throw new Error('A design has an invalid delivery choice or ZIP. Edit it before checkout.');
+    }
+    if (!['Yes', 'No'].includes(properties['Vinyl Artwork']) ||
+        !['Yes', 'No'].includes(properties.Removal) ||
+        !['Yes', 'No'].includes(properties['Hay Bales'])) {
+      throw new Error('A design is missing its service selections. Review your cart before checkout.');
+    }
+    const uploaded = value => /^https:\/\/cdn\.shopify\.com\/|^\/\/cdn\.shopify\.com\//i.test(String(value || ''));
+    if (properties['Vinyl Artwork'] === 'Yes' && !uploaded(properties['Artwork File'])) {
+      throw new Error('The artwork file is missing. Review your cart before checkout.');
+    }
+    if (properties['_House Photo Expected'] === 'Yes' && !uploaded(properties['House Photo'])) {
+      throw new Error('The house photo is missing. Review your cart before checkout.');
+    }
+    if (items.some(item => item.properties?.['_Service Kind'] === 'extra' && Number(item.quantity) !== 1)) {
+      throw new Error('A finishing touch has an invalid quantity. Review your cart before checkout.');
+    }
+    const kinds = items.filter(item => item !== bases[0]).map(item => item.properties?.['_Service Kind']);
+    if (kinds.some(kind => !['delivery', 'removal', 'monogram', 'extra'].includes(kind)) ||
+        kinds.filter(kind => kind === 'delivery').length !== 1 ||
+        kinds.filter(kind => kind === 'removal').length !== (properties.Removal === 'Yes' ? 1 : 0) ||
+        kinds.filter(kind => kind === 'monogram').length !== (properties['Vinyl Artwork'] === 'Yes' ? 1 : 0)) {
+      throw new Error('A design has incomplete or duplicate paid services. Review your cart before checkout.');
+    }
+  }
+  await validateCartServiceFees(cart);
 }
 
 function standaloneCartUpdates(cartForm) {
@@ -1582,7 +1632,12 @@ document.addEventListener('DOMContentLoaded', () => {
         if (productForm.dataset.editCompositionId) {
           await replaceComposition(productForm.dataset.editCompositionId, configured.compositionId);
         }
-        window.location.href = cartUrl;
+        try {
+          await validateCheckoutCart(configured.compositionId);
+        } catch (validationError) {
+          throw new CartReviewRequired(validationError.message || 'Review your cart before checkout.');
+        }
+        window.location.href = '/checkout';
       } catch (error) {
         if (error instanceof CartReviewRequired) {
           requireCartReview(error.message);
