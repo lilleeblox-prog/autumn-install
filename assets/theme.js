@@ -1027,6 +1027,22 @@ async function cartJson() {
   return response.json();
 }
 
+function prepareNativeUploadMetadata(form, properties) {
+  form.querySelectorAll('[data-upload-metadata]').forEach(input => input.remove());
+  for (const name of [
+    '_Service Fee Tier', '_Expected Service Fee', '_Delivery Variant ID',
+    '_Removal Variant ID', '_Monogram Variant ID', '_Monogram Unit Price'
+  ]) {
+    if (!properties[name]) continue;
+    const input = document.createElement('input');
+    input.type = 'hidden';
+    input.name = `properties[${name}]`;
+    input.value = String(properties[name]);
+    input.dataset.uploadMetadata = 'true';
+    form.append(input);
+  }
+}
+
 function cartContainsComposition(cart, id) {
   return cart.items.some(item => item.properties && item.properties['_Composition ID'] === id);
 }
@@ -1642,6 +1658,7 @@ document.addEventListener('DOMContentLoaded', () => {
           const compositionInput = productForm.querySelector('[data-composition-id-input]');
           const housePhotoExpected = productForm.querySelector('[data-house-photo-expected]');
           if (!compositionInput || !housePhotoExpected) throw new Error('The file uploads could not be prepared. Please try again.');
+          prepareNativeUploadMetadata(productForm, configured.items[0].properties);
           sessionStorage.setItem(PENDING_UPLOAD_KEY, JSON.stringify({
             compositionId: configured.compositionId,
             extras: configured.items.slice(1),
