@@ -190,7 +190,8 @@
        <p class="cart-noscript">JavaScript is required to safely validate grouped composition services before checkout. Your variant selections remain visible above.</p>
        <div class="cart-footer">
         {% if has_standalone %}
-          <p class="cart-note" role="alert">Individual items already in your cart are not part of an approved design. Remove them above before checkout. They have not been deleted automatically.</p>
+          <p class="cart-note" role="alert">Individual items already in your cart are not part of an approved design. They were not added by the design builder and have not been deleted automatically.</p>
+          <button type="button" class="button button--secondary" data-remove-standalone>Remove individual items from my cart</button>
         {% endif %}
         <div class="cart-subtotal">
           <span>Estimated Total</span>

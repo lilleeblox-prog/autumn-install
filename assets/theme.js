@@ -1350,6 +1350,14 @@ async function validateCartServiceFees() {
   return true;
 }
 
+function standaloneCartUpdates(cartForm) {
+  const updates = {};
+  cartForm.querySelectorAll('[data-cart-item]').forEach(item => {
+    if (!item.dataset.compositionId && item.dataset.lineKey) updates[item.dataset.lineKey] = 0;
+  });
+  return updates;
+}
+
 document.addEventListener('DOMContentLoaded', () => {
   document.querySelectorAll('[data-gallery-image]').forEach((thumbnail) => {
     thumbnail.addEventListener('click', () => {
@@ -1418,6 +1426,28 @@ document.addEventListener('DOMContentLoaded', () => {
           button.disabled = false;
         }
       });
+    });
+    const removeStandalone = cartForm.querySelector('[data-remove-standalone]');
+    removeStandalone?.addEventListener('click', async () => {
+      const updates = standaloneCartUpdates(cartForm);
+      if (!Object.keys(updates).length ||
+          !window.confirm('Remove all individual items from your cart? Your approved display and its services will stay.')) return;
+      removeStandalone.disabled = true;
+      try {
+        const response = await fetch((window.cartUrl || '/cart') + '/update.js', {
+          method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ updates })
+        });
+        if (!response.ok) throw new Error('The individual items could not be removed. Please try again.');
+        window.location.reload();
+      } catch (removeError) {
+        const notice = cartForm.querySelector('[data-cart-validation-error]') || document.createElement('p');
+        notice.dataset.cartValidationError = 'true';
+        notice.setAttribute('role', 'alert');
+        notice.style.color = 'var(--color-accent)';
+        notice.textContent = removeError.message || 'A network error prevented removal. Please try again.';
+        cartForm.querySelector('.cart-footer').prepend(notice);
+        removeStandalone.disabled = false;
+      }
     });
     cartForm.addEventListener('submit', async (event) => {
       if (cartForm.dataset.cartValidationPassed === 'true') {

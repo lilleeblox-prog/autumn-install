@@ -124,6 +124,23 @@
 }
 </style>
 
+{% assign display_size = blank %}
+{% if section.settings.small_package_product != blank and product.id == section.settings.small_package_product.id %}
+  {% assign display_size = 'small' %}
+{% elsif section.settings.medium_package_product != blank and product.id == section.settings.medium_package_product.id %}
+  {% assign display_size = 'medium' %}
+{% elsif section.settings.large_package_product != blank and product.id == section.settings.large_package_product.id %}
+  {% assign display_size = 'large' %}
+{% endif %}
+
+{% if display_size == blank %}
+  <section class="container" style="min-height: 55vh; padding-block: clamp(80px, 12vw, 150px);">
+    <span class="eyebrow">Made To Welcome / Complete displays</span>
+    <h1 style="max-width: 750px; margin-block: 20px; font-size: clamp(2.8rem, 7vw, 5.5rem); line-height: 1.08;">A welcome made as a whole.</h1>
+    <p style="max-width: 620px; line-height: 1.7;">Individual pumpkins and service products are not offered separately. Choose a complete display and personalize it in the design builder.</p>
+    <a class="button button--accent" href="{{ routes.root_url }}#compose" style="display: inline-block; margin-top: 24px;">Create your display</a>
+  </section>
+{% else %}
 <div class="container product-main">
   <div class="product-gallery">
     <div class="product-gallery__main">
@@ -168,14 +185,6 @@
       {{ product.description }}
     </div>
 
-    {% assign display_size = blank %}
-    {% if section.settings.small_package_product != blank and product.id == section.settings.small_package_product.id %}
-      {% assign display_size = 'small' %}
-    {% elsif section.settings.medium_package_product != blank and product.id == section.settings.medium_package_product.id %}
-      {% assign display_size = 'medium' %}
-    {% elsif section.settings.large_package_product != blank and product.id == section.settings.large_package_product.id %}
-      {% assign display_size = 'large' %}
-    {% endif %}
     <form {% if display_size != blank %}method="post" action="{{ routes.cart_add_url }}"{% else %}onsubmit="return false"{% endif %} enctype="multipart/form-data" data-product-form data-product-id="{{ product.id }}" data-product-title="{{ product.title | escape }}">
       <noscript><p class="product-form__noscript">Please enable JavaScript to safely add configured display and service products to your cart. You can still review the details above.</p></noscript>
       <input type="hidden" name="form_type" value="product">
@@ -473,6 +482,7 @@
     {% render 'consultation-dialog', section: section %}
   </div>
 </div>
+{% endif %}
 
 <script>
   window.shopMoneyFormat = {{ shop.money_format | json }};
