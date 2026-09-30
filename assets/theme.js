@@ -1022,9 +1022,30 @@ function configuredCartItems(form) {
 }
 
 async function cartJson() {
-  const response = await fetch((window.cartUrl || '/cart') + '.js');
+  const response = await fetch((window.cartUrl || '/cart') + '.js', {
+    cache: 'no-store', credentials: 'same-origin'
+  });
   if (!response.ok) throw new Error('Could not load your design selection. Please try again.');
-  return response.json();
+  const cart = await response.json();
+  if (!Array.isArray(cart.items)) throw new Error('Shopify returned an unexpected cart response. Please check your design again.');
+  return cart;
+}
+
+async function waitForCartMatch(matches) {
+  let cart;
+  let lastError;
+  for (const delay of [0, 200, 500, 1000]) {
+    if (delay) await new Promise(resolve => setTimeout(resolve, delay));
+    try {
+      cart = await cartJson();
+      lastError = null;
+      if (matches(cart)) return cart;
+    } catch (error) {
+      lastError = error;
+    }
+  }
+  if (!cart && lastError) throw lastError;
+  return cart;
 }
 
 function prepareNativeUploadMetadata(form, properties) {
@@ -1048,10 +1069,11 @@ function cartContainsComposition(cart, id) {
 }
 
 class CartReviewRequired extends Error {
-  constructor(message, canCleanStandalone = false) {
+  constructor(message, canCleanStandalone = false, canRecheck = false) {
     super(message);
     this.name = 'CartReviewRequired';
     this.canCleanStandalone = canCleanStandalone;
+    this.canRecheck = canRecheck;
   }
 }
 
@@ -1067,10 +1089,13 @@ async function addCompositionToCart(configured) {
     // A lost response is not proof that Shopify rejected the cart update.
   }
   if (response?.ok) return;
-  const cart = await cartJson().catch(() => null);
+  const cart = await waitForCartMatch(cart => cartContainsComposition(cart, configured.compositionId)).catch(() => null);
   if (cart && cartContainsComposition(cart, configured.compositionId)) return;
   const body = response ? await response.json().catch(() => ({})) : {};
-  throw new CartReviewRequired(body.description || 'We could not confirm your selection. Review your composition before trying again so you do not add the same design twice.');
+  throw new CartReviewRequired(
+    body.description || 'Shopify has not confirmed your approved design yet. Check again to continue; this will not add your design twice.',
+    false, !body.description
+  );
 }
 
 async function removeComposition(compositionId) {
@@ -1124,7 +1149,7 @@ async function finishPendingUpload(cartForm) {
     sessionStorage.removeItem(PENDING_UPLOAD_KEY);
     throw new CartReviewRequired('We could not confirm the uploaded files. Please review your composition before checkout.');
   }
-  const cart = await cartJson();
+  const cart = await waitForCartMatch(cart => cartContainsComposition(cart, pending.compositionId));
   const base = cart.items.find(item => item.properties?.['_Composition ID'] === pending.compositionId &&
     !item.properties?.['_Service Kind']);
   if (!base) {
@@ -1163,7 +1188,7 @@ async function finishPendingUpload(cartForm) {
     } catch {
       // Verify the cart rather than retrying a request whose outcome is unknown.
     }
-    const verified = await cartJson().catch(() => null);
+    const verified = await waitForCartMatch(cart => artworkExtrasComplete(cart, pending)).catch(() => null);
     if (!verified || !artworkExtrasComplete(verified, pending)) {
       const description = response && !response.ok ? (await response.json().catch(() => ({}))).description : '';
       throw new CartReviewRequired(description || 'We could not confirm the paid services. Remove this composition and try again before checkout.');
@@ -1369,7 +1394,17 @@ async function validateCartServiceFees(cart) {
 }
 
 async function validateCheckoutCart(expectedCompositionId) {
-  const cart = await cartJson();
+  const cart = expectedCompositionId
+    ? await waitForCartMatch(cart => cartContainsComposition(cart, expectedCompositionId)).catch(() => {
+      throw new CartReviewRequired('Shopify could not be reached to confirm your approved design. Check again to continue; this will not add your design twice.', false, true);
+    })
+    : await cartJson();
+  if (expectedCompositionId && !cartContainsComposition(cart, expectedCompositionId)) {
+    throw new CartReviewRequired(
+      'Shopify has not confirmed your approved design in this browser yet. Check again to continue; this will not add your design twice.',
+      false, true
+    );
+  }
   if (!cart.items?.length) throw new Error('Your cart is empty. Please approve a design before checkout.');
   const groups = new Map();
   for (const item of cart.items) {
@@ -1629,24 +1664,25 @@ document.addEventListener('DOMContentLoaded', () => {
       submit.disabled = true;
       submit.textContent = 'Preparing your design…';
       const cartUrl = window.paletteInstallCartPageUrl || window.cartUrl || '/cart';
-      const requireCartReview = (message, canCleanStandalone = false) => {
+      const requireCartReview = (message, canCleanStandalone = false, canRecheck = false) => {
         productForm.dataset.cartSubmitting = 'false';
         productForm.dataset.cartNeedsReview = 'true';
         approveButtons.forEach(button => { button.disabled = true; });
         approvalStatus.hidden = true;
         productFormError(productForm, message);
-        submit.textContent = canCleanStandalone ? 'Remove individual items and continue' : 'Review your composition';
+        submit.textContent = canCleanStandalone ? 'Remove individual items and continue'
+          : canRecheck ? 'Check design and continue' : 'Review your composition';
         submit.disabled = false;
         submit.type = 'button';
-        submit.onclick = canCleanStandalone ? async () => {
+        submit.onclick = canCleanStandalone || canRecheck ? async () => {
           if (submit.disabled) return;
           submit.disabled = true;
           try {
-            if (!await removeStandaloneCartItems()) return;
+            if (canCleanStandalone && !await removeStandaloneCartItems()) return;
             await validateCheckoutCart(configured.compositionId);
             window.location.href = '/checkout';
           } catch (error) {
-            requireCartReview(error.message || 'Please review your cart before checkout.', error.canCleanStandalone);
+            requireCartReview(error.message || 'Please review your cart before checkout.', error.canCleanStandalone, error.canRecheck);
           } finally {
             submit.disabled = false;
           }
@@ -1686,7 +1722,7 @@ document.addEventListener('DOMContentLoaded', () => {
         window.location.href = '/checkout';
       } catch (error) {
         if (error instanceof CartReviewRequired) {
-          requireCartReview(error.message, error.canCleanStandalone);
+          requireCartReview(error.message, error.canCleanStandalone, error.canRecheck);
           return;
         }
         productFormError(productForm, error.message || 'Your selection could not be updated. Please try again.');
