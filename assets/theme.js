@@ -1704,6 +1704,8 @@ document.addEventListener('DOMContentLoaded', () => {
       productForm.dataset.approvedSignature = '';
       approvalStatus.hidden = true;
       submit.hidden = true;
+      submit.type = 'submit';
+      submit.onclick = null;
       approveButtons.forEach(button => { button.hidden = false; });
       productFormError(productForm, '');
     };
@@ -1714,6 +1716,7 @@ document.addEventListener('DOMContentLoaded', () => {
       productForm.dataset.cartSubmitting = 'true';
       submit.disabled = true;
       submit.textContent = 'Preparing your design…';
+      let cartWriteStarted = false;
       const cartUrl = window.paletteInstallCartPageUrl || window.cartUrl || '/cart';
       const requireCartReview = (message, canCleanStandalone = false, canRecheck = false, canCleanIncomplete = false) => {
         productForm.dataset.cartSubmitting = 'false';
@@ -1762,9 +1765,11 @@ document.addEventListener('DOMContentLoaded', () => {
           housePhotoExpected.disabled = configured.items[0].properties['_House Photo Expected'] !== 'Yes';
           // Shopify's multipart product form stores both file bytes as line-item properties.
           // JSON Cart API requests would only send filenames, not the uploads.
+          cartWriteStarted = true;
           HTMLFormElement.prototype.submit.call(productForm);
           return;
         }
+        cartWriteStarted = true;
         await addCompositionToCart(configured);
         if (productForm.dataset.editCompositionId) {
           await replaceComposition(productForm.dataset.editCompositionId, configured.compositionId);
@@ -1781,10 +1786,17 @@ document.addEventListener('DOMContentLoaded', () => {
           requireCartReview(error.message, error.canCleanStandalone, error.canRecheck, error.canCleanIncomplete);
           return;
         }
+        if (cartWriteStarted) {
+          requireCartReview('We could not confirm the result of your approval. Check again to continue; this will not add your design twice.', false, true);
+          return;
+        }
         productFormError(productForm, error.message || 'Your selection could not be updated. Please try again.');
         productForm.dataset.cartSubmitting = 'false';
         submit.disabled = false;
         submit.textContent = 'Approve and continue';
+        submit.type = 'button';
+        // Validate a new approved snapshot directly, without firing unrelated form-submit listeners.
+        submit.onclick = approveDesign;
       }
     };
     const approveDesign = () => {
