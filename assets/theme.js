@@ -1069,11 +1069,12 @@ function cartContainsComposition(cart, id) {
 }
 
 class CartReviewRequired extends Error {
-  constructor(message, canCleanStandalone = false, canRecheck = false) {
+  constructor(message, canCleanStandalone = false, canRecheck = false, canCleanIncomplete = false) {
     super(message);
     this.name = 'CartReviewRequired';
     this.canCleanStandalone = canCleanStandalone;
     this.canRecheck = canRecheck;
+    this.canCleanIncomplete = canCleanIncomplete;
   }
 }
 
@@ -1338,6 +1339,53 @@ const APPROVED_SERVICE_FEES_BY_TIER = Object.freeze({
 });
 const APPROVED_VINYL_UNIT_PRICE_CENTS = 2500;
 
+function incompleteOlderDesigns(cart, protectedCompositionId) {
+  const groups = new Map();
+  for (const item of cart.items) {
+    const id = item.properties?.['_Composition ID'];
+    if (!id || id === protectedCompositionId) continue;
+    if (!groups.has(id)) groups.set(id, []);
+    groups.get(id).push(item);
+  }
+  return Array.from(groups, ([id, items]) => ({ id, items })).filter(({ items }) => {
+    const base = items.find(item => !item.properties?.['_Service Kind']);
+    if (!base) return false;
+    const p = base.properties;
+    const fee = APPROVED_SERVICE_FEES_BY_TIER[p['_Service Fee Tier']];
+    return !fee || Number(p['_Expected Service Fee']) !== fee || !p['_Delivery Variant ID'] ||
+      (p.Removal === 'Yes' && !p['_Removal Variant ID']) ||
+      (p['Vinyl Artwork'] === 'Yes' && (!p['_Monogram Variant ID'] ||
+        Number(p['_Monogram Unit Price']) !== APPROVED_VINYL_UNIT_PRICE_CENTS));
+  });
+}
+
+async function removeIncompleteOlderDesigns(protectedCompositionId) {
+  const cart = await cartJson();
+  const incomplete = incompleteOlderDesigns(cart, protectedCompositionId);
+  if (!incomplete.length) return true;
+  const items = incomplete.flatMap(group => group.items);
+  if (items.some(item => !item.key)) throw new Error('An earlier incomplete design could not be identified. Nothing was removed.');
+  const names = incomplete.map(({ items }) => {
+    const base = items.find(item => !item.properties?.['_Service Kind']);
+    const details = [base.properties.Palette, base.properties['Requested Week']].filter(Boolean).join(' · ');
+    const total = items.reduce((sum, item) => sum + Number(item.final_line_price ?? Number(item.final_price ?? item.price) * Number(item.quantity)), 0);
+    const price = Number.isFinite(total) ? ` · ${formatMoney(total, window.shopMoneyFormat || '${{amount}}')}` : '';
+    return `• ${base.product_title || base.title || 'Earlier design'}${details ? ` — ${details}` : ''}${price}`;
+  }).join('\n');
+  if (!window.confirm(`These earlier designs are missing required service details and block checkout:\n\n${names}\n\nRemove these designs and their service lines? Your current design and other complete designs will stay.`)) return false;
+  const updates = Object.fromEntries(items.map(item => [item.key, 0]));
+  const response = await fetch((window.cartUrl || '/cart') + '/update.js', {
+    method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ updates })
+  });
+  if (!response.ok) throw new Error('The earlier incomplete designs could not be removed. Please try again.');
+  const ids = new Set(incomplete.map(group => group.id));
+  const verified = await waitForCartMatch(next => !next.items.some(item => ids.has(item.properties?.['_Composition ID'])));
+  if (verified.items.some(item => ids.has(item.properties?.['_Composition ID']))) {
+    throw new Error('Shopify has not confirmed the removal yet. Check again before continuing.');
+  }
+  return true;
+}
+
 async function validateCartServiceFees(cart) {
   cart ||= await cartJson();
   const groups = new Map();
@@ -1406,6 +1454,9 @@ async function validateCheckoutCart(expectedCompositionId) {
     );
   }
   if (!cart.items?.length) throw new Error('Your cart is empty. Please approve a design before checkout.');
+  if (incompleteOlderDesigns(cart, expectedCompositionId).length) {
+    throw new CartReviewRequired('An earlier design in your cart is missing required service details. Remove the earlier incomplete designs to continue; your current approved design and other complete designs will stay.', false, false, true);
+  }
   const groups = new Map();
   for (const item of cart.items) {
     const id = item.properties?.['_Composition ID'];
@@ -1664,31 +1715,36 @@ document.addEventListener('DOMContentLoaded', () => {
       submit.disabled = true;
       submit.textContent = 'Preparing your design…';
       const cartUrl = window.paletteInstallCartPageUrl || window.cartUrl || '/cart';
-      const requireCartReview = (message, canCleanStandalone = false, canRecheck = false) => {
+      const requireCartReview = (message, canCleanStandalone = false, canRecheck = false, canCleanIncomplete = false) => {
         productForm.dataset.cartSubmitting = 'false';
         productForm.dataset.cartNeedsReview = 'true';
         approveButtons.forEach(button => { button.disabled = true; });
         approvalStatus.hidden = true;
         productFormError(productForm, message);
-        submit.textContent = canCleanStandalone ? 'Remove individual items and continue'
+        submit.textContent = canCleanIncomplete ? 'Remove earlier incomplete designs and continue'
+          : canCleanStandalone ? 'Remove individual items and continue'
           : canRecheck ? 'Check design and continue' : 'Review your composition';
         submit.disabled = false;
         submit.type = 'button';
-        submit.onclick = canCleanStandalone || canRecheck ? async () => {
+        submit.onclick = canCleanStandalone || canRecheck || canCleanIncomplete ? async () => {
           if (submit.disabled) return;
           submit.disabled = true;
           try {
             if (canCleanStandalone && !await removeStandaloneCartItems()) return;
+            if (canCleanIncomplete && !await removeIncompleteOlderDesigns(configured.compositionId)) return;
             await validateCheckoutCart(configured.compositionId);
             window.location.href = '/checkout';
           } catch (error) {
-            requireCartReview(error.message || 'Please review your cart before checkout.', error.canCleanStandalone, error.canRecheck);
+            requireCartReview(error.message || 'Please review your cart before checkout.', error.canCleanStandalone, error.canRecheck, error.canCleanIncomplete);
           } finally {
             submit.disabled = false;
           }
         } : () => { window.location.href = cartUrl; };
       };
       try {
+        if (!await removeIncompleteOlderDesigns(productForm.dataset.editCompositionId || configured.compositionId)) {
+          throw new Error('Nothing was removed and your current design has not been added. Earlier incomplete designs still block checkout; approve again if you want to remove them and continue.');
+        }
         if (configured.items[0].properties['Vinyl Artwork'] === 'Yes' ||
             configured.items[0].properties['_House Photo Expected'] === 'Yes') {
           const compositionInput = productForm.querySelector('[data-composition-id-input]');
@@ -1722,13 +1778,13 @@ document.addEventListener('DOMContentLoaded', () => {
         window.location.href = '/checkout';
       } catch (error) {
         if (error instanceof CartReviewRequired) {
-          requireCartReview(error.message, error.canCleanStandalone, error.canRecheck);
+          requireCartReview(error.message, error.canCleanStandalone, error.canRecheck, error.canCleanIncomplete);
           return;
         }
         productFormError(productForm, error.message || 'Your selection could not be updated. Please try again.');
         productForm.dataset.cartSubmitting = 'false';
         submit.disabled = false;
-        submit.textContent = 'Review your composition';
+        submit.textContent = 'Approve and continue';
       }
     };
     const approveDesign = () => {
