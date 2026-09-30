@@ -458,7 +458,7 @@
 
       <div class="product-form__buttons">
         {% if display_size != blank %}
-          <p class="product-approval-note">Approve to add this complete design and its required services to your Shopify cart for review. This does not place an order or reserve a week.</p>
+          <p class="product-approval-note">Approve to continue directly to Shopify checkout with this design and its selected services. Your cart holds one design; approving replaces any previous cart selection. This does not place an order or reserve a week.</p>
           <button type="button" class="button button--accent button--full" data-approve-design {% if product.available == false or product.selected_or_first_available_variant.price <= 0 %}disabled{% endif %}>
             {% if product.available == false %}
               Sold out

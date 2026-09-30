@@ -1137,7 +1137,7 @@
           <p class="composition-price-estimate__note" data-estimate-note>Unconfirmed service pricing is excluded. Final taxes and checkout charges are shown before payment.</p>
         </section>
         <div class="composer-final-approval">
-          <p class="product-approval-note" data-approval-disclosure>{{ approval_disclosure | escape }} Preferred weeks require confirmation.</p>
+          <p class="product-approval-note" data-approval-disclosure>{{ approval_disclosure | escape }} Your cart holds one design and its selected services. Approving replaces any previous cart selection. Preferred weeks require confirmation.</p>
           <p class="composer-review-error hidden" data-review-error role="alert" aria-live="assertive"></p>
           <div class="composer-review-actions">
             <button type="button" data-edit-design>Edit design</button>
@@ -1362,7 +1362,7 @@
       });
       form.querySelectorAll('[data-approval-disclosure]').forEach(note => {
         note.textContent = availableToOrder
-          ? {{ approval_disclosure | append: ' Preferred weeks require confirmation.' | json }}
+          ? {{ approval_disclosure | append: ' Your cart holds one design and its selected services. Approving replaces any previous cart selection. Preferred weeks require confirmation.' | json }}
           : 'This design cannot be added to the Shopify cart while the display or required services are unavailable. No order has been placed.';
       });
       const sizeLabel = card.dataset.scaleName || '';

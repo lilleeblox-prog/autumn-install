@@ -73,7 +73,6 @@
 }
 </style>
 
-{% if cart.item_count > 0 %}
   <script>
     try {
       if (sessionStorage.getItem('palette-pending-artwork-composition')) {
@@ -81,11 +80,12 @@
       }
     } catch { /* The cart stays visible if browser storage is unavailable. */ }
   </script>
-{% endif %}
-<div class="container cart-finalizing-note" role="status" aria-live="polite">
+<div class="container cart-finalizing-note" data-upload-state role="status" aria-live="polite">
   <span class="eyebrow">Just a moment</span>
   <h2>Finishing your design.</h2>
-  <p>We’re verifying your uploaded files and paid services before opening Shopify checkout.</p>
+  <p data-upload-status>We’re verifying your uploaded files and paid services before opening Shopify checkout.</p>
+  <button type="button" class="button button--primary" data-upload-retry hidden>Check design and continue</button>
+  <a class="button button--secondary" data-upload-return hidden href="{{ routes.root_url }}{% if theme.role != 'main' %}?preview_theme_id={{ theme.id }}{% endif %}#compose">Return to your design</a>
 </div>
 <div class="container cart-page" data-live-cart>
   <div class="cart-header">

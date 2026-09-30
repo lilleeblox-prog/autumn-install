@@ -1021,8 +1021,9 @@ function configuredCartItems(form) {
   return { items, compositionId };
 }
 
+let cartReadSequence = 0;
 async function cartJson() {
-  const response = await fetch((window.cartUrl || '/cart') + '.js', {
+  const response = await fetch((window.cartUrl || '/cart') + '.js?design_check=' + Date.now() + '-' + (++cartReadSequence), {
     cache: 'no-store', credentials: 'same-origin'
   });
   if (!response.ok) throw new Error('Could not load your design selection. Please try again.');
@@ -1083,6 +1084,7 @@ async function addCompositionToCart(configured) {
   try {
     response = await fetch((window.cartAddUrl || '/cart/add') + '.js', {
       method: 'POST',
+      credentials: 'same-origin',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ items: configured.items })
     });
@@ -1154,8 +1156,7 @@ async function finishPendingUpload(cartForm) {
   const base = cart.items.find(item => item.properties?.['_Composition ID'] === pending.compositionId &&
     !item.properties?.['_Service Kind']);
   if (!base) {
-    sessionStorage.removeItem(PENDING_UPLOAD_KEY);
-    throw new CartReviewRequired('Your uploaded design was not added to the selection. Please return to the design and upload your files again.');
+    throw new CartReviewRequired('Shopify has not confirmed your uploaded design yet. Check again to continue; your files and services will not be added twice.', false, true);
   }
   const artworkUrl = String(base.properties['Artwork File'] || '');
   if (pending.artworkRequired !== false &&
@@ -1195,9 +1196,8 @@ async function finishPendingUpload(cartForm) {
       throw new CartReviewRequired(description || 'We could not confirm the paid services. Remove this composition and try again before checkout.');
     }
   }
-  if (pending.editId) await replaceComposition(pending.editId, pending.compositionId);
+  await completeApprovedCart(pending.compositionId);
   sessionStorage.removeItem(PENDING_UPLOAD_KEY);
-  await validateCheckoutCart(pending.compositionId);
   window.location.replace('/checkout');
 }
 
@@ -1441,18 +1441,21 @@ async function validateCartServiceFees(cart) {
   return true;
 }
 
-async function validateCheckoutCart(expectedCompositionId) {
-  const cart = expectedCompositionId
+async function validateCheckoutCart(expectedCompositionId, { approvedOnly = false } = {}) {
+  const fullCart = expectedCompositionId
     ? await waitForCartMatch(cart => cartContainsComposition(cart, expectedCompositionId)).catch(() => {
       throw new CartReviewRequired('Shopify could not be reached to confirm your approved design. Check again to continue; this will not add your design twice.', false, true);
     })
     : await cartJson();
-  if (expectedCompositionId && !cartContainsComposition(cart, expectedCompositionId)) {
+  if (expectedCompositionId && !cartContainsComposition(fullCart, expectedCompositionId)) {
     throw new CartReviewRequired(
       'Shopify has not confirmed your approved design in this browser yet. Check again to continue; this will not add your design twice.',
       false, true
     );
   }
+  const cart = approvedOnly && expectedCompositionId
+    ? { ...fullCart, items: fullCart.items.filter(item => item.properties?.['_Composition ID'] === expectedCompositionId) }
+    : fullCart;
   if (!cart.items?.length) throw new Error('Your cart is empty. Please approve a design before checkout.');
   if (incompleteOlderDesigns(cart, expectedCompositionId).length) {
     throw new CartReviewRequired('An earlier design in your cart is missing required service details. Remove the earlier incomplete designs to continue; your current approved design and other complete designs will stay.', false, false, true);
@@ -1466,6 +1469,9 @@ async function validateCheckoutCart(expectedCompositionId) {
   }
   if (expectedCompositionId && !groups.has(expectedCompositionId)) {
     throw new Error('Your approved design is missing from the cart. Review your cart before checkout.');
+  }
+  if (groups.size !== 1) {
+    throw new Error('Your cart can hold one design with its selected services. Return to your design and approve it to replace the previous selection.');
   }
   for (const items of groups.values()) {
     const bases = items.filter(item => !item.properties?.['_Service Kind']);
@@ -1501,6 +1507,38 @@ async function validateCheckoutCart(expectedCompositionId) {
     }
   }
   await validateCartServiceFees(cart);
+  return fullCart;
+}
+
+async function completeApprovedCart(compositionId) {
+  // The current approval explicitly replaces the previous selection. Keep the
+  // previous cart intact until the new display, files and every service validate.
+  const cart = await validateCheckoutCart(compositionId, { approvedOnly: true });
+  const previous = cart.items.filter(item => item.properties?.['_Composition ID'] !== compositionId);
+  if (previous.length) {
+    if (previous.some(item => !item.key)) {
+      throw new CartReviewRequired('The previous selection could not be identified safely. Check again to continue.', false, true);
+    }
+    const updates = Object.fromEntries(previous.map(item => [item.key, 0]));
+    try {
+      await fetch((window.cartUrl || '/cart') + '/update.js', {
+        method: 'POST', credentials: 'same-origin',
+        headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ updates })
+      });
+    } catch {
+      // A missing response is not proof that the removal failed. Never re-add.
+    }
+    const verified = await waitForCartMatch(candidate =>
+      cartContainsComposition(candidate, compositionId) &&
+      candidate.items.every(item => item.properties?.['_Composition ID'] === compositionId)
+    ).catch(() => null);
+    if (!verified || !cartContainsComposition(verified, compositionId) ||
+        verified.items.some(item => item.properties?.['_Composition ID'] !== compositionId)) {
+      throw new CartReviewRequired('Your latest design is saved, but Shopify has not confirmed the replacement yet. Check again to continue; your design will not be added twice.', false, true);
+    }
+  }
+  // Re-read and validate the full cart: nothing else may reach checkout.
+  await validateCheckoutCart(compositionId);
 }
 
 async function removeStandaloneCartItems() {
@@ -1524,6 +1562,37 @@ function standaloneCartUpdates(cartForm) {
     if (!item.dataset.compositionId && item.dataset.lineKey) updates[item.dataset.lineKey] = 0;
   });
   return updates;
+}
+
+function setupPendingUploadRecovery(state) {
+  const pendingExists = () => {
+    try { return !!sessionStorage.getItem(PENDING_UPLOAD_KEY); } catch { return false; }
+  };
+  if (!pendingExists()) return;
+  document.documentElement.classList.add('cart-finalizing');
+  const retry = document.querySelector('[data-upload-retry]');
+  const returnLink = document.querySelector('[data-upload-return]');
+  returnLink?.addEventListener('click', event => {
+    if (retry?.disabled) { event.preventDefault(); return; }
+    sessionStorage.removeItem(PENDING_UPLOAD_KEY);
+  });
+  const resume = async () => {
+    if (retry?.disabled) return;
+    if (retry) retry.disabled = true;
+    try {
+      if (!pendingExists()) throw new Error('Your upload can no longer be resumed. Return to your design and select your files again.');
+      await finishPendingUpload(state);
+    } catch (error) {
+      const message = document.querySelector('[data-upload-status]');
+      if (message) message.textContent = error.message || 'Shopify could not confirm your uploaded design. Check again or return to your design.';
+      if (retry) retry.hidden = !pendingExists();
+      if (returnLink) returnLink.hidden = false;
+    } finally {
+      if (retry) retry.disabled = false;
+    }
+  };
+  retry?.addEventListener('click', resume);
+  return resume();
 }
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -1556,17 +1625,10 @@ document.addEventListener('DOMContentLoaded', () => {
   document.querySelectorAll('[data-consultation-form]').forEach(setupConsultationForm);
   document.querySelectorAll('[data-consultation-dialog]').forEach(setupSpecialInquiryDialog);
   const cartForm = document.querySelector('#cart');
+  const uploadState = cartForm || document.querySelector('[data-upload-state]');
+  if (uploadState) void setupPendingUploadRecovery(uploadState);
   if (cartForm) {
-    finishPendingUpload(cartForm).catch(error => {
-      document.documentElement.classList.remove('cart-finalizing');
-      cartForm.dataset.cartNeedsReview = 'true';
-      const notice = cartForm.querySelector('[data-cart-validation-error]') || document.createElement('p');
-      notice.dataset.cartValidationError = 'true';
-      notice.setAttribute('role', 'alert');
-      notice.style.color = 'var(--color-accent)';
-      notice.textContent = error.message || 'The file uploads could not be verified. Review your composition before checkout.';
-      cartForm.querySelector('.cart-footer').prepend(notice);
-    });
+    cartForm.dataset.cartNeedsReview ||= 'false';
     cartForm.querySelectorAll('[data-remove-composition]').forEach((button) => {
       button.addEventListener('click', async () => {
         const id = button.dataset.removeComposition;
@@ -1630,7 +1692,7 @@ document.addEventListener('DOMContentLoaded', () => {
       event.preventDefault();
       const error = cartForm.querySelector('[data-cart-validation-error]');
       try {
-        await validateCartServiceFees();
+        await validateCheckoutCart();
         if (error) error.textContent = '';
         cartForm.dataset.cartValidationPassed = 'true';
         cartForm.requestSubmit(event.submitter);
@@ -1697,10 +1759,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     const resetApproval = () => {
       if (productForm.dataset.cartSubmitting === 'true') return;
-      if (productForm.dataset.cartNeedsReview === 'true') {
-        approvalStatus.hidden = true;
-        return;
-      }
+      productForm.dataset.cartNeedsReview = 'false';
       productForm.dataset.approvedSignature = '';
       approvalStatus.hidden = true;
       submit.hidden = true;
@@ -1711,43 +1770,52 @@ document.addEventListener('DOMContentLoaded', () => {
     };
     productForm.addEventListener('input', resetApproval);
     productForm.addEventListener('change', resetApproval);
+    productForm.querySelectorAll('[data-edit-design]').forEach(button => button.addEventListener('click', resetApproval));
     const submitApprovedDesign = async (configured) => {
       if (productForm.dataset.cartSubmitting === 'true') return;
       productForm.dataset.cartSubmitting = 'true';
       submit.disabled = true;
       submit.textContent = 'Preparing your design…';
       let cartWriteStarted = false;
-      const cartUrl = window.paletteInstallCartPageUrl || window.cartUrl || '/cart';
+      const openApprovedCheckout = () => {
+        if (productForm.dataset.approvedSignature !== designSignature(productForm)) {
+          productForm.dataset.cartSubmitting = 'false';
+          resetApproval();
+          productFormError(productForm, 'Your choices changed while Shopify was preparing checkout. Review and approve your updated design to continue.');
+          return false;
+        }
+        window.location.href = '/checkout';
+        return true;
+      };
       const requireCartReview = (message, canCleanStandalone = false, canRecheck = false, canCleanIncomplete = false) => {
         productForm.dataset.cartSubmitting = 'false';
         productForm.dataset.cartNeedsReview = 'true';
-        approveButtons.forEach(button => { button.disabled = true; });
         approvalStatus.hidden = true;
         productFormError(productForm, message);
-        submit.textContent = canCleanIncomplete ? 'Remove earlier incomplete designs and continue'
-          : canCleanStandalone ? 'Remove individual items and continue'
-          : canRecheck ? 'Check design and continue' : 'Review your composition';
+        submit.textContent = canCleanIncomplete || canCleanStandalone || canRecheck
+          ? 'Check design and continue' : 'Return to your design';
         submit.disabled = false;
         submit.type = 'button';
         submit.onclick = canCleanStandalone || canRecheck || canCleanIncomplete ? async () => {
           if (submit.disabled) return;
           submit.disabled = true;
+          productForm.dataset.cartSubmitting = 'true';
+          let navigating = false;
           try {
-            if (canCleanStandalone && !await removeStandaloneCartItems()) return;
-            if (canCleanIncomplete && !await removeIncompleteOlderDesigns(configured.compositionId)) return;
-            await validateCheckoutCart(configured.compositionId);
-            window.location.href = '/checkout';
+            await completeApprovedCart(configured.compositionId);
+            navigating = openApprovedCheckout();
           } catch (error) {
             requireCartReview(error.message || 'Please review your cart before checkout.', error.canCleanStandalone, error.canRecheck, error.canCleanIncomplete);
           } finally {
             submit.disabled = false;
+            if (!navigating) productForm.dataset.cartSubmitting = 'false';
           }
-        } : () => { window.location.href = cartUrl; };
+        } : () => {
+          resetApproval();
+          productForm.querySelector('[data-edit-design]')?.click();
+        };
       };
       try {
-        if (!await removeIncompleteOlderDesigns(productForm.dataset.editCompositionId || configured.compositionId)) {
-          throw new Error('Nothing was removed and your current design has not been added. Earlier incomplete designs still block checkout; approve again if you want to remove them and continue.');
-        }
         if (configured.items[0].properties['Vinyl Artwork'] === 'Yes' ||
             configured.items[0].properties['_House Photo Expected'] === 'Yes') {
           const compositionInput = productForm.querySelector('[data-composition-id-input]');
@@ -1771,16 +1839,13 @@ document.addEventListener('DOMContentLoaded', () => {
         }
         cartWriteStarted = true;
         await addCompositionToCart(configured);
-        if (productForm.dataset.editCompositionId) {
-          await replaceComposition(productForm.dataset.editCompositionId, configured.compositionId);
-        }
         try {
-          await validateCheckoutCart(configured.compositionId);
+          await completeApprovedCart(configured.compositionId);
         } catch (validationError) {
           throw validationError instanceof CartReviewRequired
             ? validationError : new CartReviewRequired(validationError.message || 'Review your cart before checkout.');
         }
-        window.location.href = '/checkout';
+        openApprovedCheckout();
       } catch (error) {
         if (error instanceof CartReviewRequired) {
           requireCartReview(error.message, error.canCleanStandalone, error.canRecheck, error.canCleanIncomplete);
@@ -1800,6 +1865,11 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     };
     const approveDesign = () => {
+      if (productForm.dataset.cartSubmitting === 'true') return;
+      if (productForm.dataset.cartNeedsReview === 'true') {
+        void submit.onclick?.();
+        return;
+      }
       try {
         if (productForm.closest('[data-package-browser]')?.dataset.cartPreviewOnly === 'true') {
           throw new Error('This design cannot be added to the Shopify cart until its display and required services are available. No items were added.');
@@ -1825,6 +1895,10 @@ document.addEventListener('DOMContentLoaded', () => {
     productForm.addEventListener('submit', (event) => {
       event.preventDefault();
       if (productForm.dataset.cartSubmitting === 'true') return;
+      if (productForm.dataset.cartNeedsReview === 'true') {
+        void submit.onclick?.();
+        return;
+      }
       if (!productForm.dataset.approvedSignature || productForm.dataset.approvedSignature !== designSignature(productForm)) {
         resetApproval();
         productFormError(productForm, 'Please approve your updated design before reviewing your composition.');
