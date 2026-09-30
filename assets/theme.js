@@ -767,7 +767,9 @@ function designSignature(form) {
   return JSON.stringify(Array.from(new FormData(form).entries())
     .filter(([key]) => key !== 'properties[_Composition ID]')
     .map(([key, value]) => [key, value && typeof value === 'object' && 'size' in value
-      ? [value.name, value.size, value.type, value.lastModified] : value]));
+      // Empty file inputs create synthetic File objects whose lastModified can
+      // change on every FormData read. They are not a changed customer upload.
+      ? (!value.name && value.size === 0 ? '' : [value.name, value.size, value.type, value.lastModified]) : value]));
 }
 
 function showDraftCartPreview(form, design) {
