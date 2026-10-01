@@ -32,7 +32,7 @@
       </div>
     {% endif %}
 
-    {{ form.errors | default_errors }}
+    {% if form.errors %}<div data-contact-form-error>{{ form.errors | default_errors }}</div>{% endif %}
      <p class="contact-form__prefill" data-consultation-prefill-notice hidden>We’ve carried your design notes into this conversation. Add your contact details and take a look before sending; an inquiry is not a booking or quote.</p>
       <p class="contact-form__transfer-error" data-consultation-transfer-error role="alert" hidden>Your selected details could not be carried over. Please enter your special request in the form below before sending.</p>
 

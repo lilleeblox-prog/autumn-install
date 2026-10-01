@@ -347,10 +347,21 @@ function setupSpecialInquiryDialog(dialog) {
 
   let pending;
   try { pending = JSON.parse(sessionStorage.getItem(INQUIRY_PENDING_KEY) || 'null'); } catch { /* A blocked browser store cannot resume. */ }
-  if (dialog.querySelector('[data-inquiry-success]')) {
+  // Shopify reports contact results to every contact form on the page.
+  // Only the form named by the POST action's return fragment owns that result.
+  const ownsResponse = !!contactForm.id && window.location?.hash === `#${contactForm.id}`;
+  const success = dialog.querySelector('[data-inquiry-success]');
+  const formError = dialog.querySelector('[data-inquiry-form-error]');
+  if (success) success.hidden = !ownsResponse;
+  if (formError) formError.hidden = !ownsResponse;
+  if (success && ownsResponse) {
     try { sessionStorage.removeItem(INQUIRY_PENDING_KEY); } catch { /* Storage may be unavailable. */ }
+    dialog.inquiryComplete = true;
+    dialog.querySelector('[data-inquiry-fields]').hidden = true;
+    const title = dialog.querySelector('[data-inquiry-title]');
+    if (title) title.textContent = 'Thank you.';
     dialog.showModal();
-  } else if (dialog.querySelector('[data-inquiry-form-error]')) {
+  } else if (formError && ownsResponse) {
     // Shopify repopulates form.body on validation errors. Session storage is
     // only a backup; the submitted message survives even when storage is blocked.
     const previousBody = body.value || pending?.body;
@@ -451,6 +462,13 @@ function openSpecialInquiry(sourceForm, choices) {
   const dialog = document.querySelector('[data-consultation-dialog]');
   if (!dialog) throw new Error('The inquiry form is unavailable. Please contact the studio.');
   setupSpecialInquiryDialog(dialog);
+  if (dialog.inquiryComplete) {
+    dialog.querySelector('[data-inquiry-success]').hidden = true;
+    dialog.querySelector('[data-inquiry-fields]').hidden = false;
+    const title = dialog.querySelector('[data-inquiry-title]');
+    if (title) title.textContent = 'Tell us your idea.';
+    dialog.inquiryComplete = false;
+  }
   dialog.inquiryPrepared = false;
   // A returned or prepared submission already contains its design and hosted
   // file links. Reopening must not replace it with a new builder snapshot.
@@ -490,7 +508,13 @@ function setupConsultationForm(root) {
   if (transferError && new URLSearchParams(window.location.search).get('consultation_transfer') === 'failed') {
     transferError.hidden = false;
   }
-  if (root.querySelector('[data-contact-success]')) {
+  const submittedForm = root.querySelector('form');
+  const ownsResponse = !!submittedForm?.id && window.location?.hash === `#${submittedForm.id}`;
+  const success = root.querySelector('[data-contact-success]');
+  const formError = root.querySelector('[data-contact-form-error]');
+  if (success) success.hidden = !ownsResponse;
+  if (formError) formError.hidden = !ownsResponse;
+  if (success && ownsResponse) {
     try { sessionStorage.removeItem(CONSULTATION_STORAGE_KEY); } catch { /* Storage may be unavailable. */ }
     return;
   }

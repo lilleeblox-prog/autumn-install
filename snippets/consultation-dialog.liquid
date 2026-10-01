@@ -18,7 +18,7 @@
 <dialog class="special-request-dialog" data-consultation-dialog data-upload-endpoint="{{ settings.consultation_upload_endpoint | escape }}" aria-labelledby="SpecialRequestTitle-{{ section.id }}">
   <div class="special-request-dialog__inner">
     <div class="special-request-dialog__top">
-      <div><span class="eyebrow">A conversation with the studio</span><h2 id="SpecialRequestTitle-{{ section.id }}">Tell us your idea.</h2></div>
+      <div><span class="eyebrow">A conversation with the studio</span><h2 id="SpecialRequestTitle-{{ section.id }}" data-inquiry-title>Tell us your idea.</h2></div>
       <button type="button" class="special-request-dialog__close" data-inquiry-close aria-label="Close inquiry">&times;</button>
     </div>
     {% form 'contact', id: inquiry_form_id %}
@@ -28,6 +28,7 @@
       {% if form.errors %}
         <div data-inquiry-form-error>{{ form.errors | default_errors }}</div>
       {% endif %}
+      <div data-inquiry-fields>
       <p>Your choices are below. Add your contact details and tell us what you would like to change. Selected files will be securely uploaded before your inquiry is sent.</p>
       <pre class="special-request-dialog__summary" data-inquiry-summary aria-label="Selected design details"></pre>
       <p class="special-request-dialog__files" data-inquiry-files></p>
@@ -40,6 +41,7 @@
       <p class="special-request-dialog__error" data-inquiry-error role="alert" hidden></p>
       <button type="submit" class="button button--accent">Send inquiry</button>
       <p class="contact-form__note">An inquiry is not a booking, quote, or order. Files are only sent when the inquiry is submitted successfully.</p>
+      </div>
     {% endform %}
   </div>
 </dialog>
