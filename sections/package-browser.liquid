@@ -926,7 +926,7 @@
     <button type="button" aria-pressed="true" data-pane-tab="build">Create your look</button>
     <button type="button" aria-pressed="false" data-pane-tab="preview">See your design</button>
   </nav>
-  <form class="palette-composer__form" method="post" action="{{ routes.cart_add_url }}" enctype="multipart/form-data" data-product-form data-product-title="{{ section.settings.title | escape }}" data-selected-scale-name="{{ initial_scale | escape }}" data-base-estimate-cents="{{ initial_base_estimate_cents }}">
+  <form class="palette-composer__form" method="post" action="{{ routes.cart_add_url }}" enctype="multipart/form-data" data-product-form data-shopify-editor="{{ request.design_mode }}" data-product-title="{{ section.settings.title | escape }}" data-selected-scale-name="{{ initial_scale | escape }}" data-base-estimate-cents="{{ initial_base_estimate_cents }}">
     <input type="hidden" name="form_type" value="product">
     <input type="hidden" name="return_to" value="{% if theme.role != 'main' and theme.id != blank %}{{ routes.cart_url }}?preview_theme_id={{ theme.id }}{% else %}{{ routes.cart_url }}{% endif %}">
     <input type="hidden" name="quantity" value="1">
@@ -935,6 +935,7 @@
     <input type="hidden" name="properties[Hay Bales]" value="No" data-hay-property>
     <input type="hidden" name="properties[Palette]" value="" data-chosen-palette>
     <div class="palette-composer__editor" data-composer-pane="build" aria-label="Create your display">
+      {% render 'editor-order-preview' %}
       <header class="palette-composer__intro">
         <div class="eyebrow">{{ section.settings.eyebrow | escape }}</div>
         {% assign title_lines = section.settings.title | split: '|' %}
@@ -1341,7 +1342,7 @@
       root.dataset.cartPreviewOnly = availableToOrder ? 'false' : 'true';
       form.querySelectorAll('[data-approve-design]').forEach(button => {
         button.disabled = !palette;
-        button.textContent = 'Continue to checkout';
+        button.textContent = form.dataset.shopifyEditor === 'true' ? 'Open store preview' : 'Continue to checkout';
       });
       form.querySelectorAll('[data-approval-disclosure]').forEach(note => {
         note.textContent = availableToOrder

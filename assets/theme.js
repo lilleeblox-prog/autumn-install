@@ -1106,6 +1106,7 @@ class CartReviewRequired extends Error {
 }
 
 async function addCompositionToCart(configured, multipartBody = null) {
+  if (window.Shopify?.designMode) throw new Error('Open the store preview in a separate tab to test checkout. No design was submitted from the theme editor.');
   const base = configured?.items?.[0];
   const baseProperties = base?.properties || {};
   if (multipartBody && base) {
@@ -1212,6 +1213,9 @@ function artworkExtrasComplete(cart, pending) {
 }
 
 async function finishPendingUpload(cartForm, navigateToCheckout = true) {
+  if (window.Shopify?.designMode || cartForm.dataset.shopifyEditor === 'true') {
+    throw new CartReviewRequired('Open the store preview in a separate tab to test file uploads and checkout. No services were added from the theme editor.');
+  }
   const serialized = sessionStorage.getItem(PENDING_UPLOAD_KEY);
   if (!serialized) {
     if (!navigateToCheckout) throw new CartReviewRequired('Your upload can no longer be resumed. Return to your design and approve it again.');
@@ -1868,6 +1872,15 @@ document.addEventListener('DOMContentLoaded', () => {
       approveButtons.forEach(button => { button.hidden = false; });
       productFormError(productForm, '');
     };
+    const openEditorPreview = () => {
+      if (productForm.dataset.shopifyEditor !== 'true' && !window.Shopify?.designMode) return false;
+      productFormError(productForm, 'Checkout testing opens outside the theme editor. Save your changes and select your files in the separate store preview.');
+      productForm.querySelector('[data-editor-store-preview]')?.click();
+      return true;
+    };
+    if (productForm.dataset.shopifyEditor === 'true' || window.Shopify?.designMode) {
+      approveButtons.forEach(button => { button.textContent = 'Open store preview'; });
+    }
     productForm.addEventListener('input', resetApproval);
     productForm.addEventListener('change', resetApproval);
     productForm.querySelectorAll('[data-edit-design]').forEach(button => button.addEventListener('click', resetApproval));
@@ -1989,6 +2002,7 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     };
     const approveDesign = () => {
+      if (openEditorPreview()) return;
       if (productForm.dataset.cartSubmitting === 'true') return;
       if (productForm.dataset.cartNeedsReview === 'true') {
         void submit.onclick?.();
@@ -2018,6 +2032,7 @@ document.addEventListener('DOMContentLoaded', () => {
     approveButtons.forEach(button => button.addEventListener('click', approveDesign));
     productForm.addEventListener('submit', (event) => {
       event.preventDefault();
+      if (openEditorPreview()) return;
       if (productForm.dataset.cartSubmitting === 'true') return;
       if (productForm.dataset.cartNeedsReview === 'true') {
         void submit.onclick?.();

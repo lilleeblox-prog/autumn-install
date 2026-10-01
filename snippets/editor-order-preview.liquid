@@ -1,0 +1,11 @@
+{% if request.design_mode %}
+  {% assign standalone_preview_url = request.path | append: '?preview_theme_id=' | append: theme.id %}
+  {% if request.page_type == 'index' %}
+    {% assign standalone_preview_url = standalone_preview_url | append: '#compose' %}
+  {% endif %}
+  <div class="editor-order-preview" style="padding:18px;margin:0 0 28px;border:1px solid currentColor;font-size:14px;line-height:1.6" role="note">
+    <strong>Checkout testing opens outside the theme editor.</strong>
+    <p style="margin:8px 0">Save your theme changes, then open the store preview in a new tab. Select your files there; files selected in this editor do not carry over.</p>
+    <a href="{{ standalone_preview_url | escape }}" target="_blank" rel="noopener noreferrer" data-editor-store-preview>Open store preview →</a>
+  </div>
+{% endif %}
