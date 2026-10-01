@@ -1425,6 +1425,12 @@
       updateBrief();
       updateOutsideNote();
     });
+    // Restore the consultation snapshot after browser Back restores controls,
+    // rather than leaving the initial page defaults in session storage.
+    window.addEventListener?.('pageshow', () => setTimeout(() => {
+      updateBrief();
+      updateOutsideNote();
+    }, 0));
     form.addEventListener('change', event => {
       updateBrief();
       updateOutsideNote();

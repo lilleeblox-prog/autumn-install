@@ -497,6 +497,19 @@ function setupConsultationForm(root) {
   const timing = root.querySelector('[name="contact[timing]"]');
   const body = root.querySelector('[name="contact[body]"]');
   const notice = root.querySelector('[data-consultation-prefill-notice]');
+  // Browser Back can restore textarea values after scripts initialize, without
+  // restoring their data attributes. Remember only values we generated, so
+  // restored design text stays updateable while customer edits stay intact.
+  const ownershipKey = `palette-install-contact-prefill-v1:${body?.id || 'default'}`;
+  let previousPrefills;
+  try { previousPrefills = JSON.parse(sessionStorage.getItem(ownershipKey) || 'null'); } catch { /* Storage may be blocked. */ }
+  const knownBodies = new Set(Array.isArray(previousPrefills?.bodies) ? previousPrefills.bodies.filter(value => typeof value === 'string') : []);
+  const knownTimings = new Set(Array.isArray(previousPrefills?.timings) ? previousPrefills.timings.filter(value => typeof value === 'string') : []);
+  const rememberPrefill = (values, value) => {
+    values.delete(value);
+    values.add(value);
+    while (values.size > 8) values.delete(values.values().next().value);
+  };
   const apply = () => {
     let saved;
     try { saved = JSON.parse(sessionStorage.getItem(CONSULTATION_STORAGE_KEY) || 'null'); } catch { return; }
@@ -523,17 +536,23 @@ function setupConsultationForm(root) {
     ];
     const message = lines.filter(Boolean).join('\n');
     if (timing && typeof choices.week === 'string' && choices.week &&
-        (!timing.value || timing.value === timing.dataset.prefillValue)) {
+        (!timing.value || timing.value === timing.dataset.prefillValue || knownTimings.has(timing.value))) {
       timing.value = choices.week;
       timing.dataset.prefillValue = timing.value;
+      rememberPrefill(knownTimings, timing.value);
     }
-    if (body && message && (!body.value || body.value === body.dataset.prefillValue)) {
+    if (body && message && (!body.value || body.value === body.dataset.prefillValue || knownBodies.has(body.value))) {
       body.value = message;
       body.dataset.prefillValue = message;
+      rememberPrefill(knownBodies, body.value);
     }
+    try {
+      sessionStorage.setItem(ownershipKey, JSON.stringify({ bodies: [...knownBodies], timings: [...knownTimings] }));
+    } catch { /* Existing in-page ownership still works without storage. */ }
     if (notice && message) notice.hidden = false;
   };
   document.addEventListener('palette-install:consultation-updated', apply);
+  window.addEventListener?.('pageshow', () => setTimeout(apply, 0));
   apply();
 }
 
