@@ -451,11 +451,15 @@ function openSpecialInquiry(sourceForm, choices) {
   const dialog = document.querySelector('[data-consultation-dialog]');
   if (!dialog) throw new Error('The inquiry form is unavailable. Please contact the studio.');
   setupSpecialInquiryDialog(dialog);
+  dialog.inquiryPrepared = false;
+  // A returned or prepared submission already contains its design and hosted
+  // file links. Reopening must not replace it with a new builder snapshot.
+  if (dialog.inquiryRetry) {
+    if (!dialog.open) dialog.showModal();
+    return;
+  }
   dialog.inquirySource = sourceForm;
   dialog.inquiryChoices = choices;
-  dialog.inquiryPrepared = false;
-  if (dialog.inquiryRetry) dialog.querySelector('[data-inquiry-body]').value = '';
-  dialog.inquiryRetry = false;
   dialog.querySelector('[data-inquiry-summary]').textContent = consultationSummary(choices);
   const artwork = choices.artwork === 'Yes' ? sourceForm.querySelector('[data-artwork-file]')?.files?.[0] : null;
   const photo = sourceForm.querySelector('[data-house-photo-file]')?.files?.[0];
@@ -463,7 +467,10 @@ function openSpecialInquiry(sourceForm, choices) {
     [artwork && `Artwork: ${artwork.name}`, photo && `House photo: ${photo.name}`].filter(Boolean).join(' · ') ||
     'No files selected.';
   const timing = dialog.querySelector('[data-inquiry-timing]');
-  if (timing && !timing.value) timing.value = choices.week || '';
+  if (timing && (!timing.value || timing.value === timing.dataset.prefillValue)) {
+    timing.value = choices.week || '';
+    timing.dataset.prefillValue = timing.value;
+  }
   const endpoint = dialog.dataset.uploadEndpoint || '';
   const uploadUnavailable = !!(artwork || photo) && !/^https:\/\/[^/]+\/api\/consultation-uploads\/?$/.test(endpoint);
   const error = dialog.querySelector('[data-inquiry-error]');
