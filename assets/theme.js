@@ -1081,14 +1081,15 @@ class CartReviewRequired extends Error {
   }
 }
 
-async function addCompositionToCart(configured) {
+async function addCompositionToCart(configured, multipartBody = null) {
   let response;
   try {
     response = await fetch((window.cartAddUrl || '/cart/add') + '.js', {
       method: 'POST',
       credentials: 'same-origin',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ items: configured.items })
+      // The browser supplies the multipart boundary when real files are sent.
+      headers: multipartBody ? { 'Accept': 'application/json' } : { 'Content-Type': 'application/json' },
+      body: multipartBody || JSON.stringify({ items: configured.items })
     });
   } catch {
     // A lost response is not proof that Shopify rejected the cart update.
@@ -1097,10 +1098,13 @@ async function addCompositionToCart(configured) {
   const cart = await waitForCartMatch(cart => cartContainsComposition(cart, configured.compositionId)).catch(() => null);
   if (cart && cartContainsComposition(cart, configured.compositionId)) return;
   const body = response ? await response.json().catch(() => ({})) : {};
-  throw new CartReviewRequired(
+  const problem = new CartReviewRequired(
     body.description || 'Shopify has not confirmed your approved design yet. Check again to continue; this will not add your design twice.',
     false, !body.description
   );
+  problem.addRejected = response?.status >= 400 && response.status < 500;
+  if (problem.addRejected) problem.canRecheck = false;
+  throw problem;
 }
 
 async function removeComposition(compositionId) {
@@ -1142,9 +1146,12 @@ function artworkExtrasComplete(cart, pending) {
   return expected.size === actual.size && Array.from(expected).every(([key, count]) => actual.get(key) === count);
 }
 
-async function finishPendingUpload(cartForm) {
+async function finishPendingUpload(cartForm, navigateToCheckout = true) {
   const serialized = sessionStorage.getItem(PENDING_UPLOAD_KEY);
-  if (!serialized) return;
+  if (!serialized) {
+    if (!navigateToCheckout) throw new CartReviewRequired('Your upload can no longer be resumed. Return to your design and approve it again.');
+    return;
+  }
   cartForm.dataset.cartNeedsReview = 'true';
   let pending;
   try {
@@ -1200,7 +1207,7 @@ async function finishPendingUpload(cartForm) {
   }
   await completeApprovedCart(pending.compositionId);
   sessionStorage.removeItem(PENDING_UPLOAD_KEY);
-  window.location.replace('/checkout');
+  if (navigateToCheckout) window.location.replace('/checkout');
 }
 
 async function loadEditingComposition(form) {
@@ -1779,6 +1786,8 @@ document.addEventListener('DOMContentLoaded', () => {
       submit.disabled = true;
       submit.textContent = 'Preparing your design…';
       let cartWriteStarted = false;
+      const hasUploads = configured.items[0].properties['Vinyl Artwork'] === 'Yes' ||
+        configured.items[0].properties['_House Photo Expected'] === 'Yes';
       const openApprovedCheckout = () => {
         if (productForm.dataset.approvedSignature !== designSignature(productForm)) {
           productForm.dataset.cartSubmitting = 'false';
@@ -1804,7 +1813,8 @@ document.addEventListener('DOMContentLoaded', () => {
           productForm.dataset.cartSubmitting = 'true';
           let navigating = false;
           try {
-            await completeApprovedCart(configured.compositionId);
+            if (hasUploads) await finishPendingUpload(productForm, false);
+            else await completeApprovedCart(configured.compositionId);
             navigating = openApprovedCheckout();
           } catch (error) {
             requireCartReview(error.message || 'Please review your cart before checkout.', error.canCleanStandalone, error.canRecheck, error.canCleanIncomplete);
@@ -1818,8 +1828,7 @@ document.addEventListener('DOMContentLoaded', () => {
         };
       };
       try {
-        if (configured.items[0].properties['Vinyl Artwork'] === 'Yes' ||
-            configured.items[0].properties['_House Photo Expected'] === 'Yes') {
+        if (hasUploads) {
           const compositionInput = productForm.querySelector('[data-composition-id-input]');
           const housePhotoExpected = productForm.querySelector('[data-house-photo-expected]');
           if (!compositionInput || !housePhotoExpected) throw new Error('The file uploads could not be prepared. Please try again.');
@@ -1833,12 +1842,26 @@ document.addEventListener('DOMContentLoaded', () => {
           }));
           compositionInput.value = configured.compositionId;
           housePhotoExpected.disabled = configured.items[0].properties['_House Photo Expected'] !== 'Yes';
-          // Shopify's multipart product form stores both file bytes as line-item properties.
-          // JSON Cart API requests would only send filenames, not the uploads.
+          // Keep the multipart file bytes, but await Shopify's JSON response on
+          // this page rather than navigating through a blind native POST.
+          const uploadData = new FormData(productForm);
+          uploadData.delete('return_to');
+          // Internal metadata was just added synchronously; it is not a shopper edit.
+          productForm.dataset.approvedSignature = designSignature(productForm);
           cartWriteStarted = true;
-          HTMLFormElement.prototype.submit.call(productForm);
+          try {
+            await addCompositionToCart(configured, uploadData);
+          } catch (error) {
+            if (error.addRejected) sessionStorage.removeItem(PENDING_UPLOAD_KEY);
+            throw error;
+          }
+          await finishPendingUpload(productForm, false);
+          openApprovedCheckout();
           return;
         }
+        // A newly approved file-free design supersedes an older upload intent.
+        // It must not reopen recovery for a stale composition on a later cart visit.
+        try { sessionStorage.removeItem(PENDING_UPLOAD_KEY); } catch { /* File-free checkout does not depend on storage. */ }
         cartWriteStarted = true;
         await addCompositionToCart(configured);
         try {
