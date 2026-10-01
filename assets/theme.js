@@ -243,10 +243,32 @@ const SERVICE_AREA_ZIPS = new Set([
   '37128', '37153', '37187', '37034', '37076', '37025', '38401', '37189',
   '37115', '37098'
 ]);
+function configuredServiceAreaZips() {
+  if (!Object.prototype.hasOwnProperty.call(window, 'paletteInstallApprovedZipList')) {
+    return { valid: true, zips: SERVICE_AREA_ZIPS };
+  }
+  const configured = window.paletteInstallApprovedZipList;
+  if (typeof configured !== 'string' || !configured.trim()) return { valid: false, zips: new Set() };
+  const zips = new Set();
+  for (const line of configured.split(/\r\n?|\n/)) {
+    if (!line.trim()) continue;
+    for (const token of line.split(',')) {
+      const zip = token.trim();
+      if (!/^\d{5}$/.test(zip)) return { valid: false, zips: new Set() };
+      zips.add(zip);
+    }
+  }
+  return zips.size ? { valid: true, zips } : { valid: false, zips: new Set() };
+}
+function serviceAreaConfigurationError() {
+  return 'Delivery and installation can’t be approved because the approved ZIP list is blank or invalid. Please contact the studio.';
+}
 function serviceAreaForZip(value) {
   const zip = String(value || '').trim();
   if (!/^\d{5}$/.test(zip)) return 'invalid';
-  return SERVICE_AREA_ZIPS.has(zip) ? 'within' : 'outside';
+  const configuration = configuredServiceAreaZips();
+  if (!configuration.valid) return 'configuration-error';
+  return configuration.zips.has(zip) ? 'within' : 'outside';
 }
 window.paletteInstallServiceArea = { check: serviceAreaForZip };
 
@@ -831,6 +853,7 @@ function previewCartDesign(form) {
   if (zipStatus === 'outside') {
     throw new Error(`We don’t currently deliver or install to ZIP ${installationZip}. Fill out the consultation form instead of ordering.`);
   }
+  if (zipStatus === 'configuration-error') throw new Error(serviceAreaConfigurationError());
   const requestedWeek = String(new FormData(form).get('properties[Requested Week]') || '');
   if (requestedWeek && !requestedWeekOpen(requestedWeek)) {
     throw new Error('This week has already started. Please select an upcoming week.');
@@ -905,6 +928,7 @@ function configuredCartItems(form) {
   if (form.querySelector('[data-custom-request]')?.checked) {
     throw new Error('Further customization needs a consultation before this design can be ordered. Please request a consultation.');
   }
+  if (zipStatus === 'configuration-error') throw new Error(serviceAreaConfigurationError());
   if (zipStatus !== 'within') {
     throw new Error('Enter a valid five-digit installation or delivery ZIP code.');
   }
@@ -1315,6 +1339,8 @@ function validateCartGroups(cartForm) {
     if (zipStatus !== 'within') {
       error.textContent = zipStatus === 'outside'
         ? 'Outside our service area? Please request a consultation instead of checking out.'
+        : zipStatus === 'configuration-error'
+          ? serviceAreaConfigurationError()
         : 'Please edit your design and enter a valid five-digit installation or delivery ZIP code.';
       return false;
     }
@@ -1924,20 +1950,9 @@ document.addEventListener('DOMContentLoaded', () => {
         void submit.onclick?.();
         return;
       }
-      if (!productForm.dataset.approvedSignature || productForm.dataset.approvedSignature !== designSignature(productForm)) {
-        resetApproval();
-        productFormError(productForm, 'Please approve your updated design before reviewing your composition.');
-        return;
-      }
-      let configured;
-      try {
-        configured = configuredCartItems(productForm);
-      } catch (error) {
-        resetApproval();
-        productFormError(productForm, error.message);
-        return;
-      }
-      void submitApprovedDesign(configured);
+      // Submitting this single form is approval. Keyboard submission follows
+      // the same validation and one-write lock as the primary checkout button.
+      approveDesign();
     });
     loadEditingComposition(productForm).catch(error => {
       approveButtons.forEach(button => { button.disabled = true; });

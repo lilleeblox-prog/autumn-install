@@ -348,7 +348,7 @@
   #PackageBrowser-{{ section.id }} .composition-price-estimate__row, #PackageBrowser-{{ section.id }} .composition-price-estimate__total { display:flex;justify-content:space-between;gap:10px;padding:8px 0;font-size:.8rem; }
   #PackageBrowser-{{ section.id }} .composition-price-estimate__total { border-top:1px solid rgba(255,255,255,.3);padding-top:14px; }
   #PackageBrowser-{{ section.id }} .composition-price-estimate__total strong { font:400 1.8rem var(--font-serif); }
-  #PackageBrowser-{{ section.id }} [data-approve-design], #PackageBrowser-{{ section.id }} [data-cart-submit], #PackageBrowser-{{ section.id }} [data-open-final-review] { width:100%;padding:15px;border:0;background:var(--composer-accent);color:white;cursor:pointer;margin-top:10px; }
+  #PackageBrowser-{{ section.id }} [data-approve-design], #PackageBrowser-{{ section.id }} [data-cart-submit] { width:100%;padding:15px;border:0;background:var(--composer-accent);color:white;cursor:pointer;margin-top:10px; }
   #PackageBrowser-{{ section.id }} [data-approve-design]:disabled { opacity:.55;cursor:not-allowed; }
   #PackageBrowser-{{ section.id }} .product-approval { border:1px solid var(--composer-line);padding:14px;margin:12px 0; }
   /* Match the Palette Install design-studio composition. */
@@ -577,30 +577,6 @@
     font: inherit; font-weight: 700; letter-spacing: .06em;
   }
   #PackageBrowser-{{ section.id }} .composer-inquiry-button:hover { background: #d6b59d; }
-  #PackageBrowser-{{ section.id }} .composer-editor-approval {
-    grid-column: 1 / -1;
-    width: 100%;
-    margin: 0;
-    padding: 18px 24px 22px;
-    border-top: 1px solid var(--composer-line);
-    background: var(--composer-paper);
-    text-align: center;
-  }
-  #PackageBrowser-{{ section.id }} .composer-editor-approval p {
-    margin: 0 auto 8px;
-    color: var(--composer-muted);
-    font-size: 12px;
-    line-height: 1.6;
-  }
-  #PackageBrowser-{{ section.id }} .composer-editor-approval [data-open-final-review] {
-    display: block;
-    max-width: 560px;
-    margin: 0 auto;
-    padding: 18px 24px;
-    background: var(--composer-ink);
-    color: var(--composer-paper);
-  }
-  #PackageBrowser-{{ section.id }} .composer-editor-approval [data-open-final-review]:hover { background: var(--composer-oxide); }
   #PackageBrowser-{{ section.id }} .product-approval { border-color: rgba(255,255,255,.25); }
   #PackageBrowser-{{ section.id }} .composer-choice {
     gap: 10px;
@@ -628,6 +604,29 @@
     outline-offset: 2px;
   }
   #PackageBrowser-{{ section.id }} .composer-choice--full-card small { margin-left: 0; }
+  #PackageBrowser-{{ section.id }} .composer-addon-picker { margin: 26px 0 34px; }
+  #PackageBrowser-{{ section.id }} .composer-addon-picker .variant-picker__label { display:block; margin-bottom:12px; }
+  #PackageBrowser-{{ section.id }} .composer-addon-picker .addon-option {
+    display:flex;
+    gap:12px;
+    align-items:flex-start;
+    margin:8px 0;
+    padding:16px 18px;
+    border:1px solid rgba(62, 53, 43, .20);
+    background:var(--composer-card);
+    color:var(--composer-ink);
+    cursor:pointer;
+    font-size:13px;
+    line-height:1.5;
+  }
+  #PackageBrowser-{{ section.id }} .composer-addon-picker .addon-option:has(input:checked) {
+    border-color:var(--composer-oxide);
+    background:#ded2c3;
+  }
+  #PackageBrowser-{{ section.id }} .composer-addon-picker input { margin:3px 0 0; accent-color:var(--composer-oxide); }
+  #PackageBrowser-{{ section.id }} .composer-addon-picker .addon-info { display:grid; gap:4px; }
+  #PackageBrowser-{{ section.id }} .composer-addon-picker .addon-info strong { font-weight:600; }
+  #PackageBrowser-{{ section.id }} .composer-addon-picker .addon-option__description { color:var(--composer-muted); font-size:12px; }
   #PackageBrowser-{{ section.id }} .composer-field { margin: 22px 0; }
   #PackageBrowser-{{ section.id }} .composer-field input,
   #PackageBrowser-{{ section.id }} .composer-field select,
@@ -860,43 +859,17 @@
     #PackageBrowser-{{ section.id }} .package-browser__grid { grid-template-columns:1fr; }
     #PackageBrowser-{{ section.id }} .palette-choice { min-height:152px; }
   }
-  #PackageBrowser-{{ section.id }}[data-review-stage=build] [data-approve-design],
-  #PackageBrowser-{{ section.id }}[data-review-stage=build] [data-edit-design] { display:none !important; }
   @media(min-width:901px) {
-    #PackageBrowser-{{ section.id }}[data-review-stage=build] .palette-composer__preview-content {
+    #PackageBrowser-{{ section.id }} .palette-composer__preview-content {
       position: sticky;
       top: var(--composer-preview-stick-top, 24px);
     }
   }
-  @media(max-width:900px) {
-    #PackageBrowser-{{ section.id }}[data-mobile-pane=preview][data-review-stage=build] .composer-editor-approval { display:none !important; }
-  }
-  #PackageBrowser-{{ section.id }}[data-review-stage=final] .palette-composer__tabs,
-  #PackageBrowser-{{ section.id }}[data-review-stage=final] .palette-composer__editor,
-  #PackageBrowser-{{ section.id }}[data-review-stage=final] .composer-editor-approval { display:none !important; }
-  #PackageBrowser-{{ section.id }}[data-review-stage=final] .palette-composer__form { display:block; }
-  #PackageBrowser-{{ section.id }}[data-review-stage=final] .palette-composer__preview { width:100%; }
-  #PackageBrowser-{{ section.id }}[data-review-stage=final] .palette-composer__preview-intro,
-  #PackageBrowser-{{ section.id }}[data-review-stage=final] .composition-summary {
-    box-sizing:border-box;
-    width:100%;
-    max-width:980px;
-    margin-left:auto;
-    margin-right:auto;
-  }
   #PackageBrowser-{{ section.id }} [data-edit-design] { cursor:pointer;font-size:.75rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase; }
   #PackageBrowser-{{ section.id }} .palette-composer__preview-intro [data-edit-design] { display:block;width:max-content;margin:0 0 26px;padding:12px 18px;border:1px solid var(--composer-oxide);background:transparent;color:var(--composer-ink); }
   #PackageBrowser-{{ section.id }} .palette-composer__preview-intro [data-edit-design]:hover { background:var(--composer-ink);color:var(--composer-paper); }
-  #PackageBrowser-{{ section.id }} .composer-final-approval { margin-top:28px; }
-  #PackageBrowser-{{ section.id }} .composer-review-actions { display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;align-items:stretch; }
-  #PackageBrowser-{{ section.id }} .composer-review-actions button { width:100%;min-height:54px;margin:0; }
-  #PackageBrowser-{{ section.id }} .composer-review-actions [data-edit-design] { border:1px solid var(--composer-paper);background:transparent;color:var(--composer-paper); }
-  #PackageBrowser-{{ section.id }} .composer-review-actions [data-edit-design]:hover { background:var(--composer-paper);color:var(--composer-ink); }
-  #PackageBrowser-{{ section.id }} .composer-review-error { margin:14px 0;color:#ffd7c5;line-height:1.5; }
-  @media(max-width:900px) {
-    #PackageBrowser-{{ section.id }}[data-review-stage=final] .palette-composer__form { height:auto;min-height:calc(100vh - 84px); }
-    #PackageBrowser-{{ section.id }}[data-review-stage=final] .palette-composer__preview { max-height:none;overflow:visible; }
-  }
+  #PackageBrowser-{{ section.id }} .composer-approval { margin-top:28px; }
+  #PackageBrowser-{{ section.id }} .composer-approval-error { margin:14px 0;color:#ffd7c5;line-height:1.5; }
   #PackageBrowser-{{ section.id }} .cart-layout-dialog {
     width: min(760px, calc(100% - 32px));
     max-height: min(88vh, 900px);
@@ -948,7 +921,7 @@
 {% endfor %}
 
 <div id="{{ section.settings.section_id | default: 'compose' | escape }}" style="scroll-margin-top: 100px"></div>
-<section class="palette-composer" id="PackageBrowser-{{ section.id }}" data-package-browser="{{ section.id }}" data-mobile-pane="build" data-review-stage="build">
+<section class="palette-composer" id="PackageBrowser-{{ section.id }}" data-package-browser="{{ section.id }}" data-mobile-pane="build">
   <nav class="palette-composer__tabs" aria-label="Builder views">
     <button type="button" aria-pressed="true" data-pane-tab="build">Create your look</button>
     <button type="button" aria-pressed="false" data-pane-tab="preview">See your design</button>
@@ -1047,6 +1020,23 @@
           <label class="composer-custom"><input type="checkbox" data-custom-request> I have a special request</label>
           <p data-custom-request-note hidden>A consultation is required for this request. Your selected details and files will be included when you send the inquiry. <a href="{% if pages.contact != blank %}{{ pages.contact.url }}{% else %}{{ routes.root_url }}{% endif %}#consultation-form" data-consultation-link>Open the inquiry form →</a></p>
         </div>
+        <div class="addon-picker composer-addon-picker">
+          <span class="variant-picker__label">Finishing touches</span>
+          {% for block in section.blocks %}
+            {% if block.type == 'addon' %}
+              {% assign addon_prod = block.settings.product %}
+              {% if addon_prod != blank and addon_prod.available and addon_prod.selected_or_first_available_variant.price > 0 %}
+                <label class="addon-option" {{ block.shopify_attributes }}>
+                  <input type="checkbox" name="addons[]" value="{{ addon_prod.selected_or_first_available_variant.id }}" data-addon-price="{{ addon_prod.selected_or_first_available_variant.price }}">
+                  <span class="addon-info">
+                    <strong>{{ addon_prod.title | escape }}</strong>
+                    {% if block.settings.description != blank %}<span class="addon-option__description">{{ block.settings.description | escape }}</span>{% endif %}
+                  </span>
+                </label>
+              {% endif %}
+            {% endif %}
+          {% endfor %}
+        </div>
         <div class="palette-composer__arrival">
           <span class="eyebrow">04 / The arrival</span>
           <h2>Make an entrance.</h2>
@@ -1136,23 +1126,16 @@
           <div class="composition-price-estimate__total"><span>Known subtotal</span><strong data-estimate-total aria-live="polite"></strong></div>
           <p class="composition-price-estimate__note" data-estimate-note>Unconfirmed service pricing is excluded. Final taxes and checkout charges are shown before payment.</p>
         </section>
-        <div class="composer-final-approval">
+        <div class="composer-approval">
           <p class="product-approval-note" data-approval-disclosure>{{ approval_disclosure | escape }} Your cart holds one design and its selected services. Approving replaces any previous cart selection. Preferred weeks require confirmation.</p>
-          <p class="composer-review-error hidden" data-review-error role="alert" aria-live="assertive"></p>
-          <div class="composer-review-actions">
-            <button type="button" data-edit-design>Edit design</button>
-            <button type="button" data-approve-design disabled>Approve</button>
-          </div>
+          <p class="composer-approval-error hidden" data-review-error role="alert" aria-live="assertive"></p>
+          <button type="button" data-approve-design disabled>Continue to checkout</button>
           <div class="product-approval" data-approval-status hidden role="status"><strong>Preparing your checkout</strong><p>We’re verifying your display and services before opening Shopify checkout. Your preferred week still needs confirmation.</p></div>
-          <button type="submit" data-cart-submit hidden>Review your composition</button>
+          <button type="submit" data-cart-submit hidden>Preparing checkout recovery</button>
         </div>
       </div>
       </div>
     </aside>
-    <div class="composer-editor-approval">
-      <p>Ready to look at everything together? Review your choices and estimated total before continuing.</p>
-      <button type="button" data-open-final-review>Approve final design</button>
-    </div>
   </form>
   {% render 'consultation-dialog', section: section %}
   <dialog class="cart-layout-dialog" data-cart-layout-dialog aria-labelledby="CartLayoutTitle-{{ section.id }}">
@@ -1358,7 +1341,7 @@
       root.dataset.cartPreviewOnly = availableToOrder ? 'false' : 'true';
       form.querySelectorAll('[data-approve-design]').forEach(button => {
         button.disabled = !palette;
-        button.textContent = 'Approve';
+        button.textContent = 'Continue to checkout';
       });
       form.querySelectorAll('[data-approval-disclosure]').forEach(note => {
         note.textContent = availableToOrder
@@ -1400,32 +1383,7 @@
         : 'Requested delivery & installation week';
       rememberSelection();
     };
-    root.querySelector('[data-open-final-review]')?.addEventListener('click', () => {
-      if (window.paletteInstallServiceArea.check(text('Installation ZIP')) === 'outside') {
-        productFormError(form, 'We don’t currently serve this ZIP. Fill out the consultation form below instead of placing an order.');
-        form.querySelector('[data-outside-area-note] a')?.focus();
-        return;
-      }
-      if (!form.checkValidity()) {
-        const missingField = focusFirstInvalidComposerField(form);
-        productFormError(form, `Please complete ${missingField || 'the highlighted choices'} before reviewing your design.`);
-        return;
-      }
-      if (form.querySelector('[data-custom-request]')?.checked) {
-        productFormError(form, 'A special request needs a consultation before it can be approved for cart review.');
-        form.querySelector('[data-custom-request]')?.focus();
-        return;
-      }
-      productFormError(form, '');
-      root.dataset.reviewStage = 'final';
-      root.dataset.mobilePane = 'preview';
-      root.querySelectorAll('[data-pane-tab]').forEach(tab =>
-        tab.setAttribute('aria-pressed', String(tab.dataset.paneTab === 'preview')));
-      root.scrollIntoView({ block: 'start', behavior: 'instant' });
-      root.querySelector('[data-edit-design]')?.focus({ preventScroll: true });
-    });
     root.querySelectorAll('[data-edit-design]').forEach(button => button.addEventListener('click', () => {
-      root.dataset.reviewStage = 'build';
       root.dataset.mobilePane = 'build';
       root.querySelectorAll('[data-pane-tab]').forEach(tab =>
         tab.setAttribute('aria-pressed', String(tab.dataset.paneTab === 'build')));
@@ -1651,6 +1609,22 @@
           "id": "room_fallback",
           "label": "Recommended setting fallback",
           "default": "A considered seasonal welcome for your entry"
+        }
+      ]
+    },
+    {
+      "type": "addon",
+      "name": "Add-on Product",
+      "settings": [
+        {
+          "type": "product",
+          "id": "product",
+          "label": "Product"
+        },
+        {
+          "type": "text",
+          "id": "description",
+          "label": "Brief description"
         }
       ]
     },

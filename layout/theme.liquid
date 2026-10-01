@@ -30,6 +30,7 @@
     </style>
     <script>
       window.paletteInstallCartPageUrl = {% if theme.role != 'main' and theme.id != blank %}{{ routes.cart_url | append: '?preview_theme_id=' | append: theme.id | json }}{% else %}{{ routes.cart_url | json }}{% endif %};
+      window.paletteInstallApprovedZipList = {{ settings.approved_service_area_zips | json }};
     </script>
     <script src="{{ 'theme.js' | asset_url }}" defer="defer"></script>
 

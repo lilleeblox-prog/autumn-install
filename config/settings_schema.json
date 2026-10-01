@@ -34,6 +34,18 @@
     ]
   },
   {
+    "name": "Delivery ZIP eligibility",
+    "settings": [
+      {
+        "type": "textarea",
+        "id": "approved_service_area_zips",
+        "label": "Approved delivery and installation ZIP codes",
+        "info": "Enter only approved five-digit ZIP codes, separated by commas or new lines. A blank or malformed list disables paid delivery and installation approvals. Keep Shopify shipping zones and rates configured separately.",
+        "default": "37064\n37069\n37067\n37027\n37179\n37221\n37220\n37135\n37215\n37205\n37046\n37211\n37014\n37204\n37062\n37212\n37174\n37013\n37143\n37209\n37203\n37210\n37201\n37217\n37219\n37208\n37213\n37082\n37228\n37238\n37060\n37086\n37206\n37218\n38482\n37214\n37207\n37167\n37216\n38476\n37128\n37153\n37187\n37034\n37076\n37025\n38401\n37189\n37115\n37098"
+      }
+    ]
+  },
+  {
     "name": "Social media",
     "settings": [
       {
