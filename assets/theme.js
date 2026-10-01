@@ -1106,6 +1106,36 @@ class CartReviewRequired extends Error {
 }
 
 async function addCompositionToCart(configured, multipartBody = null) {
+  const base = configured?.items?.[0];
+  const baseProperties = base?.properties || {};
+  if (multipartBody && base) {
+    multipartBody.set('id', String(base.id));
+    multipartBody.set('quantity', String(base.quantity ?? 1));
+    for (const [name, value] of Object.entries(baseProperties)) {
+      // Files remain the actual File objects already in the multipart body.
+      if (name !== 'Artwork File' && name !== 'House Photo') {
+        multipartBody.set(`properties[${name}]`, String(value));
+      }
+    }
+    multipartBody.set('properties[_Composition ID]', String(configured.compositionId));
+  }
+  const hostedFile = value => /^https:\/\/cdn\.shopify\.com\/|^\/\/cdn\.shopify\.com\//i.test(String(value || ''));
+  const isConfirmedBase = line => {
+    const properties = line?.properties;
+    if (!base || !properties ||
+        String(properties['_Composition ID'] ?? '') !== String(configured.compositionId) ||
+        Number(line.quantity) !== 1 ||
+        ![line.variant_id, line.id].some(id => id != null && String(id) === String(base.id)) ||
+        properties['_Service Kind']) return false;
+    if (multipartBody) {
+      if (!Object.entries(baseProperties).every(([name, value]) =>
+        String(properties[name] ?? '') === String(value))) return false;
+      if (baseProperties['Vinyl Artwork'] === 'Yes' && !hostedFile(properties['Artwork File'])) return false;
+      if (baseProperties['_House Photo Expected'] === 'Yes' && !hostedFile(properties['House Photo'])) return false;
+    }
+    return true;
+  };
+  const receipt = { compositionId: configured.compositionId, baseConfirmed: true };
   let response;
   try {
     response = await fetch((window.cartAddUrl || '/cart/add') + '.js', {
@@ -1118,10 +1148,21 @@ async function addCompositionToCart(configured, multipartBody = null) {
   } catch {
     // A lost response is not proof that Shopify rejected the cart update.
   }
-  if (response?.ok) return;
-  const cart = await waitForCartMatch(cart => cartContainsComposition(cart, configured.compositionId)).catch(() => null);
-  if (cart && cartContainsComposition(cart, configured.compositionId)) return;
-  const body = response ? await response.json().catch(() => ({})) : {};
+  let body = {};
+  if (typeof response?.json === 'function') {
+    try {
+      body = await response.json() || {};
+    } catch {
+      // HTML or an interrupted response is not confirmation of the cart write.
+    }
+  }
+  const responseLines = Array.isArray(body?.items) ? body.items : [body];
+  if (response?.ok && !response.redirected && responseLines.some(isConfirmedBase)) return receipt;
+
+  // An unparseable, redirected, or mismatched add response is uncertain. Only
+  // inspect the cart; never repeat the potentially chargeable write.
+  const cart = await waitForCartMatch(candidate => candidate.items.some(isConfirmedBase)).catch(() => null);
+  if (cart && cart.items.some(isConfirmedBase)) return receipt;
   const problem = new CartReviewRequired(
     body.description || 'Shopify has not confirmed your approved design yet. Check again to continue; this will not add your design twice.',
     false, !body.description
@@ -1185,11 +1226,32 @@ async function finishPendingUpload(cartForm, navigateToCheckout = true) {
     sessionStorage.removeItem(PENDING_UPLOAD_KEY);
     throw new CartReviewRequired('We could not confirm the uploaded files. Please review your composition before checkout.');
   }
-  const cart = await waitForCartMatch(cart => cartContainsComposition(cart, pending.compositionId));
+  const assertCurrentUpload = () => {
+    let current;
+    try { current = JSON.parse(sessionStorage.getItem(PENDING_UPLOAD_KEY)); } catch { /* Reject an unreadable intent. */ }
+    if (current?.compositionId !== pending.compositionId ||
+        (cartForm.dataset.pendingUploadCompositionId &&
+         cartForm.dataset.pendingUploadCompositionId !== pending.compositionId)) {
+      throw new CartReviewRequired('Your upload selection changed while Shopify was checking it. Return to your design before continuing.');
+    }
+  };
+  assertCurrentUpload();
+  const hostedUpload = value => /^https:\/\/cdn\.shopify\.com\/|^\/\/cdn\.shopify\.com\//i.test(String(value || ''));
+  const cart = await waitForCartMatch(candidate => {
+    const display = candidate.items.find(item => item.properties?.['_Composition ID'] === pending.compositionId &&
+      !item.properties?.['_Service Kind']);
+    return !!display &&
+      (pending.artworkRequired === false || hostedUpload(display.properties['Artwork File'])) &&
+      (!pending.housePhotoRequired ||
+       (display.properties['_House Photo Expected'] === 'Yes' && hostedUpload(display.properties['House Photo'])));
+  });
+  assertCurrentUpload();
   const base = cart.items.find(item => item.properties?.['_Composition ID'] === pending.compositionId &&
     !item.properties?.['_Service Kind']);
   if (!base) {
-    throw new CartReviewRequired('Shopify has not confirmed your uploaded design yet. Check again to continue; your files and services will not be added twice.', false, true);
+    throw new CartReviewRequired(pending.receiptConfirmed
+      ? 'Shopify accepted your upload, but this page cannot see the display in its cart yet. Check again; your design will not be submitted twice.'
+      : 'Shopify has not confirmed your uploaded design yet. Check again to continue; your files and services will not be added twice.', false, true);
   }
   const artworkUrl = String(base.properties['Artwork File'] || '');
   if (pending.artworkRequired !== false &&
@@ -1211,6 +1273,7 @@ async function finishPendingUpload(cartForm, navigateToCheckout = true) {
       throw new CartReviewRequired('Your files arrived, but the paid services could not be verified. Remove this composition and try again before checkout.');
     }
     // Mark the attempt before sending it: an interrupted response must not trigger a duplicate charge on reload.
+    assertCurrentUpload();
     pending.started = true;
     sessionStorage.setItem(PENDING_UPLOAD_KEY, JSON.stringify(pending));
     let response;
@@ -1229,7 +1292,9 @@ async function finishPendingUpload(cartForm, navigateToCheckout = true) {
       throw new CartReviewRequired(description || 'We could not confirm the paid services. Remove this composition and try again before checkout.');
     }
   }
+  assertCurrentUpload();
   await completeApprovedCart(pending.compositionId);
+  assertCurrentUpload();
   sessionStorage.removeItem(PENDING_UPLOAD_KEY);
   if (navigateToCheckout) window.location.replace('/checkout');
 }
@@ -1866,6 +1931,7 @@ document.addEventListener('DOMContentLoaded', () => {
             artworkRequired: configured.items[0].properties['Vinyl Artwork'] === 'Yes',
             housePhotoRequired: configured.items[0].properties['_House Photo Expected'] === 'Yes'
           }));
+          productForm.dataset.pendingUploadCompositionId = configured.compositionId;
           compositionInput.value = configured.compositionId;
           housePhotoExpected.disabled = configured.items[0].properties['_House Photo Expected'] !== 'Yes';
           // Keep the multipart file bytes, but await Shopify's JSON response on
@@ -1876,7 +1942,14 @@ document.addEventListener('DOMContentLoaded', () => {
           productForm.dataset.approvedSignature = designSignature(productForm);
           cartWriteStarted = true;
           try {
-            await addCompositionToCart(configured, uploadData);
+            const receipt = await addCompositionToCart(configured, uploadData);
+            if (receipt?.baseConfirmed && receipt.compositionId === configured.compositionId) {
+              const pending = JSON.parse(sessionStorage.getItem(PENDING_UPLOAD_KEY));
+              if (pending?.compositionId === configured.compositionId) {
+                pending.receiptConfirmed = true;
+                sessionStorage.setItem(PENDING_UPLOAD_KEY, JSON.stringify(pending));
+              }
+            }
           } catch (error) {
             if (error.addRejected) sessionStorage.removeItem(PENDING_UPLOAD_KEY);
             throw error;
