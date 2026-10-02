@@ -601,6 +601,8 @@ function setupProductJourney(form) {
      }
    }
     if (weekSelect) setupRequestedWeekAvailability(form);
+  const navigationType = window.performance?.getEntriesByType?.('navigation')?.[0]?.type;
+  let restoringControls = navigationType === 'back_forward' || navigationType === 'reload';
   const setVisibility = () => {
     const service = form.querySelector('[data-service]:checked');
     const isDelivery = service && service.dataset.service === 'delivery';
@@ -615,7 +617,9 @@ function setupProductJourney(form) {
       outsideNote.hidden = serviceAreaForZip(zip) !== 'outside';
     }
     if (monogramFields) monogramFields.hidden = !hasMonogram;
-    monogramInputs.forEach(input => { input.disabled = !hasMonogram; input.required = !!hasMonogram; });
+    // Disabling before a history restore makes the browser discard saved
+    // color/quantity values. Apply the restored artwork choice on page-show.
+    monogramInputs.forEach(input => { input.disabled = !hasMonogram && !restoringControls; input.required = !!hasMonogram; });
     if (dateLabel) dateLabel.innerHTML = isDelivery
        ? '03 / Requested delivery week'
        : '03 / Requested delivery &amp; installation week';
@@ -637,6 +641,7 @@ function setupProductJourney(form) {
   });
   setVisibility();
   window.addEventListener?.('pageshow', () => setTimeout(() => {
+    restoringControls = false;
     if (form.dataset.cartSubmitting === 'true') return;
     // Back can restore checked controls after initialization, without change events.
     setVisibility();
