@@ -603,7 +603,8 @@ function setupProductJourney(form) {
     if (weekSelect) setupRequestedWeekAvailability(form);
   const navigationType = window.performance?.getEntriesByType?.('navigation')?.[0]?.type;
   let restoringControls = navigationType === 'back_forward' || navigationType === 'reload';
-  const setVisibility = () => {
+  const setVisibility = event => {
+    if (event) restoringControls = false;
     const service = form.querySelector('[data-service]:checked');
     const isDelivery = service && service.dataset.service === 'delivery';
     const hasMonogram = form.querySelector('[data-monogram-choice="yes"]:checked');
