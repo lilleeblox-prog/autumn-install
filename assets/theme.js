@@ -1098,12 +1098,37 @@ function configuredCartItems(form) {
 }
 
 let cartReadSequence = 0;
-async function cartJson() {
-  const response = await fetch((window.cartUrl || '/cart') + '.js?design_check=' + Date.now() + '-' + (++cartReadSequence), {
-    cache: 'no-store', credentials: 'same-origin'
+async function cartRequest(url, options = {}, timeoutMs = 20000) {
+  const controller = new AbortController();
+  let timer;
+  const timeout = new Promise((resolve, reject) => {
+    timer = setTimeout(() => {
+      controller.abort();
+      reject(new Error('Shopify is taking longer than expected. Check your design again to continue; it will not be added twice.'));
+    }, timeoutMs);
   });
+  try {
+    return await Promise.race([
+      (async () => {
+        const response = await fetch(url, { ...options, signal: controller.signal });
+        let body = {};
+        try { body = await response.json() || {}; } catch {
+          // An unreadable response cannot confirm a write; the caller checks the cart.
+        }
+        return { response, body };
+      })(),
+      timeout
+    ]);
+  } finally {
+    clearTimeout(timer);
+  }
+}
+
+async function cartJson(timeoutMs = 10000) {
+  const { response, body: cart } = await cartRequest((window.cartUrl || '/cart') + '.js?design_check=' + Date.now() + '-' + (++cartReadSequence), {
+    cache: 'no-store', credentials: 'same-origin'
+  }, timeoutMs);
   if (!response.ok) throw new Error('Could not load your design selection. Please try again.');
-  const cart = await response.json();
   if (!Array.isArray(cart.items)) throw new Error('Shopify returned an unexpected cart response. Please check your design again.');
   return cart;
 }
@@ -1111,10 +1136,12 @@ async function cartJson() {
 async function waitForCartMatch(matches) {
   let cart;
   let lastError;
+  const deadline = Date.now() + 15000;
   for (const delay of [0, 200, 500, 1000]) {
+    if (Date.now() + delay >= deadline) break;
     if (delay) await new Promise(resolve => setTimeout(resolve, delay));
     try {
-      cart = await cartJson();
+      cart = await cartJson(Math.max(1, Math.min(10000, deadline - Date.now())));
       lastError = null;
       if (matches(cart)) return cart;
     } catch (error) {
@@ -1188,24 +1215,17 @@ async function addCompositionToCart(configured, multipartBody = null) {
   };
   const receipt = { compositionId: configured.compositionId, baseConfirmed: true };
   let response;
+  let body = {};
   try {
-    response = await fetch((window.cartAddUrl || '/cart/add') + '.js', {
+    ({ response, body } = await cartRequest((window.cartAddUrl || '/cart/add') + '.js', {
       method: 'POST',
       credentials: 'same-origin',
       // The browser supplies the multipart boundary when real files are sent.
       headers: multipartBody ? { 'Accept': 'application/json' } : { 'Content-Type': 'application/json' },
       body: multipartBody || JSON.stringify({ items: configured.items })
-    });
+    }, multipartBody ? 120000 : 20000));
   } catch {
     // A lost response is not proof that Shopify rejected the cart update.
-  }
-  let body = {};
-  if (typeof response?.json === 'function') {
-    try {
-      body = await response.json() || {};
-    } catch {
-      // HTML or an interrupted response is not confirmation of the cart write.
-    }
   }
   const responseLines = Array.isArray(body?.items) ? body.items : [body];
   if (response?.ok && !response.redirected && responseLines.some(isConfirmedBase)) return receipt;
@@ -1320,6 +1340,7 @@ async function finishPendingUpload(cartForm, navigateToCheckout = true) {
     sessionStorage.removeItem(PENDING_UPLOAD_KEY);
     throw new CartReviewRequired('The house photo did not reach the order. Remove this composition and upload it again before checkout.');
   }
+  let confirmedCart = cart;
   if (!artworkExtrasComplete(cart, pending)) {
     const existing = cart.items.some(item => item.properties?.['_Composition ID'] === pending.compositionId &&
       item.properties?.['_Service Kind']);
@@ -1331,23 +1352,25 @@ async function finishPendingUpload(cartForm, navigateToCheckout = true) {
     pending.started = true;
     sessionStorage.setItem(PENDING_UPLOAD_KEY, JSON.stringify(pending));
     let response;
+    let responseBody = {};
     try {
-      response = await fetch((window.cartAddUrl || '/cart/add') + '.js', {
+      ({ response, body: responseBody } = await cartRequest((window.cartAddUrl || '/cart/add') + '.js', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ items: pending.extras })
-      });
+      }));
     } catch {
       // Verify the cart rather than retrying a request whose outcome is unknown.
     }
     const verified = await waitForCartMatch(cart => artworkExtrasComplete(cart, pending)).catch(() => null);
     if (!verified || !artworkExtrasComplete(verified, pending)) {
-      const description = response && !response.ok ? (await response.json().catch(() => ({}))).description : '';
+      const description = response && !response.ok ? responseBody.description : '';
       throw new CartReviewRequired(description || 'We could not confirm the paid services. Remove this composition and try again before checkout.');
     }
+    confirmedCart = verified;
   }
   assertCurrentUpload();
-  await completeApprovedCart(pending.compositionId);
+  await completeApprovedCart(pending.compositionId, confirmedCart);
   assertCurrentUpload();
   sessionStorage.removeItem(PENDING_UPLOAD_KEY);
   if (navigateToCheckout) window.location.replace('/checkout');
@@ -1595,12 +1618,14 @@ async function validateCartServiceFees(cart) {
   return true;
 }
 
-async function validateCheckoutCart(expectedCompositionId, { approvedOnly = false } = {}) {
-  const fullCart = expectedCompositionId
+async function validateCheckoutCart(expectedCompositionId, { approvedOnly = false, confirmedCart = null } = {}) {
+  // Reuse only the fresh server response from this same approval operation.
+  // Never persist this snapshot or reuse it after a later cart write.
+  const fullCart = confirmedCart || (expectedCompositionId
     ? await waitForCartMatch(cart => cartContainsComposition(cart, expectedCompositionId)).catch(() => {
       throw new CartReviewRequired('Shopify could not be reached to confirm your approved design. Check again to continue; this will not add your design twice.', false, true);
     })
-    : await cartJson();
+    : await cartJson());
   if (expectedCompositionId && !cartContainsComposition(fullCart, expectedCompositionId)) {
     throw new CartReviewRequired(
       'Shopify has not confirmed your approved design in this browser yet. Check again to continue; this will not add your design twice.',
@@ -1664,35 +1689,40 @@ async function validateCheckoutCart(expectedCompositionId, { approvedOnly = fals
   return fullCart;
 }
 
-async function completeApprovedCart(compositionId) {
+async function completeApprovedCart(compositionId, confirmedCart = null) {
   // The current approval explicitly replaces the previous selection. Keep the
   // previous cart intact until the new display, files and every service validate.
-  const cart = await validateCheckoutCart(compositionId, { approvedOnly: true });
+  let cart = await validateCheckoutCart(compositionId, { approvedOnly: true, confirmedCart });
   const previous = cart.items.filter(item => item.properties?.['_Composition ID'] !== compositionId);
   if (previous.length) {
     if (previous.some(item => !item.key)) {
       throw new CartReviewRequired('The previous selection could not be identified safely. Check again to continue.', false, true);
     }
     const updates = Object.fromEntries(previous.map(item => [item.key, 0]));
+    let replacement;
     try {
-      await fetch((window.cartUrl || '/cart') + '/update.js', {
+      const result = await cartRequest((window.cartUrl || '/cart') + '/update.js', {
         method: 'POST', credentials: 'same-origin',
         headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ updates })
       });
+      if (result.response.ok && !result.response.redirected && Array.isArray(result.body.items)) replacement = result.body;
     } catch {
       // A missing response is not proof that the removal failed. Never re-add.
     }
-    const verified = await waitForCartMatch(candidate =>
+    const matchesReplacement = candidate =>
       cartContainsComposition(candidate, compositionId) &&
-      candidate.items.every(item => item.properties?.['_Composition ID'] === compositionId)
-    ).catch(() => null);
+      candidate.items.every(item => item.properties?.['_Composition ID'] === compositionId);
+    const verified = replacement && matchesReplacement(replacement)
+      ? replacement : await waitForCartMatch(matchesReplacement).catch(() => null);
     if (!verified || !cartContainsComposition(verified, compositionId) ||
         verified.items.some(item => item.properties?.['_Composition ID'] !== compositionId)) {
       throw new CartReviewRequired('Your latest design is saved, but Shopify has not confirmed the replacement yet. Check again to continue; your design will not be added twice.', false, true);
     }
+    cart = verified;
   }
-  // Re-read and validate the full cart: nothing else may reach checkout.
-  await validateCheckoutCart(compositionId);
+  // Validate the entire latest server snapshot, including the replacement response.
+  // Reading the exact same cart again adds latency without another safety check.
+  await validateCheckoutCart(compositionId, { confirmedCart: cart });
 }
 
 async function removeStandaloneCartItems() {
@@ -1949,6 +1979,7 @@ document.addEventListener('DOMContentLoaded', () => {
           productFormError(productForm, 'Your choices changed while Shopify was preparing checkout. Review and approve your updated design to continue.');
           return false;
         }
+        submit.textContent = 'Opening checkout…';
         window.location.href = '/checkout';
         return true;
       };
@@ -1964,6 +1995,7 @@ document.addEventListener('DOMContentLoaded', () => {
         submit.onclick = canCleanStandalone || canRecheck || canCleanIncomplete ? async () => {
           if (submit.disabled) return;
           submit.disabled = true;
+          submit.textContent = 'Checking your design…';
           productForm.dataset.cartSubmitting = 'true';
           let navigating = false;
           try {
@@ -1983,6 +2015,7 @@ document.addEventListener('DOMContentLoaded', () => {
       };
       try {
         if (hasUploads) {
+          submit.textContent = 'Uploading your files…';
           const compositionInput = productForm.querySelector('[data-composition-id-input]');
           const housePhotoExpected = productForm.querySelector('[data-house-photo-expected]');
           if (!compositionInput || !housePhotoExpected) throw new Error('The file uploads could not be prepared. Please try again.');
@@ -2017,6 +2050,7 @@ document.addEventListener('DOMContentLoaded', () => {
             if (error.addRejected) sessionStorage.removeItem(PENDING_UPLOAD_KEY);
             throw error;
           }
+          submit.textContent = 'Confirming your design and services…';
           await finishPendingUpload(productForm, false);
           openApprovedCheckout();
           return;
@@ -2026,6 +2060,7 @@ document.addEventListener('DOMContentLoaded', () => {
         try { sessionStorage.removeItem(PENDING_UPLOAD_KEY); } catch { /* File-free checkout does not depend on storage. */ }
         cartWriteStarted = true;
         await addCompositionToCart(configured);
+        submit.textContent = 'Confirming your design and services…';
         try {
           await completeApprovedCart(configured.compositionId);
         } catch (validationError) {
