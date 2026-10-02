@@ -1425,12 +1425,28 @@
       updateBrief();
       updateOutsideNote();
     });
-    // Restore the consultation snapshot after browser Back restores controls,
-    // rather than leaving the initial page defaults in session storage.
-    window.addEventListener?.('pageshow', () => setTimeout(() => {
+    const restoreDesignControls = () => {
+      if (form.dataset.cartSubmitting === 'true') return;
+      const recovering = form.dataset.cartNeedsReview === 'true' &&
+        typeof form.querySelector('[data-cart-submit]')?.onclick === 'function';
+      if (!recovering) {
+        // The browser restores select values, not our activeScale variable.
+        // Resolve the restored variant before rebuilding availability and prices.
+        const restoredScale = cards.find(card => {
+          try {
+            return JSON.parse(card.dataset.variants || '[]').some(variant =>
+              String(variant.id) === String(variantSelect.value));
+          } catch { return false; }
+        });
+        if (restoredScale) activeScale = restoredScale;
+        updatePalette(root.querySelector('[data-composer-palette]:checked')?.value || '');
+      }
       updateBrief();
       updateOutsideNote();
-    }, 0));
+    };
+    // Refresh after history restoration, without pretending the shopper changed
+    // a checkbox (which could open a consultation or discard a saved retry).
+    window.addEventListener?.('pageshow', () => setTimeout(restoreDesignControls, 0));
     form.addEventListener('change', event => {
       updateBrief();
       updateOutsideNote();

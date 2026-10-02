@@ -636,6 +636,15 @@ function setupProductJourney(form) {
     catch (problem) { productFormError(form, problem.message); }
   });
   setVisibility();
+  window.addEventListener?.('pageshow', () => setTimeout(() => {
+    if (form.dataset.cartSubmitting === 'true') return;
+    // Back can restore checked controls after initialization, without change events.
+    setVisibility();
+    saveChoices();
+    if (form.dataset.cartNeedsReview !== 'true') {
+      form.dispatchEvent(new Event('input', { bubbles: true }));
+    }
+  }, 0));
 }
 
 function setupCompositionBrief(form) {
@@ -1963,6 +1972,19 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     productForm.addEventListener('input', resetApproval);
     productForm.addEventListener('change', resetApproval);
+    window.addEventListener?.('pageshow', event => {
+      const returned = event.persisted ||
+        window.performance?.getEntriesByType?.('navigation')?.[0]?.type === 'back_forward';
+      if (!returned) return;
+      productForm.dataset.cartSubmitting = 'false';
+      submit.disabled = false;
+      // Keep an interrupted submission's explicit recheck action; only reset
+      // the completed checkout's stale approval/busy state.
+      if (productForm.dataset.cartNeedsReview === 'true' &&
+          submit.type === 'button' && typeof submit.onclick === 'function') return;
+      submit.textContent = 'Approve and continue';
+      resetApproval();
+    });
     productForm.querySelectorAll('[data-edit-design]').forEach(button => button.addEventListener('click', resetApproval));
     const submitApprovedDesign = async (configured) => {
       if (productForm.dataset.cartSubmitting === 'true') return;
