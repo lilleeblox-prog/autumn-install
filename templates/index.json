@@ -43,6 +43,8 @@
         "step3"
       ],
       "settings": {
+        "background_image": "shopify://shop_images/4390.jpg",
+        "image_visibility": 30,
         "section_id": "process",
         "title": "Made for the way you welcome.",
         "eyebrow": "Our approach / From idea to entrance",
