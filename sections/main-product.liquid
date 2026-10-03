@@ -229,7 +229,7 @@
         <fieldset class="variant-picker__group" data-product-palette>
           <legend class="variant-picker__label">Choose a palette</legend>
           <div class="variant-options">
-            {% assign palette_choices = 'Autumn in the Countryside|Classic Harvest|Coastal Cowgirl' | split: '|' %}
+            {% assign palette_choices = 'Autumn in the Countryside|Classic Harvest|Coastal Cowgirl|Pink Pony Club' | split: '|' %}
             {% for palette in palette_choices %}
               <label class="variant-option">
                 <input type="radio" name="properties[Palette]" value="{{ palette | escape }}" required>
@@ -257,6 +257,7 @@
          </div>
          {% assign rendered_count = 0 %}
          <div class="palette-gallery__grid">
+           {% assign pink_photo_configured = false %}
            {% for block in section.blocks %}
              {% if block.type == 'palette_image' %}
                {% assign palette_matches = false %}
@@ -268,6 +269,7 @@
                  {% assign gallery_image = block.settings.placeholder | append: '.webp' %}
                {% endif %}
                {% if gallery_image != blank %}
+                 {% if block.settings.palette == 'Pink Pony Club' %}{% assign pink_photo_configured = true %}{% endif %}
                  {% if palette_matches %}{% assign rendered_count = rendered_count | plus: 1 %}{% endif %}
                   <div class="palette-gallery__item{% unless palette_matches %} hidden{% endunless %}" data-palette="{{ block.settings.palette | escape }}" style="--palette-x: {{ block.settings.position_x | default: 50 }}%; --palette-y: {{ block.settings.position_y | default: 50 }}%; --palette-zoom: {{ block.settings.zoom | default: 100 | divided_by: 100.0 }}; --palette-turn: {% if block.settings.flip_180 %}180deg{% else %}0deg{% endif %};" {{ block.shopify_attributes }}>
                    {% if block.settings.image != blank %}
@@ -279,6 +281,12 @@
                {% endif %}
              {% endif %}
            {% endfor %}
+           {% unless pink_photo_configured %}
+             {% if selected_palette == 'Pink Pony Club' %}{% assign rendered_count = rendered_count | plus: 1 %}{% endif %}
+             <div class="palette-gallery__item{% unless selected_palette == 'Pink Pony Club' %} hidden{% endunless %}" data-palette="Pink Pony Club">
+               <img src="{{ 'palette-pink-pony-club.webp' | asset_url }}" width="577" height="1024" loading="lazy" alt="Pink Pony Club: blush pink and white heirloom pumpkins">
+             </div>
+           {% endunless %}
          </div>
           <p class="palette-gallery__empty" {% if rendered_count > 0 %}hidden{% endif %}>A study for this palette is being prepared.</p>
          {% if pages.gallery != blank %}
@@ -563,7 +571,8 @@
           "options": [
             { "value": "Autumn in the Countryside", "label": "Autumn in the Countryside" },
             { "value": "Classic Harvest", "label": "Classic Harvest" },
-            { "value": "Coastal Cowgirl", "label": "Coastal Cowgirl" }
+            { "value": "Coastal Cowgirl", "label": "Coastal Cowgirl" },
+            { "value": "Pink Pony Club", "label": "Pink Pony Club" }
           ],
           "default": "Autumn in the Countryside"
         },
@@ -575,7 +584,8 @@
             { "value": "none", "label": "None" },
             { "value": "palette-countryside", "label": "Autumn in the Countryside" },
             { "value": "palette-classic-harvest", "label": "Classic Harvest" },
-            { "value": "palette-coastal-cowgirl", "label": "Coastal Cowgirl" }
+            { "value": "palette-coastal-cowgirl", "label": "Coastal Cowgirl" },
+            { "value": "palette-pink-pony-club", "label": "Pink Pony Club" }
           ],
           "default": "none"
         },
