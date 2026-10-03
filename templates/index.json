@@ -313,6 +313,33 @@
         "title": "The little things worth knowing",
         "intro": "From the first conversation to the finishing touches, here is what to expect when shaping a welcome of your own."
       }
+    },
+    "1791065304e4142cb6": {
+      "type": "apps",
+      "blocks": {
+        "instafeed_app_block_ebXacY": {
+          "type": "shopify://apps/instafeed/blocks/app-block/c447db20-095d-4a10-9725-b5977662c9d5",
+          "settings": {
+            "title": "The Season Made Beautiful",
+            "title_color": "",
+            "title_size_v2": 0,
+            "alignment": "center",
+            "instafeed_margin_top": 0,
+            "instafeed_margin_bottom": 0,
+            "instafeed_margin_sides": 0,
+            "show_instagram_link": false,
+            "link_alignment": "left",
+            "link_color": "#000000",
+            "background_color": "",
+            "feed_id": "",
+            "html_area": ""
+          }
+        }
+      },
+      "block_order": [
+        "instafeed_app_block_ebXacY"
+      ],
+      "settings": {}
     }
   },
   "order": [
@@ -321,6 +348,7 @@
     "hero",
     "studio-about",
     "contact",
-    "faq"
+    "faq",
+    "1791065304e4142cb6"
   ]
 }
