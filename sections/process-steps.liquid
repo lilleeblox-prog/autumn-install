@@ -1,10 +1,13 @@
 <style>
-.process-section { padding: var(--spacing-xl) 0; background-color: var(--color-foreground); color: var(--color-background); }
+.process-section { position: relative; isolation: isolate; overflow: hidden; padding: var(--spacing-xl) 0; background-color: var(--color-foreground); color: #fff8ef; }
+.process-section__background { position: absolute; inset: 0; z-index: -1; opacity: var(--process-image-opacity, 0.25); pointer-events: none; }
+.process-section__background img { display: block; width: 100%; height: 100%; object-fit: cover; object-position: center 70%; }
+.process-section > .container { position: relative; }
 .process-section__header { text-align: center; margin-bottom: var(--spacing-lg); }
-.process-section__header .eyebrow { color: var(--color-accent); }
-.process-section h1, .process-section h2 { color: var(--color-background); font-size: 3.5rem; }
+.process-section .eyebrow { color: #fff4e9; }
+.process-section h1, .process-section h2 { color: #fff8ef; font-size: 3.5rem; }
 .process-section__header > p { max-width: 720px; margin: 0 auto; line-height: 1.7; }
-.process-section p { color: var(--color-muted); }
+.process-section p { color: #f4f0e8; }
 .process-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--spacing-lg); }
 .process-step { position: relative; }
 .process-step::before {
@@ -14,7 +17,7 @@
   left: 0;
   width: 100%;
   height: 1px;
-  background: var(--color-accent);
+  background: rgba(255, 244, 233, 0.45);
   z-index: 1;
 }
 .process-step__number {
@@ -23,16 +26,16 @@
   display: inline-flex;
   width: 32px;
   height: 32px;
-  background: var(--color-foreground);
-  border: 1px solid var(--color-accent);
-  color: var(--color-accent);
+  background: rgba(35, 35, 32, 0.85);
+  border: 1px solid rgba(255, 244, 233, 0.6);
+  color: #fff4e9;
   align-items: center;
   justify-content: center;
   font-family: var(--font-mono);
   font-size: 0.75rem;
   margin-bottom: var(--spacing-sm);
 }
-.process-step h3 { color: var(--color-background); font-size: 1.25rem; font-family: var(--font-sans); font-weight: 600; margin-bottom: 0.5rem; }
+.process-step h3 { color: #fff8ef; font-size: 1.25rem; font-family: var(--font-sans); font-weight: 600; margin-bottom: 0.5rem; }
 .process-step p { font-size: 0.875rem; line-height: 1.6; }
 .process-section__action { display: flex; justify-content: center; margin-top: var(--spacing-lg); }
 
@@ -42,7 +45,14 @@
 }
 </style>
 
-<section class="process-section" id="{{ section.settings.section_id }}">
+<section class="process-section" id="{{ section.settings.section_id | escape }}" style="--process-image-opacity: {{ section.settings.image_visibility | default: 25 | divided_by: 100.0 }};">
+  <div class="process-section__background" aria-hidden="true">
+    {% if section.settings.background_image != blank %}
+      {{ section.settings.background_image | image_url: width: 2000 | image_tag: alt: '', widths: '640, 960, 1440, 2000', sizes: '100vw', loading: 'eager', fetchpriority: 'high' }}
+    {% else %}
+      <img src="{{ 'package-medium.webp' | asset_url }}" width="1200" height="1500" alt="" loading="eager" fetchpriority="high">
+    {% endif %}
+  </div>
   <div class="container">
     <div class="process-section__header">
       {% if section.settings.eyebrow != blank %}<div class="eyebrow">{{ section.settings.eyebrow | escape }}</div>{% endif %}
@@ -79,6 +89,23 @@
 {
   "name": "Process Steps",
   "settings": [
+    {
+      "type": "image_picker",
+      "id": "background_image",
+      "label": "Background image",
+      "info": "Uses the existing porch image when no image is selected."
+    },
+    {
+      "type": "range",
+      "id": "image_visibility",
+      "label": "Background image visibility",
+      "min": 10,
+      "max": 30,
+      "step": 5,
+      "unit": "%",
+      "default": 25,
+      "info": "The image blends into the dark background to keep the text readable."
+    },
     {
       "type": "text",
       "id": "section_id",
