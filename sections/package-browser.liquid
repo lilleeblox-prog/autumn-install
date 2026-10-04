@@ -571,6 +571,14 @@
   }
   #PackageBrowser-{{ section.id }} [data-approve-design]:hover,
   #PackageBrowser-{{ section.id }} [data-cart-submit]:hover { background: #d6b59d; }
+  #PackageBrowser-{{ section.id }} .palette-composer__editor-checkout { margin-top: 24px; }
+  #PackageBrowser-{{ section.id }} .palette-composer__editor-checkout [data-approve-design] {
+    background: var(--composer-ink);
+    color: var(--composer-paper);
+  }
+  #PackageBrowser-{{ section.id }} .palette-composer__editor-checkout [data-approve-design]:hover {
+    background: var(--composer-accent);
+  }
   #PackageBrowser-{{ section.id }} .composer-inquiry-button {
     width: 100%; margin-top: 16px; padding: 15px; border: 0;
     background: var(--composer-accent); color: white; cursor: pointer;
@@ -1081,6 +1089,9 @@
         <div data-service-products data-display-size="" data-expected-service-fee="0" data-delivery-id="" data-delivery-price="0" data-monogram-id="{% if monogram_product.available and monogram_product.published_at != blank and mono_variant.price > 0 %}{{ mono_variant.id }}{% endif %}" data-monogram-price="{{ mono_variant.price | default: 0 }}" data-monogram-estimate-cents="{% if mono_variant.price > 0 %}{{ mono_variant.price }}{% else %}{{ section.settings.vinyl_estimate_cents | default: 0 }}{% endif %}" data-removal-id="" data-removal-price="0"></div>
       </div>
       <p class="package-browser__transfer-error" role="alert" data-consultation-transfer-error hidden>Choices could not be saved for consultation. Please enter them in the form yourself.</p>
+      <div class="palette-composer__editor-checkout">
+        <button type="button" data-approve-design disabled>Continue to checkout</button>
+      </div>
       <div id="product-form-error" class="hidden" role="alert" aria-live="assertive" aria-atomic="true"></div>
     </div>
     <aside class="palette-composer__preview" data-composer-pane="preview" aria-label="Live design review">
