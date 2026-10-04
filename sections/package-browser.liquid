@@ -837,7 +837,6 @@
     #PackageBrowser-{{ section.id }} .palette-composer__tabs button[aria-pressed=true] { border-bottom:2px solid var(--composer-accent); }
     #PackageBrowser-{{ section.id }} .palette-composer__form { display:block;height:auto;min-height:0;overflow:visible; }
     #PackageBrowser-{{ section.id }} .palette-composer__editor, #PackageBrowser-{{ section.id }} .palette-composer__preview { max-height:none;overflow:visible;padding:28px 20px; }
-    #PackageBrowser-{{ section.id }}[data-mobile-pane=build] [data-composer-pane=preview], #PackageBrowser-{{ section.id }}[data-mobile-pane=preview] [data-composer-pane=build] { display:none; }
     #PackageBrowser-{{ section.id }} .palette-composer__editor { border-right:0; }
   }
   @media(max-width:600px) {
@@ -906,6 +905,198 @@
   @media(max-width:600px) {
     #PackageBrowser-{{ section.id }} .cart-layout-dialog__details { grid-template-columns:1fr; }
   }
+  #PackageBrowser-{{ section.id }} [data-mobile-review-toggle],
+  #PackageBrowser-{{ section.id }} .composition-summary__mobile-meta { display:none; }
+  @media(max-width:900px) {
+    #PackageBrowser-{{ section.id }} {
+      --mobile-review-bottom: max(12px, env(safe-area-inset-bottom));
+    }
+    #PackageBrowser-{{ section.id }} .palette-composer__tabs { display:none !important; }
+    #PackageBrowser-{{ section.id }} .palette-composer__form { overflow:visible; }
+    #PackageBrowser-{{ section.id }} .palette-composer__editor { padding-bottom:calc(124px + env(safe-area-inset-bottom)); }
+    #PackageBrowser-{{ section.id }} .palette-composer__preview {
+      display:none;
+      position:fixed;
+      z-index:30;
+      right:12px;
+      bottom:var(--mobile-review-bottom);
+      left:12px;
+      max-height:none;
+      padding:0;
+      background:transparent;
+      pointer-events:none;
+    }
+    #PackageBrowser-{{ section.id }}[data-mobile-review-visible="true"] .palette-composer__preview {
+      display:block;
+    }
+    #PackageBrowser-{{ section.id }} .palette-composer__preview-content {
+      max-height:none;
+      overflow:visible;
+      pointer-events:auto;
+    }
+    #PackageBrowser-{{ section.id }} .palette-composer__preview-intro { display:none; }
+    #PackageBrowser-{{ section.id }} .composition-summary {
+      --summary-inset:16px;
+      display:grid;
+      grid-template-columns:54px minmax(0,1fr) auto;
+      grid-template-rows:auto auto;
+      align-items:center;
+      gap:4px 12px;
+      width:100%;
+      max-height:92px;
+      overflow:hidden;
+      margin:0;
+      padding:12px;
+      border:1px solid rgba(255,255,255,.16);
+      border-radius:3px;
+      background:var(--composer-ink);
+      box-shadow:0 10px 34px rgba(32,27,22,.24);
+    }
+    #PackageBrowser-{{ section.id }} [data-mobile-review-toggle] {
+      display:flex;
+      grid-column:2;
+      grid-row:1;
+      align-items:center;
+      justify-content:flex-start;
+      gap:6px;
+      min-width:0;
+      padding:0;
+      border:0;
+      background:transparent;
+      color:var(--composer-paper);
+      font:600 10px/1.25 var(--font-sans);
+      letter-spacing:.1em;
+      text-align:left;
+      text-transform:uppercase;
+      cursor:pointer;
+    }
+    #PackageBrowser-{{ section.id }} [data-mobile-review-toggle]::after {
+      content:"＋";
+      margin-left:auto;
+      color:#d6b59d;
+      font-size:16px;
+    }
+    #PackageBrowser-{{ section.id }} .composition-summary__mobile-meta {
+      display:block;
+      grid-column:2;
+      grid-row:2;
+      min-width:0;
+      overflow:hidden;
+      color:rgba(255,255,255,.72);
+      font-size:10px;
+      line-height:1.35;
+      text-overflow:ellipsis;
+      white-space:nowrap;
+    }
+    #PackageBrowser-{{ section.id }} .composition-summary__image {
+      grid-column:1;
+      grid-row:1 / span 2;
+      width:54px;
+      height:54px;
+      margin:0;
+      background:#514940;
+    }
+    #PackageBrowser-{{ section.id }} .composition-summary__image .palette-study__grid,
+    #PackageBrowser-{{ section.id }} .composition-summary__image .palette-study__item {
+      width:100%;
+      height:100%;
+      aspect-ratio:auto;
+    }
+    #PackageBrowser-{{ section.id }} .composition-summary__image img { width:100%;height:100%;object-fit:cover; }
+    #PackageBrowser-{{ section.id }} .composition-summary > .eyebrow,
+    #PackageBrowser-{{ section.id }} .composition-summary > h2 { display:none; }
+    #PackageBrowser-{{ section.id }} .composition-summary__row { display:none; }
+    #PackageBrowser-{{ section.id }} .composition-price-estimate {
+      grid-column:3;
+      grid-row:1 / span 2;
+      min-width:76px;
+      margin:0;
+      padding:0;
+      border:0;
+      text-align:right;
+    }
+    #PackageBrowser-{{ section.id }} .composition-price-estimate > .eyebrow,
+    #PackageBrowser-{{ section.id }} [data-estimate-rows],
+    #PackageBrowser-{{ section.id }} .composition-price-estimate__note { display:none; }
+    #PackageBrowser-{{ section.id }} .composition-price-estimate__total {
+      display:grid;
+      gap:3px;
+      padding:0;
+      border:0;
+      font-size:9px;
+      line-height:1.2;
+    }
+    #PackageBrowser-{{ section.id }} .composition-price-estimate__total span { color:rgba(255,255,255,.65); }
+    #PackageBrowser-{{ section.id }} .composition-price-estimate__total strong {
+      color:var(--composer-paper);
+      font:400 20px/1 var(--font-serif);
+      white-space:nowrap;
+    }
+    #PackageBrowser-{{ section.id }} .composer-approval,
+    #PackageBrowser-{{ section.id }} .composition-summary__disclosure { display:none; }
+    #PackageBrowser-{{ section.id }}[data-mobile-review-expanded="true"] .palette-composer__preview-content {
+      max-height:min(78dvh, calc(100dvh - 32px - env(safe-area-inset-bottom)));
+      overflow-y:auto;
+      overscroll-behavior:contain;
+      border-radius:3px;
+      scrollbar-width:thin;
+    }
+    #PackageBrowser-{{ section.id }}[data-mobile-review-expanded="true"] .composition-summary {
+      display:block;
+      max-height:none;
+      overflow:visible;
+      padding:22px;
+    }
+    #PackageBrowser-{{ section.id }}[data-mobile-review-expanded="true"] [data-mobile-review-toggle] {
+      display:flex;
+      position:sticky;
+      top:0;
+      z-index:2;
+      background:var(--composer-ink);
+      width:100%;
+      min-height:40px;
+      margin:0 0 18px;
+      padding-bottom:12px;
+      border-bottom:1px solid rgba(255,255,255,.2);
+    }
+    #PackageBrowser-{{ section.id }}[data-mobile-review-expanded="true"] [data-mobile-review-toggle]::after { content:"−"; }
+    #PackageBrowser-{{ section.id }}[data-mobile-review-expanded="true"] .composition-summary__mobile-meta { display:none; }
+    #PackageBrowser-{{ section.id }}[data-mobile-review-expanded="true"] .composition-summary__image {
+      width:auto;
+      height:auto;
+      margin:0 -22px 22px;
+      aspect-ratio:3 / 2;
+    }
+    #PackageBrowser-{{ section.id }}[data-mobile-review-expanded="true"] .composition-summary__image .palette-study__grid,
+    #PackageBrowser-{{ section.id }}[data-mobile-review-expanded="true"] .composition-summary__image .palette-study__item { aspect-ratio:3 / 2; }
+    #PackageBrowser-{{ section.id }}[data-mobile-review-expanded="true"] .composition-summary > .eyebrow,
+    #PackageBrowser-{{ section.id }}[data-mobile-review-expanded="true"] .composition-summary > h2 { display:block; }
+    #PackageBrowser-{{ section.id }}[data-mobile-review-expanded="true"] .composition-summary > h2 {
+      margin:8px 0 22px;
+      font:400 36px/1 var(--font-serif);
+      color:var(--composer-paper);
+    }
+    #PackageBrowser-{{ section.id }}[data-mobile-review-expanded="true"] .composition-summary__row { display:flex; }
+    #PackageBrowser-{{ section.id }}[data-mobile-review-expanded="true"] .composition-summary__row[hidden] { display:none; }
+    #PackageBrowser-{{ section.id }}[data-mobile-review-expanded="true"] .composition-price-estimate {
+      margin-top:24px;
+      padding-top:20px;
+      border-top:1px solid rgba(255,255,255,.3);
+      text-align:left;
+    }
+    #PackageBrowser-{{ section.id }}[data-mobile-review-expanded="true"] .composition-price-estimate > .eyebrow,
+    #PackageBrowser-{{ section.id }}[data-mobile-review-expanded="true"] [data-estimate-rows],
+    #PackageBrowser-{{ section.id }}[data-mobile-review-expanded="true"] .composition-price-estimate__note { display:block; }
+    #PackageBrowser-{{ section.id }}[data-mobile-review-expanded="true"] .composition-price-estimate__total {
+      display:flex;
+      padding-top:14px;
+      border-top:1px solid rgba(255,255,255,.3);
+      font-size:12px;
+    }
+    #PackageBrowser-{{ section.id }}[data-mobile-review-expanded="true"] .composer-approval { display:block; }
+    #PackageBrowser-{{ section.id }}[data-mobile-review-expanded="true"] .composition-summary__disclosure { display:block; }
+    #PackageBrowser-{{ section.id }}[data-mobile-review-keyboard="true"] .palette-composer__preview { display:none !important; }
+  }
 </style>
 
 {% assign palette_names = 'Autumn in the Countryside|Classic Harvest|Coastal Cowgirl|Pink Pony Club' | split: '|' %}
@@ -929,11 +1120,7 @@
 {% endfor %}
 
 <div id="{{ section.settings.section_id | default: 'compose' | escape }}" style="scroll-margin-top: 100px"></div>
-<section class="palette-composer" id="PackageBrowser-{{ section.id }}" data-package-browser="{{ section.id }}" data-mobile-pane="build">
-  <nav class="palette-composer__tabs" aria-label="Builder views">
-    <button type="button" aria-pressed="true" data-pane-tab="build">Create your look</button>
-    <button type="button" aria-pressed="false" data-pane-tab="preview">See your design</button>
-  </nav>
+<section class="palette-composer" id="PackageBrowser-{{ section.id }}" data-package-browser="{{ section.id }}">
   <form class="palette-composer__form" method="post" action="{{ routes.cart_add_url }}" enctype="multipart/form-data" data-product-form data-shopify-editor="{{ request.design_mode }}" data-product-title="{{ section.settings.title | escape }}" data-selected-scale-name="{{ initial_scale | escape }}" data-base-estimate-cents="{{ initial_base_estimate_cents }}">
     <input type="hidden" name="form_type" value="product">
     <input type="hidden" name="return_to" value="{% if theme.role != 'main' and theme.id != blank %}{{ routes.cart_url }}?preview_theme_id={{ theme.id }}{% else %}{{ routes.cart_url }}{% endif %}">
@@ -942,7 +1129,7 @@
     <input type="hidden" name="properties[_House Photo Expected]" value="Yes" data-house-photo-expected disabled>
     <input type="hidden" name="properties[Hay Bales]" value="No" data-hay-property>
     <input type="hidden" name="properties[Palette]" value="" data-chosen-palette>
-    <div class="palette-composer__editor" data-composer-pane="build" aria-label="Create your display">
+    <div class="palette-composer__editor" data-composer-pane="build" aria-label="Create your display" tabindex="-1">
       {% render 'editor-order-preview' %}
       <header class="palette-composer__intro">
         <div class="eyebrow">{{ section.settings.eyebrow | escape }}</div>
@@ -1095,7 +1282,7 @@
       <div id="product-form-error" class="hidden" role="alert" aria-live="assertive" aria-atomic="true"></div>
     </div>
     <aside class="palette-composer__preview" data-composer-pane="preview" aria-label="Live design review">
-      <div class="palette-composer__preview-content" data-sticky-preview>
+      <div class="palette-composer__preview-content" id="MobileReview-{{ section.id }}" data-sticky-preview>
       <div class="palette-composer__preview-intro">
         <button type="button" data-edit-design>&larr; Edit design</button>
         <span class="eyebrow">Your entrance / In the making</span>
@@ -1103,6 +1290,10 @@
         <p>{{ section.settings.summary_disclosure | escape }}</p>
       </div>
       <div class="composition-summary" id="gallery">
+        <button type="button" data-mobile-review-toggle aria-expanded="false" aria-controls="MobileReview-{{ section.id }}">
+          <span>Review live design</span>
+        </button>
+        <div class="composition-summary__mobile-meta" data-mobile-review-meta aria-live="polite">Choose a palette and scale</div>
         <div class="composition-summary__image" data-palette-browser-gallery aria-label="Selected palette photograph" hidden>
           <div class="palette-study__grid">
             {% for block in section.blocks %}
@@ -1204,6 +1395,61 @@
     window.paletteInstallWeekAvailability.setup(form);
     root.dataset.initialized = 'true';
     const previewContent = root.querySelector('[data-sticky-preview]');
+    const mobileReviewToggle = root.querySelector('[data-mobile-review-toggle]');
+    const mobileReviewMeta = root.querySelector('[data-mobile-review-meta]');
+    const editor = root.querySelector('.palette-composer__editor');
+    const mobileReviewMedia = window.matchMedia('(max-width: 900px)');
+    const updateMobileReviewVisibility = () => {
+      if (!mobileReviewMedia.matches) {
+        root.removeAttribute('data-mobile-review-visible');
+        root.removeAttribute('data-mobile-review-keyboard');
+        return;
+      }
+      const viewport = window.visualViewport;
+      const keyboardOpen = !!viewport && window.innerHeight - viewport.height > 140;
+      if (keyboardOpen) {
+        root.dataset.mobileReviewKeyboard = 'true';
+        root.dataset.mobileReviewExpanded = 'false';
+        mobileReviewToggle?.setAttribute('aria-expanded', 'false');
+      } else {
+        root.removeAttribute('data-mobile-review-keyboard');
+      }
+      const bounds = root.getBoundingClientRect();
+      const composerVisible = bounds.bottom > 0 && bounds.top < window.innerHeight;
+      const dialogOpen = !!document.querySelector('dialog[open]');
+      root.dataset.mobileReviewVisible = String(composerVisible && !dialogOpen && !keyboardOpen);
+    };
+    const setMobileReviewExpanded = (expanded, restoreFocus = false) => {
+      root.dataset.mobileReviewExpanded = String(expanded);
+      mobileReviewToggle?.setAttribute('aria-expanded', String(expanded));
+      if (!expanded && restoreFocus) mobileReviewToggle?.focus();
+    };
+    mobileReviewToggle?.addEventListener('click', () => {
+      setMobileReviewExpanded(mobileReviewToggle.getAttribute('aria-expanded') !== 'true');
+    });
+    form.addEventListener('invalid', () => {
+      if (mobileReviewMedia.matches) setMobileReviewExpanded(false);
+    }, true);
+    form.addEventListener('focusin', event => {
+      if (mobileReviewMedia.matches && event.target.closest('[data-composer-pane="build"]')) {
+        setMobileReviewExpanded(false);
+      }
+    });
+    document.addEventListener('keydown', event => {
+      if (event.key === 'Escape' && root.dataset.mobileReviewExpanded === 'true' &&
+          mobileReviewMedia.matches && !document.querySelector('dialog[open]')) {
+        event.preventDefault();
+        setMobileReviewExpanded(false, true);
+      }
+    });
+    window.addEventListener('scroll', updateMobileReviewVisibility, { passive: true });
+    window.addEventListener('resize', updateMobileReviewVisibility);
+    window.visualViewport?.addEventListener('resize', updateMobileReviewVisibility);
+    window.visualViewport?.addEventListener('scroll', updateMobileReviewVisibility);
+    mobileReviewMedia.addEventListener?.('change', updateMobileReviewVisibility);
+    const dialogObserver = new MutationObserver(updateMobileReviewVisibility);
+    dialogObserver.observe(document.documentElement, { subtree: true, attributes: true, attributeFilter: ['open'] });
+    updateMobileReviewVisibility();
     const updateStickyOffset = () => {
       if (!previewContent) return;
       const contentHeight = previewContent.getBoundingClientRect().height;
@@ -1392,6 +1638,10 @@
         : '';
       setBriefValue('[data-brief-artwork]', artworkDetails);
       setBriefValue('[data-brief-notes]', text('General Notes').trim());
+      if (mobileReviewMeta) {
+        const scale = activeScale?.dataset.scaleName || 'Choose a scale';
+        mobileReviewMeta.textContent = [paletteValue, scale].filter(Boolean).join(' · ');
+      }
       const weekLabel = root.querySelector('[data-requested-week-label]');
       if (weekLabel) weekLabel.textContent = selectedService?.dataset.service === 'delivery'
         ? 'Requested delivery week'
@@ -1399,10 +1649,13 @@
       rememberSelection();
     };
     root.querySelectorAll('[data-edit-design]').forEach(button => button.addEventListener('click', () => {
-      root.dataset.mobilePane = 'build';
-      root.querySelectorAll('[data-pane-tab]').forEach(tab =>
-        tab.setAttribute('aria-pressed', String(tab.dataset.paneTab === 'build')));
-      root.scrollIntoView({ block: 'start', behavior: 'instant' });
+      setMobileReviewExpanded(false);
+      if (mobileReviewMedia.matches) {
+        editor?.scrollIntoView({ block: 'start', behavior: 'smooth' });
+        editor?.focus({ preventScroll: true });
+      } else {
+        root.scrollIntoView({ block: 'start', behavior: 'instant' });
+      }
     }));
     cards.forEach(card => card.addEventListener('click', () => {
       const shouldExpand = card.getAttribute('aria-expanded') !== 'true';
@@ -1468,21 +1721,7 @@
         selectScale(activeScale);
       }
     });
-    root.querySelectorAll('[data-pane-tab]').forEach(button => button.addEventListener('click', () => {
-      root.dataset.mobilePane = button.dataset.paneTab;
-      root.querySelectorAll('[data-pane-tab]').forEach(tab => tab.setAttribute('aria-pressed', tab === button ? 'true' : 'false'));
-    }));
-    const revealGalleryAnchor = () => {
-      if (window.location.hash !== '#gallery' || !window.matchMedia('(max-width: 900px)').matches) return;
-      root.dataset.mobilePane = 'preview';
-      root.querySelectorAll('[data-pane-tab]').forEach(tab => {
-        const selected = tab.dataset.paneTab === 'preview';
-        tab.setAttribute('aria-pressed', selected ? 'true' : 'false');
-      });
-      requestAnimationFrame(() => root.querySelector('#gallery')?.scrollIntoView({ behavior: 'smooth', block: 'start' }));
-    };
-    window.addEventListener('hashchange', revealGalleryAnchor);
-    revealGalleryAnchor();
+    updateMobileReviewVisibility();
     const defaultCard = cards.find(card => card.getAttribute('aria-pressed') === 'true') || cards[0];
     if (defaultCard) selectScale(defaultCard);
     const initialPalette = new URLSearchParams(window.location.search).get('palette');
