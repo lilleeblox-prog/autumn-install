@@ -1170,12 +1170,20 @@
               {% assign delivery = blank %}
               {% assign removal = blank %}
               {% assign expected_service_fee = 0 %}
+              {% assign installation = blank %}
+              {% case display_size %}
+                {% when 'small' %}{% assign installation = section.settings.installation_small_product %}
+                {% when 'medium' %}{% assign installation = section.settings.installation_medium_product %}
+                {% when 'large' %}{% assign installation = section.settings.installation_large_product %}
+              {% endcase %}
               {% case display_size %}
                 {% when 'small' %}{% assign delivery = section.settings.delivery_small_product %}{% assign removal = section.settings.removal_small_product %}{% assign expected_service_fee = 2500 %}
                 {% when 'medium' %}{% assign delivery = section.settings.delivery_medium_product %}{% assign removal = section.settings.removal_medium_product %}{% assign expected_service_fee = 5000 %}
                 {% when 'large' %}{% assign delivery = section.settings.delivery_large_product %}{% assign removal = section.settings.removal_large_product %}{% assign expected_service_fee = 8500 %}
               {% endcase %}
-              <div class="package-card-shell" {{ block.shopify_attributes }}>
+              <div class="package-card-shell" {{ block.shopify_attributes }}
+                data-installation-id="{% if installation != blank and installation.available and installation.published_at != blank and installation.selected_or_first_available_variant.price > 0 %}{{ installation.selected_or_first_available_variant.id }}{% endif %}"
+                data-installation-price="{{ installation.selected_or_first_available_variant.price | default: 0 }}">
                 <button type="button" class="package-card" data-composer-scale data-scale-name="{{ block.settings.scale_name | escape }}" data-display-size="{{ display_size }}" data-expected-service-fee="{{ expected_service_fee }}" data-base-estimate-cents="{% if prod != blank and prod.price_min > 0 and prod.price_min == prod.price_max %}{{ prod.price_min }}{% else %}{{ block.settings.draft_estimate_cents | default: 0 }}{% endif %}" data-product-id="{% if prod != blank %}{{ prod.id }}{% endif %}" data-product-title="{% if prod != blank %}{{ prod.title | escape }}{% else %}{{ block.settings.scale_name | escape }}{% endif %}" data-product-available="{% if prod != blank and prod.available and prod.published_at != blank %}true{% else %}false{% endif %}" data-palette-index="{{ option_index }}" data-default-variant="{% if prod != blank and prod.has_only_default_variant %}true{% else %}false{% endif %}" data-variants="{% if prod != blank %}{{ prod.variants | json | escape }}{% endif %}" data-delivery-id="{% if delivery != blank and delivery.available and delivery.published_at != blank and delivery.selected_or_first_available_variant.price > 0 %}{{ delivery.selected_or_first_available_variant.id }}{% endif %}" data-delivery-price="{{ delivery.selected_or_first_available_variant.price | default: 0 }}" data-removal-id="{% if removal != blank and removal.available and removal.published_at != blank and removal.selected_or_first_available_variant.price > 0 %}{{ removal.selected_or_first_available_variant.id }}{% endif %}" data-removal-price="{{ removal.selected_or_first_available_variant.price | default: 0 }}" aria-pressed="{% if block.settings.default_selected %}true{% else %}false{% endif %}" aria-expanded="false" aria-controls="package-includes-{{ block.id }}">
                   {% if block.settings.most_popular %}<small class="package-card__popular">Most popular</small>{% endif %}
                   <span class="package-title">{{ block.settings.scale_name | escape }}</span>
@@ -1591,6 +1599,9 @@
       services.dataset.expectedServiceFee = card.dataset.expectedServiceFee || '0';
       services.dataset.deliveryId = card.dataset.deliveryId || '';
       services.dataset.deliveryPrice = card.dataset.deliveryPrice || '0';
+      const installation = card.closest('.package-card-shell');
+      services.dataset.installationId = installation?.dataset.installationId || '';
+      services.dataset.installationPrice = installation?.dataset.installationPrice || '0';
       services.dataset.removalId = card.dataset.removalId || '';
       services.dataset.removalPrice = card.dataset.removalPrice || '0';
       hayProperty.value = ['medium', 'large'].includes(card.dataset.displaySize) ? 'Yes' : 'No';
@@ -1600,6 +1611,9 @@
         ? formatMoney(selected.dataset.price, window.shopMoneyFormat)
         : 'Pricing to be confirmed';
       const availableToOrder = !!variant && !!services.dataset.deliveryId &&
+        (text('Service') !== 'Custom installation' ||
+          (!!services.dataset.installationId &&
+            Number(services.dataset.installationPrice) === ({ small:7500, medium:10000, large:15000 })[services.dataset.displaySize])) &&
         (text('Vinyl Artwork') !== 'Yes' ||
           (!!services.dataset.monogramId && Number(services.dataset.monogramPrice) === 2500)) &&
         (text('Removal') !== 'Yes' || !!services.dataset.removalId) &&
@@ -1818,6 +1832,9 @@
       "default": "Approval opens Shopify checkout after checking your display and services. It does not place an order or reserve a week."
     },
     { "type": "product", "id": "delivery_small_product", "label": "The Stoop delivery service product" },
+    { "type": "product", "id": "installation_small_product", "label": "The Stoop custom installation product" },
+    { "type": "product", "id": "installation_medium_product", "label": "The Porch custom installation product" },
+    { "type": "product", "id": "installation_large_product", "label": "The Estate custom installation product" },
     { "type": "product", "id": "delivery_medium_product", "label": "The Porch delivery service product" },
     { "type": "product", "id": "delivery_large_product", "label": "The Estate delivery service product" },
     { "type": "product", "id": "removal_small_product", "label": "The Stoop removal service product" },

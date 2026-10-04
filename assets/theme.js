@@ -739,14 +739,18 @@ function setupProductEstimate(form) {
       products.dataset.deliveryId, products.dataset.deliveryPrice, products.dataset.expectedServiceFee);
     const removalEstimate = resolveServiceEstimateCents(
       products.dataset.removalId, products.dataset.removalPrice, products.dataset.expectedServiceFee);
+    const installationEstimate = resolveServiceEstimateCents(
+      products.dataset.installationId, products.dataset.installationPrice,
+      APPROVED_INSTALLATION_FEES_BY_TIER[products.dataset.displaySize]);
     if (form.querySelector('[data-service]:checked')) {
-      const label = form.querySelector('[data-service]:checked')?.value === 'Custom installation'
-        ? 'Delivery & installation service'
-        : 'Delivery service';
+      const label = 'Delivery service';
       additions.push({ label: products.dataset.deliveryId ? label : `${label} · estimate`, priceCents: deliveryEstimate });
     }
     if (form.querySelector('[data-service="install"]:checked')) {
-      additions.push({ label: 'Custom installation · setup', included: true });
+      additions.push({
+        label: products.dataset.installationId ? 'Custom installation' : 'Custom installation · estimate',
+        priceCents: installationEstimate
+      });
     }
     if (['medium', 'large'].includes(products.dataset.displaySize)) {
       additions.push({ label: 'Hay bales · pair', included: true });
@@ -787,11 +791,12 @@ function setupProductEstimate(form) {
     const vinylIsReference = !!form.querySelector('[data-monogram-choice="yes"]:checked') &&
       !products.dataset.monogramId && Number(products.dataset.monogramEstimateCents) > 0;
     const serviceIsReference = (!products.dataset.deliveryId && !!form.querySelector('[data-service]:checked') && deliveryEstimate !== null) ||
+      (!products.dataset.installationId && !!form.querySelector('[data-service="install"]:checked') && installationEstimate !== null) ||
       (!products.dataset.removalId && !!form.querySelector('input[name="properties[Removal]"][value="Yes"]:checked') && removalEstimate !== null);
-    const referenceNote = `${isComposer && !selectedVariant?.value ? 'Draft display prices are estimates until a priced display is available. ' : ''}${serviceIsReference ? 'Delivery and selected removal rates are reference estimates until their services are available. ' : ''}${vinylIsReference ? 'Vinyl artwork is a reference estimate per pumpkin; it cannot be ordered until the add-on is available. ' : ''}`;
+    const referenceNote = `${isComposer && !selectedVariant?.value ? 'Draft display prices are estimates until a priced display is available. ' : ''}${serviceIsReference ? 'Delivery, selected installation, and removal rates are reference estimates until their services are available. ' : ''}${vinylIsReference ? 'Vinyl artwork is a reference estimate per pumpkin; it cannot be ordered until the add-on is available. ' : ''}`;
     estimate.querySelector('[data-estimate-note]').textContent = result.pending.length
       ? `${result.pending.join(', ')} ${result.pending.length === 1 ? 'is' : 'are'} not included in this subtotal. ${referenceNote}Taxes and any other Shopify checkout charges are shown before payment.`
-      : `${referenceNote}Delivery is charged for both fulfillment choices; removal is separate. Taxes and any other Shopify checkout charges are shown before payment.`;
+      : `${referenceNote}Delivery is charged for both fulfillment choices; custom installation and removal are separate. Taxes and any other Shopify checkout charges are shown before payment.`;
   };
   form.addEventListener('input', update);
   form.addEventListener('change', update);
@@ -883,9 +888,12 @@ function showDraftCartPreview(form, design) {
   put('[data-draft-cart-removal]', design.removal === 'Yes' ? 'Requested' : 'Not requested');
   put('[data-draft-cart-notes]', design.notes || 'No additional notes');
   const additions = [
-    { label: design.service === 'Custom installation' ? 'Delivery & installation service · estimate' : 'Delivery service · estimate',
+    { label: 'Delivery service · estimate',
       priceCents: design.deliveryEstimateCents }
   ];
+  if (design.service === 'Custom installation') additions.push({
+    label: 'Custom installation · estimate', priceCents: design.installationEstimateCents
+  });
   if (design.artwork === 'Yes') additions.push({
     label: 'Vinyl-wrapped pumpkin · estimate', priceCents: design.vinylEstimateCents,
     quantity: design.artworkQuantity
@@ -975,6 +983,7 @@ function previewCartDesign(form) {
       ? Number(form.querySelector('[data-base-variant]').selectedOptions[0].dataset.price)
       : Number(card.dataset.baseEstimateCents) || 0,
     deliveryEstimateCents: Number(services?.dataset.expectedServiceFee) || 0,
+    installationEstimateCents: APPROVED_INSTALLATION_FEES_BY_TIER[card.dataset.displaySize] || 0,
     vinylEstimateCents: Number(services?.dataset.monogramEstimateCents) || 0
   };
   showDraftCartPreview(form, preview);
@@ -1088,6 +1097,16 @@ function configuredCartItems(form) {
   properties['_Expected Service Fee'] = String(expectedFee);
   properties['_Delivery Variant ID'] = String(serviceProducts.dataset.deliveryId);
   addService(serviceProducts.dataset.deliveryId, 1, 'Delivery', 'delivery');
+  if (service === 'Custom installation') {
+    const installationFee = APPROVED_INSTALLATION_FEES_BY_TIER[displaySize];
+    if (!serviceProducts.dataset.installationId ||
+        Number(serviceProducts.dataset.installationPrice) !== installationFee) {
+      throw new Error('The custom installation service product or price does not match this display size. Please contact us.');
+    }
+    properties['_Expected Installation Fee'] = String(installationFee);
+    properties['_Installation Variant ID'] = String(serviceProducts.dataset.installationId);
+    addService(serviceProducts.dataset.installationId, 1, 'Custom installation', 'installation');
+  }
   if (monogram === 'Yes') {
     if (!serviceProducts.dataset.monogramId ||
         Number(serviceProducts.dataset.monogramPrice) !== APPROVED_VINYL_UNIT_PRICE_CENTS) {
@@ -1171,6 +1190,7 @@ function prepareNativeUploadMetadata(form, properties) {
   form.querySelectorAll('[data-upload-metadata]').forEach(input => input.remove());
   for (const name of [
     '_Service Fee Tier', '_Expected Service Fee', '_Delivery Variant ID',
+    '_Expected Installation Fee', '_Installation Variant ID',
     '_Removal Variant ID', '_Monogram Variant ID', '_Monogram Unit Price'
   ]) {
     if (!properties[name]) continue;
@@ -1506,6 +1526,7 @@ function validateCartGroups(cartForm) {
       return false;
     }
     expected.push(['delivery', 1]);
+    if (base[0].dataset.service === 'Custom installation') expected.push(['installation', 1]);
     if (base[0].dataset.monogram === 'Yes') expected.push(['monogram', Number(base[0].dataset.monogramQty)]);
     if (base[0].dataset.removal === 'Yes') expected.push(['removal', 1]);
     const actual = items.filter(item => item.dataset.serviceKind && item.dataset.serviceKind !== 'extra').map(item => [
@@ -1530,6 +1551,11 @@ const APPROVED_SERVICE_FEES_BY_TIER = Object.freeze({
   large: 8500
 });
 const APPROVED_VINYL_UNIT_PRICE_CENTS = 2500;
+const APPROVED_INSTALLATION_FEES_BY_TIER = Object.freeze({
+  small: 7500,
+  medium: 10000,
+  large: 15000
+});
 
 function incompleteOlderDesigns(cart, protectedCompositionId) {
   const groups = new Map();
@@ -1545,6 +1571,8 @@ function incompleteOlderDesigns(cart, protectedCompositionId) {
     const p = base.properties;
     const fee = APPROVED_SERVICE_FEES_BY_TIER[p['_Service Fee Tier']];
     return !fee || Number(p['_Expected Service Fee']) !== fee || !p['_Delivery Variant ID'] ||
+      (p.Service === 'Custom installation' && (!p['_Installation Variant ID'] ||
+        Number(p['_Expected Installation Fee']) !== APPROVED_INSTALLATION_FEES_BY_TIER[p['_Service Fee Tier']])) ||
       (p.Removal === 'Yes' && !p['_Removal Variant ID']) ||
       (p['Vinyl Artwork'] === 'Yes' && (!p['_Monogram Variant ID'] ||
         Number(p['_Monogram Unit Price']) !== APPROVED_VINYL_UNIT_PRICE_CENTS));
@@ -1602,6 +1630,7 @@ async function validateCartServiceFees(cart) {
     }
     const serviceItems = items.filter(item => item.properties?.['_Service Kind'] && item.properties['_Service Kind'] !== 'extra');
     const delivery = serviceItems.filter(item => item.properties['_Service Kind'] === 'delivery');
+    const installation = serviceItems.filter(item => item.properties['_Service Kind'] === 'installation');
     const removal = serviceItems.filter(item => item.properties['_Service Kind'] === 'removal');
     const monogram = serviceItems.filter(item => item.properties['_Service Kind'] === 'monogram');
     const unitPrice = item => Number(item.final_price ?? item.price);
@@ -1609,6 +1638,17 @@ async function validateCartServiceFees(cart) {
     if (delivery.length !== 1 || !variantMatches(delivery[0], properties['_Delivery Variant ID']) ||
         unitPrice(delivery[0]) !== approvedFee || Number(delivery[0].quantity) !== 1) {
       throw new Error('The delivery service product or price does not match this display size. Edit or remove this composition before checkout.');
+    }
+    if (properties.Service === 'Custom installation') {
+      const installationFee = APPROVED_INSTALLATION_FEES_BY_TIER[tier];
+      if (Number(properties['_Expected Installation Fee']) !== installationFee ||
+          installation.length !== 1 ||
+          !variantMatches(installation[0], properties['_Installation Variant ID']) ||
+          unitPrice(installation[0]) !== installationFee || Number(installation[0].quantity) !== 1) {
+        throw new Error('The custom installation service product or price does not match this display size. Edit or remove this composition before checkout.');
+      }
+    } else if (installation.length) {
+      throw new Error('This composition contains an unrequested custom installation charge. Review your cart before checkout.');
     }
     if (properties.Removal === 'Yes') {
       if (removal.length !== 1 || !variantMatches(removal[0], properties['_Removal Variant ID']) ||
@@ -1693,8 +1733,9 @@ async function validateCheckoutCart(expectedCompositionId, { approvedOnly = fals
       throw new Error('A finishing touch has an invalid quantity. Review your cart before checkout.');
     }
     const kinds = items.filter(item => item !== bases[0]).map(item => item.properties?.['_Service Kind']);
-    if (kinds.some(kind => !['delivery', 'removal', 'monogram', 'extra'].includes(kind)) ||
+    if (kinds.some(kind => !['delivery', 'installation', 'removal', 'monogram', 'extra'].includes(kind)) ||
         kinds.filter(kind => kind === 'delivery').length !== 1 ||
+        kinds.filter(kind => kind === 'installation').length !== (properties.Service === 'Custom installation' ? 1 : 0) ||
         kinds.filter(kind => kind === 'removal').length !== (properties.Removal === 'Yes' ? 1 : 0) ||
         kinds.filter(kind => kind === 'monogram').length !== (properties['Vinyl Artwork'] === 'Yes' ? 1 : 0)) {
       throw new Error('A design has incomplete or duplicate paid services. Review your cart before checkout.');

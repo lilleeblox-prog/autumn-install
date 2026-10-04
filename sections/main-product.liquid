@@ -298,14 +298,17 @@
        {% case display_size %}
          {% when 'small' %}
            {% assign delivery_product = section.settings.delivery_small_product %}
+           {% assign installation_product = section.settings.installation_small_product %}
            {% assign removal_product = section.settings.removal_small_product %}
             {% assign expected_service_fee = 2500 %}
          {% when 'medium' %}
            {% assign delivery_product = section.settings.delivery_medium_product %}
+           {% assign installation_product = section.settings.installation_medium_product %}
            {% assign removal_product = section.settings.removal_medium_product %}
             {% assign expected_service_fee = 5000 %}
          {% when 'large' %}
            {% assign delivery_product = section.settings.delivery_large_product %}
+           {% assign installation_product = section.settings.installation_large_product %}
            {% assign removal_product = section.settings.removal_large_product %}
             {% assign expected_service_fee = 8500 %}
        {% endcase %}
@@ -414,6 +417,8 @@
         <div data-service-products data-display-size="{{ display_size }}" data-expected-service-fee="{{ expected_service_fee }}"
             data-delivery-id="{% if delivery_product != blank and delivery_product.available and delivery_product.published_at != blank and delivery_product.selected_or_first_available_variant.price > 0 %}{{ delivery_product.selected_or_first_available_variant.id }}{% endif %}"
            data-delivery-price="{{ delivery_product.selected_or_first_available_variant.price | default: 0 }}"
+            data-installation-id="{% if installation_product != blank and installation_product.available and installation_product.published_at != blank and installation_product.selected_or_first_available_variant.price > 0 %}{{ installation_product.selected_or_first_available_variant.id }}{% endif %}"
+            data-installation-price="{{ installation_product.selected_or_first_available_variant.price | default: 0 }}"
            data-monogram-id="{% if monogram_product != blank and monogram_product.available and monogram_product.published_at != blank and monogram_product.selected_or_first_available_variant.price > 0 %}{{ monogram_product.selected_or_first_available_variant.id }}{% endif %}"
             data-monogram-price="{{ monogram_product.selected_or_first_available_variant.price | default: 0 }}"
             data-monogram-estimate-cents="{% if monogram_product.selected_or_first_available_variant.price > 0 %}{{ monogram_product.selected_or_first_available_variant.price }}{% else %}{{ section.settings.vinyl_estimate_cents | default: 0 }}{% endif %}"
@@ -516,6 +521,9 @@
       "info": "Used only when this product has no media."
     },
     { "type": "product", "id": "delivery_small_product", "label": "The Stoop delivery service product" },
+    { "type": "product", "id": "installation_small_product", "label": "The Stoop custom installation product" },
+    { "type": "product", "id": "installation_medium_product", "label": "The Porch custom installation product" },
+    { "type": "product", "id": "installation_large_product", "label": "The Estate custom installation product" },
     { "type": "product", "id": "delivery_medium_product", "label": "The Porch delivery service product" },
     { "type": "product", "id": "delivery_large_product", "label": "The Estate delivery service product" },
     {

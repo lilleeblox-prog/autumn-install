@@ -4,6 +4,9 @@
       "type": "main-product",
       "settings": {
         "delivery_small_product": "delivery-the-stoop",
+        "installation_small_product": "installation-the-stoop",
+        "installation_medium_product": "installation-the-porch",
+        "installation_large_product": "installation-the-estate",
         "delivery_medium_product": "delivery-the-porch",
         "delivery_large_product": "delivery-the-estate",
         "small_package_product": "the-stoop",

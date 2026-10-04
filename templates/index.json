@@ -199,7 +199,10 @@
         "removal_medium_product": "removal-the-porch",
         "removal_large_product": "removal-the-estate",
         "monogram_product": "vinyl-artwork-per-pumpkin",
-        "vinyl_estimate_cents": 2500
+        "vinyl_estimate_cents": 2500,
+        "installation_small_product": "installation-the-stoop",
+        "installation_medium_product": "installation-the-porch",
+        "installation_large_product": "installation-the-estate"
       }
     },
     "hero": {
