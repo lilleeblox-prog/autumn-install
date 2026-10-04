@@ -914,6 +914,11 @@
     #PackageBrowser-{{ section.id }} .palette-composer__tabs { display:none !important; }
     #PackageBrowser-{{ section.id }} .palette-composer__form { overflow:visible; }
     #PackageBrowser-{{ section.id }} .palette-composer__editor { padding-bottom:calc(124px + env(safe-area-inset-bottom)); }
+    #PackageBrowser-{{ section.id }} .palette-composer__editor { padding-inline:clamp(24px, 5vw, 40px); }
+    #PackageBrowser-{{ section.id }} .palette-composer__editor fieldset { min-inline-size:0; max-width:100%; }
+    #PackageBrowser-{{ section.id }} .palette-composer__editor input,
+    #PackageBrowser-{{ section.id }} .palette-composer__editor select,
+    #PackageBrowser-{{ section.id }} .palette-composer__editor textarea { box-sizing:border-box; max-width:100%; min-width:0; }
     #PackageBrowser-{{ section.id }} .palette-composer__preview {
       display:none;
       position:fixed;
