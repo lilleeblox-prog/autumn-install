@@ -1610,14 +1610,14 @@
       if (price) price.textContent = selected && Number(selected.dataset.price) > 0
         ? formatMoney(selected.dataset.price, window.shopMoneyFormat)
         : 'Pricing to be confirmed';
-      const availableToOrder = !!variant && !!services.dataset.deliveryId &&
+      const availableToOrder = !!variant &&
         (text('Service') !== 'Custom installation' ||
           (!!services.dataset.installationId &&
             Number(services.dataset.installationPrice) === ({ small:7500, medium:10000, large:15000 })[services.dataset.displaySize])) &&
         (text('Vinyl Artwork') !== 'Yes' ||
           (!!services.dataset.monogramId && Number(services.dataset.monogramPrice) === 2500)) &&
-        (text('Removal') !== 'Yes' || !!services.dataset.removalId) &&
-        Number(services.dataset.deliveryPrice) === Number(services.dataset.expectedServiceFee);
+        (text('Removal') !== 'Yes' || (!!services.dataset.removalId &&
+          Number(services.dataset.removalPrice) === Number(services.dataset.expectedServiceFee)));
       root.dataset.cartPreviewOnly = availableToOrder ? 'false' : 'true';
       form.querySelectorAll('[data-approve-design]').forEach(button => {
         button.disabled = !palette;

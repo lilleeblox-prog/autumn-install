@@ -197,7 +197,7 @@
           <span>Estimated Total</span>
           <span>{{ cart.total_price | money }}</span>
         </div>
-            <p class="cart-note">Your display and services appear as separate lines. To change a detail, choose “Edit design” above. At checkout, enter the full address where you want the display installed or delivered, using the same ZIP you chose for your design. The delivery service above is charged once; your preferred week still needs confirmation. Review the final total before paying.</p>
+            <p class="cart-note">Delivery is included with every package. Selected installation and optional services appear as separate lines. To change a detail, choose “Edit design” above. At checkout, enter the full address where you want the display installed or delivered, using the same ZIP you chose for your design. Your preferred week still needs confirmation. Review the final total before paying.</p>
             <p class="cart-note">We serve selected ZIP codes near Franklin, Tennessee. Outside those ZIPs? {% if pages.contact != blank %}<a href="{{ pages.contact.url }}#consultation-form">Request a consultation instead</a>.{% else %}Please contact the studio before ordering.{% endif %}</p>
         <div class="cart-buttons">
           <button type="submit" name="update" class="button button--secondary">Update selection</button>
@@ -325,12 +325,13 @@
       row.append(image, info);
       items.append(row);
     };
-    addService('Delivery', design.service === 'Custom installation'
-      ? 'Delivery with styling at your entry' : 'Delivery for you to arrange', design.deliveryEstimateCents);
+    addService('Delivery · included', 'Included with every package', 0);
+    if (design.service === 'Custom installation') addService('Custom installation', 'Selected service', design.installationEstimateCents);
     if (design.artwork === 'Yes') addService('Vinyl artwork', `${design.artworkQuantity} pumpkin${design.artworkQuantity === 1 ? '' : 's'} · file not uploaded · reference estimate`, design.vinylEstimateCents * design.artworkQuantity);
     if (design.removal === 'Yes') addService('Post-season removal', 'Requested service', design.deliveryEstimateCents);
-    const knownTotal = Number(design.baseEstimateCents) + Number(design.deliveryEstimateCents) *
-      (design.removal === 'Yes' ? 2 : 1) +
+    const knownTotal = Number(design.baseEstimateCents) +
+      (design.removal === 'Yes' ? Number(design.deliveryEstimateCents) : 0) +
+      (design.service === 'Custom installation' ? Number(design.installationEstimateCents) : 0) +
       (design.artwork === 'Yes' ? Number(design.vinylEstimateCents) * design.artworkQuantity : 0);
     put('[data-preview-total]', money(knownTotal));
     if (design.artwork === 'Yes') {
