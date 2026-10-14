@@ -43,7 +43,7 @@
         "step3"
       ],
       "settings": {
-        "background_image": "shopify://shop_images/4390.jpg",
+        "background_image": "shopify://shop_images/5160.jpg",
         "image_visibility": 30,
         "section_id": "process",
         "title": "Made for the way you welcome.",
@@ -193,16 +193,16 @@
         "continue_label": "Approve design",
         "continue_disclosure": "Take a moment with your design. Approval adds it to the cart for review; it does not place an order or reserve a week.",
         "delivery_small_product": "delivery-the-stoop",
+        "installation_small_product": "installation-the-stoop",
+        "installation_medium_product": "installation-the-porch",
+        "installation_large_product": "installation-the-estate",
         "delivery_medium_product": "delivery-the-porch",
         "delivery_large_product": "delivery-the-estate",
         "removal_small_product": "removal-the-stoop",
         "removal_medium_product": "removal-the-porch",
         "removal_large_product": "removal-the-estate",
         "monogram_product": "vinyl-artwork-per-pumpkin",
-        "vinyl_estimate_cents": 2500,
-        "installation_small_product": "installation-the-stoop",
-        "installation_medium_product": "installation-the-porch",
-        "installation_large_product": "installation-the-estate"
+        "vinyl_estimate_cents": 2500
       }
     },
     "hero": {
