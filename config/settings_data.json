@@ -16,7 +16,6 @@
       "header": {
         "type": "header",
         "settings": {
-          "logo_image": "shopify://shop_images/5160_6a2a365c-f738-46de-af94-fc1d8843fa1c.jpg",
           "menu": "main-menu"
         }
       },
